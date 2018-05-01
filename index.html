@@ -29,11 +29,11 @@
         12. 支持窗口初始化打开位置控制<br />
         13. 支持获取窗口信息（默认存储所有窗口状态）通过 layx.windows[窗口id]可以获取窗口信息<br />
         14. 窗口最小化自动计算<br />
+        15. 支持窗口通讯<br />
     </p>
     <p>
         <strong>即将开发功能</strong>：<br />
-        1. 窗口通讯（iframe与父窗口或iframe和iframe）<br />
-        2. 提示框，询问框，加载框<br />
+        1. 提示框，询问框，加载框<br />
     </p>
     <p><strong>演示案例</strong></p>
     <button id="btn1">打开新窗口（默认屏幕中间）</button>
@@ -60,6 +60,9 @@
     <button id="btn16">关闭事件（return false；禁止关闭）</button>
     <button id="btn17">最小化事件（return false；禁止最小化）</button>
     <button id="btn18">最大化/正常事件（return false；禁止最大化/正常）</button>
+    <br />
+    <br />
+    <button id="btn19">获取父窗口内容</button>
     <script src="layx.js" type="text/javascript"></script>
     <script type="text/javascript">
         document.getElementById('btn1').onclick = function () {
@@ -235,6 +238,14 @@
                         alert("我准备切换最大化/最小化了...");
                     }
                 }
+            });
+        };
+
+        document.getElementById('btn19').onclick = function () {
+            layx.open({
+                id: 'demo-custom14',
+                title: '获取父窗口内容',
+                content: ['iframe', './demo/message.html']  // iframe为类型，预留字段，后续将有其他类型
             });
         };
     </script>

@@ -376,7 +376,7 @@
                 pos = that.screenTransform(config.screen, config.width, config.height);
 
             // html
-            var layxHtml = `<div class="layx-iframe" data-type="` + config.content[0] + `" ` + (config.content[0] === "iframe" ? ' data-content="' + config.content[1] + '" ' : '') + ` id="` + layxId + `" style="height:` + config.height + `px;width:` + config.width + `px;z-index:` + core.zIndex + `;top:` + pos.top + `px;left:` + pos.left + `px;">
+            var layxHtml = `<div class="layx-iframe" data-type="` + config.content[0] + `" ` + (config.content[0] === "iframe" ? ' data-content="' + config.content[1] + '" ' : '') + ` id="` + layxId + `" style="height:` + config.height + `px;width:` + config.width + `px;z-index:` + (++core.zIndex) + `;top:` + pos.top + `px;left:` + pos.left + `px;">
         <div class="layx-iframe-title layx-flex-row">
             <div class="layx-title-icons"></div>
             <div class="layx-title-label layx-flex-item" title="`+ config.title + `">` + config.title + `</div>
@@ -405,6 +405,10 @@
             core.zIndex++;
 
             var layxContainer = utils.getElementById(layxId);
+            layxContainer.onclick = function () {
+                utils.Event.emit(layxPrefix + "setTop", layxContainer);
+            }
+
             that.recoreLayxContainerArea(layxContainer);
             // create iframe
             var iframeContext = that.createIframe(utils.getElementBySelector(".layx-body", layxContainer), config.content[1], function () {
@@ -414,6 +418,8 @@
             });
 
             // store window statu
+            core.windows[layxId] = {};
+            core.windows[layxId]["createDate"] = new Date();
             utils.Event.emit(layxPrefix + "updateStatus", layxContainer);
 
             // destroy click
@@ -441,19 +447,6 @@
                     utils.Event.emit(layxPrefix + "maxOrNormal", layxContainer);
                 }
             };
-
-            layxContainer.onclick = function () {
-                var that = this;
-
-                var maskLayer = utils.getElementBySelector(".layx-mask", layxContainer);
-                maskLayer.style.setProperty("visibility", "hidden");
-                that.style.zIndex = ++top.layx.zIndex;
-
-                if (core.windows[layxContainer.getAttribute("id")]) {
-                    // store window statu
-                    utils.Event.emit(layxPrefix + "updateStatus", layxContainer);
-                }
-            }
 
             // titlelabel dbclick
             var titleLabel = utils.getElementBySelector(".layx-title-label", layxContainer);
@@ -507,6 +500,8 @@
             new Resize(config.resize, layxContainer, dragRightTop, config.minWidth, config.minHeight, false, true, false, false);
             new Resize(config.resize, layxContainer, dragRightBotom, config.minWidth, config.minHeight, false, false, false, false);
             new Resize(config.resize, layxContainer, dragLeftBottom, config.minWidth, config.minHeight, true, false, false, false);
+
+            return layxContainer;
         },
         createIframe: function (pEle, src, onload) {
             var iframe = document.createElement("iframe");
@@ -580,10 +575,7 @@
             var layxId = that.name + '-' + options.id;
             var windowInfo = that.windows[layxId];
 
-            if (!windowInfo) {
-                methods.init(options);
-            }
-            else {
+            if (windowInfo) {
                 var status = windowInfo.status;
                 switch (status) {
                     case "min":
@@ -591,6 +583,9 @@
                         break;
                 }
                 windowInfo.container.click();
+            }
+            else {
+                methods.init(options);
             }
         },
         windows: {},
@@ -711,7 +706,8 @@
                 layxContainerZindex = layxContainer.style.zIndex,
                 layxContainerType = layxContainer.getAttribute("data-type"),
                 layxContainerContent = layxContainerType === "iframe" ? layxContainer.getAttribute("data-content") : utils.getElementBySelector(".layx-body", layxContainer).lastElementChild.innerHTML,
-                context = layxContainerType === "iframe" ? utils.getElementBySelector(".layx-webcontent", layxContainer).contentWindow : window;
+                context = layxContainerType === "iframe" ? utils.getElementBySelector(".layx-webcontent", layxContainer).contentWindow : window,
+                createDate = core.windows[id].createDate;
 
             core.windows[id] = {
                 id: id,
@@ -722,10 +718,26 @@
                 type: layxContainerType,
                 content: layxContainerContent,
                 container: layxContainer,
-                context: context
+                context: context,
+                updateDate: new Date(),
+                createDate: createDate
             };
         });
+
+        utils.Event.on(layxPrefix + "setTop", function (layxContainer) {
+            var maskLayer = utils.getElementBySelector(".layx-mask", layxContainer);
+            maskLayer.style.setProperty("visibility", "hidden");
+            layxContainer.style.zIndex = ++top.layx.zIndex;
+
+            if (core.windows[layxContainer.getAttribute("id")]) {
+                // store window statu
+                utils.Event.emit(layxPrefix + "updateStatus", layxContainer);
+            }
+        });
+
     }();
 
     win.layx = core;
+    over["layx"] = core;
+    over["layx"]["app"] = core;
 }(top, window);
