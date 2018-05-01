@@ -600,7 +600,7 @@
         var layxPrefix = core.name + `-`;
         utils.Event.on(layxPrefix + "destroy", function (layxContainer) {
             var id = layxContainer.getAttribute("id");
-            delete core.windows[id];
+            core.windows[id] = null;
             layxContainer.parentNode.removeChild(layxContainer);
         });
 
