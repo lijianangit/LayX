@@ -449,8 +449,10 @@
                 maskLayer.style.setProperty("visibility", "hidden");
                 that.style.zIndex = ++top.layx.zIndex;
 
-                // store window statu
-                utils.Event.emit(layxPrefix + "updateStatus", layxContainer);
+                if (core.windows[layxContainer.getAttribute("id")]) {
+                    // store window statu
+                    utils.Event.emit(layxPrefix + "updateStatus", layxContainer);
+                }
             }
 
             // titlelabel dbclick
@@ -600,7 +602,7 @@
         var layxPrefix = core.name + `-`;
         utils.Event.on(layxPrefix + "destroy", function (layxContainer) {
             var id = layxContainer.getAttribute("id");
-            core.windows[id] = null;
+            delete core.windows[id];
             layxContainer.parentNode.removeChild(layxContainer);
         });
 
