@@ -710,7 +710,8 @@
                 layxContainerStatus = layxContainer.getAttribute("data-statu") || "normal",
                 layxContainerZindex = layxContainer.style.zIndex,
                 layxContainerType = layxContainer.getAttribute("data-type"),
-                layxContainerContent = layxContainerType === "iframe" ? layxContainer.getAttribute("data-content") : utils.getElementBySelector(".layx-body", layxContainer).lastElementChild.innerHTML;
+                layxContainerContent = layxContainerType === "iframe" ? layxContainer.getAttribute("data-content") : utils.getElementBySelector(".layx-body", layxContainer).lastElementChild.innerHTML,
+                context = layxContainerType === "iframe" ? utils.getElementBySelector(".layx-webcontent", layxContainer).contentWindow : window;
 
             core.windows[id] = {
                 id: id,
@@ -720,7 +721,8 @@
                 zIndex: layxContainerZindex,
                 type: layxContainerType,
                 content: layxContainerContent,
-                container: layxContainer
+                container: layxContainer,
+                context: context
             };
         });
     }();
