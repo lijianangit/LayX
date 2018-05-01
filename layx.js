@@ -71,9 +71,9 @@
                 html = doc.documentElement,
                 clientTop = html.clientTop || body.clientTop || 0,
                 clientLeft = html.clientLeft || body.clientLeft || 0,
-                top = box.top + (self.pageYOffset || html.scrollTop || body.scrollTop) - clientTop,
-                left = box.left + (self.pageXOffset || html.scrollLeft || body.scrollLeft) - clientLeft;
-            return { 'top': top, 'left': left };
+                top = Math.round(box.top) + (self.pageYOffset || html.scrollTop || body.scrollTop) - clientTop,
+                left = Math.round(box.left) + (self.pageXOffset || html.scrollLeft || body.scrollLeft) - clientLeft;
+            return { 'top': top - 1, 'left': left - 1 };
         }
     };
     var defaults = {
@@ -346,7 +346,7 @@
                     // 中间
                     case "center":
                     default:
-                        return { top: Math.round((visibleHeight - height - 2) / 2), left: Math.round((visibleWidth - width - 2) / 2) };
+                        return { top: Math.ceil((visibleHeight - height - 2) / 2), left: Math.ceil((visibleWidth - width - 2) / 2) };
                         break;
                     // 左上
                     case "lt":
