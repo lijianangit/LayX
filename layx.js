@@ -346,7 +346,7 @@
                     // 中间
                     case "center":
                     default:
-                        return { top: (visibleHeight - height - 2) / 2, left: (visibleWidth - width - 2) / 2 };
+                        return { top: Math.round((visibleHeight - height - 2) / 2), left: Math.round((visibleWidth - width - 2) / 2) };
                         break;
                     // 左上
                     case "lt":
