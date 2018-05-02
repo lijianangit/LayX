@@ -5,6 +5,7 @@
 .layx-icon-normal:before { content: "\e62b"; }
 .layx-icon-destroy:before { content: "\e644"; }
 
+.layx-iframe { box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; }
 .layx-iframe, .layx-iframe * { margin: 0; padding: 0; outline: 0; border: 0; }
 .layx-flex-row { display: -webkit-box; display: -webkit-flex; display: box; display: flexbox; display: flex; -webkit-box-orient: horizontal; -webkit-flex-flow: row; flex-flow: row; width: 100%; -webkit-flex-direction: row; flex-direction: row; box-sizing: border-box; }
 .layx-flex-item { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; box-sizing: border-box; overflow: hidden; }
@@ -13,7 +14,7 @@
 /*标题*/
 .layx-iframe-title { height: 30px; background-color: #fff; position: relative; z-index: 1; }
 .layx-iframe-title.not-allowed { cursor: not-allowed; }
-.layx-title-label { padding-right: 8px; text-overflow: ellipsis; }
+.layx-title-label { padding-right: 8px; text-overflow: ellipsis; position: relative; }
 .layx-iframe[data-statu='min'] { overflow: hidden; }
 .layx-iframe-title { font-size: 12px; color: #00003a; padding-left: 8px; line-height: 30px; }
 .layx-title-tool-item { width: 45px; height: 29px; text-align: center; line-height: 29px; text-decoration: none; color: #000; float: left; display: inline-block; font-size: 12px; position: relative; z-index: 2; }
