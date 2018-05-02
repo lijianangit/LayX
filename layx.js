@@ -239,6 +239,8 @@
 
                 layxContainer.style.zIndex = ++core.zIndex;
             }
+
+            e.stopPropagation();
             return false;
         };
 
@@ -311,11 +313,13 @@
         }
 
         var dragstart = function (e) {
+
+            e = e || window.event;
             var layxContainerStatus = layxContainer.getAttribute("data-statu") || "normal";
 
             if (layxContainerStatus === "normal" && canResize) {
                 maskLayer.style.setProperty("visibility", "visible");
-                e = e || window.event;
+
 
                 resizeEle.disX = e.clientX - resizeEle.offsetLeft;
                 resizeEle.disY = e.clientY - resizeEle.offsetTop;
@@ -329,6 +333,8 @@
                 document.onmouseup = dragend;
                 document.onmousemove = drag;
             }
+
+            e.stopPropagation();
             return false;
         }
         resizeEle.onmousedown = dragstart;
@@ -427,6 +433,7 @@
             // destroy click
             var destroyMenu = utils.getElementBySelector(".layx-icon-destroy", layxContainer);
             destroyMenu.onclick = function (e) {
+                e = e || window.event;
                 var result;
                 if (utils.isFunction(config.events.destroy)) {
                     result = config.events.destroy(iframeContext, layxContainer);
@@ -435,11 +442,14 @@
                     that.destroyIframe(iframeContext);
                     utils.Event.emit(layxPrefix + "destroy", layxContainer);
                 }
+
+                e.stopPropagation();
             };
 
             // max/normal click
             var maxOrNormalMenu = utils.getElementBySelector(".layx-max-normal", layxContainer);
             maxOrNormalMenu.onclick = function (e) {
+                e = e || window.event;
                 var result;
                 if (utils.isFunction(config.events.maxOrNormal)) {
                     var layxContainerStatus = layxContainer.getAttribute("data-statu") || "normal";
@@ -448,12 +458,17 @@
                 if (result !== false) {
                     utils.Event.emit(layxPrefix + "maxOrNormal", layxContainer);
                 }
+
+                e.stopPropagation();
             };
 
             // titlelabel dbclick
             var titleLabel = utils.getElementBySelector(".layx-title-label", layxContainer);
-            titleLabel.ondblclick = function () {
+            titleLabel.ondblclick = function (e) {
+                e = e || window.event;
                 utils.Event.emit(layxPrefix + "maxOrNormal", layxContainer);
+
+                e.stopPropagation();
             };
             // move
             new Drag(config.move, titleLabel, layxContainer, { limit: config.moveLock.limit, lockX: config.moveLock.x, lockY: config.moveLock.y });
@@ -461,8 +476,8 @@
             // min click
             var minMenu = utils.getElementBySelector(".layx-min", layxContainer);
             minMenu.onclick = function (e) {
+                e = e || window.event;
                 var result, that = this;
-
 
                 if (!that.classList.contains("layx-icon-max")) {
                     if (utils.isFunction(config.events.min)) {
@@ -479,6 +494,8 @@
                 if (result !== false) {
                     utils.Event.emit(layxPrefix + "min", layxContainer);
                 }
+
+                e.stopPropagation();
             };
 
             // resize
