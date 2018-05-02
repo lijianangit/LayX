@@ -93,8 +93,10 @@
         move: true,
         moveLock: { x: false, y: false, limit: false },
         resize: true,
-        minWidth: 250,
-        minHeight: 250,
+        min: true,
+        max: true,
+        minWidth: 100,
+        minHeight: 100,
         events: {
             load: function (layxContainer) {
             },
@@ -162,9 +164,10 @@
                     layxContainer.style.setProperty('height', layxContainerArea[1] + 'px');
                     layxContainer.setAttribute("data-statu", "normal");
 
-                    maxOrNormalMenu.classList.remove("layx-icon-max");
-                    maxOrNormalMenu.classList.add("layx-icon-normal");
-
+                    if (maxOrNormalMenu) {
+                        maxOrNormalMenu.classList.remove("layx-icon-max");
+                        maxOrNormalMenu.classList.add("layx-icon-normal");
+                    }
 
                     if (e.clientX < layxContainerArea[0] / 2) {
                         layxContainer.style.left = 0;
@@ -395,9 +398,8 @@
         <div class="layx-iframe-title layx-flex-row">
             <div class="layx-title-icons"></div>
             <div class="layx-title-label layx-flex-item" title="`+ config.title + `">` + config.title + `</div>
-            <div class="layx-title-tools">
-                <a class="layx-title-tool-item layx-min layx-iconfont layx-icon-min"></a>
-                <a class="layx-title-tool-item layx-max-normal layx-iconfont layx-icon-normal"></a>
+            <div class="layx-title-tools">`+ (config.min === true ? `<a class="layx-title-tool-item layx-min layx-iconfont layx-icon-min"></a>` : ``) + `
+                `+ (config.max === true ? `<a class="layx-title-tool-item layx-max-normal layx-iconfont layx-icon-normal"></a>` : ``) + `
                 <a class="layx-title-tool-item layx-destroy layx-iconfont layx-icon-destroy"></a>
             </div>
         </div>
@@ -455,19 +457,21 @@
 
             // max/normal click
             var maxOrNormalMenu = utils.getElementBySelector(".layx-max-normal", layxContainer);
-            maxOrNormalMenu.onclick = function (e) {
-                e = e || window.event;
-                var result;
-                if (utils.isFunction(config.events.maxOrNormal)) {
-                    var layxContainerStatus = layxContainer.getAttribute("data-statu") || "normal";
-                    result = config.events.maxOrNormal(iframeContext, layxContainerStatus, layxContainer);
-                }
-                if (result !== false) {
-                    utils.Event.emit(layxPrefix + "maxOrNormal", layxContainer);
-                }
+            if (maxOrNormalMenu) {
+                maxOrNormalMenu.onclick = function (e) {
+                    e = e || window.event;
+                    var result;
+                    if (utils.isFunction(config.events.maxOrNormal)) {
+                        var layxContainerStatus = layxContainer.getAttribute("data-statu") || "normal";
+                        result = config.events.maxOrNormal(iframeContext, layxContainerStatus, layxContainer);
+                    }
+                    if (result !== false) {
+                        utils.Event.emit(layxPrefix + "maxOrNormal", layxContainer);
+                    }
 
-                e.stopPropagation();
-            };
+                    e.stopPropagation();
+                };
+            }
 
             // titlelabel dbclick
             var titleLabel = utils.getElementBySelector(".layx-title-label", layxContainer);
@@ -482,28 +486,30 @@
 
             // min click
             var minMenu = utils.getElementBySelector(".layx-min", layxContainer);
-            minMenu.onclick = function (e) {
-                e = e || window.event;
-                var result, that = this;
+            if (minMenu) {
+                minMenu.onclick = function (e) {
+                    e = e || window.event;
+                    var result, that = this;
 
-                if (!that.classList.contains("layx-icon-max")) {
-                    if (utils.isFunction(config.events.min)) {
-                        result = config.events.min(iframeContext, layxContainer);
+                    if (!that.classList.contains("layx-icon-max")) {
+                        if (utils.isFunction(config.events.min)) {
+                            result = config.events.min(iframeContext, layxContainer);
+                        }
                     }
-                }
-                else {
-                    if (utils.isFunction(config.events.maxOrNormal)) {
-                        var layxContainerStatus = layxContainer.getAttribute("data-statu") || "normal";
-                        result = config.events.maxOrNormal(iframeContext, layxContainerStatus, layxContainer);
+                    else {
+                        if (utils.isFunction(config.events.maxOrNormal)) {
+                            var layxContainerStatus = layxContainer.getAttribute("data-statu") || "normal";
+                            result = config.events.maxOrNormal(iframeContext, layxContainerStatus, layxContainer);
+                        }
                     }
-                }
 
-                if (result !== false) {
-                    utils.Event.emit(layxPrefix + "min", layxContainer);
-                }
+                    if (result !== false) {
+                        utils.Event.emit(layxPrefix + "min", layxContainer);
+                    }
 
-                e.stopPropagation();
-            };
+                    e.stopPropagation();
+                };
+            }
 
             // resize
             var
@@ -650,11 +656,15 @@
                 methods.changeLayxContainerArea(layxContainer, [visibleWidth - 2, visibleHeight - 2, 0, 0]);
                 layxContainer.setAttribute("data-statu", "max");
 
-                maxOrNormalMenu.classList.remove("layx-icon-normal");
-                maxOrNormalMenu.classList.add("layx-icon-max");
-                if (!minMenu.classList.contains("layx-icon-min")) {
-                    minMenu.classList.remove("layx-icon-max");
-                    minMenu.classList.add("layx-icon-min");
+                if (maxOrNormalMenu) {
+                    maxOrNormalMenu.classList.remove("layx-icon-normal");
+                    maxOrNormalMenu.classList.add("layx-icon-max");
+                }
+                if (minMenu) {
+                    if (!minMenu.classList.contains("layx-icon-min")) {
+                        minMenu.classList.remove("layx-icon-max");
+                        minMenu.classList.add("layx-icon-min");
+                    }
                 }
                 dragContainer.style.setProperty("visibility", "hidden");
             }
@@ -662,8 +672,10 @@
                 methods.changeLayxContainerArea(layxContainer, layxContainerArea);
                 layxContainer.setAttribute("data-statu", "normal");
 
-                maxOrNormalMenu.classList.remove("layx-icon-max");
-                maxOrNormalMenu.classList.add("layx-icon-normal");
+                if (maxOrNormalMenu) {
+                    maxOrNormalMenu.classList.remove("layx-icon-max");
+                    maxOrNormalMenu.classList.add("layx-icon-normal");
+                }
                 dragContainer.style.setProperty("visibility", "visible");
             }
 
@@ -686,48 +698,56 @@
                 maxOrNormalMenu = utils.getElementBySelector(".layx-max-normal", layxContainer),
                 minMenu = utils.getElementBySelector(".layx-min", layxContainer);
 
-            if (!maxOrNormalMenu.classList.contains("layx-icon-normal")) {
-                maxOrNormalMenu.classList.remove("layx-icon-max");
-                maxOrNormalMenu.classList.add("layx-icon-normal");
+            if (maxOrNormalMenu) {
+                if (!maxOrNormalMenu.classList.contains("layx-icon-normal")) {
+                    maxOrNormalMenu.classList.remove("layx-icon-max");
+                    maxOrNormalMenu.classList.add("layx-icon-normal");
+                }
             }
 
             if (layxContainerStatus === "max") {
-                minMenu.setAttribute("data-area", "[" + [visibleWidth, visibleHeight, 0, 0] + "]");
+                if (minMenu) {
+                    minMenu.setAttribute("data-area", "[" + [visibleWidth, visibleHeight, 0, 0] + "]");
+                }
             }
 
-            if (minMenu.classList.contains("layx-icon-max")) {
-                var minStoreArea = minMenu.getAttribute("data-area");
-                layxContainerArea = minStoreArea ? eval("(" + minStoreArea + ")") : layxContainerArea;
-                methods.changeLayxContainerArea(layxContainer, layxContainerArea);
+            if (minMenu) {
+                if (minMenu.classList.contains("layx-icon-max")) {
+                    var minStoreArea = minMenu.getAttribute("data-area");
+                    layxContainerArea = minStoreArea ? eval("(" + minStoreArea + ")") : layxContainerArea;
+                    methods.changeLayxContainerArea(layxContainer, layxContainerArea);
 
-                if (minStoreArea) {
-                    layxContainer.setAttribute("data-statu", "max");
-                    maxOrNormalMenu.classList.remove("layx-icon-normal");
-                    maxOrNormalMenu.classList.add("layx-icon-max");
-                    minMenu.removeAttribute("data-area")
+                    if (minStoreArea) {
+                        layxContainer.setAttribute("data-statu", "max");
+                        if (maxOrNormalMenu) {
+                            maxOrNormalMenu.classList.remove("layx-icon-normal");
+                            maxOrNormalMenu.classList.add("layx-icon-max");
+                        }
+                        minMenu.removeAttribute("data-area")
+                    }
+                    else {
+                        dragContainer.style.setProperty("visibility", "visible");
+                        layxContainer.setAttribute("data-statu", "normal");
+                    }
+
+                    minMenu.classList.remove("layx-icon-max");
+                    minMenu.classList.add("layx-icon-min");
+
+                    // store window statu
+                    utils.Event.emit(layxPrefix + "updateStatus", layxContainer);
                 }
                 else {
-                    dragContainer.style.setProperty("visibility", "visible");
-                    layxContainer.setAttribute("data-statu", "normal");
+                    dragContainer.style.setProperty("visibility", "hidden");
+                    layxContainer.setAttribute("data-statu", "min");
+
+                    // store window statu
+                    utils.Event.emit(layxPrefix + "updateStatus", layxContainer);
+
+                    minMenu.classList.remove("layx-icon-min");
+                    minMenu.classList.add("layx-icon-max");
+
+                    methods.layxContainerMinManager();
                 }
-
-                minMenu.classList.remove("layx-icon-max");
-                minMenu.classList.add("layx-icon-min");
-
-                // store window statu
-                utils.Event.emit(layxPrefix + "updateStatus", layxContainer);
-            }
-            else {
-                dragContainer.style.setProperty("visibility", "hidden");
-                layxContainer.setAttribute("data-statu", "min");
-
-                // store window statu
-                utils.Event.emit(layxPrefix + "updateStatus", layxContainer);
-
-                minMenu.classList.remove("layx-icon-min");
-                minMenu.classList.add("layx-icon-max");
-
-                methods.layxContainerMinManager();
             }
         });
 
