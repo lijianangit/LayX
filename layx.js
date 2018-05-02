@@ -1,4 +1,11 @@
-﻿; !function (over, win) {
+﻿/*
+ * gitee : https://gitee.com/monksoul/LayX
+ * author : 百小僧
+ * version : v1.0.0 beta
+ * create time : 2018.04.30
+ */
+
+; !function (over, win) {
     "use strict";
 
     var utils = {
@@ -592,7 +599,7 @@
     };
 
     var core = {
-        v: '1.0',
+        v: '1.0.0 beta',
         name: 'layx',
         open: function (options) {
             var that = this;
