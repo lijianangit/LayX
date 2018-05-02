@@ -208,8 +208,10 @@
         }
 
         var dragstart = function (e) {
-            e = e || window.event
-            if (canMove) {
+            e = e || window.event;
+
+            var layxContainerStatus = layxContainer.getAttribute("data-statu") || "normal";
+            if (layxContainerStatus !== "min" && canMove) {
                 maskLayer.style.setProperty("visibility", "visible");
                 var layxContainerArea = eval("(" + layxContainer.getAttribute("data-area") + ")");
 
@@ -551,19 +553,24 @@
                 layxContainer.setAttribute("data-area", "[" + [layxContainer.offsetWidth - 2, layxContainer.offsetHeight - 2, layxContainer.offsetTop, layxContainer.offsetLeft] + "]");
             }
         },
-        layxContainerMinManager: function (layxContainer) {
+        layxContainerMinManager: function () {
             var minCount = 0,
-                minWidth = 200;
+                minWidth = 200,
+                minHeight = 30,
+                padding = 10,
+                visibleWidth = document.documentElement.clientWidth,
+                lineMaxCount = Math.floor(visibleWidth / minWidth);
             var windows = core.windows;
             if (windows) {
                 for (var id in windows) {
                     if (windows[id].status === "min") {
+                        methods.changeLayxContainerArea(windows[id].container, [minWidth, minHeight, 'auto', (minCount % lineMaxCount) * (minWidth + padding) + padding]);
+                        windows[id].container.style.setProperty('bottom', Math.floor(minCount / lineMaxCount) * (minHeight + padding) + padding + "px");
+
                         minCount++;
                     }
                 }
             }
-
-            methods.changeLayxContainerArea(layxContainer, [200, 30, 'auto', minCount * (minWidth + 10)]);
         }
     };
 
@@ -682,20 +689,22 @@
 
                 minMenu.classList.remove("layx-icon-max");
                 minMenu.classList.add("layx-icon-min");
+
+                // store window statu
+                utils.Event.emit(layxPrefix + "updateStatus", layxContainer);
             }
             else {
                 dragContainer.style.setProperty("visibility", "hidden");
-                methods.layxContainerMinManager(layxContainer);
-
-                layxContainer.style.setProperty('bottom', "10px")
                 layxContainer.setAttribute("data-statu", "min");
+
+                // store window statu
+                utils.Event.emit(layxPrefix + "updateStatus", layxContainer);
 
                 minMenu.classList.remove("layx-icon-min");
                 minMenu.classList.add("layx-icon-max");
-            }
 
-            // store window statu
-            utils.Event.emit(layxPrefix + "updateStatus", layxContainer);
+                methods.layxContainerMinManager();
+            }
         });
 
         utils.Event.on(layxPrefix + "updateStatus", function (layxContainer) {
