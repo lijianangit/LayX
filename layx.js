@@ -749,4 +749,8 @@
     win.layx = core;
     over["layx"] = core;
     over["layx"]["app"] = core;
+
+    window.onresize = function () {
+        methods.layxContainerMinManager();
+    }
 }(top, window);
