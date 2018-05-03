@@ -1,11 +1,3 @@
-.layx-iconfont {
-    width: 1em;
-    height: 1em;
-    vertical-align: -0.15em;
-    fill: currentColor;
-    overflow: hidden;
-}
-
 .layx-window,
 .layx-window *,
 .layx-shade {
@@ -68,6 +60,14 @@
     z-index: 1;
 }
 
+.layx-iconfont {
+    width: 1em;
+    height: 1em;
+    /*vertical-align: -0.15em;*/
+    fill: currentColor;
+    overflow: hidden;
+}
+
 .layx-title,
 .layx-body {
     -webkit-box-flex: 1;
@@ -93,6 +93,7 @@
     box-orient: vertical;
     -webkit-box-orient: vertical;
     -moz-box-orient: vertical;
+    line-height: 28px;
 }
 
 .layx-menus {
