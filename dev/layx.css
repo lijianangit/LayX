@@ -148,6 +148,10 @@
     z-index: 3;
 }
 
+.layx-resizes[data-enable='0'] {
+    visibility: hidden;
+}
+
 .layx-resizes>div {
     position: absolute;
 }

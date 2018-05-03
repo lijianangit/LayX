@@ -122,88 +122,6 @@
         }
     };
 
-    // Event define
-    var EventTarget = function() {
-        this._listener = {};
-    };
-
-    EventTarget.prototype = {
-        constructor: this,
-        addEvent: function(type, fn) {
-            if (typeof type === "string" && typeof fn === "function") {
-                if (typeof this._listener[type] === "undefined") {
-                    this._listener[type] = [fn];
-                } else {
-                    this._listener[type].push(fn);
-                }
-            }
-            return this;
-        },
-        addEvents: function(obj) {
-            obj = typeof obj === "object" ? obj : {};
-            var type;
-            for (type in obj) {
-                if (type && typeof obj[type] === "function") {
-                    this.addEvent(type, obj[type]);
-                }
-            }
-            return this;
-        },
-        fireEvent: function(type) {
-            if (type && this._listener[type]) {
-                var events = {
-                    type: type,
-                    target: this
-                };
-
-                for (var length = this._listener[type].length, start = 0; start < length; start += 1) {
-                    this._listener[type][start].call(this, events);
-                }
-            }
-            return this;
-        },
-        fireEvents: function(array) {
-            if (array instanceof Array) {
-                for (var i = 0, length = array.length; i < length; i += 1) {
-                    this.fireEvent(array[i]);
-                }
-            }
-            return this;
-        },
-        removeEvent: function(type, key) {
-            var listeners = this._listener[type];
-            if (listeners instanceof Array) {
-                if (typeof key === "function") {
-                    for (var i = 0, length = listeners.length; i < length; i += 1) {
-                        if (listeners[i] === listener) {
-                            listeners.splice(i, 1);
-                            break;
-                        }
-                    }
-                } else if (key instanceof Array) {
-                    for (var lis = 0, lenkey = key.length; lis < lenkey; lis += 1) {
-                        this.removeEvent(type, key[lenkey]);
-                    }
-                } else {
-                    delete this._listener[type];
-                }
-            }
-            return this;
-        },
-        removeEvents: function(params) {
-            if (params instanceof Array) {
-                for (var i = 0, length = params.length; i < length; i += 1) {
-                    this.removeEvent(params[i]);
-                }
-            } else if (typeof params === "object") {
-                for (var type in params) {
-                    this.removeEvent(type, params[type]);
-                }
-            }
-            return this;
-        }
-    };
-
     var utils = {
         extend: function(target, ...sources) {
             sources.forEach(source => {
@@ -237,13 +155,52 @@
         InsertAfter: function(html, el) {
             ((el && el.nodeType == 1) ? el : document.body).lastElementChild.insertAdjacentHTML('afterend', html);
         },
-    };
+        getClientArea: function() {
+            return { width: window.innerWidth, height: window.innerHeight };
+        },
+        compilePositionParams: function(width, height, params) {
+            var that = this;
+            var posOptions = ['center', 'lt', 'rt', 'lb', 'rb'];
+            var clientArea = that.getClientArea();
+            var position = { top: 0, left: 0 };
+            if (that.isArray(params) && params.length === 2) {
+                position.top = params[0];
+                position.left = params[1];
+            } else {
+                params = posOptions.indexOf(params.toString()) > -1 ? params.toString() : 'center';
+                switch (params) {
+                    case 'center':
+                        position.top = Math.floor(Math.floor(clientArea.height - height) / 2);
+                        position.left = Math.floor(Math.floor(clientArea.width - width) / 2);
+                        break;
+                    case 'lt':
+                        position.top = 0;
+                        position.left = 0;
+                        break;
+                    case 'rt':
+                        position.top = 0;
+                        position.left = Math.floor(clientArea.width - width);
+                        break;
+                    case 'lb':
+                        position.top = Math.floor(clientArea.height - height);
+                        position.left = 0;
+                        break;
+                    case 'rb':
+                        position.top = Math.floor(clientArea.height - height);
+                        position.left = Math.floor(clientArea.width - width);
+                        break;
+                }
+            }
+            if (typeof position.top !== 'number') {
+                position.top = Math.floor(Math.floor(clientArea.height - height) / 2);
+            }
+            if (typeof position.left !== 'number') {
+                position.left = Math.floor(Math.floor(clientArea.width - width) / 2);
+            }
 
-    // layx window events define
-    var winEvents = new EventTarget();
-    winEvents.addEvents({
-        destroy: function(winform, options) {}
-    });
+            return position;
+        }
+    };
 
     // Layx class define
     var Layx = {
@@ -256,10 +213,22 @@
                 winform.id = config.id;
                 winform.title = config.title;
                 winform.type = config.type;
+                winform.config = config;
+                winform.status = 'normal';
+                winform.createDate = new Date();
+
+                var position = utils.compilePositionParams(config.width, config.height, config.position);
+                winform.defaultAreaInfo = {
+                    width: config.width,
+                    height: config.height,
+                    top: position.top,
+                    left: position.left,
+                    position: config.position
+                };
 
                 // create window dom
                 var winTemplate = `
-                <div class="layx-window" id="layx-` + config.id + `" style="width:` + config.width + `px;height:` + config.height + `px;top:50px;left:50px;z-index: ` + (++Layx.zIndex) + `;background-color:` + config.bgColor + `;border-color:` + config.borderColor + `;opacity:` + config.opacity + `">
+                <div class="layx-window" id="layx-` + config.id + `" style="width:` + config.width + `px;height:` + config.height + `px;top:` + position.top + `px;left:` + position.left + `px;z-index: ` + (++Layx.zIndex) + `;background-color:` + (config.bgColor ? config.bgColor : 'transparent') + `;border-color:` + config.borderColor + `;opacity:` + config.opacity + `">
                     <div class="layx-control-bar">
                         <div class="layx-icons">
                             <div class="layx-icon">
@@ -323,6 +292,20 @@
                 // append to body
                 utils.InsertAfter(winTemplate);
 
+                var windowDom = utils.getElementById('layx-' + config.id);
+                winform.windowDom = windowDom;
+                winform.zIndex = Layx.zIndex;
+
+                // bind events
+                var destroyMenu = utils.querySelector('.layx-destroy-menu', windowDom);
+                if (destroyMenu) destroyMenu.onclick = function(e) { Layx.triggerMethod('destroy', config.id, e); };
+
+                var maxMenu = utils.querySelector('.layx-max-menu', windowDom);
+                if (maxMenu) maxMenu.onclick = function(e) { Layx.triggerMethod('max', config.id, e); };
+
+                var minMenu = utils.querySelector('.layx-min-menu', windowDom);
+                if (minMenu) minMenu.onclick = function(e) { Layx.triggerMethod('min', config.id, e); };
+
                 Layx.windows[winform.id] = winform;
             }
             return winform;
@@ -334,6 +317,182 @@
             var windowDom = utils.getElementById("layx-" + id);
             if (windowDom) {
                 windowDom.parentNode.removeChild(windowDom);
+            }
+        },
+        max: function(id) {
+            var windowDom = utils.getElementById("layx-" + id);
+            if (windowDom) {
+                var maxMenu = utils.querySelector('.layx-max-menu', windowDom);
+                if (maxMenu) {
+                    maxMenu.innerHTML = `
+                    <svg class="layx-iconfont" aria-hidden="true">
+                        <use xlink:href="#layx-icon-restore"></use>
+                    </svg>
+                    `;
+                    maxMenu.classList.remove('layx-max-menu');
+                    maxMenu.classList.add('layx-restore-menu');
+                    maxMenu.setAttribute('data-ref', 'max');
+
+                    var restoreMenu = utils.querySelector('.layx-restore-menu[data-ref="max"]', windowDom);
+                    if (restoreMenu) restoreMenu.onclick = function(e) { Layx.triggerMethod('restore', id, e); };
+                }
+
+                var minMenu = utils.querySelector('.layx-restore-menu[data-ref="min"]', windowDom);
+                if (minMenu) {
+                    minMenu.innerHTML = `
+                    <svg class="layx-iconfont" aria-hidden="true">
+                        <use xlink:href="#layx-icon-min"></use>
+                    </svg>
+                    `;
+                    minMenu.classList.remove('layx-restore-menu');
+                    minMenu.classList.add('layx-min-menu');
+                    minMenu.removeAttribute('data-ref');
+                    minMenu.removeAttribute('data-restore-statu');
+
+                    minMenu.onclick = function(e) { Layx.triggerMethod('min', id, e); };
+                }
+
+                var resizePanel = utils.querySelector('.layx-resizes', windowDom);
+                if (resizePanel) {
+                    resizePanel.setAttribute('data-enable', '0');
+                }
+
+                var clientArea = utils.getClientArea();
+                windowDom.style.width = clientArea.width + 'px';
+                windowDom.style.height = clientArea.height + 'px';
+                windowDom.style.top = '0px';
+                windowDom.style.left = '0px';
+
+                Layx.windows[id].status = 'max';
+            }
+        },
+        restore: function(id) {
+            var windowDom = utils.getElementById("layx-" + id),
+                winform = Layx.windows[id];
+            if (windowDom) {
+
+                var maxMenu = utils.querySelector('.layx-restore-menu[data-ref="max"]', windowDom);
+                if (maxMenu) {
+                    maxMenu.innerHTML = `
+                        <svg class="layx-iconfont" aria-hidden="true">
+                            <use xlink:href="#layx-icon-max"></use>
+                        </svg>
+                        `;
+                    maxMenu.classList.remove('layx-restore-menu');
+                    maxMenu.classList.add('layx-max-menu');
+                    maxMenu.removeAttribute('data-ref');
+
+                    maxMenu.onclick = function(e) { Layx.triggerMethod('max', id, e); };
+
+                    var defaultAreaInfo = winform.defaultAreaInfo;
+                    windowDom.style.width = defaultAreaInfo.width + 'px';
+                    windowDom.style.height = defaultAreaInfo.height + 'px';
+                    windowDom.style.top = defaultAreaInfo.top + 'px';
+                    windowDom.style.left = defaultAreaInfo.left + 'px';
+
+                    Layx.windows[id].status = 'normal';
+                }
+
+                var minMenu = utils.querySelector('.layx-restore-menu[data-ref="min"]', windowDom);
+                if (minMenu) {
+                    minMenu.innerHTML = `
+                        <svg class="layx-iconfont" aria-hidden="true">
+                            <use xlink:href="#layx-icon-min"></use>
+                        </svg>
+                        `;
+                    minMenu.classList.remove('layx-restore-menu');
+                    minMenu.classList.add('layx-min-menu');
+                    minMenu.removeAttribute('data-ref');
+
+                    minMenu.onclick = function(e) { Layx.triggerMethod('min', id, e); };
+
+                    var resizePanel = utils.querySelector('.layx-resizes', windowDom);
+                    if (resizePanel) {
+                        resizePanel.removeAttribute('data-enable');
+                    }
+
+                    var restoreStatu = minMenu.getAttribute("data-restore-statu");
+                    if (restoreStatu === "normal") {
+                        var defaultAreaInfo = winform.defaultAreaInfo;
+                        windowDom.style.width = defaultAreaInfo.width + 'px';
+                        windowDom.style.height = defaultAreaInfo.height + 'px';
+                        windowDom.style.top = defaultAreaInfo.top + 'px';
+                        windowDom.style.left = defaultAreaInfo.left + 'px';
+
+                        Layx.windows[id].status = 'normal';
+                    } else if (restoreStatu === "max") {
+                        Layx.triggerMethod(restoreStatu, id);
+                    }
+                }
+            }
+        },
+        min: function(id) {
+            var windowDom = utils.getElementById("layx-" + id),
+                winform = Layx.windows[id];
+            if (windowDom) {
+                var minMenu = utils.querySelector('.layx-min-menu', windowDom);
+                if (minMenu) {
+                    minMenu.innerHTML = `
+                    <svg class="layx-iconfont" aria-hidden="true">
+                        <use xlink:href="#layx-icon-restore"></use>
+                    </svg>
+                    `;
+                    minMenu.classList.remove('layx-min-menu');
+                    minMenu.classList.add('layx-restore-menu');
+                    minMenu.setAttribute('data-ref', 'min');
+                    minMenu.setAttribute('data-restore-statu', winform.status);
+
+                    var restoreMenu = utils.querySelector('.layx-restore-menu[data-ref="min"]', windowDom);
+                    if (restoreMenu) restoreMenu.onclick = function(e) { Layx.triggerMethod('restore', id, e); };
+                }
+
+                var maxMenu = utils.querySelector('.layx-restore-menu[data-ref="max"]', windowDom);
+                if (maxMenu) {
+                    maxMenu.innerHTML = `
+                    <svg class="layx-iconfont" aria-hidden="true">
+                        <use xlink:href="#layx-icon-max"></use>
+                    </svg>
+                    `;
+                    maxMenu.classList.remove('layx-restore-menu');
+                    maxMenu.classList.add('layx-max-menu');
+                    maxMenu.removeAttribute('data-ref');
+
+                    maxMenu.onclick = function(e) { Layx.triggerMethod('max', id, e); };
+                }
+
+                var resizePanel = utils.querySelector('.layx-resizes', windowDom);
+                if (resizePanel) {
+                    resizePanel.setAttribute('data-enable', '0');
+                }
+
+                Layx.windows[id].status = 'min';
+                Layx.minManager();
+            }
+        },
+        triggerMethod: function(methodName, id, e) {
+            e = e || window.event;
+            Layx[methodName](id);
+            e.stopPropagation();
+        },
+        minManager: function() {
+            var clientArea = utils.getClientArea(),
+                paddingLeft = 10,
+                paddingBottom = 10,
+                minStatuWidth = 200,
+                minStatuHeight = 30,
+                lineMaxCount = Math.floor(clientArea.width / (minStatuWidth + paddingLeft)),
+                stepIndex = 0;
+            var windows = Layx.windows;
+            if (windows) {
+                for (var id in windows) {
+                    if (windows[id].status === 'min') {
+                        windows[id].windowDom.style.width = minStatuWidth + 'px';
+                        windows[id].windowDom.style.height = minStatuHeight + 'px';
+                        windows[id].windowDom.style.top = clientArea.height - (Math.floor(stepIndex / lineMaxCount) + 1) * (minStatuHeight + paddingBottom) + 'px';
+                        windows[id].windowDom.style.left = (stepIndex % lineMaxCount) * (minStatuWidth + paddingLeft) + paddingLeft + 'px';
+                        stepIndex++;
+                    }
+                }
             }
         }
     };
@@ -348,11 +507,14 @@
         min: function(id) {},
         max: function(id) {},
         restore: function(id) {},
-        setAlwaysOnTop: function(id) {},
         getWindow: function(id) {},
+        getWindows: function() {
+            return Layx.windows;
+        },
         setTitle: function(id, title) {},
         setPosition: function(id, position) {},
-        getWindows: function() {}
+        setContent: function(id, content) {},
+        setAlwaysOnTop: function(id) {}
     };
 
 })(top, window);
