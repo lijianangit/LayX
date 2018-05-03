@@ -102,7 +102,7 @@
         intercept: {
             load: {
                 before: function() {},
-                after: function() {}
+                after: function(iframe) {}
             },
             min: {
                 before: function() {},
