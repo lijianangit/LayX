@@ -11,13 +11,17 @@
 
 <body>
     <button id='btn1'>打开新窗口</button>
+    <button id='btn2'>改变窗口标题</button>
     <script src="layx.js" type="text/javascript"></script>
     <script type="text/javascript">
         document.getElementById('btn1').onclick = function(e) {
             layx.open({
-                id: 'layx',
+                id: 'btn1',
                 title: 'Layx 页面弹窗最佳选择'
             });
+        }
+        document.getElementById('btn2').onclick = function(e) {
+            layx.setTitle('btn1', '改变标题：Layx.')
         }
     </script>
 </body>

@@ -521,6 +521,15 @@
                 windowDom.style.zIndex = ++Layx.zIndex;
                 winform.zIndex = Layx.zIndex;
             }
+        },
+        setTitle: function(id, txt) {
+            var windowDom = utils.getElementById("layx-" + id),
+                winform = Layx.windows[id];
+            if (windowDom) {
+                var title = utils.querySelector('.layx-title', windowDom);
+                title.innerHTML = txt;
+                winform.title = txt;
+            }
         }
     };
 
@@ -534,11 +543,15 @@
         min: function(id) {},
         max: function(id) {},
         restore: function(id) {},
-        getWindow: function(id) {},
+        getWindow: function(id) {
+            return Layx.windows[id];
+        },
         getWindows: function() {
             return Layx.windows;
         },
-        setTitle: function(id, title) {},
+        setTitle: function(id, title) {
+            Layx.setTitle(id, title);
+        },
         setPosition: function(id, position) {},
         setContent: function(id, content) {},
         setAlwaysOnTop: function(id) {}
