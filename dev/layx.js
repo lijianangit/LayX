@@ -228,6 +228,9 @@
 
                 // create window dom
                 var winTemplate = `
+                ` + (config.shade === true ? `
+                <div class="layx-shade" id="layx-` + config.id + `-shade" style="z-index:` + (++Layx.zIndex) + `"></div>
+                ` : ``) + `
                 <div class="layx-window" id="layx-` + config.id + `" style="width:` + config.width + `px;height:` + config.height + `px;top:` + position.top + `px;left:` + position.left + `px;z-index: ` + (++Layx.zIndex) + `;background-color:` + (config.bgColor ? config.bgColor : 'transparent') + `;border-color:` + config.borderColor + `;opacity:` + config.opacity + `">
                     <div class="layx-control-bar">
                         <div class="layx-icons">
@@ -315,9 +318,13 @@
                     }
                 };
 
-                Layx.windows[winform.id] = winform;
+                Layx.windows[config.id] = winform;
+
+                return winform;
+            } else {
+                Layx.ExistShow(config.id);
+                return Layx.windows[config.id];
             }
-            return winform;
         },
         destroy: function(id) {
             if (Layx.windows.hasOwnProperty(id)) {
@@ -502,6 +509,17 @@
                         stepIndex++;
                     }
                 }
+            }
+        },
+        ExistShow: function(id) {
+            var windowDom = utils.getElementById("layx-" + id),
+                winform = Layx.windows[id];
+            if (windowDom) {
+                if (winform.status === "min") {
+                    Layx.triggerMethod('restore', id);
+                }
+                windowDom.style.zIndex = ++Layx.zIndex;
+                winform.zIndex = Layx.zIndex;
             }
         }
     };
