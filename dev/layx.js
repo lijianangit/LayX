@@ -80,6 +80,7 @@
         borderColor: '#3baced',
         opacity: 1,
         type: 'iframe',
+        url: '',
         content: 'about:blank',
         width: 800,
         height: 600,
@@ -239,6 +240,10 @@
         create: function(options) {
             var config = utils.extend({}, defaults, options || {});
             if (!Layx.windows.hasOwnProperty(config.id)) {
+                if (config.url) {
+                    config.type = 'iframe';
+                }
+
                 var winform = {};
                 winform.id = config.id;
                 winform.title = config.title;
@@ -326,7 +331,7 @@
                 var layxBody = utils.querySelector('.layx-body');
                 if (utils.isFunction(config.intercept.load.before) && config.intercept.load.before() !== false) {
                     if (config.type === "iframe") {
-                        var iframe = utils.createIframe("layx-" + config.id + '-content', config.content, function() {
+                        var iframe = utils.createIframe("layx-" + config.id + '-content', (config.url ? config.url : config.content), function() {
                             try {
                                 var iframeDoc = iframe.contentWindow;
                                 iframeDoc.onclick = function(e) {
