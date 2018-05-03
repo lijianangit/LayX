@@ -324,29 +324,35 @@
                 // append to body
                 utils.InsertAfter(winTemplate);
                 var layxBody = utils.querySelector('.layx-body');
-                if (config.type === "iframe") {
-                    var iframe = utils.createIframe("layx-" + config.id + '-content', config.content, function() {
-                        try {
-                            var iframeDoc = iframe.contentWindow;
-                            iframeDoc.onclick = function(e) {
-                                var that = this.self;
-                                if (that != over && that.frameElement && that.frameElement.tagName == "IFRAME") {
-                                    var windowDom = that.frameElement.parentNode.parentElement;
-                                    windowDom.style.zIndex = ++Layx.zIndex;
-                                    winform.zIndex = Layx.zIndex;
+                if (utils.isFunction(config.intercept.load.before) && config.intercept.load.before() !== false) {
+                    if (config.type === "iframe") {
+                        var iframe = utils.createIframe("layx-" + config.id + '-content', config.content, function() {
+                            try {
+                                var iframeDoc = iframe.contentWindow;
+                                iframeDoc.onclick = function(e) {
+                                    var that = this.self;
+                                    if (that != over && that.frameElement && that.frameElement.tagName == "IFRAME") {
+                                        var windowDom = that.frameElement.parentNode.parentElement;
+                                        windowDom.style.zIndex = ++Layx.zIndex;
+                                        winform.zIndex = Layx.zIndex;
+                                    }
+                                };
+                                if (utils.isFunction(config.intercept.load.after)) {
+                                    config.intercept.load.after(iframeDoc);
                                 }
-                            };
-                        } catch (error) { console.warn(error); }
-                    });
-                    iframe.classList.add("layx-iframe");
-                    layxBody.appendChild(iframe);
-                } else {
-                    var div = document.createElement('div');
-                    div.classList.add('layx-html');
-                    div.innerHTML = config.content;
-                    div.setAttribute("id", "layx-" + config.id + '-content');
-                    layxBody.appendChild(div);
+                            } catch (error) { console.warn(error); }
+                        });
+                        iframe.classList.add("layx-iframe");
+                        layxBody.appendChild(iframe);
+                    } else {
+                        var div = document.createElement('div');
+                        div.classList.add('layx-html');
+                        div.innerHTML = config.content;
+                        div.setAttribute("id", "layx-" + config.id + '-content');
+                        layxBody.appendChild(div);
+                    }
                 }
+
 
                 var windowDom = utils.getElementById('layx-' + config.id);
                 winform.windowDom = windowDom;
