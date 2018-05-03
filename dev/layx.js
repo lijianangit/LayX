@@ -592,6 +592,7 @@
         },
         triggerMethod: function(methodName, id, e) {
             e = e || window.event;
+            Layx.ExistShow(id);
             Layx[methodName](id);
             e.stopPropagation();
         },
