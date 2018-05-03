@@ -85,6 +85,7 @@
         width: 800,
         height: 600,
         position: 'center',
+        useFrameTitle: false,
         minWidth: 50,
         minHeight: 50,
         shade: false,
@@ -377,6 +378,8 @@
                 var windowDom = utils.getElementById('layx-' + config.id);
                 winform.windowDom = windowDom;
                 winform.zIndex = Layx.zIndex;
+                Layx.windows[config.id] = winform;
+
                 var layxBody = utils.querySelector('.layx-body', windowDom);
 
                 if (utils.isFunction(config.intercept.load.before) && config.intercept.load.before() !== false) {
@@ -384,6 +387,10 @@
                         var iframe = utils.createIframe("layx-" + config.id + '-content', (config.url ? config.url : config.content), function() {
                             try {
                                 var iframeDoc = iframe.contentWindow;
+                                if (config.useFrameTitle === true) {
+                                    var frameTitle = iframe.contentDocument.querySelector('title');
+                                    Layx.setTitle(config.id, frameTitle ? frameTitle.innerText : config.title);
+                                }
                                 iframeDoc.onclick = function(e) {
                                     var that = this.self;
                                     if (that != over && that.frameElement && that.frameElement.tagName == "IFRAME") {
@@ -435,8 +442,6 @@
                         }
                     };
                 }
-
-                Layx.windows[config.id] = winform;
 
                 return winform;
             } else {
