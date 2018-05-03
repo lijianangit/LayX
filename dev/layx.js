@@ -433,7 +433,7 @@
         },
         destroy: function(id) {
             if (Layx.windows.hasOwnProperty(id)) {
-                delete Layx.windows.id;
+                delete Layx.windows[id];
             }
             var windowDom = utils.getElementById("layx-" + id);
             if (windowDom) {
