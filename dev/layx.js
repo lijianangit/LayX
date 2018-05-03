@@ -233,6 +233,37 @@
         }
     };
 
+    var Drag = function(el) {
+        var options = arguments[1] || {},
+            limit = false || options.limit,
+            lockX = false || options.lockX,
+            lockY = false || options.lockY;
+
+        var drag = function(e) {
+            e = e || window.event;
+
+            var button = e.button || e.which;
+            if (button == 1 && e.shiftKey == false) {}
+        }
+
+        var dragend = function(e) {
+            e = e || window.event;
+
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+
+        var dragstart = function(e) {
+            e = e || window.event;
+            var windowDom = el.parentElement.parentElement;
+            windowDom.style.zIndex = ++Layx.zIndex;
+            Layx.windows[windowDom.id.substr(5)].zIndex = Layx.zIndex;
+            el.windowDom = windowDom;
+            return false;
+        };
+        el.onmousedown = dragstart;
+    }
+
     // Layx class define
     var Layx = {
         zIndex: 19920527,
@@ -380,6 +411,9 @@
 
                 var title = utils.querySelector('.layx-title', windowDom);
                 if (title) {
+                    if (config.movable) {
+                        new Drag(title);
+                    }
                     title.ondblclick = function(e) {
                         if (winform.status === "normal") {
                             Layx.triggerMethod('max', config.id, e);
