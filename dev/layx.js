@@ -86,6 +86,7 @@
         position: 'center',
         minWidth: 50,
         minHeight: 50,
+        shade: false,
         minimizable: true,
         maximizable: true,
         closable: true,
