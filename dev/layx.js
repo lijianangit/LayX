@@ -242,6 +242,8 @@
             if (!Layx.windows.hasOwnProperty(config.id)) {
                 if (config.url) {
                     config.type = 'iframe';
+                } else {
+                    config.type = 'html';
                 }
 
                 var winform = {};
@@ -328,7 +330,11 @@
 
                 // append to body
                 utils.InsertAfter(winTemplate);
-                var layxBody = utils.querySelector('.layx-body');
+                var windowDom = utils.getElementById('layx-' + config.id);
+                winform.windowDom = windowDom;
+                winform.zIndex = Layx.zIndex;
+                var layxBody = utils.querySelector('.layx-body', windowDom);
+
                 if (utils.isFunction(config.intercept.load.before) && config.intercept.load.before() !== false) {
                     if (config.type === "iframe") {
                         var iframe = utils.createIframe("layx-" + config.id + '-content', (config.url ? config.url : config.content), function() {
@@ -355,13 +361,12 @@
                         div.innerHTML = config.content;
                         div.setAttribute("id", "layx-" + config.id + '-content');
                         layxBody.appendChild(div);
+                        windowDom.onclick = function(e) {
+                            this.style.zIndex = ++Layx.zIndex;
+                            winform.zIndex = Layx.zIndex;
+                        }
                     }
                 }
-
-
-                var windowDom = utils.getElementById('layx-' + config.id);
-                winform.windowDom = windowDom;
-                winform.zIndex = Layx.zIndex;
 
                 // bind events
                 var destroyMenu = utils.querySelector('.layx-destroy-menu', windowDom);
