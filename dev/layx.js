@@ -75,7 +75,7 @@
     var defaults = {
         id: 'layx',
         icon: '',
-        title: '未命名标题',
+        title: '',
         bgColor: '#fff',
         borderColor: '#3baced',
         opacity: 1,
@@ -402,7 +402,12 @@
                                 if (utils.isFunction(config.intercept.load.after)) {
                                     config.intercept.load.after(iframeDoc);
                                 }
-                            } catch (error) { console.warn(error); }
+                            } catch (error) {
+                                if (config.useFrameTitle === true) {
+                                    Layx.setTitle(config.id, config.title);
+                                }
+                                console.warn(error);
+                            }
                         });
                         iframe.classList.add("layx-iframe");
                         layxBody.appendChild(iframe);
@@ -654,6 +659,16 @@
                 title.innerHTML = txt;
                 winform.title = txt;
             }
+        },
+        setUrl: function(id, url) {
+            var windowDom = utils.getElementById("layx-" + id),
+                winform = Layx.windows[id];
+            if (windowDom) {
+                if (winform.type === "iframe") {
+                    var iframe = utils.querySelector('#layx-' + id + '-content', windowDom);
+                    iframe.setAttribute("src", url);
+                }
+            }
         }
     };
 
@@ -675,6 +690,9 @@
         },
         setTitle: function(id, title) {
             Layx.setTitle(id, title);
+        },
+        setUrl: function(id, url) {
+            Layx.setUrl(id, url);
         },
         setPosition: function(id, position) {},
         setContent: function(id, content) {},
