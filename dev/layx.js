@@ -306,6 +306,15 @@
                 var minMenu = utils.querySelector('.layx-min-menu', windowDom);
                 if (minMenu) minMenu.onclick = function(e) { Layx.triggerMethod('min', config.id, e); };
 
+                var title = utils.querySelector('.layx-title', windowDom);
+                if (title) title.ondblclick = function(e) {
+                    if (winform.status === "normal") {
+                        Layx.triggerMethod('max', config.id, e);
+                    } else {
+                        Layx.triggerMethod('restore', config.id, e);
+                    }
+                };
+
                 Layx.windows[winform.id] = winform;
             }
             return winform;
