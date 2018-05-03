@@ -35,7 +35,11 @@
             });
         }
         document.getElementById('btn4').onclick = function(e) {
-            layx.setUrl('btn1', 'https://www.baidu.com');
+            layx.open({
+                id: 'btn4',
+                title: '开源中国官网',
+                url: 'http://www.oschina.net'
+            });
         }
     </script>
 </body>
