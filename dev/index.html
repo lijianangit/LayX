@@ -17,7 +17,9 @@
         document.getElementById('btn1').onclick = function(e) {
             layx.open({
                 id: 'btn1',
-                title: 'Layx 页面弹窗最佳选择'
+                title: 'Layx 页面弹窗最佳选择',
+                type: 'iframe',
+                content: './iframe.html'
             });
         }
         document.getElementById('btn2').onclick = function(e) {

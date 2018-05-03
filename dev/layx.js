@@ -199,6 +199,36 @@
             }
 
             return position;
+        },
+        createIframe: function(id, src, onload) {
+            var that = this,
+                iframe = document.createElement("iframe");
+
+            src = src || 'about:blank';
+            iframe.setAttribute("id", id);
+            iframe.setAttribute("allowtransparency", true);
+            iframe.setAttribute("frameborder", 0);
+            iframe.setAttribute("scrolling", "auto");
+
+            if (that.isFunction(onload)) {
+                if (iframe.attachEvent) {
+                    iframe.attachEvent('onload', onload);
+                } else if (iframe.addEventListener) {
+                    iframe.addEventListener('load', onload);
+                } else {
+                    iframe.onload = onload;
+                }
+            }
+            iframe.src = src;
+            return iframe;
+        },
+        destroyIframe: function(iframe) {
+            iframe.src = 'about:blank';
+            try {
+                iframe.contentWindow.document.write('');
+                iframe.contentWindow.document.clear();
+            } catch (error) {}
+            iframe.parentNode.removeChild(iframe);
         }
     };
 
@@ -273,7 +303,6 @@
                     </div>
                     <div class="layx-body">
                         <div class="layx-fixed" data-enable="0"></div>
-                        <iframe class="layx-iframe" allowtransparency="true" frameborder="0" scrolling="auto" src="./iframe.html"></iframe>
                     </div>
                     ` + (config.resizable === true ?
                     `
@@ -294,6 +323,30 @@
 
                 // append to body
                 utils.InsertAfter(winTemplate);
+                var layxBody = utils.querySelector('.layx-body');
+                if (config.type === "iframe") {
+                    var iframe = utils.createIframe("layx-" + config.id + '-content', config.content, function() {
+                        try {
+                            var iframeDoc = iframe.contentWindow;
+                            iframeDoc.onclick = function(e) {
+                                var that = this.self;
+                                if (that != over && that.frameElement && that.frameElement.tagName == "IFRAME") {
+                                    var windowDom = that.frameElement.parentNode.parentElement;
+                                    windowDom.style.zIndex = ++Layx.zIndex;
+                                    winform.zIndex = Layx.zIndex;
+                                }
+                            };
+                        } catch (error) { console.warn(error); }
+                    });
+                    iframe.classList.add("layx-iframe");
+                    layxBody.appendChild(iframe);
+                } else {
+                    var div = document.createElement('div');
+                    div.classList.add('layx-html');
+                    div.innerHTML = config.content;
+                    div.setAttribute("id", "layx-" + config.id + '-content');
+                    layxBody.appendChild(div);
+                }
 
                 var windowDom = utils.getElementById('layx-' + config.id);
                 winform.windowDom = windowDom;
@@ -533,7 +586,7 @@
         }
     };
 
-    win.layx = {
+    over.layx = win.layx = {
         open: function(options) {
             return Layx.create(options);
         },
