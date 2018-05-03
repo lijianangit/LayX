@@ -230,6 +230,19 @@
                 iframe.contentWindow.document.clear();
             } catch (error) {}
             iframe.parentNode.removeChild(iframe);
+        },
+        poll: function(fn, callback, errback, timeout, interval) {
+            var endTime = Number(new Date()) + (timeout || 2000);
+            interval = interval || 100;
+            (function p() {
+                if (fn()) {
+                    callback();
+                } else if (Number(new Date()) < endTime) {
+                    setTimeout(p, interval);
+                } else {
+                    errback(new Error('timed out for ' + fn + ': ' + arguments));
+                }
+            })();
         }
     };
 
@@ -641,7 +654,7 @@
 
     over.layx = win.layx = {
         open: function(options) {
-            return Layx.create(options);
+            Layx.create(options);
         },
         destroy: function(id) {
             Layx.destroy(id);
