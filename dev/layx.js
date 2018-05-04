@@ -47,28 +47,28 @@
         intercept: {
             // 加载监听
             load: {
-                before: function before(windowDom, winform) {},
-                after: function after(windowDom, winform, iframe) {}
+                before: function(windowDom, winform) {},
+                after: function(windowDom, winform, iframe) {}
             },
             // 最小化监听
             min: {
-                before: function before(windowDom, winform) {},
-                after: function after(windowDom, winform) {}
+                before: function(windowDom, winform) {},
+                after: function(windowDom, winform) {}
             },
             // 最大化监听
             max: {
-                before: function before(windowDom, winform) {},
-                after: function after(windowDom, winform) {}
+                before: function(windowDom, winform) {},
+                after: function(windowDom, winform) {}
             },
             // 恢复监听
             restore: {
-                before: function before(windowDom, winform) {},
-                after: function after(windowDom, winform) {}
+                before: function(windowDom, winform) {},
+                after: function(windowDom, winform) {}
             },
             // 关闭监听
             destroy: {
-                before: function before(windowDom, winform) {},
-                after: function after(windowDom, winform) {}
+                before: function(windowDom, winform) {},
+                after: function(windowDom, winform) {}
             }
         }
     };
