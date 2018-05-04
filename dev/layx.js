@@ -31,7 +31,7 @@
         minWidth: 50, // 拖曳大小最小宽度
         minHeight: 50, // 拖曳大小最大宽度
         shadable: false, // 是否启用窗口阻隔
-        pinable: true, // 是否允许置顶
+        pinable: false, // 是否允许置顶
         minimizable: true, // 是否允许最小化
         maximizable: true, // 是否允许最大化
         closable: true, // 是否允许关闭
@@ -366,6 +366,8 @@
         v: '1.0.0',
         zIndex: 19920527,
         windows: {},
+        pinWindow: {}, // 置顶window
+        pinZindex: 19900527, // 置顶起始索引
         create: function(options) {
             var config = utils.extend({}, defaults, options || {});
             if (!Layx.windows.hasOwnProperty(config.id)) {
