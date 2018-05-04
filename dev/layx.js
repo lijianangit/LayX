@@ -482,6 +482,16 @@
                 if (shade) {
                     shade.parentNode.removeChild(shade);
                 }
+                var parentFrame = utils.querySelector("#layx-" + id + "-content", windowDom);
+                if (parentFrame) {
+                    // 关闭嵌套子窗体，递归
+                    if (parentFrame.tagName === "IFRAME") {
+                        if (parentFrame["contentWindow"]) {
+                            // 没有实现
+                        }
+                    }
+
+                }
             }
             if (Layx.windows.hasOwnProperty(id)) {
                 delete Layx.windows[id];
