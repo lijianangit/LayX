@@ -299,6 +299,9 @@
 
             if (Drag.isMove === true) {
                 Drag.isMove = false;
+                if (el.windowDom.offsetTop === 0) {
+                    Layx.triggerMethod('max', el.windowId, Layx.windows[el.windowId], e);
+                }
             }
             el.layxFixed.removeAttribute('data-enable');
         };
@@ -308,9 +311,11 @@
 
             var windowDom = utils.getNodeByClassName(el, 'layx-window'),
                 layxFixed = utils.querySelector('.layx-fixed', windowDom),
-                clientArea = utils.getClientArea();
-            Layx.setZindex(windowDom, Layx.windows[windowDom.id.substr(5)]);
+                clientArea = utils.getClientArea(),
+                windowId = windowDom.id.substr(5);
+            Layx.setZindex(windowDom, Layx.windows[windowId]);
             el.windowDom = windowDom;
+            el.windowId = windowId;
             el.layxFixed = layxFixed;
             el.windowStartLeft = windowDom.offsetLeft;
             el.windowStartTop = windowDom.offsetTop;
