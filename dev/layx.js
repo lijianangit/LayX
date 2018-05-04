@@ -681,6 +681,10 @@
         destroy: function(id) {
             Layx.destroy(id);
         },
+        // 关闭所有窗口，调用此接口将不能执行 intercept定义的拦截器
+        destroyAll: function() {
+
+        },
         // 最小化窗口
         min: function(id) {
             Layx.min(id);
