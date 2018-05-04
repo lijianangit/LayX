@@ -40,10 +40,10 @@
         moveLimit: {
             vertical: false, // 是否禁止垂直拖动，false不禁止
             horizontal: false, // 是否禁止水平拖动，false不禁止
-            moveOutLeft: true, // 是否允许左边拖出，true允许
-            moveOutright: true, // 是否允许右边拖出，true允许
-            moveOutTop: true, // 是否允许上边拖出，true允许，此设置不管是false还是true，窗口都不能拖出窗体
-            moveOutBottom: true, // 是否允许下边拖出，true允许
+            leftOut: true, // 是否允许左边拖出，true允许
+            rightOut: true, // 是否允许右边拖出，true允许
+            topOut: true, // 是否允许上边拖出，true允许，此设置不管是false还是true，窗口都不能拖出窗体
+            bottomOut: true, // 是否允许下边拖出，true允许
         },
         alwaysOnTop: false, // 是否总是置顶
         focusable: true, // 是否启用iframe页面点击置顶
@@ -279,9 +279,9 @@
                 moveLimit.vertical === true && (_top = el.windowStartTop);
 
                 // move out limit
-                moveLimit.moveOutLeft === false && (_left = Math.max(_left, 0));
-                moveLimit.moveOutRight === false && (_left = Math.min(_left, el.clientArea.width - el.windowStartWidth));
-                moveLimit.moveOutBottom === false && (_top = Math.min(_top, el.clientArea.height - el.windowStartHeight));
+                moveLimit.leftOut === false && (_left = Math.max(_left, 0));
+                moveLimit.rightOut === false && (_left = Math.min(_left, el.clientArea.width - el.windowStartWidth));
+                moveLimit.bottomOut === false && (_top = Math.min(_top, el.clientArea.height - el.windowStartHeight));
 
                 _top = Math.max(_top, 0);
                 _top = Math.min(el.clientArea.height - 15, _top);
