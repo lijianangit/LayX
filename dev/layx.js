@@ -127,6 +127,7 @@
         moveLimit: { x: false, y: false }, // 拖动窗口显示，x为true表示禁止水平拖动，y为true表示禁止垂直拖动
         alwaysOnTop: false, // 是否总是置顶
         focusable: true, // 是否启用iframe页面点击置顶
+        scaleAnimatable: false, // 是否启用窗口缩放动画
         parent: null, // 父窗体id，设置此选项时，关闭父窗体将会关闭所有子窗体
         controlMenus: [], // 自定义标题栏按钮
         menuItems: [], // 自定义顶部菜单，支持无限极
