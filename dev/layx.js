@@ -129,6 +129,7 @@
         alwaysOnTop: false, // 是否总是置顶
         focusable: true, // 是否启用iframe页面点击置顶
         scaleAnimatable: false, // 是否启用窗口缩放动画
+        allowTitleDblclickToRestore: true, // 是否允许标题双击恢复窗体
         parent: null, // 父窗体id，设置此选项时，关闭父窗体将会关闭所有子窗体
         controlMenus: [], // 自定义标题栏按钮
         menuItems: [], // 自定义顶部菜单，支持无限极
@@ -476,13 +477,15 @@
                     if (config.movable) {
                         new Drag(title);
                     }
-                    title.ondblclick = function(e) {
-                        if (winform.status === "normal") {
-                            Layx.triggerMethod('max', config.id, winform, e);
-                        } else {
-                            Layx.triggerMethod('restore', config.id, winform, e);
-                        }
-                    };
+                    if (config.allowTitleDblclickToRestore === true) {
+                        title.ondblclick = function(e) {
+                            if (winform.status === "normal") {
+                                Layx.triggerMethod('max', config.id, winform, e);
+                            } else {
+                                Layx.triggerMethod('restore', config.id, winform, e);
+                            }
+                        };
+                    }
                 }
 
                 var shade = utils.querySelector('.layx-shade');
