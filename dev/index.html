@@ -20,7 +20,49 @@
             layx.open({
                 id: 'btn1',
                 url: './iframe.html',
-                useFrameTitle: true
+                useFrameTitle: true,
+                intercept: {
+                    load: {
+                        before: function(windowDom, winform) {
+                            alert('加载之前');
+                        },
+                        after: function(windowDom, winform, iframe) {
+                            alert('加载之后');
+                        }
+                    },
+                    min: {
+                        before: function(windowDom, winform) {
+                            alert('最小化之前');
+                        },
+                        after: function(windowDom, winform) {
+                            alert('最小化之后');
+                        }
+                    },
+                    max: {
+                        before: function(windowDom, winform) {
+                            alert('最大化之前');
+                        },
+                        after: function(windowDom, winform) {
+                            alert('最大化之后');
+                        }
+                    },
+                    restore: {
+                        before: function(windowDom, winform) {
+                            alert('切换之前');
+                        },
+                        after: function(windowDom, winform) {
+                            alert('切换之后');
+                        }
+                    },
+                    destroy: {
+                        before: function(windowDom, winform) {
+                            alert('关闭之前');
+                        },
+                        after: function(windowDom, winform) {
+                            alert('关闭之后');
+                        }
+                    }
+                }
             });
         }
         document.getElementById('btn2').onclick = function(e) {
