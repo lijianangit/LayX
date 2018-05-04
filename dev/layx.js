@@ -36,7 +36,15 @@
         closable: true, // 是否允许关闭
         resizable: true, // 是否允许拖曳大小
         movable: true, // 是否允许拖动窗口
-        moveLimit: { x: false, y: false }, // 拖动窗口显示，x为true表示禁止水平拖动，y为true表示禁止垂直拖动
+        // 拖动窗口显示，vertical为true表示禁止水平拖动，horizontal为true表示禁止垂直拖动
+        moveLimit: {
+            vertical: false, // 是否禁止垂直拖动，false不禁止
+            horizontal: false, // 是否禁止水平拖动，false不禁止
+            moveOutLeft: true, // 是否允许左边拖出，true允许
+            moveOutright: true, // 是否允许右边拖出，true允许
+            moveOutTop: true, // 是否允许上边拖出，true允许，此设置不管是false还是true，窗口都不能拖出窗体
+            moveOutBottom: true, // 是否允许下边拖出，true允许
+        },
         alwaysOnTop: false, // 是否总是置顶
         focusable: true, // 是否启用iframe页面点击置顶
         scaleAnimatable: false, // 是否启用窗口缩放动画
@@ -228,21 +236,58 @@
             var that = this;
             var link = that.embedLayxCss('layx.css');
             that.cssReady(fn, link);
+        },
+        getMousePosition: function(e) {
+            e = event || window.event;
+            var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+            var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+            var x = e.pageX || e.clientX + scrollX;
+            var y = e.pageY || e.clientY + scrollY;
+            return { 'x': x, 'y': y };
+        },
+        getNodeByClassName: function(node, className) {
+            var that = this;
+            if (node === document.body) {
+                return null;
+            }
+            var cls = node.classList;
+            if (cls.contains(className)) {
+                return node;
+            } else {
+                return that.getNodeByClassName(node.parentNode, className);
+            }
         }
     };
 
-    var Drag = function(el) {
-        var options = arguments[1] || {},
-            limit = false || options.limit,
-            lockX = false || options.lockX,
-            lockY = false || options.lockY;
-
+    var Drag = function(el, moveLimit) {
         var drag = function(e) {
             e = e || window.event;
 
             var button = e.button || e.which;
             if (button == 1 && e.shiftKey == false) {
                 Drag.isMove = true;
+                var currentPosition = utils.getMousePosition(e);
+                var currentX = currentPosition.x,
+                    currentY = currentPosition.y,
+                    distX = currentX - el.startX,
+                    distY = currentY - el.startY,
+                    _top = el.windowStartTop + distY,
+                    _left = el.windowStartLeft + distX;
+
+                // limit
+                moveLimit.horizontal === true && (_left = el.windowStartLeft);
+                moveLimit.vertical === true && (_top = el.windowStartTop);
+
+                // move out limit
+                moveLimit.moveOutLeft === false && (_left = Math.max(_left, 0));
+                moveLimit.moveOutRight === false && (_left = Math.min(_left, el.clientArea.width - el.windowStartWidth));
+                moveLimit.moveOutBottom === false && (_top = Math.min(_top, el.clientArea.height - el.windowStartHeight));
+
+                _top = Math.max(_top, 0);
+                _top = Math.min(el.clientArea.height - 15, _top);
+
+                el.windowDom.style.top = _top + 'px';
+                el.windowDom.style.left = _left + 'px';
             }
         };
 
@@ -255,14 +300,28 @@
             if (Drag.isMove === true) {
                 Drag.isMove = false;
             }
+            el.layxFixed.removeAttribute('data-enable');
         };
 
         var dragstart = function(e) {
             e = e || window.event;
 
-            var windowDom = el.parentElement.parentElement;
+            var windowDom = utils.getNodeByClassName(el, 'layx-window'),
+                layxFixed = utils.querySelector('.layx-fixed', windowDom),
+                clientArea = utils.getClientArea();
             Layx.setZindex(windowDom, Layx.windows[windowDom.id.substr(5)]);
             el.windowDom = windowDom;
+            el.layxFixed = layxFixed;
+            el.windowStartLeft = windowDom.offsetLeft;
+            el.windowStartTop = windowDom.offsetTop;
+            el.windowStartWidth = windowDom.offsetWidth;
+            el.windowStartHeight = windowDom.offsetHeight;
+
+            var startPosition = utils.getMousePosition(e);
+            el.startX = startPosition.x;
+            el.startY = startPosition.y;
+            el.clientArea = clientArea;
+            layxFixed.setAttribute('data-enable', '1');
 
             document.onmouseup = dragend;
             document.onmousemove = drag;
@@ -386,7 +445,7 @@
                 var title = utils.querySelector('.layx-title', windowDom);
                 if (title) {
                     if (config.movable) {
-                        new Drag(title);
+                        new Drag(title, config.moveLimit);
                     }
                     if (config.allowTitleDblclickToRestore === true) {
                         title.ondblclick = function(e) {
