@@ -648,9 +648,6 @@
                 Layx.minManager();
             }
         },
-        handleRestoreIntercept: function(id, winform) {
-
-        },
         triggerMethod: function(methodName, id, winform, e) {
             e = e || window.event;
             var beforeReval = true;
