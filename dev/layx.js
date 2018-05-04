@@ -130,15 +130,19 @@
     };
 
     var utils = {
-        extend: function(target, ...sources) {
-            sources.forEach(source => {
-                let descriptors = Object.keys(source).reduce((descriptors, key) => {
+        extend: function extend(target) {
+            for (var _len = arguments.length, sources = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+                sources[_key - 1] = arguments[_key];
+            }
+
+            sources.forEach(function(source) {
+                var descriptors = Object.keys(source).reduce(function(descriptors, key) {
                     descriptors[key] = Object.getOwnPropertyDescriptor(source, key);
                     return descriptors;
                 }, {});
 
-                Object.getOwnPropertySymbols(source).forEach(sym => {
-                    let descriptor = Object.getOwnPropertyDescriptor(source, sym);
+                Object.getOwnPropertySymbols(source).forEach(function(sym) {
+                    var descriptor = Object.getOwnPropertyDescriptor(source, sym);
                     if (descriptor.enumerable) {
                         descriptors[sym] = descriptor;
                     }
