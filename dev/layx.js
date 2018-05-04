@@ -761,50 +761,54 @@
 
     over.layx = win.layx = {
         // 打开窗口
-        open: function open(options) {
+        open: function(options) {
             Layx.create(options);
-            // 自动加载css，目前不支持非本地环境（file:///)使用，还未找到解决方案
-            // utils.loadCss(function() {
-            //     Layx.create(options);
-            // });
+
+        },
+        // 打开窗口并自动检测是否加载了layx.css，如果没有加载就自动加载，只适合非file:///协议环境
+        openl: function(options) {
+            //自动加载css，目前不支持非本地环境（file:///)使用，还未找到解决方案
+            utils.loadCss(function() {
+                Layx.create(options);
+            });
         },
         // 关闭窗口
-        destroy: function destroy(id) {
+        destroy: function(id) {
             Layx.destroy(id);
         },
         // 最小化窗口
-        min: function min(id) {
+        min: function(id) {
             Layx.min(id);
         },
         // 最大化窗口
-        max: function max(id) {
+        max: function(id) {
             Layx.max(id);
         },
         // 恢复窗口
-        restore: function restore(id) {
+        restore: function(id) {
             Layx.restore(id);
         },
         // 获取窗口信息
-        getWindow: function getWindow(id) {
+        getWindow: function(id) {
             return Layx.windows[id];
         },
         // 获取所有窗口信息
-        getWindows: function getWindows() {
+        getWindows: function() {
             return Layx.windows;
         },
         // 设置窗口标题
-        setTitle: function setTitle(id, title) {
+        setTitle: function(id, title) {
             Layx.setTitle(id, title);
         },
         // 设置窗口地址，只对iframe有效
-        setUrl: function setUrl(id, url) {
+        setUrl: function(id, url) {
             Layx.setUrl(id, url);
         },
         // 设置窗口位置
-        setPosition: function setPosition(id, position) {},
+        setPosition: function(id, position) {},
         // 设置窗口内容
-        setContent: function setContent(id, content) {},
+        setContent: function(id, content) {},
         // 设置置顶
-        setAlwaysOnTop: function setAlwaysOnTop(id) {}
+        setAlwaysOnTop: function(id) {}
     };
 }(top, window);
