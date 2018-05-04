@@ -274,20 +274,35 @@
                     _top = el.windowStartTop + distY,
                     _left = el.windowStartLeft + distX;
 
-                // limit
-                moveLimit.horizontal === true && (_left = el.windowStartLeft);
-                moveLimit.vertical === true && (_top = el.windowStartTop);
+                if (distX !== 0 || distY !== 0) {
+                    if (Layx.windows[el.windowId].status === "max") {
+                        Layx.triggerMethod('restore', el.windowId, Layx.windows[el.windowId], e);
+                        if (currentPosition.x < el.defaultAreaInfo.width / 2) {
+                            _left = 0;
+                        } else if (currentPosition.x > el.defaultAreaInfo.width / 2 && currentPosition.x < el.clientArea.width - el.defaultAreaInfo.width) {
+                            _left = currentPosition.x - el.defaultAreaInfo.width / 2;
+                        } else if (el.clientArea.width - currentPosition.x < el.defaultAreaInfo.width / 2) {
+                            _left = el.clientArea.width - el.defaultAreaInfo.width;
+                        } else if (el.clientArea.width - currentPosition.x > el.defaultAreaInfo.width / 2 && currentPosition.x >= el.clientArea.width - el.defaultAreaInfo.width) {
+                            _left = currentPosition.x - el.defaultAreaInfo.width / 2;
+                        }
+                        el.startX = currentPosition.x - _left;
+                    }
+                    // limit
+                    moveLimit.horizontal === true && (_left = el.windowStartLeft);
+                    moveLimit.vertical === true && (_top = el.windowStartTop);
 
-                // move out limit
-                moveLimit.leftOut === false && (_left = Math.max(_left, 0));
-                moveLimit.rightOut === false && (_left = Math.min(_left, el.clientArea.width - el.windowStartWidth));
-                moveLimit.bottomOut === false && (_top = Math.min(_top, el.clientArea.height - el.windowStartHeight));
+                    // move out limit
+                    moveLimit.leftOut === false && (_left = Math.max(_left, 0));
+                    moveLimit.rightOut === false && (_left = Math.min(_left, el.clientArea.width - el.windowStartWidth));
+                    moveLimit.bottomOut === false && (_top = Math.min(_top, el.clientArea.height - el.windowStartHeight));
 
-                _top = Math.max(_top, 0);
-                _top = Math.min(el.clientArea.height - 15, _top);
+                    _top = Math.max(_top, 0);
+                    _top = Math.min(el.clientArea.height - 15, _top);
 
-                el.windowDom.style.top = _top + 'px';
-                el.windowDom.style.left = _left + 'px';
+                    el.windowDom.style.top = _top + 'px';
+                    el.windowDom.style.left = _left + 'px';
+                }
             }
         };
 
@@ -299,9 +314,14 @@
 
             if (Drag.isMove === true) {
                 Drag.isMove = false;
+                var winform = Layx.windows[el.windowId];
                 if (el.windowDom.offsetTop === 0) {
-                    Layx.triggerMethod('max', el.windowId, Layx.windows[el.windowId], e);
+                    Layx.triggerMethod('max', el.windowId, winform, e);
                 }
+
+                winform.defaultAreaInfo.top = el.windowDom.offsetTop;
+                winform.defaultAreaInfo.left = el.windowDom.offsetLeft;
+
             }
             el.layxFixed.removeAttribute('data-enable');
         };
@@ -312,8 +332,9 @@
             var windowDom = utils.getNodeByClassName(el, 'layx-window'),
                 layxFixed = utils.querySelector('.layx-fixed', windowDom),
                 clientArea = utils.getClientArea(),
-                windowId = windowDom.id.substr(5);
-            Layx.setZindex(windowDom, Layx.windows[windowId]);
+                windowId = windowDom.id.substr(5),
+                winform = Layx.windows[windowId];
+            Layx.setZindex(windowDom, winform);
             el.windowDom = windowDom;
             el.windowId = windowId;
             el.layxFixed = layxFixed;
@@ -321,6 +342,7 @@
             el.windowStartTop = windowDom.offsetTop;
             el.windowStartWidth = windowDom.offsetWidth;
             el.windowStartHeight = windowDom.offsetHeight;
+            el.defaultAreaInfo = winform.defaultAreaInfo;
 
             var startPosition = utils.getMousePosition(e);
             el.startX = startPosition.x;
