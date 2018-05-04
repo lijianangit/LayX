@@ -471,8 +471,12 @@
                 delete Layx.windows[id];
             }
             var windowDom = utils.getElementById("layx-" + id);
+            var shade = utils.getElementById('layx-' + id + '-shade');
             if (windowDom) {
                 windowDom.parentNode.removeChild(windowDom);
+                if (shade) {
+                    shade.parentNode.removeChild(shade);
+                }
             }
         },
         max: function(id) {
