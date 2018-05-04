@@ -171,12 +171,15 @@
                     return descriptors;
                 }, {});
 
-                Object.getOwnPropertySymbols(source).forEach(function(sym) {
-                    var descriptor = Object.getOwnPropertyDescriptor(source, sym);
-                    if (descriptor.enumerable) {
-                        descriptors[sym] = descriptor;
-                    }
-                });
+                if (Object["getOwnPropertySymbols"]) {
+                    Object.getOwnPropertySymbols(source).forEach(function(sym) {
+                        var descriptor = Object.getOwnPropertyDescriptor(source, sym);
+                        if (descriptor.enumerable) {
+                            descriptors[sym] = descriptor;
+                        }
+                    });
+                }
+
                 Object.defineProperties(target, descriptors);
             });
             return target;
