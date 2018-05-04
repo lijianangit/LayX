@@ -1,6 +1,7 @@
 "use strict";
 
 /*
+ * file : layx.js
  * gitee : https://gitee.com/monksoul/LayX
  * author : 百小僧/MonkSoul
  * version : v1.0.0
@@ -110,8 +111,8 @@
         borderColor: '#3baced', // 边框颜色
         opacity: 1, // 透明度
         type: 'iframe', // 窗口类型：支持iframe,alert,confirm,error,load,prompt
-        url: '', // iframe类型地址，type=iframe 时有效
-        content: 'about:blank', // 非iframe类型内容，支持text,html
+        url: 'about:blank', // iframe类型地址，type=iframe 时有效
+        content: '', // 非iframe类型内容，支持text,html
         width: 800, // 初始化宽度
         height: 600, // 初始化高度
         position: 'center', // 初始化位置，支持'center', 'lt', 'rt', 'lb', 'rb'以及 [top,left]数组
@@ -334,6 +335,7 @@
 
     // Layx class define
     var Layx = {
+        v: '1.0.0',
         zIndex: 19920527,
         windows: {},
         create: function create(options) {
