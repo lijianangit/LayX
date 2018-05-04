@@ -391,14 +391,16 @@
                                     var frameTitle = iframe.contentDocument.querySelector('title');
                                     Layx.setTitle(config.id, frameTitle ? frameTitle.innerText : config.title);
                                 }
-                                iframeDoc.onclick = function(e) {
-                                    var that = this.self;
-                                    if (that != over && that.frameElement && that.frameElement.tagName == "IFRAME") {
-                                        var windowDom = that.frameElement.parentNode.parentElement;
-                                        windowDom.style.zIndex = ++Layx.zIndex;
-                                        winform.zIndex = Layx.zIndex;
-                                    }
-                                };
+                                if (config.focusable === true) {
+                                    iframeDoc.onclick = function(e) {
+                                        var that = this.self;
+                                        if (that != over && that.frameElement && that.frameElement.tagName == "IFRAME") {
+                                            var windowDom = that.frameElement.parentNode.parentElement;
+                                            windowDom.style.zIndex = ++Layx.zIndex;
+                                            winform.zIndex = Layx.zIndex;
+                                        }
+                                    };
+                                }
                                 if (utils.isFunction(config.intercept.load.after)) {
                                     config.intercept.load.after(iframeDoc);
                                 }
