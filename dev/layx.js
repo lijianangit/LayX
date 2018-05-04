@@ -330,9 +330,10 @@
                 if (el.windowDom.offsetTop === 0) {
                     Layx.triggerMethod('max', el.windowId, winform, e);
                 }
-
-                winform.defaultAreaInfo.top = el.windowDom.offsetTop;
-                winform.defaultAreaInfo.left = el.windowDom.offsetLeft;
+                if (Layx.windows[el.windowId].status !== "max") {
+                    winform.defaultAreaInfo.top = el.windowDom.offsetTop;
+                    winform.defaultAreaInfo.left = el.windowDom.offsetLeft;
+                }
 
             }
             el.layxFixed.removeAttribute('data-enable');
