@@ -257,7 +257,9 @@
             e = e || window.event;
 
             var button = e.button || e.which;
-            if (button == 1 && e.shiftKey == false) {}
+            if (button == 1 && e.shiftKey == false) {
+                Drag.isMove = true;
+            }
         }
 
         var dragend = function(e) {
@@ -265,20 +267,25 @@
 
             document.onmouseup = null;
             document.onmousemove = null;
+
+            if (Drag.isMove === true) {
+                Drag.isMove = false;
+            }
         }
 
         var dragstart = function(e) {
             e = e || window.event;
-            var button = e.button || e.which;
 
             var windowDom = el.parentElement.parentElement;
             Layx.setZindex(windowDom, Layx.windows[windowDom.id.substr(5)]);
             el.windowDom = windowDom;
 
-            if (button == 1 && e.shiftKey == false) {}
+            document.onmouseup = dragend;
+            document.onmousemove = drag;
 
             return false;
         };
+        Drag.isMove = false;
         el.onmousedown = dragstart;
     }
 
@@ -610,7 +617,7 @@
                     minMenu.setAttribute('data-restore-statu', winform.status);
 
                     var restoreMenu = utils.querySelector('.layx-restore-menu[data-ref="min"]', windowDom);
-                    if (restoreMenu) restoreMenu.onclick = function(e) { Layx.triggerMethod('restore', id, e); };
+                    if (restoreMenu) restoreMenu.onclick = function(e) { Layx.triggerMethod('restore', id, winform, e); };
                 }
 
                 var maxMenu = utils.querySelector('.layx-restore-menu[data-ref="max"]', windowDom);
@@ -636,9 +643,21 @@
                 Layx.minManager();
             }
         },
+        handleRestoreIntercept: function(id, winform) {
+
+        },
         triggerMethod: function(methodName, id, winform, e) {
             e = e || window.event;
-            Layx[methodName](id);
+            var beforeReval = true;
+            if (winform && winform.config && winform.config.intercept[methodName] && utils.isFunction(winform.config.intercept[methodName].before) && winform.config.intercept[methodName].before(winform.windowDom, winform) === false) {
+                beforeReval = false;
+            }
+            if (beforeReval) {
+                Layx[methodName] && Layx[methodName](id);
+            }
+            if (winform && winform.config && winform.config.intercept[methodName] && utils.isFunction(winform.config.intercept[methodName].after)) {
+                winform.config.intercept[methodName].after(winform.windowDom, winform);
+            }
             e.stopPropagation();
         },
         minManager: function() {
