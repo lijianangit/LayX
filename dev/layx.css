@@ -128,7 +128,8 @@
 
 .layx-operator.layx-min-menu:hover,
 .layx-operator.layx-restore-menu:hover,
-.layx-operator.layx-max-menu:hover {
+.layx-operator.layx-max-menu:hover,
+.layx-operator.layx-pin-menu:hover {
     background-color: #e5e5e5;
 }
 

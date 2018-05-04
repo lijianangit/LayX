@@ -31,6 +31,7 @@
         minWidth: 50, // 拖曳大小最小宽度
         minHeight: 50, // 拖曳大小最大宽度
         shadable: false, // 是否启用窗口阻隔
+        pinable: true, // 是否允许置顶
         minimizable: true, // 是否允许最小化
         maximizable: true, // 是否允许最大化
         closable: true, // 是否允许关闭
@@ -401,7 +402,7 @@
                 };
 
                 // create window dom
-                var winTemplate = "\n                " + (config.shadable === true ? "\n                <div class=\"layx-shade\" id=\"layx-" + config.id + "-shade\" style=\"z-index:" + ++Layx.zIndex + "\"></div>\n                " : "") + "\n                <div class=\"layx-window\" id=\"layx-" + config.id + "\" style=\"width:" + config.width + "px;height:" + config.height + "px;top:" + position.top + "px;left:" + position.left + "px;z-index: " + ++Layx.zIndex + ";background-color:" + (config.bgColor ? config.bgColor : 'transparent') + ";border-color:" + config.borderColor + ";opacity:" + config.opacity + "\">\n                    <div class=\"layx-control-bar\">\n                        <div class=\"layx-icons\">\n                            <div class=\"layx-icon\">\n                                <svg class=\"layx-iconfont\" aria-hidden=\"true\">\n                                    <use xlink:href=\"#layx-icon-windows\"></use>\n                                </svg>\n                            </div>\n                        </div>\n                        <div class=\"layx-title\">" + config.title + "</div>\n                        <div class=\"layx-menus\">\n                        " + (config.minimizable === true ? "\n                            <div class=\"layx-operator layx-min-menu\">\n                                <svg class=\"layx-iconfont\" aria-hidden=\"true\">\n                                    <use xlink:href=\"#layx-icon-min\"></use>\n                                </svg>\n                            </div>\n                            " : "") + "\n                            \n                            " + (config.maximizable === true ? "\n                            <div class=\"layx-operator layx-max-menu\">\n                                <svg class=\"layx-iconfont\" aria-hidden=\"true\">\n                                    <use xlink:href=\"#layx-icon-max\"></use>\n                                </svg>\n                            </div>\n                                " : "") + "\n                            \n                            " + (config.closable === true ? "\n                                <div class=\"layx-operator layx-destroy-menu\">\n                                <svg class=\"layx-iconfont\" aria-hidden=\"true\">\n                                    <use xlink:href=\"#layx-icon-destroy\"></use>\n                                </svg>\n                            </div>\n                                " : "") + "\n                            \n                        </div>\n                    </div>\n                    <div class=\"layx-body\">\n                        <div class=\"layx-fixed\" data-enable=\"0\"></div>\n                    </div>\n                    " + (config.resizable === true ? "\n                        <div class=\"layx-resizes\">\n                        <div class=\"layx-resize-top\"></div>\n                        <div class=\"layx-resize-right\"></div>\n                        <div class=\"layx-resize-bottom\"></div>\n                        <div class=\"layx-resize-left\"></div>\n                        <div class=\"layx-resize-left-top\"></div>\n                        <div class=\"layx-resize-right-top\"></div>\n                        <div class=\"layx-resize-left-bottom\"></div>\n                        <div class=\"layx-resize-right-bottom\"></div>\n                    </div>\n                        " : "") + "\n                </div>\n                ";
+                var winTemplate = "\n                " + (config.shadable === true ? '\n                <div class="layx-shade" id="layx-' + config.id + '-shade" style="z-index:' + ++Layx.zIndex + '"></div>\n                ' : "") + '\n                <div class="layx-window" id="layx-' + config.id + '" style="width:' + config.width + "px;height:" + config.height + "px;top:" + position.top + "px;left:" + position.left + "px;z-index: " + ++Layx.zIndex + ";background-color:" + (config.bgColor ? config.bgColor : "transparent") + ";border-color:" + config.borderColor + ";opacity:" + config.opacity + '">\n                    <div class="layx-control-bar">\n                        <div class="layx-icons">\n                            <div class="layx-icon">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-windows"></use>\n                                </svg>\n                            </div>\n                        </div>\n                        <div class="layx-title">' + config.title + '</div>\n                        <div class="layx-menus">\n                        ' + (config.pinable === true ? '\n                            <div class="layx-operator layx-pin-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-pin"></use>\n                                </svg>\n                            </div>\n                            ' : "") + "\n                            \n                            " + (config.minimizable === true ? '\n                            <div class="layx-operator layx-min-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-min"></use>\n                                </svg>\n                            </div>\n                            ' : "") + "\n                            \n                            " + (config.maximizable === true ? '\n                            <div class="layx-operator layx-max-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-max"></use>\n                                </svg>\n                            </div>\n                                ' : "") + "\n                            \n                            " + (config.closable === true ? '\n                                <div class="layx-operator layx-destroy-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-destroy"></use>\n                                </svg>\n                            </div>\n                                ' : "") + '\n                            \n                        </div>\n                    </div>\n                    <div class="layx-body">\n                        <div class="layx-fixed" data-enable="0"></div>\n                    </div>\n                    ' + (config.resizable === true ? '\n                        <div class="layx-resizes">\n                        <div class="layx-resize-top"></div>\n                        <div class="layx-resize-right"></div>\n                        <div class="layx-resize-bottom"></div>\n                        <div class="layx-resize-left"></div>\n                        <div class="layx-resize-left-top"></div>\n                        <div class="layx-resize-right-top"></div>\n                        <div class="layx-resize-left-bottom"></div>\n                        <div class="layx-resize-right-bottom"></div>\n                    </div>\n                        ' : "") + "\n                </div>\n                ";
 
                 // append to body
                 utils.InsertAfter(winTemplate);
@@ -810,29 +811,20 @@
 }(top, window);
 
 ;
-! function(window) {
-    "use strict";
-
-    var svgSprite = '<svg><symbol id="layx-icon-restore" viewBox="0 0 1157 1024"><path d="M1016.52185234 724.44050175L833.87364805 724.44050175 833.87364805 898.52098643 833.87364805 960.05279112 833.87364805 961.2211168 772.34184336 961.2211168 772.34184336 960.05279112 124.31068789 960.05279112 124.31068789 961.2211168 62.7788832 961.2211168 62.7788832 960.05279112 62.7788832 898.52098643 62.7788832 360.31241885 62.7788832 298.78061416 124.31068789 298.78061416 298.78061416 298.78061416 298.78061416 62.7788832 303.06447442 62.7788832 360.31241885 62.7788832 1016.52185234 62.7788832 1074.15923838 62.7788832 1078.05365615 62.7788832 1078.05365615 662.90869795 1078.05365615 724.44050175 1016.52185234 724.44050175ZM124.31068789 898.52098643L772.34184336 898.52098643 772.34184336 724.44050175 772.34184336 662.90869795 772.34184336 360.31241885 124.31068789 360.31241885 124.31068789 898.52098643ZM1016.52185234 124.31068789L360.31241885 124.31068789 360.31241885 298.78061416 772.34184336 298.78061416 833.87364805 298.78061416 833.87364805 360.31241885 833.87364805 662.90869795 1016.52185234 662.90869795 1016.52185234 124.31068789Z"  ></path></symbol><symbol id="layx-icon-windows" viewBox="0 0 1024 1024"><path d="M128 512 128 288 384 231.68 384 508.16 128 512M853.333333 128 853.333333 501.333333 426.666667 507.733333 426.666667 222.293333 853.333333 128M128 554.666667 384 558.506667 384 849.066667 128 800 128 554.666667M853.333333 565.333333 853.333333 938.666667 426.666667 857.173333 426.666667 558.933333 853.333333 565.333333Z"  ></path></symbol><symbol id="layx-icon-min" viewBox="0 0 1024 1024"><path d="M65.23884 456.152041 958.760137 456.152041l0 111.695918L65.23884 567.847959 65.23884 456.152041z"  ></path></symbol><symbol id="layx-icon-max" viewBox="0 0 1024 1024"><path d="M75.74912227 948.24738475L75.74912227 75.75145131l872.50059037 0 0 872.49593344L75.74912227 948.24738475zM839.18786674 184.81446115L184.81213326 184.81446115l0 654.37573462 654.37573461 0L839.18786674 184.81446115z"  ></path></symbol><symbol id="layx-icon-destroy" viewBox="0 0 1024 1024"><path d="M933.89254819 139.71606348L884.23129279 90.08990363 511.96490363 462.39138834 140.40044113 90.82692583 90.84447403 140.34779656 462.40893653 511.91225907 90.10745181 884.2137446 139.73361166 933.875 512.03509637 561.53841892 883.59955887 933.10288141 933.15552597 883.58201068 561.59106347 512.01754819Z"  ></path></symbol></svg>';
-    var script = function() {
-        var scripts = document.getElementsByTagName("script");
-        return scripts[scripts.length - 1];
-    }();
+!(function(window) {
+    var svgSprite = '<svg><symbol id="layx-icon-restore" viewBox="0 0 1157 1024"><path d="M1016.52185234 724.44050175L833.87364805 724.44050175 833.87364805 898.52098643 833.87364805 960.05279112 833.87364805 961.2211168 772.34184336 961.2211168 772.34184336 960.05279112 124.31068789 960.05279112 124.31068789 961.2211168 62.7788832 961.2211168 62.7788832 960.05279112 62.7788832 898.52098643 62.7788832 360.31241885 62.7788832 298.78061416 124.31068789 298.78061416 298.78061416 298.78061416 298.78061416 62.7788832 303.06447442 62.7788832 360.31241885 62.7788832 1016.52185234 62.7788832 1074.15923838 62.7788832 1078.05365615 62.7788832 1078.05365615 662.90869795 1078.05365615 724.44050175 1016.52185234 724.44050175ZM124.31068789 898.52098643L772.34184336 898.52098643 772.34184336 724.44050175 772.34184336 662.90869795 772.34184336 360.31241885 124.31068789 360.31241885 124.31068789 898.52098643ZM1016.52185234 124.31068789L360.31241885 124.31068789 360.31241885 298.78061416 772.34184336 298.78061416 833.87364805 298.78061416 833.87364805 360.31241885 833.87364805 662.90869795 1016.52185234 662.90869795 1016.52185234 124.31068789Z"  ></path></symbol><symbol id="layx-icon-windows" viewBox="0 0 1024 1024"><path d="M128 512 128 288 384 231.68 384 508.16 128 512M853.333333 128 853.333333 501.333333 426.666667 507.733333 426.666667 222.293333 853.333333 128M128 554.666667 384 558.506667 384 849.066667 128 800 128 554.666667M853.333333 565.333333 853.333333 938.666667 426.666667 857.173333 426.666667 558.933333 853.333333 565.333333Z"  ></path></symbol><symbol id="layx-icon-min" viewBox="0 0 1024 1024"><path d="M65.23884 456.152041 958.760137 456.152041l0 111.695918L65.23884 567.847959 65.23884 456.152041z"  ></path></symbol><symbol id="layx-icon-max" viewBox="0 0 1024 1024"><path d="M75.74912227 948.24738475L75.74912227 75.75145131l872.50059037 0 0 872.49593344L75.74912227 948.24738475zM839.18786674 184.81446115L184.81213326 184.81446115l0 654.37573462 654.37573461 0L839.18786674 184.81446115z"  ></path></symbol><symbol id="layx-icon-destroy" viewBox="0 0 1024 1024"><path d="M933.89254819 139.71606348L884.23129279 90.08990363 511.96490363 462.39138834 140.40044113 90.82692583 90.84447403 140.34779656 462.40893653 511.91225907 90.10745181 884.2137446 139.73361166 933.875 512.03509637 561.53841892 883.59955887 933.10288141 933.15552597 883.58201068 561.59106347 512.01754819Z"  ></path></symbol><symbol id="layx-icon-pin" viewBox="0 0 1024 1024"><path d="M326.4 5.65333333l7.89333333 174.72-224.74666666 376.64 168.32 117.86666667L77.22666667 1012.26666667l8.74666666 6.08 248.42666667-304 168.32 117.86666666L779.73333333 492.37333333l166.93333334-52.37333333L326.4 5.65333333z m-144.96 536.53333334l184.74666667-312.10666667L722.13333333 479.36 492.16 759.78666667l-310.72-217.6z m582.4-100.69333334l-1.92 0.64-374.4-262.18666666-0.10666667-2.02666667-2.98666666-66.56 442.88 310.18666667-63.46666667 19.94666666z" fill="" ></path></symbol></svg>';
+    var script = function() { var scripts = document.getElementsByTagName("script"); return scripts[scripts.length - 1] }();
     var shouldInjectCss = script.getAttribute("data-injectcss");
     var ready = function(fn) {
         if (document.addEventListener) {
-            if (~["complete", "loaded", "interactive"].indexOf(document.readyState)) {
-                setTimeout(fn, 0);
-            } else {
+            if (~["complete", "loaded", "interactive"].indexOf(document.readyState)) { setTimeout(fn, 0) } else {
                 var loadFn = function() {
                     document.removeEventListener("DOMContentLoaded", loadFn, false);
-                    fn();
+                    fn()
                 };
-                document.addEventListener("DOMContentLoaded", loadFn, false);
+                document.addEventListener("DOMContentLoaded", loadFn, false)
             }
-        } else if (document.attachEvent) {
-            IEContentLoaded(window, fn);
-        }
+        } else if (document.attachEvent) { IEContentLoaded(window, fn) }
 
         function IEContentLoaded(w, fn) {
             var d = w.document,
@@ -840,37 +832,24 @@
                 init = function() {
                     if (!done) {
                         done = true;
-                        fn();
+                        fn()
                     }
                 };
             var polling = function() {
-                try {
-                    d.documentElement.doScroll("left");
-                } catch (e) {
-                    setTimeout(polling, 50);
-                    return;
-                }
-                init();
+                try { d.documentElement.doScroll("left") } catch (e) { setTimeout(polling, 50); return }
+                init()
             };
             polling();
             d.onreadystatechange = function() {
                 if (d.readyState == "complete") {
                     d.onreadystatechange = null;
-                    init();
+                    init()
                 }
-            };
+            }
         }
     };
-    var before = function(el, target) {
-        target.parentNode.insertBefore(el, target);
-    };
-    var prepend = function(el, target) {
-        if (target.firstChild) {
-            before(el, target.firstChild);
-        } else {
-            target.appendChild(el);
-        }
-    };
+    var before = function(el, target) { target.parentNode.insertBefore(el, target) };
+    var prepend = function(el, target) { if (target.firstChild) { before(el, target.firstChild) } else { target.appendChild(el) } };
 
     function appendSvg() {
         var div, svg;
@@ -884,16 +863,9 @@
             svg.style.width = 0;
             svg.style.height = 0;
             svg.style.overflow = "hidden";
-            prepend(svg, document.body);
+            prepend(svg, document.body)
         }
     }
-    if (shouldInjectCss && !window.__iconfont__svg__cssinject__) {
-        window.__iconfont__svg__cssinject__ = true;
-        try {
-            document.write("<style>.svgfont {display: inline-block;width: 1em;height: 1em;fill: currentColor;vertical-align: -0.1em;font-size:16px;}</style>");
-        } catch (e) {
-            console && console.log(e);
-        }
-    }
-    ready(appendSvg);
-}(window);
+    if (shouldInjectCss && !window.__iconfont__svg__cssinject__) { window.__iconfont__svg__cssinject__ = true; try { document.write("<style>.svgfont {display: inline-block;width: 1em;height: 1em;fill: currentColor;vertical-align: -0.1em;font-size:16px;}</style>") } catch (e) { console && console.log(e) } }
+    ready(appendSvg)
+})(window);
