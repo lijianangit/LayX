@@ -407,7 +407,6 @@
                     left: position.left
                 };
 
-
                 // create window dom
                 var winTemplate = "\n                " + (config.shadable === true ? "\n                <div class=\"layx-shade\" id=\"layx-" + config.id + "-shade\" style=\"z-index:" + ++Layx.zIndex + "\"></div>\n                " : "") + "\n                <div class=\"layx-window\" id=\"layx-" + config.id + "\" style=\"width:" + config.width + "px;height:" + config.height + "px;top:" + position.top + "px;left:" + position.left + "px;z-index: " + ++Layx.zIndex + ";background-color:" + (config.bgColor ? config.bgColor : 'transparent') + ";border-color:" + config.borderColor + ";opacity:" + config.opacity + "\">\n                    <div class=\"layx-control-bar\">\n                        <div class=\"layx-icons\">\n                            <div class=\"layx-icon\">\n                                <svg class=\"layx-iconfont\" aria-hidden=\"true\">\n                                    <use xlink:href=\"#layx-icon-windows\"></use>\n                                </svg>\n                            </div>\n                        </div>\n                        <div class=\"layx-title\">" + config.title + "</div>\n                        <div class=\"layx-menus\">\n                        " + (config.minimizable === true ? "\n                            <div class=\"layx-operator layx-min-menu\">\n                                <svg class=\"layx-iconfont\" aria-hidden=\"true\">\n                                    <use xlink:href=\"#layx-icon-min\"></use>\n                                </svg>\n                            </div>\n                            " : "") + "\n                            \n                            " + (config.maximizable === true ? "\n                            <div class=\"layx-operator layx-max-menu\">\n                                <svg class=\"layx-iconfont\" aria-hidden=\"true\">\n                                    <use xlink:href=\"#layx-icon-max\"></use>\n                                </svg>\n                            </div>\n                                " : "") + "\n                            \n                            " + (config.closable === true ? "\n                                <div class=\"layx-operator layx-destroy-menu\">\n                                <svg class=\"layx-iconfont\" aria-hidden=\"true\">\n                                    <use xlink:href=\"#layx-icon-destroy\"></use>\n                                </svg>\n                            </div>\n                                " : "") + "\n                            \n                        </div>\n                    </div>\n                    <div class=\"layx-body\">\n                        <div class=\"layx-fixed\" data-enable=\"0\"></div>\n                    </div>\n                    " + (config.resizable === true ? "\n                        <div class=\"layx-resizes\">\n                        <div class=\"layx-resize-top\"></div>\n                        <div class=\"layx-resize-right\"></div>\n                        <div class=\"layx-resize-bottom\"></div>\n                        <div class=\"layx-resize-left\"></div>\n                        <div class=\"layx-resize-left-top\"></div>\n                        <div class=\"layx-resize-right-top\"></div>\n                        <div class=\"layx-resize-left-bottom\"></div>\n                        <div class=\"layx-resize-right-bottom\"></div>\n                    </div>\n                        " : "") + "\n                </div>\n                ";
 
@@ -526,7 +525,6 @@
                             // 没有实现
                         }
                     }
-
                 }
             }
             if (Layx.windows.hasOwnProperty(id)) {
@@ -763,7 +761,6 @@
         // 打开窗口
         open: function(options) {
             Layx.create(options);
-
         },
         // 打开窗口并自动检测是否加载了layx.css，如果没有加载就自动加载，只适合非file:///协议环境
         openl: function(options) {
