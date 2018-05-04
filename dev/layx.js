@@ -737,29 +737,47 @@
     };
 
     over.layx = win.layx = {
+        // 打开窗口
         open: function(options) {
             Layx.create(options);
         },
+        // 关闭窗口
         destroy: function(id) {
             Layx.destroy(id);
         },
-        min: function(id) {},
-        max: function(id) {},
-        restore: function(id) {},
+        // 最小化窗口
+        min: function(id) {
+            Layx.min(id);
+        },
+        // 最大化窗口
+        max: function(id) {
+            Layx.max(id);
+        },
+        // 恢复窗口
+        restore: function(id) {
+            Layx.restore(id);
+        },
+        // 获取窗口信息
         getWindow: function(id) {
             return Layx.windows[id];
         },
+        // 获取所有窗口信息
         getWindows: function() {
             return Layx.windows;
         },
+        // 设置窗口标题
         setTitle: function(id, title) {
             Layx.setTitle(id, title);
         },
+        // 设置窗口地址，只对iframe有效
         setUrl: function(id, url) {
             Layx.setUrl(id, url);
         },
+        // 设置窗口位置
         setPosition: function(id, position) {},
+        // 设置窗口内容
         setContent: function(id, content) {},
+        // 设置置顶
         setAlwaysOnTop: function(id) {}
     };
 
