@@ -372,7 +372,7 @@
         el.onmousedown = dragstart;
     };
 
-    var Resize = function(el, resizeLimit) {
+    var Resize = function(el, resizeLimit, isTop, isLeft) {
         var drag = function(e) {
             e = e || window.event;
 
@@ -576,7 +576,15 @@
                         Layx.setFlicker(windowId.substr(5));
                     };
                 }
-
+                if (config.resizable) {
+                    var resize = utils.querySelector('.layx-resizes', windowDom);
+                    if (resize) {
+                        var leftResize = utils.querySelector('.layx-resize-left', windowDom);
+                        if (config.resizeLimit && config.resizeLimit["l"] === true && leftResize) {
+                            new Resize(leftResize, config.resizeLimit, true, false);
+                        }
+                    }
+                }
                 return winform;
             } else {
                 Layx.ExistShow(config.id);
