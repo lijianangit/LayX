@@ -9,95 +9,6 @@
  * update time : 2018.05.04
  */
 ;
-! function(window) {
-    "use strict";
-
-    var svgSprite = '<svg><symbol id="layx-icon-restore" viewBox="0 0 1157 1024"><path d="M1016.52185234 724.44050175L833.87364805 724.44050175 833.87364805 898.52098643 833.87364805 960.05279112 833.87364805 961.2211168 772.34184336 961.2211168 772.34184336 960.05279112 124.31068789 960.05279112 124.31068789 961.2211168 62.7788832 961.2211168 62.7788832 960.05279112 62.7788832 898.52098643 62.7788832 360.31241885 62.7788832 298.78061416 124.31068789 298.78061416 298.78061416 298.78061416 298.78061416 62.7788832 303.06447442 62.7788832 360.31241885 62.7788832 1016.52185234 62.7788832 1074.15923838 62.7788832 1078.05365615 62.7788832 1078.05365615 662.90869795 1078.05365615 724.44050175 1016.52185234 724.44050175ZM124.31068789 898.52098643L772.34184336 898.52098643 772.34184336 724.44050175 772.34184336 662.90869795 772.34184336 360.31241885 124.31068789 360.31241885 124.31068789 898.52098643ZM1016.52185234 124.31068789L360.31241885 124.31068789 360.31241885 298.78061416 772.34184336 298.78061416 833.87364805 298.78061416 833.87364805 360.31241885 833.87364805 662.90869795 1016.52185234 662.90869795 1016.52185234 124.31068789Z"  ></path></symbol><symbol id="layx-icon-windows" viewBox="0 0 1024 1024"><path d="M128 512 128 288 384 231.68 384 508.16 128 512M853.333333 128 853.333333 501.333333 426.666667 507.733333 426.666667 222.293333 853.333333 128M128 554.666667 384 558.506667 384 849.066667 128 800 128 554.666667M853.333333 565.333333 853.333333 938.666667 426.666667 857.173333 426.666667 558.933333 853.333333 565.333333Z"  ></path></symbol><symbol id="layx-icon-min" viewBox="0 0 1024 1024"><path d="M65.23884 456.152041 958.760137 456.152041l0 111.695918L65.23884 567.847959 65.23884 456.152041z"  ></path></symbol><symbol id="layx-icon-max" viewBox="0 0 1024 1024"><path d="M75.74912227 948.24738475L75.74912227 75.75145131l872.50059037 0 0 872.49593344L75.74912227 948.24738475zM839.18786674 184.81446115L184.81213326 184.81446115l0 654.37573462 654.37573461 0L839.18786674 184.81446115z"  ></path></symbol><symbol id="layx-icon-destroy" viewBox="0 0 1024 1024"><path d="M933.89254819 139.71606348L884.23129279 90.08990363 511.96490363 462.39138834 140.40044113 90.82692583 90.84447403 140.34779656 462.40893653 511.91225907 90.10745181 884.2137446 139.73361166 933.875 512.03509637 561.53841892 883.59955887 933.10288141 933.15552597 883.58201068 561.59106347 512.01754819Z"  ></path></symbol></svg>';
-    var script = function() {
-        var scripts = document.getElementsByTagName("script");
-        return scripts[scripts.length - 1];
-    }();
-    var shouldInjectCss = script.getAttribute("data-injectcss");
-    var ready = function ready(fn) {
-        if (document.addEventListener) {
-            if (~["complete", "loaded", "interactive"].indexOf(document.readyState)) {
-                setTimeout(fn, 0);
-            } else {
-                var loadFn = function loadFn() {
-                    document.removeEventListener("DOMContentLoaded", loadFn, false);
-                    fn();
-                };
-                document.addEventListener("DOMContentLoaded", loadFn, false);
-            }
-        } else if (document.attachEvent) {
-            IEContentLoaded(window, fn);
-        }
-
-        function IEContentLoaded(w, fn) {
-            var d = w.document,
-                done = false,
-                init = function init() {
-                    if (!done) {
-                        done = true;
-                        fn();
-                    }
-                };
-            var polling = function polling() {
-                try {
-                    d.documentElement.doScroll("left");
-                } catch (e) {
-                    setTimeout(polling, 50);
-                    return;
-                }
-                init();
-            };
-            polling();
-            d.onreadystatechange = function() {
-                if (d.readyState == "complete") {
-                    d.onreadystatechange = null;
-                    init();
-                }
-            };
-        }
-    };
-    var before = function before(el, target) {
-        target.parentNode.insertBefore(el, target);
-    };
-    var prepend = function prepend(el, target) {
-        if (target.firstChild) {
-            before(el, target.firstChild);
-        } else {
-            target.appendChild(el);
-        }
-    };
-
-    function appendSvg() {
-        var div, svg;
-        div = document.createElement("div");
-        div.innerHTML = svgSprite;
-        svgSprite = null;
-        svg = div.getElementsByTagName("svg")[0];
-        if (svg) {
-            svg.setAttribute("aria-hidden", "true");
-            svg.style.position = "absolute";
-            svg.style.width = 0;
-            svg.style.height = 0;
-            svg.style.overflow = "hidden";
-            prepend(svg, document.body);
-        }
-    }
-    if (shouldInjectCss && !window.__iconfont__svg__cssinject__) {
-        window.__iconfont__svg__cssinject__ = true;
-        try {
-            document.write("<style>.svgfont {display: inline-block;width: 1em;height: 1em;fill: currentColor;vertical-align: -0.1em;font-size:16px;}</style>");
-        } catch (e) {
-            console && console.log(e);
-        }
-    }
-    ready(appendSvg);
-}(window);
-
-;
 ! function(over, win) {
     "use strict";
 
@@ -806,3 +717,92 @@
         setAlwaysOnTop: function(id) {}
     };
 }(top, window);
+
+;
+! function(window) {
+    "use strict";
+
+    var svgSprite = '<svg><symbol id="layx-icon-restore" viewBox="0 0 1157 1024"><path d="M1016.52185234 724.44050175L833.87364805 724.44050175 833.87364805 898.52098643 833.87364805 960.05279112 833.87364805 961.2211168 772.34184336 961.2211168 772.34184336 960.05279112 124.31068789 960.05279112 124.31068789 961.2211168 62.7788832 961.2211168 62.7788832 960.05279112 62.7788832 898.52098643 62.7788832 360.31241885 62.7788832 298.78061416 124.31068789 298.78061416 298.78061416 298.78061416 298.78061416 62.7788832 303.06447442 62.7788832 360.31241885 62.7788832 1016.52185234 62.7788832 1074.15923838 62.7788832 1078.05365615 62.7788832 1078.05365615 662.90869795 1078.05365615 724.44050175 1016.52185234 724.44050175ZM124.31068789 898.52098643L772.34184336 898.52098643 772.34184336 724.44050175 772.34184336 662.90869795 772.34184336 360.31241885 124.31068789 360.31241885 124.31068789 898.52098643ZM1016.52185234 124.31068789L360.31241885 124.31068789 360.31241885 298.78061416 772.34184336 298.78061416 833.87364805 298.78061416 833.87364805 360.31241885 833.87364805 662.90869795 1016.52185234 662.90869795 1016.52185234 124.31068789Z"  ></path></symbol><symbol id="layx-icon-windows" viewBox="0 0 1024 1024"><path d="M128 512 128 288 384 231.68 384 508.16 128 512M853.333333 128 853.333333 501.333333 426.666667 507.733333 426.666667 222.293333 853.333333 128M128 554.666667 384 558.506667 384 849.066667 128 800 128 554.666667M853.333333 565.333333 853.333333 938.666667 426.666667 857.173333 426.666667 558.933333 853.333333 565.333333Z"  ></path></symbol><symbol id="layx-icon-min" viewBox="0 0 1024 1024"><path d="M65.23884 456.152041 958.760137 456.152041l0 111.695918L65.23884 567.847959 65.23884 456.152041z"  ></path></symbol><symbol id="layx-icon-max" viewBox="0 0 1024 1024"><path d="M75.74912227 948.24738475L75.74912227 75.75145131l872.50059037 0 0 872.49593344L75.74912227 948.24738475zM839.18786674 184.81446115L184.81213326 184.81446115l0 654.37573462 654.37573461 0L839.18786674 184.81446115z"  ></path></symbol><symbol id="layx-icon-destroy" viewBox="0 0 1024 1024"><path d="M933.89254819 139.71606348L884.23129279 90.08990363 511.96490363 462.39138834 140.40044113 90.82692583 90.84447403 140.34779656 462.40893653 511.91225907 90.10745181 884.2137446 139.73361166 933.875 512.03509637 561.53841892 883.59955887 933.10288141 933.15552597 883.58201068 561.59106347 512.01754819Z"  ></path></symbol></svg>';
+    var script = function() {
+        var scripts = document.getElementsByTagName("script");
+        return scripts[scripts.length - 1];
+    }();
+    var shouldInjectCss = script.getAttribute("data-injectcss");
+    var ready = function ready(fn) {
+        if (document.addEventListener) {
+            if (~["complete", "loaded", "interactive"].indexOf(document.readyState)) {
+                setTimeout(fn, 0);
+            } else {
+                var loadFn = function loadFn() {
+                    document.removeEventListener("DOMContentLoaded", loadFn, false);
+                    fn();
+                };
+                document.addEventListener("DOMContentLoaded", loadFn, false);
+            }
+        } else if (document.attachEvent) {
+            IEContentLoaded(window, fn);
+        }
+
+        function IEContentLoaded(w, fn) {
+            var d = w.document,
+                done = false,
+                init = function init() {
+                    if (!done) {
+                        done = true;
+                        fn();
+                    }
+                };
+            var polling = function polling() {
+                try {
+                    d.documentElement.doScroll("left");
+                } catch (e) {
+                    setTimeout(polling, 50);
+                    return;
+                }
+                init();
+            };
+            polling();
+            d.onreadystatechange = function() {
+                if (d.readyState == "complete") {
+                    d.onreadystatechange = null;
+                    init();
+                }
+            };
+        }
+    };
+    var before = function before(el, target) {
+        target.parentNode.insertBefore(el, target);
+    };
+    var prepend = function prepend(el, target) {
+        if (target.firstChild) {
+            before(el, target.firstChild);
+        } else {
+            target.appendChild(el);
+        }
+    };
+
+    function appendSvg() {
+        var div, svg;
+        div = document.createElement("div");
+        div.innerHTML = svgSprite;
+        svgSprite = null;
+        svg = div.getElementsByTagName("svg")[0];
+        if (svg) {
+            svg.setAttribute("aria-hidden", "true");
+            svg.style.position = "absolute";
+            svg.style.width = 0;
+            svg.style.height = 0;
+            svg.style.overflow = "hidden";
+            prepend(svg, document.body);
+        }
+    }
+    if (shouldInjectCss && !window.__iconfont__svg__cssinject__) {
+        window.__iconfont__svg__cssinject__ = true;
+        try {
+            document.write("<style>.svgfont {display: inline-block;width: 1em;height: 1em;fill: currentColor;vertical-align: -0.1em;font-size:16px;}</style>");
+        } catch (e) {
+            console && console.log(e);
+        }
+    }
+    ready(appendSvg);
+}(window);
