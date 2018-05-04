@@ -31,11 +31,21 @@
         minWidth: 50, // 拖曳大小最小宽度
         minHeight: 50, // 拖曳大小最大宽度
         shadable: false, // 是否启用窗口阻隔
-        pinable: false, // 是否允许置顶
         minimizable: true, // 是否允许最小化
         maximizable: true, // 是否允许最大化
         closable: true, // 是否允许关闭
         resizable: true, // 是否允许拖曳大小
+        // 拖曳方向控制
+        resizeLimit: {
+            t: true, // 是否允许上边拖曳大小，true允许
+            r: true, // 是否允许右边拖曳大小，true允许
+            b: true, // 是否允许下边拖曳大小，true允许
+            l: true, // 是否允许左边拖曳大小，true允许
+            lt: true, // 是否允许左上边拖曳大小，true允许
+            rt: true, // 是否允许右上边拖曳大小，true允许
+            lb: true, // 是否允许左下边拖曳大小，true允许
+            rb: true // 是否允许右下边拖曳大小，true允许
+        },
         movable: true, // 是否允许拖动窗口
         // 拖动窗口显示，vertical为true表示禁止水平拖动，horizontal为true表示禁止垂直拖动
         moveLimit: {
@@ -361,6 +371,73 @@
         el.onmousedown = dragstart;
     };
 
+    var Resize = function(el, resizeLimit) {
+        var drag = function(e) {
+            e = e || window.event;
+
+            var button = e.button || e.which;
+            if (button == 1 && e.shiftKey == false) {
+
+                var currentPosition = utils.getMousePosition(e);
+                var currentX = currentPosition.x,
+                    currentY = currentPosition.y,
+                    distX = currentX - el.startX,
+                    distY = currentY - el.startY,
+                    _top = el.windowStartTop + distY,
+                    _left = el.windowStartLeft + distX;
+
+                if (distX !== 0 || distY !== 0) {
+                    Drag.isMove = true;
+
+                }
+            }
+        };
+
+        var dragend = function(e) {
+            e = e || window.event;
+
+            document.onmouseup = null;
+            document.onmousemove = null;
+
+            if (Drag.isMove === true) {
+                Drag.isMove = false;
+            }
+            el.layxFixed.removeAttribute('data-enable');
+        };
+
+        var dragstart = function(e) {
+            e = e || window.event;
+
+            var windowDom = utils.getNodeByClassName(el, 'layx-window'),
+                layxFixed = utils.querySelector('.layx-fixed', windowDom),
+                clientArea = utils.getClientArea(),
+                windowId = windowDom.id.substr(5),
+                winform = Layx.windows[windowId];
+            Layx.setZindex(windowDom, winform);
+            el.windowDom = windowDom;
+            el.windowId = windowId;
+            el.layxFixed = layxFixed;
+            el.windowStartLeft = windowDom.offsetLeft;
+            el.windowStartTop = windowDom.offsetTop;
+            el.windowStartWidth = windowDom.offsetWidth;
+            el.windowStartHeight = windowDom.offsetHeight;
+            el.defaultAreaInfo = winform.defaultAreaInfo;
+
+            var startPosition = utils.getMousePosition(e);
+            el.startX = startPosition.x;
+            el.startY = startPosition.y;
+            el.clientArea = clientArea;
+            layxFixed.setAttribute('data-enable', '1');
+
+            document.onmouseup = dragend;
+            document.onmousemove = drag;
+
+            return false;
+        };
+        Drag.isMove = false;
+        el.onmousedown = dragstart;
+    };
+
     // Layx class define
     var Layx = {
         v: '1.0.0',
@@ -404,7 +481,7 @@
                 };
 
                 // create window dom
-                var winTemplate = "\n                " + (config.shadable === true ? '\n                <div class="layx-shade" id="layx-' + config.id + '-shade" style="z-index:' + ++Layx.zIndex + '"></div>\n                ' : "") + '\n                <div class="layx-window" id="layx-' + config.id + '" style="width:' + config.width + "px;height:" + config.height + "px;top:" + position.top + "px;left:" + position.left + "px;z-index: " + ++Layx.zIndex + ";background-color:" + (config.bgColor ? config.bgColor : "transparent") + ";border-color:" + config.borderColor + ";opacity:" + config.opacity + '">\n                    <div class="layx-control-bar">\n                        <div class="layx-icons">\n                            <div class="layx-icon">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-windows"></use>\n                                </svg>\n                            </div>\n                        </div>\n                        <div class="layx-title">' + config.title + '</div>\n                        <div class="layx-menus">\n                        ' + (config.pinable === true ? '\n                            <div class="layx-operator layx-pin-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-pin"></use>\n                                </svg>\n                            </div>\n                            ' : "") + "\n                            \n                            " + (config.minimizable === true ? '\n                            <div class="layx-operator layx-min-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-min"></use>\n                                </svg>\n                            </div>\n                            ' : "") + "\n                            \n                            " + (config.maximizable === true ? '\n                            <div class="layx-operator layx-max-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-max"></use>\n                                </svg>\n                            </div>\n                                ' : "") + "\n                            \n                            " + (config.closable === true ? '\n                                <div class="layx-operator layx-destroy-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-destroy"></use>\n                                </svg>\n                            </div>\n                                ' : "") + '\n                            \n                        </div>\n                    </div>\n                    <div class="layx-body">\n                        <div class="layx-fixed" data-enable="0"></div>\n                    </div>\n                    ' + (config.resizable === true ? '\n                        <div class="layx-resizes">\n                        <div class="layx-resize-top"></div>\n                        <div class="layx-resize-right"></div>\n                        <div class="layx-resize-bottom"></div>\n                        <div class="layx-resize-left"></div>\n                        <div class="layx-resize-left-top"></div>\n                        <div class="layx-resize-right-top"></div>\n                        <div class="layx-resize-left-bottom"></div>\n                        <div class="layx-resize-right-bottom"></div>\n                    </div>\n                        ' : "") + "\n                </div>\n                ";
+                var winTemplate = "\n                " + (config.shadable === true ? '\n                <div class="layx-shade" id="layx-' + config.id + '-shade" style="z-index:' + ++Layx.zIndex + '"></div>\n                ' : "") + '\n                <div class="layx-window" id="layx-' + config.id + '" style="width:' + config.width + "px;height:" + config.height + "px;top:" + position.top + "px;left:" + position.left + "px;z-index: " + ++Layx.zIndex + ";background-color:" + (config.bgColor ? config.bgColor : "transparent") + ";border-color:" + config.borderColor + ";opacity:" + config.opacity + '">\n                    <div class="layx-control-bar">\n                        <div class="layx-icons">\n                            <div class="layx-icon">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-windows"></use>\n                                </svg>\n                            </div>\n                        </div>\n                        <div class="layx-title">' + config.title + '</div>\n                        <div class="layx-menus">\n                        ' + (config.alwaysOnTop === true ? '\n                            <div class="layx-operator layx-pin-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-pin"></use>\n                                </svg>\n                            </div>\n                            ' : "") + "\n                            \n                            " + (config.minimizable === true ? '\n                            <div class="layx-operator layx-min-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-min"></use>\n                                </svg>\n                            </div>\n                            ' : "") + "\n                            \n                            " + (config.maximizable === true ? '\n                            <div class="layx-operator layx-max-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-max"></use>\n                                </svg>\n                            </div>\n                                ' : "") + "\n                            \n                            " + (config.closable === true ? '\n                                <div class="layx-operator layx-destroy-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-destroy"></use>\n                                </svg>\n                            </div>\n                                ' : "") + '\n                            \n                        </div>\n                    </div>\n                    <div class="layx-body">\n                        <div class="layx-fixed" data-enable="0"></div>\n                    </div>\n                    ' + (config.resizable === true ? '\n                        <div class="layx-resizes">\n                        <div class="layx-resize-top"></div>\n                        <div class="layx-resize-right"></div>\n                        <div class="layx-resize-bottom"></div>\n                        <div class="layx-resize-left"></div>\n                        <div class="layx-resize-left-top"></div>\n                        <div class="layx-resize-right-top"></div>\n                        <div class="layx-resize-left-bottom"></div>\n                        <div class="layx-resize-right-bottom"></div>\n                    </div>\n                        ' : "") + "\n                </div>\n                ";
 
                 // append to body
                 utils.InsertAfter(winTemplate);
