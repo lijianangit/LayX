@@ -276,18 +276,45 @@
             } catch (error) {}
             iframe.parentNode.removeChild(iframe);
         },
-        poll: function poll(fn, callback, errback, timeout, interval) {
-            var endTime = Number(new Date()) + (timeout || 2000);
-            interval = interval || 100;
-            (function p() {
-                if (fn()) {
-                    callback();
-                } else if (Number(new Date()) < endTime) {
-                    setTimeout(p, interval);
-                } else {
-                    errback(new Error('timed out for ' + fn + ': ' + arguments));
+        embedLayxCss: function(cssUrl) {
+            var that = this;
+            var layxCss = utils.getElementById('layx-css');
+            if (!layxCss) {
+                layxCss = document.createElement('link');
+                layxCss.setAttribute('id', 'layx-css');
+                layxCss.setAttribute('rel', 'stylesheet');
+                layxCss.setAttribute('charset', 'utf-8');
+                layxCss.setAttribute('type', 'text/css');
+                layxCss.href = cssUrl;
+                var head = utils.querySelector("head");
+                head.appendChild(layxCss);
+            }
+            return layxCss;
+        },
+        cssReady: function(fn, link) {
+            var d = document,
+                t = d.createStyleSheet,
+                r = t ? 'rules' : 'cssRules',
+                s = t ? 'styleSheet' : 'sheet',
+                l = d.getElementsByTagName('link');
+            // passed link or last link node
+            link || (link = l[l.length - 1]);
+
+            function check() {
+                try {
+                    return link && link[s] && link[s][r] && link[s][r][0];
+                } catch (e) {
+                    return false;
                 }
+            }
+            (function poll() {
+                check() && setTimeout(fn, 0) || setTimeout(poll, 100);
             })();
+        },
+        loadCss: function(fn) {
+            var that = this;
+            var link = that.embedLayxCss('layx.css');
+            that.cssReady(fn, link);
         }
     };
 
@@ -728,7 +755,9 @@
     over.layx = win.layx = {
         // 打开窗口
         open: function open(options) {
-            Layx.create(options);
+            utils.loadCss(function() {
+                Layx.create(options);
+            });
         },
         // 关闭窗口
         destroy: function destroy(id) {
