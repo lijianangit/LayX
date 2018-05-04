@@ -20,18 +20,7 @@
             layx.open({
                 id: 'btn1',
                 url: './iframe.html',
-                useFrameTitle: true,
-                intercept: {
-                    // 加载监听
-                    load: {
-                        before: function(windowDom, winform) {
-                            alert('我准备加载页面啦....');
-                        },
-                        after: function(windowDom, winform, iframe) {
-                            alert('我加载完成啦.....');
-                        }
-                    }
-                }
+                useFrameTitle: true
             });
         }
         document.getElementById('btn2').onclick = function(e) {
