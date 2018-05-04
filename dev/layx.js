@@ -276,12 +276,6 @@
             } catch (error) {}
             iframe.parentNode.removeChild(iframe);
         },
-        layxPath: function() {
-            var scripts = document.scripts,
-                script = scripts[scripts.length - 1],
-                layxPath = script.src;
-            return layxPath.substring(0, layxPath.lastIndexOf("/") + 1);
-        }(),
         embedLayxCss: function(cssUrl) {
             var that = this;
             var layxCss = utils.getElementById('layx-css');
@@ -291,7 +285,7 @@
                 layxCss.setAttribute('rel', 'stylesheet');
                 layxCss.setAttribute('charset', 'utf-8');
                 layxCss.setAttribute('type', 'text/css');
-                layxCss.href = that.layxPath + cssUrl;
+                layxCss.href = cssUrl;
                 var head = utils.querySelector("head");
                 head.appendChild(layxCss);
             }
