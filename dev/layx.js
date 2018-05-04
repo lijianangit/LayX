@@ -682,9 +682,7 @@
             Layx.destroy(id);
         },
         // 关闭所有窗口，调用此接口将不能执行 intercept定义的拦截器
-        destroyAll: function() {
-
-        },
+        destroyAll: function() {},
         // 最小化窗口
         min: function(id) {
             Layx.min(id);
@@ -718,7 +716,9 @@
         // 设置窗口内容
         setContent: function(id, content) {},
         // 设置置顶
-        setAlwaysOnTop: function(id) {}
+        setAlwaysOnTop: function(id) {},
+        // 取消置顶
+        cancelOnTop: function(id) {}
     };
 }(top, window);
 
