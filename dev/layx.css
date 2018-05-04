@@ -112,6 +112,8 @@
     -webkit-box-orient: vertical;
     -moz-box-orient: vertical;
     line-height: 28px;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 .layx-menus {
