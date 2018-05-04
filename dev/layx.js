@@ -73,50 +73,55 @@
 
     // layx defaults define
     var defaults = {
-        id: 'layx',
-        icon: '',
-        title: '',
-        bgColor: '#fff',
-        borderColor: '#3baced',
-        opacity: 1,
-        type: 'iframe',
-        url: '',
-        content: 'about:blank',
-        width: 800,
-        height: 600,
-        position: 'center',
-        useFrameTitle: false,
-        minWidth: 50,
-        minHeight: 50,
-        shadable: false,
-        minimizable: true,
-        maximizable: true,
-        closable: true,
-        resizable: true,
-        movable: true,
-        moveLimit: { x: false, y: false },
-        alwaysOnTop: false,
-        focusable: true,
-        parent: null,
-        controlMenus: [],
-        menuItems: [],
+        id: 'layx', // 唯一id
+        icon: '', // 图标
+        title: '', // 窗口标题
+        bgColor: '#fff', // 背景颜色
+        borderColor: '#3baced', // 边框颜色
+        opacity: 1, // 透明度
+        type: 'iframe', // 窗口类型：支持iframe,alert,confirm,error,load,prompt
+        url: '', // iframe类型地址，type=iframe 时有效
+        content: 'about:blank', // 非iframe类型内容，支持text,html
+        width: 800, // 初始化宽度
+        height: 600, // 初始化高度
+        position: 'center', // 初始化位置，支持'center', 'lt', 'rt', 'lb', 'rb'以及 [top,left]数组
+        useFrameTitle: false, // 是否自动获取iframe页面标题填充窗口标题
+        minWidth: 50, // 拖曳大小最小宽度
+        minHeight: 50, // 拖曳大小最大宽度
+        shadable: false, // 是否启用窗口阻隔
+        minimizable: true, // 是否允许最小化
+        maximizable: true, // 是否允许最大化
+        closable: true, // 是否允许关闭
+        resizable: true, // 是否允许拖曳大小
+        movable: true, // 是否允许拖动窗口
+        moveLimit: { x: false, y: false }, // 拖动窗口显示，x为true表示禁止水平拖动，y为true表示禁止垂直拖动
+        alwaysOnTop: false, // 是否总是置顶
+        focusable: true, // 是否启用iframe页面点击置顶
+        parent: null, // 父窗体id，设置此选项时，关闭父窗体将会关闭所有子窗体
+        controlMenus: [], // 自定义标题栏按钮
+        menuItems: [], // 自定义顶部菜单，支持无限极
         intercept: {
+            // 加载监听
             load: {
                 before: function(windowDom, winform) {},
                 after: function(windowDom, winform, iframe) {}
             },
+            // 最小化监听
             min: {
                 before: function(windowDom, winform) {},
                 after: function(windowDom, winform) {}
             },
+            // 最大化监听
             max: {
                 before: function(windowDom, winform) {},
                 after: function(windowDom, winform) {}
             },
+            // 恢复监听
             restore: {
                 before: function(windowDom, winform) {},
                 after: function(windowDom, winform) {}
             },
+            // 关闭监听
             destroy: {
                 before: function(windowDom, winform) {},
                 after: function(windowDom, winform) {}
