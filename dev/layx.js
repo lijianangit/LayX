@@ -74,7 +74,7 @@
     };
 
     var utils = {
-        extend: function extend(target) {
+        extend: function(target) {
             for (var _len = arguments.length, sources = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
                 sources[_key - 1] = arguments[_key];
             }
@@ -98,25 +98,25 @@
             });
             return target;
         },
-        isArray: function isArray(o) {
+        isArray: function(o) {
             return Object.prototype.toString.call(o) == '[object Array]';
         },
-        isFunction: function isFunction(func) {
+        isFunction: function(func) {
             return func && Object.prototype.toString.call(func) === '[object Function]';
         },
-        getElementById: function getElementById(id, el) {
+        getElementById: function(id, el) {
             return (el && el.nodeType == 1 ? el : document).getElementById(id);
         },
-        querySelector: function querySelector(selector, el) {
+        querySelector: function(selector, el) {
             return (el && el.nodeType == 1 ? el : document).querySelector(selector);
         },
-        InsertAfter: function InsertAfter(html, el) {
+        InsertAfter: function(html, el) {
             (el && el.nodeType == 1 ? el : document.body).lastElementChild.insertAdjacentHTML('afterend', html);
         },
-        getClientArea: function getClientArea() {
+        getClientArea: function() {
             return { width: window.innerWidth, height: window.innerHeight };
         },
-        compilePositionParams: function compilePositionParams(width, height, params) {
+        compilePositionParams: function(width, height, params) {
             var that = this;
             var posOptions = ['center', 'lt', 'rt', 'lb', 'rb'];
             var clientArea = that.getClientArea();
@@ -158,7 +158,7 @@
 
             return position;
         },
-        createIframe: function createIframe(id, src, onload) {
+        createIframe: function(id, src, onload) {
             var that = this,
                 iframe = document.createElement("iframe");
 
@@ -180,7 +180,7 @@
             iframe.src = src;
             return iframe;
         },
-        destroyIframe: function destroyIframe(iframe) {
+        destroyIframe: function(iframe) {
             iframe.src = 'about:blank';
             try {
                 iframe.contentWindow.document.write('');
@@ -231,13 +231,13 @@
         }
     };
 
-    var Drag = function Drag(el) {
+    var Drag = function(el) {
         var options = arguments[1] || {},
             limit = false || options.limit,
             lockX = false || options.lockX,
             lockY = false || options.lockY;
 
-        var drag = function drag(e) {
+        var drag = function(e) {
             e = e || window.event;
 
             var button = e.button || e.which;
@@ -246,7 +246,7 @@
             }
         };
 
-        var dragend = function dragend(e) {
+        var dragend = function(e) {
             e = e || window.event;
 
             document.onmouseup = null;
@@ -257,7 +257,7 @@
             }
         };
 
-        var dragstart = function dragstart(e) {
+        var dragstart = function(e) {
             e = e || window.event;
 
             var windowDom = el.parentElement.parentElement;
@@ -278,7 +278,7 @@
         v: '1.0.0',
         zIndex: 19920527,
         windows: {},
-        create: function create(options) {
+        create: function(options) {
             var config = utils.extend({}, defaults, options || {});
             if (!Layx.windows.hasOwnProperty(config.id)) {
                 if (config.url) {
@@ -415,7 +415,7 @@
                 return Layx.windows[config.id];
             }
         },
-        destroy: function destroy(id) {
+        destroy: function(id) {
             var windowDom = utils.getElementById("layx-" + id),
                 winform = Layx.windows[id];
 
@@ -439,7 +439,7 @@
                 delete Layx.windows[id];
             }
         },
-        max: function max(id) {
+        max: function(id) {
             var windowDom = utils.getElementById("layx-" + id),
                 winform = Layx.windows[id];
 
@@ -484,7 +484,7 @@
                 Layx.windows[id].status = 'max';
             }
         },
-        restore: function restore(id) {
+        restore: function(id) {
             var windowDom = utils.getElementById("layx-" + id),
                 winform = Layx.windows[id];
 
@@ -541,7 +541,7 @@
                 }
             }
         },
-        min: function min(id) {
+        min: function(id) {
             var windowDom = utils.getElementById("layx-" + id),
                 winform = Layx.windows[id];
             if (windowDom) {
@@ -580,7 +580,7 @@
                 Layx.minManager();
             }
         },
-        triggerMethod: function triggerMethod(methodName, id, winform, e) {
+        triggerMethod: function(methodName, id, winform, e) {
             e = e || window.event;
             var beforeReval = true;
             if (winform && winform.config && winform.config.intercept[methodName] && utils.isFunction(winform.config.intercept[methodName].before) && winform.config.intercept[methodName].before(winform.windowDom, winform) === false) {
@@ -594,7 +594,7 @@
             }
             e.stopPropagation();
         },
-        minManager: function minManager() {
+        minManager: function() {
             var clientArea = utils.getClientArea(),
                 paddingLeft = 10,
                 paddingBottom = 10,
@@ -615,7 +615,7 @@
                 }
             }
         },
-        ExistShow: function ExistShow(id) {
+        ExistShow: function(id) {
             var windowDom = utils.getElementById("layx-" + id),
                 winform = Layx.windows[id];
             Layx.setZindex(windowDom, winform);
@@ -625,13 +625,13 @@
                 }
             }
         },
-        setZindex: function setZindex(windowDom, winform) {
+        setZindex: function(windowDom, winform) {
             if (windowDom && winform) {
                 windowDom.style.zIndex = ++Layx.zIndex;
                 winform.zIndex = Layx.zIndex;
             }
         },
-        setTitle: function setTitle(id, txt) {
+        setTitle: function(id, txt) {
             var windowDom = utils.getElementById("layx-" + id),
                 winform = Layx.windows[id];
             if (windowDom) {
@@ -640,7 +640,7 @@
                 winform.title = txt;
             }
         },
-        setUrl: function setUrl(id, url) {
+        setUrl: function(id, url) {
             var windowDom = utils.getElementById("layx-" + id),
                 winform = Layx.windows[id];
             if (windowDom) {
@@ -650,7 +650,7 @@
                 }
             }
         },
-        setFlicker: function setFlicker(id) {
+        setFlicker: function(id) {
             var filcker = null;
             var windowDom = utils.getElementById("layx-" + id),
                 winform = Layx.windows[id];
@@ -732,12 +732,12 @@
         return scripts[scripts.length - 1];
     }();
     var shouldInjectCss = script.getAttribute("data-injectcss");
-    var ready = function ready(fn) {
+    var ready = function(fn) {
         if (document.addEventListener) {
             if (~["complete", "loaded", "interactive"].indexOf(document.readyState)) {
                 setTimeout(fn, 0);
             } else {
-                var loadFn = function loadFn() {
+                var loadFn = function() {
                     document.removeEventListener("DOMContentLoaded", loadFn, false);
                     fn();
                 };
@@ -750,13 +750,13 @@
         function IEContentLoaded(w, fn) {
             var d = w.document,
                 done = false,
-                init = function init() {
+                init = function() {
                     if (!done) {
                         done = true;
                         fn();
                     }
                 };
-            var polling = function polling() {
+            var polling = function() {
                 try {
                     d.documentElement.doScroll("left");
                 } catch (e) {
@@ -774,10 +774,10 @@
             };
         }
     };
-    var before = function before(el, target) {
+    var before = function(el, target) {
         target.parentNode.insertBefore(el, target);
     };
-    var prepend = function prepend(el, target) {
+    var prepend = function(el, target) {
         if (target.firstChild) {
             before(el, target.firstChild);
         } else {
