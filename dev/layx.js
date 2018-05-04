@@ -265,7 +265,7 @@
 
             var button = e.button || e.which;
             if (button == 1 && e.shiftKey == false) {
-                Drag.isMove = true;
+
                 var currentPosition = utils.getMousePosition(e);
                 var currentX = currentPosition.x,
                     currentY = currentPosition.y,
@@ -275,6 +275,7 @@
                     _left = el.windowStartLeft + distX;
 
                 if (distX !== 0 || distY !== 0) {
+                    Drag.isMove = true;
                     if (Layx.windows[el.windowId].status === "max") {
                         Layx.triggerMethod('restore', el.windowId, Layx.windows[el.windowId], e);
                         if (currentPosition.x < el.defaultAreaInfo.width / 2) {
