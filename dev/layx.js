@@ -88,7 +88,7 @@
         useFrameTitle: false,
         minWidth: 50,
         minHeight: 50,
-        shade: false,
+        shadable: false,
         minimizable: true,
         maximizable: true,
         closable: true,
@@ -310,7 +310,7 @@
 
                 // create window dom
                 var winTemplate = `
-                ` + (config.shade === true ? `
+                ` + (config.shadable === true ? `
                 <div class="layx-shade" id="layx-` + config.id + `-shade" style="z-index:` + (++Layx.zIndex) + `"></div>
                 ` : ``) + `
                 <div class="layx-window" id="layx-` + config.id + `" style="width:` + config.width + `px;height:` + config.height + `px;top:` + position.top + `px;left:` + position.left + `px;z-index: ` + (++Layx.zIndex) + `;background-color:` + (config.bgColor ? config.bgColor : 'transparent') + `;border-color:` + config.borderColor + `;opacity:` + config.opacity + `">
@@ -448,6 +448,16 @@
                             Layx.triggerMethod('restore', config.id, e);
                         }
                     };
+                }
+
+                var shade = utils.querySelector('.layx-shade');
+                if (shade) {
+                    shade.onclick = function(e) {
+                        var that = this,
+                            id = this.id,
+                            windowId = id.substr(0, id.length - '-shade'.length);
+                        Layx.setFlicker(windowId.substr(5));
+                    }
                 }
 
                 return winform;
@@ -670,6 +680,19 @@
                     var iframe = utils.querySelector('#layx-' + id + '-content', windowDom);
                     iframe.setAttribute("src", url);
                 }
+            }
+        },
+        setFlicker: function(id) {
+            var filcker = null;
+            var windowDom = utils.getElementById("layx-" + id),
+                winform = Layx.windows[id];
+            if (windowDom) {
+                if (windowDom.classList.contains('shadowFlicker')) windowDom.classList.remove('shadowFlicker');
+                windowDom.classList.add('shadowFlicker');
+                filcker = setTimeout(function() {
+                    clearTimeout(filcker);
+                    windowDom.classList.remove('shadowFlicker');
+                }, 120 * 8);
             }
         }
     };

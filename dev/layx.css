@@ -39,6 +39,15 @@
     -webkit-flex-direction: column;
 }
 
+.layx-window.shadowFlicker {
+    animation-name: layx-shadowFlicker;
+    -webkit-animation-name: layx-shadowFlicker;
+    animation-duration: 0.12s;
+    -webkit-animation-duration: 0.12s;
+    animation-iteration-count: 8;
+    -webkit-animation-iteration-count: 8;
+}
+
 .layx-window,
 .layx-control-bar,
 .layx-menus,
@@ -236,4 +245,44 @@
     right: 0;
     bottom: 0;
     cursor: se-resize;
+}
+
+@keyframes layx-shadowFlicker {
+    from {
+        box-shadow: 1px 1px 24px rgba(0, 0, 0, .3);
+    }
+    from {}
+    to {
+        box-shadow: 1px 1px 12px rgba(0, 0, 0, .3);
+    }
+}
+
+@-webkit-keyframes layx-shadowFlicker {
+    from {
+        box-shadow: 1px 1px 24px rgba(0, 0, 0, .3);
+    }
+    from {}
+    to {
+        box-shadow: 1px 1px 12px rgba(0, 0, 0, .3);
+    }
+}
+
+@-moz-keyframes layx-shadowFlicker {
+    from {
+        box-shadow: 1px 1px 24px rgba(0, 0, 0, .3);
+    }
+    from {}
+    to {
+        box-shadow: 1px 1px 12px rgba(0, 0, 0, .3);
+    }
+}
+
+@-o-keyframes layx-shadowFlicker {
+    from {
+        box-shadow: 1px 1px 24px rgba(0, 0, 0, .3);
+    }
+    from {}
+    to {
+        box-shadow: 1px 1px 12px rgba(0, 0, 0, .3);
+    }
 }
