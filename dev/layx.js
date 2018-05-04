@@ -304,6 +304,7 @@
                 try {
                     return link && link[s] && link[s][r] && link[s][r][0];
                 } catch (e) {
+                    console.log('load layx.css fail.');
                     return false;
                 }
             }
