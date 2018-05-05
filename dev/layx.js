@@ -155,7 +155,7 @@
         querySelector: function(selector, el) {
             return (el && el.nodeType == 1 ? el : document).querySelector(selector);
         },
-        // 在文档后面插入html
+        // 在文档最后插入html
         InsertAfter: function(html, el) {
             (el && el.nodeType == 1 ? el : document.body).lastElementChild.insertAdjacentHTML('afterend', html);
         },
