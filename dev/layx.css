@@ -76,6 +76,7 @@
     line-height: 30px;
     position: reative;
     z-index: 1;
+    min-height: 30px;
 }
 
 .layx-iconfont {
@@ -277,6 +278,14 @@
     right: 0;
     bottom: 0;
     cursor: se-resize;
+}
+
+.layx-status-bar {
+    min-height: 25px;
+    background-color: #f0f0f0;
+    border-top: 1px solid #dfdfdf;
+    font-size: 12px;
+    line-height: 25px;
 }
 
 @keyframes layx-shadowFlicker {
