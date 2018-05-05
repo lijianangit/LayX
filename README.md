@@ -1,5 +1,9 @@
 > Layx 网页弹窗最佳选择.
 
+# 演示地址
+
+[Layx](http://baisoft.gotoip11.com/layx/doc/)
+
 ![输入图片说明](https://gitee.com/uploads/images/2018/0505/205352_5713b8f6_974299.png "cr1.png")
 
 # 前言
