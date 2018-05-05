@@ -1,6 +1,6 @@
 > Layx 网页弹窗最佳选择.
 
-![输入图片说明](https://gitee.com/uploads/images/2018/0505/204505_d4758dee_974299.png "cr1.png")
+![输入图片说明](https://gitee.com/uploads/images/2018/0505/205352_5713b8f6_974299.png "cr1.png")
 
 # 前言
 
