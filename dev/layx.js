@@ -463,26 +463,26 @@
                 windowId = windowDom.id.substr(5),
                 winform = Layx.windows[windowId],
                 startPosition = utils.getMousePosition(e);
+            if (winform.status !== "min") {
+                el.windowDom = windowDom;
+                el.windowId = windowId;
+                el.layxFixed = layxFixed;
+                el.windowStartLeft = windowDom.offsetLeft;
+                el.windowStartTop = windowDom.offsetTop;
+                el.windowStartWidth = windowDom.offsetWidth;
+                el.windowStartHeight = windowDom.offsetHeight;
+                el.defaultAreaInfo = winform.defaultAreaInfo;
 
-            el.windowDom = windowDom;
-            el.windowId = windowId;
-            el.layxFixed = layxFixed;
-            el.windowStartLeft = windowDom.offsetLeft;
-            el.windowStartTop = windowDom.offsetTop;
-            el.windowStartWidth = windowDom.offsetWidth;
-            el.windowStartHeight = windowDom.offsetHeight;
-            el.defaultAreaInfo = winform.defaultAreaInfo;
+                el.startX = startPosition.x;
+                el.startY = startPosition.y;
+                el.clientArea = clientArea;
 
-            el.startX = startPosition.x;
-            el.startY = startPosition.y;
-            el.clientArea = clientArea;
+                Layx.setZindex(windowDom, winform);
+                layxFixed.setAttribute('data-enable', '1');
 
-            Layx.setZindex(windowDom, winform);
-            layxFixed.setAttribute('data-enable', '1');
-
-            document.onmouseup = dragend;
-            document.onmousemove = drag;
-
+                document.onmouseup = dragend;
+                document.onmousemove = drag;
+            }
             return false;
         };
         Drag.isMove = false;
