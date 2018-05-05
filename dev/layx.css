@@ -181,6 +181,10 @@
     z-index: 1;
 }
 
+.layx-html {
+    overflow: auto;
+}
+
 .layx-resizes {
     z-index: 3;
 }
