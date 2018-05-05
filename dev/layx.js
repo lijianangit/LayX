@@ -12,7 +12,7 @@
 ! function(over, win) {
     "use strict";
 
-    // layx defaults define
+    // layx 默认配置参数
 
     var defaults = {
         id: 'layx', // 唯一id
@@ -112,7 +112,9 @@
         }
     };
 
+    // 工具类
     var utils = {
+        // 对象继承，深复制
         extend: function(target) {
             for (var _len = arguments.length, sources = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
                 sources[_key - 1] = arguments[_key];
@@ -137,24 +139,31 @@
             });
             return target;
         },
+        // 是否数组类型
         isArray: function(o) {
             return Object.prototype.toString.call(o) == '[object Array]';
         },
+        // 是否一个方法类型
         isFunction: function(func) {
             return func && Object.prototype.toString.call(func) === '[object Function]';
         },
-        getElementById: function(id, el) {
-            return (el && el.nodeType == 1 ? el : document).getElementById(id);
+        // 根据id获取元素对象
+        getElementById: function(id) {
+            return document.getElementById(id);
         },
+        // 根据选择器获取元素对象
         querySelector: function(selector, el) {
             return (el && el.nodeType == 1 ? el : document).querySelector(selector);
         },
+        // 在文档后面插入html
         InsertAfter: function(html, el) {
             (el && el.nodeType == 1 ? el : document.body).lastElementChild.insertAdjacentHTML('afterend', html);
         },
+        // 获取浏览器可视区域，包含滚动条
         getClientArea: function() {
             return { width: window.innerWidth, height: window.innerHeight };
         },
+        // 解析窗口传入的位置参数，并转化为 {left: top: }对象
         compilePositionParams: function(width, height, params) {
             var that = this;
             var posOptions = ['center', 'lt', 'rt', 'lb', 'rb'];
@@ -197,6 +206,7 @@
 
             return position;
         },
+        // 创建iframe
         createIframe: function(id, src, onload) {
             var that = this,
                 iframe = document.createElement("iframe");
@@ -219,6 +229,7 @@
             iframe.src = src;
             return iframe;
         },
+        // 销毁iframe
         destroyIframe: function(iframe) {
             iframe.src = 'about:blank';
             try {
@@ -227,6 +238,7 @@
             } catch (error) {}
             iframe.parentNode.removeChild(iframe);
         },
+        // 嵌入css元素
         embedLayxCss: function(cssUrl) {
             var that = this;
             var layxCss = utils.getElementById('layx-css');
@@ -242,6 +254,7 @@
             }
             return layxCss;
         },
+        // 监听css是否加载完毕
         cssReady: function(fn, link) {
             var d = document,
                 t = d.createStyleSheet,
@@ -263,11 +276,13 @@
                 check() && setTimeout(fn, 0) || setTimeout(poll, 100);
             })();
         },
+        // 加载css
         loadCss: function(fn) {
             var that = this;
             var link = that.embedLayxCss('layx.css');
             that.cssReady(fn, link);
         },
+        // 获取鼠标点击当前位置
         getMousePosition: function(e) {
             e = event || window.event;
             var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
@@ -276,6 +291,7 @@
             var y = e.pageY || e.clientY + scrollY;
             return { 'x': x, 'y': y };
         },
+        // 向上递归查找元素
         getNodeByClassName: function(node, className) {
             var that = this;
             if (node === document.body) {
@@ -290,6 +306,7 @@
         }
     };
 
+    // 拖动函数
     var Drag = function(el, moveLimit) {
         var drag = function(e) {
             e = e || window.event;
@@ -297,21 +314,19 @@
             var button = e.button || e.which;
             if (button == 1 && e.shiftKey == false) {
 
+                var currentPosition = utils.getMousePosition(e);
+                var currentX = currentPosition.x,
+                    currentY = currentPosition.y,
+                    distX = currentX - el.startX,
+                    distY = currentY - el.startY,
+                    _top = el.windowStartTop + distY,
+                    _left = el.windowStartLeft + distX;
                 if (distX !== 0 || distY !== 0) {
                     Drag.isMove = true;
-
                     // 触发移动之前
                     if (Drag.isTriggerMoveBefore === false) {
                         Drag.isTriggerMoveBefore = true;
                     }
-
-                    var currentPosition = utils.getMousePosition(e);
-                    var currentX = currentPosition.x,
-                        currentY = currentPosition.y,
-                        distX = currentX - el.startX,
-                        distY = currentY - el.startY,
-                        _top = el.windowStartTop + distY,
-                        _left = el.windowStartLeft + distX;
 
                     if (Layx.windows[el.windowId].status === "max") {
                         Layx.triggerMethod('restore', el.windowId, Layx.windows[el.windowId], e);
@@ -401,6 +416,7 @@
         el.onmousedown = dragstart;
     };
 
+    // 拖曳大小函数
     var Resize = function(el, resizeLimit, isTop, isLeft) {
         var drag = function(e) {
             e = e || window.event;
@@ -468,13 +484,19 @@
         el.onmousedown = dragstart;
     };
 
-    // Layx class define
+    // 内部Layx类定义
     var Layx = {
+        // 版本号
         v: '1.0.0',
+        // 窗口默认起始zIndex
         zIndex: 19920527,
+        // 当前所有窗口信息
         windows: {},
+        // 置顶窗口信息
         pinWindow: {}, // 置顶window
+        // 窗口置顶起始zIndex
         pinZindex: 19900527, // 置顶起始索引
+        // 创建窗口对象
         create: function(options) {
             var config = utils.extend({}, defaults, options || {});
             if (!Layx.windows.hasOwnProperty(config.id)) {
@@ -510,18 +532,17 @@
                     left: position.left
                 };
 
-                // create window dom
+                // 构建窗口骨架
                 var winTemplate = "\n                " + (config.shadable === true ? '\n                <div class="layx-shade" id="layx-' + config.id + '-shade" style="z-index:' + ++Layx.zIndex + '"></div>\n                ' : "") + '\n                <div class="layx-window" id="layx-' + config.id + '" style="width:' + config.width + "px;height:" + config.height + "px;top:" + position.top + "px;left:" + position.left + "px;z-index: " + ++Layx.zIndex + ";background-color:" + (config.bgColor ? config.bgColor : "transparent") + ";border-color:" + config.borderColor + ";opacity:" + config.opacity + '">\n                    <div class="layx-control-bar">\n                        <div class="layx-icons">\n                            <div class="layx-icon">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-windows"></use>\n                                </svg>\n                            </div>\n                        </div>\n                        <div class="layx-title" title="' + config.title + '">' + config.title + '</div>\n                        <div class="layx-menus">\n                        ' + (config.alwaysOnTop === true ? '\n                            <div class="layx-operator layx-pin-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-pin"></use>\n                                </svg>\n                            </div>\n                            ' : "") + "\n                            \n                            " + (config.minimizable === true ? '\n                            <div class="layx-operator layx-min-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-min"></use>\n                                </svg>\n                            </div>\n                            ' : "") + "\n                            \n                            " + (config.maximizable === true ? '\n                            <div class="layx-operator layx-max-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-max"></use>\n                                </svg>\n                            </div>\n                                ' : "") + "\n                            \n                            " + (config.closable === true ? '\n                                <div class="layx-operator layx-destroy-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-destroy"></use>\n                                </svg>\n                            </div>\n                                ' : "") + '\n                            \n                        </div>\n                    </div>\n                    <div class="layx-body">\n                        <div class="layx-fixed" data-enable="0"></div>\n                    </div>\n                    ' + (config.resizable === true ? '\n                        <div class="layx-resizes">\n                        ' + (config.resizeLimit.t === true ? '<div class="layx-resize-top"></div>' : '') + '\n                        ' + (config.resizeLimit.r === true ? '<div class="layx-resize-right"></div>' : '') + '\n                        ' + (config.resizeLimit.b === true ? '<div class="layx-resize-bottom"></div>' : '') + '\n                        ' + (config.resizeLimit.l === true ? '<div class="layx-resize-left"></div>' : '') + '\n                        ' + (config.resizeLimit.lt === true ? '<div class="layx-resize-left-top"></div>' : '') + '\n                        ' + (config.resizeLimit.rt === true ? '<div class="layx-resize-right-top"></div>' : '') + '\n                        ' + (config.resizeLimit.lb === true ? '<div class="layx-resize-left-bottom"></div>' : '') + '\n                        ' + (config.resizeLimit.rb === true ? '<div class="layx-resize-right-bottom"></div>' : '') + '\n                    </div>\n                        ' : "") + "\n                </div>\n                ";
 
-                // append to body
                 utils.InsertAfter(winTemplate);
                 var windowDom = utils.getElementById('layx-' + config.id);
                 winform.windowDom = windowDom;
                 winform.zIndex = Layx.zIndex;
                 Layx.windows[config.id] = winform;
 
+                // 构建内容对象
                 var layxBody = utils.querySelector('.layx-body', windowDom);
-
                 if (utils.isFunction(config.intercept.load.before) && config.intercept.load.before(winform, windowDom) !== false) {
                     if (config.type === "iframe") {
                         var iframe = utils.createIframe("layx-" + config.id + '-content', config.url ? config.url : config.content, function() {
@@ -564,7 +585,7 @@
                     }
                 }
 
-                // bind events
+                // 绑定事件
                 var destroyMenu = utils.querySelector('.layx-destroy-menu', windowDom);
                 if (destroyMenu) destroyMenu.onclick = function(e) {
                     Layx.triggerMethod('destroy', config.id, winform, e);
@@ -620,6 +641,7 @@
                 return Layx.windows[config.id];
             }
         },
+        // 销毁窗口
         destroy: function(id) {
             var windowDom = utils.getElementById("layx-" + id),
                 winform = Layx.windows[id];
@@ -644,6 +666,7 @@
                 delete Layx.windows[id];
             }
         },
+        // 最大化窗口
         max: function(id) {
             var windowDom = utils.getElementById("layx-" + id),
                 winform = Layx.windows[id];
@@ -689,6 +712,7 @@
                 Layx.windows[id].status = 'max';
             }
         },
+        // 恢复窗口
         restore: function(id) {
             var windowDom = utils.getElementById("layx-" + id),
                 winform = Layx.windows[id];
@@ -746,6 +770,7 @@
                 }
             }
         },
+        // 最小化窗口
         min: function(id) {
             var windowDom = utils.getElementById("layx-" + id),
                 winform = Layx.windows[id];
@@ -785,6 +810,7 @@
                 Layx.minManager();
             }
         },
+        // 内部统一触发方法机制
         triggerMethod: function(methodName, id, winform, e) {
             e = e || window.event;
             var beforeReval = true;
@@ -799,6 +825,7 @@
             }
             e.stopPropagation();
         },
+        // 最小化管理
         minManager: function() {
             var clientArea = utils.getClientArea(),
                 paddingLeft = 10,
@@ -820,6 +847,7 @@
                 }
             }
         },
+        // 如果窗口已经打开，则显示并置顶
         ExistShow: function(id) {
             var windowDom = utils.getElementById("layx-" + id),
                 winform = Layx.windows[id];
@@ -830,12 +858,14 @@
                 }
             }
         },
+        // 设置窗口zIndex
         setZindex: function(windowDom, winform) {
             if (windowDom && winform) {
                 windowDom.style.zIndex = ++Layx.zIndex;
                 winform.zIndex = Layx.zIndex;
             }
         },
+        // 设置窗口标题
         setTitle: function(id, txt) {
             var windowDom = utils.getElementById("layx-" + id),
                 winform = Layx.windows[id];
@@ -846,6 +876,7 @@
                 winform.title = txt;
             }
         },
+        // 设置窗口地址，只对type:iframe有效
         setUrl: function(id, url) {
             var windowDom = utils.getElementById("layx-" + id),
                 winform = Layx.windows[id];
@@ -856,6 +887,7 @@
                 }
             }
         },
+        // 设置窗口闪烁并显示到顶层
         setFlicker: function(id) {
             var filcker = null;
             var windowDom = utils.getElementById("layx-" + id),
@@ -863,6 +895,7 @@
             if (windowDom) {
                 if (windowDom.classList.contains('shadowFlicker')) windowDom.classList.remove('shadowFlicker');
                 windowDom.classList.add('shadowFlicker');
+                Layx.setZindex(windowDom, winform);
                 filcker = setTimeout(function() {
                     clearTimeout(filcker);
                     windowDom.classList.remove('shadowFlicker');
@@ -928,6 +961,7 @@
     };
 }(top, window);
 
+// symbol 字体图标
 ;
 !(function(window) {
     var svgSprite = '<svg><symbol id="layx-icon-restore" viewBox="0 0 1157 1024"><path d="M1016.52185234 724.44050175L833.87364805 724.44050175 833.87364805 898.52098643 833.87364805 960.05279112 833.87364805 961.2211168 772.34184336 961.2211168 772.34184336 960.05279112 124.31068789 960.05279112 124.31068789 961.2211168 62.7788832 961.2211168 62.7788832 960.05279112 62.7788832 898.52098643 62.7788832 360.31241885 62.7788832 298.78061416 124.31068789 298.78061416 298.78061416 298.78061416 298.78061416 62.7788832 303.06447442 62.7788832 360.31241885 62.7788832 1016.52185234 62.7788832 1074.15923838 62.7788832 1078.05365615 62.7788832 1078.05365615 662.90869795 1078.05365615 724.44050175 1016.52185234 724.44050175ZM124.31068789 898.52098643L772.34184336 898.52098643 772.34184336 724.44050175 772.34184336 662.90869795 772.34184336 360.31241885 124.31068789 360.31241885 124.31068789 898.52098643ZM1016.52185234 124.31068789L360.31241885 124.31068789 360.31241885 298.78061416 772.34184336 298.78061416 833.87364805 298.78061416 833.87364805 360.31241885 833.87364805 662.90869795 1016.52185234 662.90869795 1016.52185234 124.31068789Z"  ></path></symbol><symbol id="layx-icon-windows" viewBox="0 0 1024 1024"><path d="M128 512 128 288 384 231.68 384 508.16 128 512M853.333333 128 853.333333 501.333333 426.666667 507.733333 426.666667 222.293333 853.333333 128M128 554.666667 384 558.506667 384 849.066667 128 800 128 554.666667M853.333333 565.333333 853.333333 938.666667 426.666667 857.173333 426.666667 558.933333 853.333333 565.333333Z"  ></path></symbol><symbol id="layx-icon-min" viewBox="0 0 1024 1024"><path d="M65.23884 456.152041 958.760137 456.152041l0 111.695918L65.23884 567.847959 65.23884 456.152041z"  ></path></symbol><symbol id="layx-icon-max" viewBox="0 0 1024 1024"><path d="M75.74912227 948.24738475L75.74912227 75.75145131l872.50059037 0 0 872.49593344L75.74912227 948.24738475zM839.18786674 184.81446115L184.81213326 184.81446115l0 654.37573462 654.37573461 0L839.18786674 184.81446115z"  ></path></symbol><symbol id="layx-icon-destroy" viewBox="0 0 1024 1024"><path d="M933.89254819 139.71606348L884.23129279 90.08990363 511.96490363 462.39138834 140.40044113 90.82692583 90.84447403 140.34779656 462.40893653 511.91225907 90.10745181 884.2137446 139.73361166 933.875 512.03509637 561.53841892 883.59955887 933.10288141 933.15552597 883.58201068 561.59106347 512.01754819Z"  ></path></symbol><symbol id="layx-icon-pin" viewBox="0 0 1024 1024"><path d="M326.4 5.65333333l7.89333333 174.72-224.74666666 376.64 168.32 117.86666667L77.22666667 1012.26666667l8.74666666 6.08 248.42666667-304 168.32 117.86666666L779.73333333 492.37333333l166.93333334-52.37333333L326.4 5.65333333z m-144.96 536.53333334l184.74666667-312.10666667L722.13333333 479.36 492.16 759.78666667l-310.72-217.6z m582.4-100.69333334l-1.92 0.64-374.4-262.18666666-0.10666667-2.02666667-2.98666666-66.56 442.88 310.18666667-63.46666667 19.94666666z" fill="" ></path></symbol></svg>';
