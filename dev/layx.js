@@ -659,7 +659,6 @@
                                     config.intercept.load.after(winform, windowDom, iframeDoc);
                                 }
                             } catch (error) {
-                                alert('加载失败');
                                 if (config.useFrameTitle === true) {
                                     Layx.setTitle(config.id, config.title);
                                 }
