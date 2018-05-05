@@ -56,6 +56,7 @@
             topOut: true, // 是否允许上边拖出，true允许，此设置不管是false还是true，窗口都不能拖出窗体
             bottomOut: true, // 是否允许下边拖出，true允许
         },
+        statusBar: false, // 是否显示状态栏
         alwaysOnTop: false, // 是否总是置顶
         focusable: true, // 是否启用iframe页面点击置顶
         scaleAnimatable: false, // 是否启用窗口缩放动画
@@ -307,7 +308,7 @@
     };
 
     // 拖动类定义
-    var Drag = function(el, moveLimit) {
+    var Drag = function(el, moveLimit, moveEvent) {
         var drag = function(e) {
             e = e || window.event;
 
@@ -606,7 +607,7 @@
                 var title = utils.querySelector('.layx-title', windowDom);
                 if (title) {
                     if (config.movable) {
-                        new Drag(title, config.moveLimit);
+                        new Drag(title, config.moveLimit, config.intercept.move);
                     }
                     if (config.allowTitleDblclickToRestore === true) {
                         title.ondblclick = function(e) {
