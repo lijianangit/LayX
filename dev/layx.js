@@ -1146,7 +1146,7 @@
                 winform = Layx.windows[id];
             if (winform) {
                 winform.alwaysOnTop = false;
-                Layx.pin(id);
+                Layx.triggerMethod('pin', id, winform);
             }
 
         },
@@ -1156,7 +1156,7 @@
                 winform = Layx.windows[id];
             if (winform) {
                 winform.alwaysOnTop = true;
-                Layx.pin(id);
+                Layx.triggerMethod('pin', id, winform);
             }
 
         },
