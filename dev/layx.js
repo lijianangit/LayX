@@ -771,6 +771,11 @@
                         Layx.triggerMethod(restoreStatu, id, winform);
                     }
                 }
+
+                var resizePanel = utils.querySelector('.layx-resizes', windowDom);
+                if (resizePanel) {
+                    resizePanel.removeAttribute('data-enable');
+                }
             }
         },
         // 最小化窗口
