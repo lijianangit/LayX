@@ -60,9 +60,9 @@
         focusable: true, // 是否启用iframe页面点击置顶
         scaleAnimatable: false, // 是否启用窗口缩放动画
         allowTitleDblclickToRestore: true, // 是否允许标题双击恢复窗体
-        parent: null, // 父窗体id，设置此选项时，关闭父窗体将会关闭所有子窗体
+        parent: null, // 父窗体id，设置此选项时，窗体将在窗体内部页面打开（MDI模式）并和父窗口共用同一个生命周期；注意：只支持非跨域页面。
         controlMenus: [], // 自定义标题栏按钮
-        menuItems: [], // 自定义顶部菜单，支持无限极
+        menuItems: [], // 自定义顶部下拉菜单，支持无限极
         // 拦截器，可以监听窗口各个状态
         intercept: {
             // iframe页面加载监听
@@ -306,7 +306,7 @@
         }
     };
 
-    // 拖动函数
+    // 拖动类定义
     var Drag = function(el, moveLimit) {
         var drag = function(e) {
             e = e || window.event;
@@ -321,6 +321,7 @@
                     distY = currentY - el.startY,
                     _top = el.windowStartTop + distY,
                     _left = el.windowStartLeft + distX;
+
                 if (distX !== 0 || distY !== 0) {
                     Drag.isMove = true;
                     // 触发移动之前
@@ -389,8 +390,8 @@
                 layxFixed = utils.querySelector('.layx-fixed', windowDom),
                 clientArea = utils.getClientArea(),
                 windowId = windowDom.id.substr(5),
-                winform = Layx.windows[windowId];
-            Layx.setZindex(windowDom, winform);
+                winform = Layx.windows[windowId],
+                startPosition = utils.getMousePosition(e);
             el.windowDom = windowDom;
             el.windowId = windowId;
             el.layxFixed = layxFixed;
@@ -399,11 +400,11 @@
             el.windowStartWidth = windowDom.offsetWidth;
             el.windowStartHeight = windowDom.offsetHeight;
             el.defaultAreaInfo = winform.defaultAreaInfo;
-
-            var startPosition = utils.getMousePosition(e);
             el.startX = startPosition.x;
             el.startY = startPosition.y;
             el.clientArea = clientArea;
+
+            Layx.setZindex(windowDom, winform);
             layxFixed.setAttribute('data-enable', '1');
 
             document.onmouseup = dragend;
@@ -416,7 +417,7 @@
         el.onmousedown = dragstart;
     };
 
-    // 拖曳大小函数
+    // 拖曳类定义
     var Resize = function(el, resizeLimit, isTop, isLeft) {
         var drag = function(e) {
             e = e || window.event;
@@ -434,7 +435,6 @@
 
                 if (distX !== 0 || distY !== 0) {
                     Drag.isMove = true;
-
                 }
             }
         };
@@ -458,8 +458,9 @@
                 layxFixed = utils.querySelector('.layx-fixed', windowDom),
                 clientArea = utils.getClientArea(),
                 windowId = windowDom.id.substr(5),
-                winform = Layx.windows[windowId];
-            Layx.setZindex(windowDom, winform);
+                winform = Layx.windows[windowId],
+                startPosition = utils.getMousePosition(e);
+
             el.windowDom = windowDom;
             el.windowId = windowId;
             el.layxFixed = layxFixed;
@@ -469,10 +470,11 @@
             el.windowStartHeight = windowDom.offsetHeight;
             el.defaultAreaInfo = winform.defaultAreaInfo;
 
-            var startPosition = utils.getMousePosition(e);
             el.startX = startPosition.x;
             el.startY = startPosition.y;
             el.clientArea = clientArea;
+
+            Layx.setZindex(windowDom, winform);
             layxFixed.setAttribute('data-enable', '1');
 
             document.onmouseup = dragend;
