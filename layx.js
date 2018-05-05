@@ -120,11 +120,11 @@
             },
             // 拖曳窗口大小监听
             resize: {
-                // 移动之前
+                // 拖曳之前
                 before: function(windowDom, winform) {},
-                // 移动中
+                // 拖曳中
                 resizing: function(windowDom, winform) {},
-                // 移动结束
+                // 拖曳结束
                 after: function(windowDom, winform) {}
             }
         }
