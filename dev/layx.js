@@ -1116,6 +1116,15 @@
                 }
             }
         },
+        // 设置窗口标题
+        setContent: function(id, content) {
+            var windowDom = utils.getElementById("layx-" + id),
+                winform = Layx.windows[id];
+            if (windowDom) {
+                var cxt = utils.querySelector('.layx-html', windowDom);
+                cxt.innerHTML = content;
+            }
+        },
         // 设置窗口闪烁并显示到顶层
         setFlicker: function(id) {
             var filcker = null;
@@ -1129,6 +1138,39 @@
                     windowDom.classList.remove('shadowFlicker');
                 }, 120 * 8);
                 clearTimeout(filcker);
+            }
+        },
+        // 设置置顶
+        setOnTop: function(id) {
+            var windowDom = utils.getElementById("layx-" + id),
+                winform = Layx.windows[id];
+            if (winform) {
+                winform.alwaysOnTop = false;
+                Layx.pin(id);
+            }
+
+        },
+        // 取消置顶
+        cancelOnTop: function(id) {
+            var windowDom = utils.getElementById("layx-" + id),
+                winform = Layx.windows[id];
+            if (winform) {
+                winform.alwaysOnTop = true;
+                Layx.pin(id);
+            }
+
+        },
+        // 设置位置
+        setPosition: function(id, position) {
+            var windowDom = utils.getElementById("layx-" + id),
+                winform = Layx.windows[id];
+
+            if (windowDom && winform) {
+                var pos = utils.compilePositionParams(winform.defaultAreaInfo.width, width.defaultAreaInfo.height, position);
+                windowDom.style.left = pos.left + 'px';
+                windowDom.style.top = pos.top + 'px';
+                winform.defaultAreaInfo.left = pos.left;
+                winform.defaultAreaInfo.top = pos.top;
             }
         }
     };
@@ -1190,13 +1232,21 @@
             Layx.setUrl(id, url);
         },
         // 设置窗口位置
-        setPosition: function(id, position) {},
+        setPosition: function(id, position) {
+            Layx.setPosition(id, position);
+        },
         // 设置窗口内容
-        setContent: function(id, content) {},
+        setContent: function(id, content) {
+            Layx.setContent(id, content);
+        },
         // 设置置顶
-        setAlwaysOnTop: function(id) {},
+        setOnTop: function(id) {
+            Layx.setOnTop(id);
+        },
         // 取消置顶
-        cancelOnTop: function(id) {}
+        cancelOnTop: function(id) {
+            Layx.cancelOnTop(id);
+        }
     };
 
     if (over === slf) {
