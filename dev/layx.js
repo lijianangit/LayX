@@ -601,13 +601,11 @@
         // 版本号
         v: '1.0.0',
         // 窗口默认起始zIndex
-        zIndex: 19920527,
+        zIndex: 10000000,
         // 当前所有窗口信息
         windows: {},
-        // 置顶窗口信息
-        pinWindow: {}, // 置顶window
         // 窗口置顶起始zIndex
-        pinZindex: 19900527, // 置顶起始索引
+        pinZindex: 20000000, // 置顶起始索引
         // 创建窗口对象
         create: function(options) {
             var config = layxDeepClone({}, defaults, options || {});
@@ -627,6 +625,7 @@
                 winform.type = config.type;
                 winform.config = config;
                 winform.status = 'normal';
+                winform.alwaysOnTop = config.alwaysOnTop;
                 winform.createDate = new Date();
 
                 var clientArea = utils.getClientArea();
@@ -648,12 +647,12 @@
                 };
 
                 // 构建窗口骨架
-                var winTemplate = "\n                " + (config.shadable === true ? '\n                <div class="layx-shade" id="layx-' + config.id + '-shade" style="z-index:' + ++Layx.zIndex + '"></div>\n                ' : "") + '\n                <div class="layx-window" id="layx-' + config.id + '" style="width:' + config.width + "px;height:" + config.height + "px;top:" + position.top + "px;left:" + position.left + "px;z-index: " + ++Layx.zIndex + ";background-color:" + (config.bgColor ? config.bgColor : "transparent") + ";border-color:" + config.borderColor + ";opacity:" + config.opacity + '">\n                    <div class="layx-control-bar">\n                        <div class="layx-icons">\n                            ' + (config.icon === false ? "" : config.icon ? config.icon.toString() : '<div class="layx-icon">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-windows"></use>\n                                </svg>\n                            </div>') + '\n                        </div>\n                        <div class="layx-title" title="' + config.title + '">' + config.title + '</div>\n                        <div class="layx-menus">\n                        ' + (config.pinable === true ? '\n                            <div class="layx-operator layx-pin-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-pin"></use>\n                                </svg>\n                            </div>\n                            ' : "") + "\n                            \n                            " + (config.minimizable === true ? '\n                            <div class="layx-operator layx-min-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-min"></use>\n                                </svg>\n                            </div>\n                            ' : "") + "\n                            \n                            " + (config.maximizable === true ? '\n                            <div class="layx-operator layx-max-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-max"></use>\n                                </svg>\n                            </div>\n                                ' : "") + "\n                            \n                            " + (config.closable === true ? '\n                                <div class="layx-operator layx-destroy-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-destroy"></use>\n                                </svg>\n                            </div>\n                                ' : "") + '\n                            \n                        </div>\n                    </div>\n                    <div class="layx-body">\n                        <div class="layx-fixed" data-enable="0"></div>\n                    </div>\n                    ' + (config.resizable === true ? '\n                        <div class="layx-resizes">\n                        ' + (config.resizeLimit.t === true ? '<div class="layx-resize-top"></div>' : "") + "\n                        " + (config.resizeLimit.r === true ? '<div class="layx-resize-right"></div>' : "") + "\n                        " + (config.resizeLimit.b === true ? '<div class="layx-resize-bottom"></div>' : "") + "\n                        " + (config.resizeLimit.l === true ? '<div class="layx-resize-left"></div>' : "") + "\n                        " + (config.resizeLimit.lt === true ? '<div class="layx-resize-left-top"></div>' : "") + "\n                        " + (config.resizeLimit.rt === true ? '<div class="layx-resize-right-top"></div>' : "") + "\n                        " + (config.resizeLimit.lb === true ? '<div class="layx-resize-left-bottom"></div>' : "") + "\n                        " + (config.resizeLimit.rb === true ? '<div class="layx-resize-right-bottom"></div>' : "") + "\n                    </div>\n                        " : "") + "\n                " + (config.statusBar === false ? "" : '<div class="layx-status-bar">' + config.statusBar + '</div>\n                        ') + "</div>\n                ";
+                var winTemplate = "\n                " + (config.shadable === true ? '\n                <div class="layx-shade" id="layx-' + config.id + '-shade" style="z-index:' + (config.alwaysOnTop === true ? (++Layx.pinZindex) : (++Layx.zIndex)) + '"></div>\n                ' : "") + '\n                <div class="layx-window" id="layx-' + config.id + '" style="width:' + config.width + "px;height:" + config.height + "px;top:" + position.top + "px;left:" + position.left + "px;z-index: " + (config.alwaysOnTop === true ? (++Layx.pinZindex) : (++Layx.zIndex)) + ";background-color:" + (config.bgColor ? config.bgColor : "transparent") + ";border-color:" + config.borderColor + ";opacity:" + config.opacity + '">\n                    <div class="layx-control-bar">\n                        <div class="layx-icons">\n                            ' + (config.icon === false ? "" : config.icon ? config.icon.toString() : '<div class="layx-icon">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-windows"></use>\n                                </svg>\n                            </div>') + '\n                        </div>\n                        <div class="layx-title" title="' + config.title + '">' + config.title + '</div>\n                        <div class="layx-menus">\n                        ' + (config.pinable === true ? '\n                            <div class="layx-operator layx-pin-menu" ' + (config.alwaysOnTop === true ? ' data-topable="1" ' : '') + '>\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-pin"></use>\n                                </svg>\n                            </div>\n                            ' : "") + "\n                            \n                            " + (config.minimizable === true ? '\n                            <div class="layx-operator layx-min-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-min"></use>\n                                </svg>\n                            </div>\n                            ' : "") + "\n                            \n                            " + (config.maximizable === true ? '\n                            <div class="layx-operator layx-max-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-max"></use>\n                                </svg>\n                            </div>\n                                ' : "") + "\n                            \n                            " + (config.closable === true ? '\n                                <div class="layx-operator layx-destroy-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-destroy"></use>\n                                </svg>\n                            </div>\n                                ' : "") + '\n                            \n                        </div>\n                    </div>\n                    <div class="layx-body">\n                        <div class="layx-fixed" data-enable="0"></div>\n                    </div>\n                    ' + (config.resizable === true ? '\n                        <div class="layx-resizes">\n                        ' + (config.resizeLimit.t === true ? '<div class="layx-resize-top"></div>' : "") + "\n                        " + (config.resizeLimit.r === true ? '<div class="layx-resize-right"></div>' : "") + "\n                        " + (config.resizeLimit.b === true ? '<div class="layx-resize-bottom"></div>' : "") + "\n                        " + (config.resizeLimit.l === true ? '<div class="layx-resize-left"></div>' : "") + "\n                        " + (config.resizeLimit.lt === true ? '<div class="layx-resize-left-top"></div>' : "") + "\n                        " + (config.resizeLimit.rt === true ? '<div class="layx-resize-right-top"></div>' : "") + "\n                        " + (config.resizeLimit.lb === true ? '<div class="layx-resize-left-bottom"></div>' : "") + "\n                        " + (config.resizeLimit.rb === true ? '<div class="layx-resize-right-bottom"></div>' : "") + "\n                    </div>\n                        " : "") + "\n                " + (config.statusBar === false ? "" : '<div class="layx-status-bar">' + config.statusBar + '</div>\n                        ') + "</div>\n                ";
 
                 utils.InsertAfter(winTemplate);
                 var windowDom = utils.getElementById('layx-' + config.id);
                 winform.windowDom = windowDom;
-                winform.zIndex = Layx.zIndex;
+                winform.zIndex = (config.alwaysOnTop === true ? Layx.pinZindex : Layx.zIndex);
                 Layx.windows[config.id] = winform;
 
                 // 构建内容对象
@@ -731,6 +730,13 @@
                 if (minMenu) minMenu.onclick = function(e) {
                     Layx.triggerMethod('min', config.id, winform, e);
                 };
+
+                var pinMenu = utils.querySelector('.layx-pin-menu', windowDom);
+                if (pinMenu) {
+                    if (pinMenu) pinMenu.onclick = function(e) {
+                        Layx.triggerMethod('pin', config.id, winform, e);
+                    };
+                }
 
                 var title = utils.querySelector('.layx-title', windowDom);
                 if (title) {
@@ -981,6 +987,29 @@
                 Layx.minManager();
             }
         },
+        pin: function(id) {
+            var windowDom = utils.getElementById("layx-" + id),
+                winform = Layx.windows[id];
+            if (windowDom) {
+                var pinMenu = utils.querySelector('.layx-pin-menu', windowDom);
+                if (winform.alwaysOnTop == true) {
+                    winform.alwaysOnTop = false;
+                    Layx.setZindex(windowDom, winform);
+                    if (pinMenu) {
+                        pinMenu.removeAttribute("data-topable");
+                    }
+                    return;
+                }
+                if (winform.alwaysOnTop == false) {
+                    winform.alwaysOnTop = true;
+                    Layx.setZindex(windowDom, winform);
+                    if (pinMenu) {
+                        pinMenu.setAttribute("data-topable", "1");
+                    }
+                    return;
+                }
+            }
+        },
         // 内部统一触发方法机制
         triggerMethod: function(methodName, id, winform, e) {
             e = e || window.event;
@@ -1032,8 +1061,13 @@
         // 设置窗口zIndex
         setZindex: function(windowDom, winform) {
             if (windowDom && winform) {
-                windowDom.style.zIndex = ++Layx.zIndex;
-                winform.zIndex = Layx.zIndex;
+                if (winform.alwaysOnTop === true) {
+                    windowDom.style.zIndex = ++Layx.pinZindex;
+                    winform.zIndex = Layx.pinZindex;
+                } else {
+                    windowDom.style.zIndex = ++Layx.zIndex;
+                    winform.zIndex = Layx.zIndex;
+                }
             }
         },
         // 设置窗口标题
