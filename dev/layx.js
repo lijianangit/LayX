@@ -105,11 +105,20 @@
             // 移动窗口监听
             move: {
                 // 移动之前
-                before: function(windowDom, winform, top, left) {},
+                before: function(windowDom, winform) {},
                 // 移动中
-                moveing: function(windowDom, winform, top, left) {},
+                moveing: function(windowDom, winform) {},
                 // 移动结束
-                after: function(windowDom, winform, top, left) {}
+                after: function(windowDom, winform) {}
+            },
+            // 拖曳窗口大小监听
+            resize: {
+                // 移动之前
+                before: function(windowDom, winform) {},
+                // 移动中
+                resizing: function(windowDom, winform) {},
+                // 移动结束
+                after: function(windowDom, winform) {}
             }
         }
     };
@@ -358,13 +367,15 @@
 
                 if (distX !== 0 || distY !== 0) {
                     Drag.isMove = true;
+                    var winform = Layx.windows[el.windowId];
                     // 触发移动之前
                     if (Drag.isTriggerMoveBefore === false) {
                         Drag.isTriggerMoveBefore = true;
+                        winform && winform.config && winform.config.intercept["move"] && utils.isFunction(winform.config.intercept["move"].before) && winform.config.intercept["move"].before(winform.windowDom, winform, currentX, currentY);
                     }
 
-                    if (Layx.windows[el.windowId].status === "max") {
-                        Layx.triggerMethod('restore', el.windowId, Layx.windows[el.windowId], e);
+                    if (winform.status === "max") {
+                        Layx.triggerMethod('restore', el.windowId, winform, e);
                         if (currentPosition.x < el.defaultAreaInfo.width / 2) {
                             _left = 0;
                         } else if (currentPosition.x > el.defaultAreaInfo.width / 2 && currentPosition.x < el.clientArea.width - el.defaultAreaInfo.width) {
@@ -390,6 +401,8 @@
 
                     el.windowDom.style.top = _top + 'px';
                     el.windowDom.style.left = _left + 'px';
+
+                    winform && winform.config && winform.config.intercept["move"] && utils.isFunction(winform.config.intercept["move"].moveing) && winform.config.intercept["move"].moveing(winform.windowDom, winform, currentX, currentY);
                 }
             }
         };
@@ -413,6 +426,7 @@
                 }
 
                 // 触发移动之后
+                winform && winform.config && winform.config.intercept["move"] && utils.isFunction(winform.config.intercept["move"].after) && winform.config.intercept["move"].after(winform.windowDom, winform);
             }
             el.layxFixed.removeAttribute('data-enable');
         };
@@ -473,6 +487,12 @@
 
                 if (distX !== 0 || distY !== 0) {
                     Resize.isResize = true;
+                    var winform = Layx.windows[el.windowId];
+                    // 触发移动之前
+                    if (Resize.isTriggerResizeBefore === false) {
+                        Resize.isTriggerResizeBefore = true;
+                        winform && winform.config && winform.config.intercept["resize"] && utils.isFunction(winform.config.intercept["resize"].before) && winform.config.intercept["resize"].before(winform.windowDom, winform);
+                    }
 
                     _width = Math.max(_width, minWidth);
                     if (isLeft) {
@@ -514,6 +534,8 @@
                         el.windowDom.style.top = _top + 'px';
                         el.windowDom.style.height = _height + 'px';
                     }
+
+                    winform && winform.config && winform.config.intercept["resize"] && utils.isFunction(winform.config.intercept["resize"].resizing) && winform.config.intercept["resize"].resizing(winform.windowDom, winform);
                 }
             }
         };
@@ -526,11 +548,14 @@
 
             if (Resize.isResize === true) {
                 Resize.isResize = false;
+                Resize.isTriggerResizeBefore = false;
                 var winform = Layx.windows[el.windowId];
                 winform.defaultAreaInfo.top = el.windowDom.offsetTop;
                 winform.defaultAreaInfo.left = el.windowDom.offsetLeft;
                 winform.defaultAreaInfo.width = el.windowDom.offsetWidth;
                 winform.defaultAreaInfo.height = el.windowDom.offsetHeight;
+
+                winform && winform.config && winform.config.intercept["resize"] && utils.isFunction(winform.config.intercept["resize"].after) && winform.config.intercept["resize"].after(winform.windowDom, winform);
             }
             el.layxFixed.removeAttribute('data-enable');
         };
@@ -566,6 +591,7 @@
             }
             return false;
         };
+        Resize.isTriggerResizeBefore = false;
         Resize.isResize = false;
         el.onmousedown = dragstart;
     };
