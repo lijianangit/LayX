@@ -9,7 +9,7 @@
  * update time : 2018.05.05
  */
 ;
-! function(over, win) {
+! function(over, win, slf) {
     "use strict";
 
     // layx 默认配置参数
@@ -63,7 +63,7 @@
         focusable: true, // 是否启用iframe页面点击置顶
         // scaleAnimatable: false, // 是否启用窗口缩放动画，开发中....
         allowTitleDblclickToRestore: true, // 是否允许标题双击恢复窗体
-        parent: null, // 父窗体id，设置此选项时，窗体将在窗体内部页面打开（MDI模式）并和父窗口共用同一个生命周期；注意：只支持非跨域页面。
+        // parent: null, // 父窗体id，设置此选项时，窗体将在窗体内部页面打开（MDI模式）并和父窗口共用同一个生命周期；注意：只支持非跨域页面。开发中...
         // menuItems: [], // 自定义顶部下拉菜单，支持无限极，开发中....
         // 拦截器，可以监听窗口各个状态
         intercept: {
@@ -634,6 +634,7 @@
                 winform.status = 'normal';
                 winform.alwaysOnTop = config.alwaysOnTop;
                 winform.createDate = new Date();
+                winform.parentWindow = win.parent;
 
                 var clientArea = utils.getClientArea();
                 var position = utils.compilePositionParams(config.width, config.height, config.position);
@@ -658,7 +659,17 @@
 
                 utils.InsertAfter(winTemplate);
                 var windowDom = utils.getElementById('layx-' + config.id);
+
+                if (over !== slf && slf.frameElement && self.frameElement.tagName == "IFRAME") {
+                    var _windowDom = self.frameElement.parentNode.parentElement,
+                        _layxid = _windowDom.getAttribute("data-layx-id"),
+                        _windowId = _windowDom.id.substr(5);
+                    windowDom.setAttribute("data-layx-id", (_layxid ? _layxid + '.' : '') + _windowId);
+                } else {
+                    windowDom.setAttribute("data-layx-id", config.id);
+                }
                 winform.windowDom = windowDom;
+
                 winform.zIndex = (config.alwaysOnTop === true ? Layx.pinZindex : Layx.zIndex);
                 Layx.windows[config.id] = winform;
 
@@ -814,6 +825,15 @@
                         }
                     }
                 }
+
+                if (over !== slf && slf.frameElement && self.frameElement.tagName == "IFRAME") {
+                    var _windowDom = self.frameElement.parentNode.parentElement,
+                        _layxid = _windowDom.getAttribute("data-layx-id"),
+                        _windowId = _windowDom.id.substr(5);
+                    if (!over.layx.Windows.hasOwnProperty((_layxid ? _layxid + '.' : '') + _windowId)) {
+                        over.layx.Windows[(_layxid ? _layxid + '.' : '') + _windowId] = winform;
+                    }
+                }
                 return winform;
             } else {
                 Layx.ExistShow(config.id);
@@ -831,18 +851,15 @@
                 if (shade) {
                     shade.parentNode.removeChild(shade);
                 }
-                var parentFrame = utils.querySelector("#layx-" + id + "-content", windowDom);
-                if (parentFrame) {
-                    // 关闭嵌套子窗体，递归
-                    if (parentFrame.tagName === "IFRAME") {
-                        if (parentFrame["contentWindow"]) {
-                            // 没有实现
-                        }
-                    }
-                }
             }
             if (Layx.windows.hasOwnProperty(id)) {
                 delete Layx.windows[id];
+                var reg = new RegExp("^" + id + '\.');
+                for (var childId in over.layx.Windows) {
+                    if (reg.test(childId)) {
+                        delete over.layx.Windows[childId];
+                    }
+                }
             }
         },
         // 最大化窗口
@@ -1116,7 +1133,7 @@
         }
     };
 
-    over.layx = win.layx = {
+    win.layx = {
         // 打开窗口
         open: function(options) {
             Layx.create(options);
@@ -1150,10 +1167,20 @@
         getWindow: function(id) {
             return Layx.windows[id];
         },
-        // 获取所有窗口信息
-        getWindows: function() {
-            return Layx.windows;
+        getIframeContext: function(id) {
+            var iframeContext = null;
+
+            if (over === slf && over.layx.Windows.hasOwnProperty(id)) {
+                iframeContext = over.layx.Windows[id].windowDom.querySelector('#layx-' + id.substr(id.lastIndexOf('.') + 1) + '-content').contentWindow;
+            } else {
+                if (slf.layx.Windows.hasOwnProperty(id)) {
+                    iframeContext = slf.layx.Windows[id].windowDom.querySelector('#layx-' + id.substr(id.lastIndexOf('.') + 1) + '-content').contentWindow;
+                }
+            }
+            return iframeContext;
         },
+        // 获取所有窗口信息
+        Windows: Layx.windows,
         // 设置窗口标题
         setTitle: function(id, title) {
             Layx.setTitle(id, title);
@@ -1171,7 +1198,11 @@
         // 取消置顶
         cancelOnTop: function(id) {}
     };
-}(top, window);
+
+    if (over === slf) {
+        over.layx = win.layx;
+    }
+}(top, window, self);
 
 // symbol 字体图标
 ;
