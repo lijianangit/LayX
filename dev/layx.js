@@ -63,31 +63,51 @@
         parent: null, // 父窗体id，设置此选项时，关闭父窗体将会关闭所有子窗体
         controlMenus: [], // 自定义标题栏按钮
         menuItems: [], // 自定义顶部菜单，支持无限极
+        // 拦截器，可以监听窗口各个状态
         intercept: {
-            // 加载监听
+            // iframe页面加载监听
             load: {
+                // 加载之前，return false；禁止加载
                 before: function(windowDom, winform) {},
+                // 加载之后
                 after: function(windowDom, winform, iframe) {}
             },
             // 最小化监听
             min: {
+                // 最小化之前，return false；禁止最小化
                 before: function(windowDom, winform) {},
+                // 最小化之后
                 after: function(windowDom, winform) {}
             },
             // 最大化监听
             max: {
+                // 最大化之前，return false；禁止最大化
                 before: function(windowDom, winform) {},
+                // 最大化之后
                 after: function(windowDom, winform) {}
             },
             // 恢复监听
             restore: {
+                // 恢复之前，return false；禁止恢复
                 before: function(windowDom, winform) {},
+                // 恢复之后
                 after: function(windowDom, winform) {}
             },
             // 关闭监听
             destroy: {
+                // 关闭之前，return false；禁止关闭
                 before: function(windowDom, winform) {},
+                // 关闭之后
                 after: function(windowDom, winform) {}
+            },
+            // 移动窗口监听
+            move: {
+                // 移动之前
+                before: function(windowDom, winform, top, left) {},
+                // 移动中
+                moveing: function(windowDom, winform, top, left) {},
+                // 移动结束
+                after: function(windowDom, winform, top, left) {}
             }
         }
     };
