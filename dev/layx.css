@@ -95,6 +95,10 @@
     flex: 1;
 }
 
+.layx-icons {
+    padding: 0 8px;
+}
+
 .layx-title {
     color: #00003a;
     font-size: 13px;
@@ -142,7 +146,6 @@
 
 .layx-icons .layx-icon {
     font-size: 14px;
-    width: 30px;
     text-align: center;
     color: #666;
 }

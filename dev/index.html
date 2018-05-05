@@ -20,20 +20,7 @@
             layx.open({
                 id: 'btn1',
                 url: './iframe.html',
-                useFrameTitle: true,
-                intercept: {
-                    resize: {
-                        before: function() {
-                            console.log('拖曳大小之前...');
-                        },
-                        resizing: function() {
-                            console.log('拖曳大小中' + new Date());
-                        },
-                        after: function() {
-                            console.log('拖曳结束' + new Date());
-                        }
-                    }
-                }
+                useFrameTitle: true
             });
         }
         document.getElementById('btn2').onclick = function(e) {
