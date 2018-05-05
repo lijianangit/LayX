@@ -26,11 +26,11 @@
         content: '', // 非iframe类型内容，支持text,html
         width: 800, // 初始化宽度
         height: 600, // 初始化高度
-        loaddingText: '内容加载中...', // 内容加载文本代码
+        loaddingText: '内容加载中...', // 内容加载文本内容，支持html
         position: 'center', // 初始化位置，支持'center', 'lt', 'rt', 'lb', 'rb'以及 [top,left]数组
         useFrameTitle: false, // 是否自动获取iframe页面标题填充窗口标题
-        minWidth: 50, // 拖曳大小最小宽度
-        minHeight: 50, // 拖曳大小最大宽度
+        minWidth: 150, // 拖曳大小最小宽度
+        minHeight: 150, // 拖曳大小最大宽度
         shadable: false, // 是否启用窗口阻隔
         minimizable: true, // 是否允许最小化
         maximizable: true, // 是否允许最大化
@@ -114,33 +114,59 @@
         }
     };
 
-    // 工具类
-    var utils = {
-        // 对象继承，深复制
-        extend: function(target) {
-            for (var _len = arguments.length, sources = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-                sources[_key - 1] = arguments[_key];
+    void
+
+    function(global) {
+        var extend,
+            _extend,
+            _isObject;
+
+        _isObject = function(o) {
+            return Object.prototype.toString.call(o) === '[object Object]';
+        }
+
+        _extend = function self(destination, source) {
+            var property;
+            for (property in destination) {
+                if (destination.hasOwnProperty(property)) {
+
+                    // 若destination[property]和sourc[property]都是对象，则递归
+                    if (_isObject(destination[property]) && _isObject(source[property])) {
+                        self(destination[property], source[property]);
+                    }
+
+                    // 若sourc[property]已存在，则跳过
+                    if (source.hasOwnProperty(property)) {
+                        continue;
+                    } else {
+                        source[property] = destination[property];
+                    }
+                }
+            }
+        }
+
+        extend = function() {
+            var arr = arguments,
+                result = {},
+                i;
+
+            if (!arr.length) return {};
+
+            for (i = arr.length - 1; i >= 0; i--) {
+                if (_isObject(arr[i])) {
+                    _extend(arr[i], result);
+                };
             }
 
-            sources.forEach(function(source) {
-                var descriptors = Object.keys(source).reduce(function(descriptors, key) {
-                    descriptors[key] = Object.getOwnPropertyDescriptor(source, key);
-                    return descriptors;
-                }, {});
+            arr[0] = result;
+            return result;
+        }
 
-                if (Object["getOwnPropertySymbols"]) {
-                    Object.getOwnPropertySymbols(source).forEach(function(sym) {
-                        var descriptor = Object.getOwnPropertyDescriptor(source, sym);
-                        if (descriptor.enumerable) {
-                            descriptors[sym] = descriptor;
-                        }
-                    });
-                }
+        global.layxDeepClone = extend;
+    }(win);
 
-                Object.defineProperties(target, descriptors);
-            });
-            return target;
-        },
+    // 工具类
+    var utils = {
         // 是否数组类型
         isArray: function(o) {
             return Object.prototype.toString.call(o) == '[object Array]';
@@ -423,7 +449,7 @@
     };
 
     // 拖曳类定义
-    var Resize = function(el, resizeLimit, isTop, isLeft) {
+    var Resize = function(el, minWidth, minHeight, isTop, isLeft, lockX, lockY) {
         var drag = function(e) {
             e = e || window.event;
 
@@ -436,10 +462,53 @@
                     distX = currentX - el.startX,
                     distY = currentY - el.startY,
                     _top = el.windowStartTop + distY,
-                    _left = el.windowStartLeft + distX;
+                    _left = el.windowStartLeft + distX,
+                    _height = isTop ? el.windowStartHeight - distY : el.windowStartHeight + distY,
+                    _width = isLeft ? el.windowStartWidth - distX : el.windowStartWidth + distX;
 
                 if (distX !== 0 || distY !== 0) {
-                    Drag.isMove = true;
+                    Resize.isResize = true;
+
+                    _width = Math.max(_width, minWidth);
+                    if (isLeft) {
+                        _left = Math.min(_left, el.windowStartLeft + el.windowStartWidth - minWidth);
+                        _left = Math.max(0, _left);
+
+                        _width = Math.min(_width, el.windowStartLeft + el.windowStartWidth);
+                    } else {
+                        _left = Math.min(_left, el.windowStartLeft);
+                        _left = Math.max(el.windowStartLeft, _left);
+
+                        _width = Math.min(_width, el.clientArea.width - el.windowStartLeft);
+                    }
+
+                    _height = Math.max(_height, minHeight);
+                    if (isTop) {
+                        _top = Math.min(_top, el.windowStartTop + el.windowStartHeight - minHeight);
+                        _top = Math.max(0, _top);
+
+                        _height = Math.min(_height, el.windowStartTop + el.windowStartHeight);
+                    } else {
+                        _top = Math.min(_top, el.windowStartTop);
+                        _top = Math.max(el.windowStartTop, _top);
+
+                        _height = Math.min(_height, el.clientArea.height - el.windowStartTop);
+                    }
+
+                    if (lockY) {
+                        el.windowDom.style.width = _width + 'px';
+                        el.windowDom.style.left = _left + 'px';
+                    }
+                    if (lockX) {
+                        el.windowDom.style.top = _top + 'px';
+                        el.windowDom.style.height = _height + 'px';
+                    }
+                    if (lockY === false && lockX === false) {
+                        el.windowDom.style.width = _width + 'px';
+                        el.windowDom.style.left = _left + 'px';
+                        el.windowDom.style.top = _top + 'px';
+                        el.windowDom.style.height = _height + 'px';
+                    }
                 }
             }
         };
@@ -450,8 +519,13 @@
             document.onmouseup = null;
             document.onmousemove = null;
 
-            if (Drag.isMove === true) {
-                Drag.isMove = false;
+            if (Resize.isResize === true) {
+                Resize.isResize = false;
+                var winform = Layx.windows[el.windowId];
+                winform.defaultAreaInfo.top = el.windowDom.offsetTop;
+                winform.defaultAreaInfo.left = el.windowDom.offsetLeft;
+                winform.defaultAreaInfo.width = el.windowDom.offsetWidth;
+                winform.defaultAreaInfo.height = el.windowDom.offsetHeight;
             }
             el.layxFixed.removeAttribute('data-enable');
         };
@@ -487,7 +561,7 @@
             }
             return false;
         };
-        Drag.isMove = false;
+        Resize.isResize = false;
         el.onmousedown = dragstart;
     };
 
@@ -505,7 +579,7 @@
         pinZindex: 19900527, // 置顶起始索引
         // 创建窗口对象
         create: function(options) {
-            var config = utils.extend({}, defaults, options || {});
+            var config = layxDeepClone({}, defaults, options || {});
             if (!Layx.windows.hasOwnProperty(config.id)) {
                 if (config.url) {
                     config.type = 'iframe';
@@ -652,7 +726,42 @@
                     if (resize) {
                         var leftResize = utils.querySelector('.layx-resize-left', windowDom);
                         if (config.resizeLimit && config.resizeLimit["l"] === true && leftResize) {
-                            new Resize(leftResize, config.resizeLimit, true, false);
+                            new Resize(leftResize, config.minWidth, config.minHeight, false, true, false, true);
+                        }
+
+                        var rightResize = utils.querySelector('.layx-resize-right', windowDom);
+                        if (config.resizeLimit && config.resizeLimit["r"] === true && rightResize) {
+                            new Resize(rightResize, config.minWidth, config.minHeight, false, false, false, true);
+                        }
+
+                        var topResize = utils.querySelector('.layx-resize-top', windowDom);
+                        if (config.resizeLimit && config.resizeLimit["t"] === true && topResize) {
+                            new Resize(topResize, config.minWidth, config.minHeight, true, false, true, false);
+                        }
+
+                        var bottomResize = utils.querySelector('.layx-resize-bottom', windowDom);
+                        if (config.resizeLimit && config.resizeLimit["b"] === true && bottomResize) {
+                            new Resize(bottomResize, config.minWidth, config.minHeight, false, false, true, false);
+                        }
+
+                        var leftTopResize = utils.querySelector('.layx-resize-left-top', windowDom);
+                        if (config.resizeLimit && config.resizeLimit["lt"] === true && leftTopResize) {
+                            new Resize(leftTopResize, config.minWidth, config.minHeight, true, true, false, false);
+                        }
+
+                        var rightTopResize = utils.querySelector('.layx-resize-right-top', windowDom);
+                        if (config.resizeLimit && config.resizeLimit["rt"] === true && rightTopResize) {
+                            new Resize(rightTopResize, config.minWidth, config.minHeight, true, false, false, false);
+                        }
+
+                        var leftBottomResize = utils.querySelector('.layx-resize-left-bottom', windowDom);
+                        if (config.resizeLimit && config.resizeLimit["lb"] === true && leftBottomResize) {
+                            new Resize(leftBottomResize, config.minWidth, config.minHeight, false, true, false, false);
+                        }
+
+                        var rightBottomResize = utils.querySelector('.layx-resize-right-bottom', windowDom);
+                        if (config.resizeLimit && config.resizeLimit["rb"] === true && rightBottomResize) {
+                            new Resize(rightBottomResize, config.minWidth, config.minHeight, false, false, false, false);
                         }
                     }
                 }

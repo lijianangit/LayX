@@ -201,16 +201,13 @@
     overflow: auto;
 }
 
-.layx-resizes {
-    z-index: 3;
-}
-
 .layx-resizes[data-enable='0'] {
     visibility: hidden;
 }
 
 .layx-resizes>div {
     position: absolute;
+    z-index: 3;
 }
 
 .layx-resize-top,
