@@ -105,15 +105,15 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    overflow: hidden;
-    text-overflow: ellipsis;
     -webkit-line-clamp: 1;
     box-orient: vertical;
     -webkit-box-orient: vertical;
     -moz-box-orient: vertical;
     line-height: 28px;
     word-wrap: break-word;
-    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .layx-menus {
