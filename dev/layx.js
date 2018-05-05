@@ -297,16 +297,22 @@
             var button = e.button || e.which;
             if (button == 1 && e.shiftKey == false) {
 
-                var currentPosition = utils.getMousePosition(e);
-                var currentX = currentPosition.x,
-                    currentY = currentPosition.y,
-                    distX = currentX - el.startX,
-                    distY = currentY - el.startY,
-                    _top = el.windowStartTop + distY,
-                    _left = el.windowStartLeft + distX;
-
                 if (distX !== 0 || distY !== 0) {
                     Drag.isMove = true;
+
+                    // 触发移动之前
+                    if (Drag.isTriggerMoveBefore === false) {
+                        Drag.isTriggerMoveBefore = true;
+                    }
+
+                    var currentPosition = utils.getMousePosition(e);
+                    var currentX = currentPosition.x,
+                        currentY = currentPosition.y,
+                        distX = currentX - el.startX,
+                        distY = currentY - el.startY,
+                        _top = el.windowStartTop + distY,
+                        _left = el.windowStartLeft + distX;
+
                     if (Layx.windows[el.windowId].status === "max") {
                         Layx.triggerMethod('restore', el.windowId, Layx.windows[el.windowId], e);
                         if (currentPosition.x < el.defaultAreaInfo.width / 2) {
@@ -346,6 +352,7 @@
 
             if (Drag.isMove === true) {
                 Drag.isMove = false;
+                Drag.isTriggerMoveBefore = false;
                 var winform = Layx.windows[el.windowId];
                 if (el.windowDom.offsetTop === 0) {
                     Layx.triggerMethod('max', el.windowId, winform, e);
@@ -355,6 +362,7 @@
                     winform.defaultAreaInfo.left = el.windowDom.offsetLeft;
                 }
 
+                // 触发移动之后
             }
             el.layxFixed.removeAttribute('data-enable');
         };
@@ -388,6 +396,7 @@
 
             return false;
         };
+        Drag.isTriggerMoveBefore = false;
         Drag.isMove = false;
         el.onmousedown = dragstart;
     };
