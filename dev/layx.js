@@ -114,9 +114,8 @@
         }
     };
 
-    void
-
-    function(global) {
+    // 对象深度复制
+    (function(global) {
         var extend,
             _extend,
             _isObject;
@@ -155,7 +154,7 @@
             for (i = arr.length - 1; i >= 0; i--) {
                 if (_isObject(arr[i])) {
                     _extend(arr[i], result);
-                };
+                }
             }
 
             arr[0] = result;
@@ -163,7 +162,7 @@
         }
 
         global.layxDeepClone = extend;
-    }(win);
+    })(win);
 
     // 工具类
     var utils = {
@@ -248,14 +247,20 @@
 
             if (that.isFunction(onload)) {
                 if (iframe.attachEvent) {
-                    iframe.attachEvent('onload', onload);
-                } else if (iframe.addEventListener) {
-                    iframe.addEventListener('load', onload);
+                    iframe.attachEvent("onreadystatechange", function() {
+                        if (iframe.readyState === "complete" || iframe.readyState == "loaded") {
+                            iframe.detachEvent("onreadystatechange", arguments.callee);
+                            onload();
+                        }
+                    });
                 } else {
-                    iframe.onload = onload;
+                    iframe.addEventListener("load", function() {
+                        this.removeEventListener("load", arguments.call, false);
+                        onload();
+                    }, false);
                 }
             }
-            iframe.src = src;
+            iframe.setAttribute("src", src);
             return iframe;
         },
         // 销毁iframe
