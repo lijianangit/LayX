@@ -102,6 +102,13 @@
                 // 关闭之后
                 after: function(windowDom, winform) {}
             },
+            // 置顶监听
+            pin: {
+                // 置顶之前，return false；禁止操作
+                before: function(windowDom, winform) {},
+                // 置顶之后
+                after: function(windowDom, winform) {}
+            },
             // 移动窗口监听
             move: {
                 // 移动之前

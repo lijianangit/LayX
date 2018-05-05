@@ -21,7 +21,17 @@
                 id: 'btn1',
                 url: './iframe.html',
                 useFrameTitle: true,
-                alwaysOnTop: true
+                alwaysOnTop: true,
+                intercept: {
+                    pin: {
+                        before: function() {
+                            console.log('置顶之前...');
+                        },
+                        after: function() {
+                            console.log('置顶之后');
+                        }
+                    }
+                }
             });
         }
         document.getElementById('btn2').onclick = function(e) {
