@@ -169,6 +169,22 @@
     visibility: visible;
 }
 
+.layx-wait {
+    width: 100%;
+    height: 100%;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    position: relative;
+}
+
+.layx-wait>.layx-iframe {
+    display: none;
+}
+
 .layx-iframe,
 .layx-html {
     position: absolute;

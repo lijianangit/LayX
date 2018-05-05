@@ -26,6 +26,7 @@
         content: '', // 非iframe类型内容，支持text,html
         width: 800, // 初始化宽度
         height: 600, // 初始化高度
+        loaddingText: '内容加载中...', // 内容加载文本代码
         position: 'center', // 初始化位置，支持'center', 'lt', 'rt', 'lb', 'rb'以及 [top,left]数组
         useFrameTitle: false, // 是否自动获取iframe页面标题填充窗口标题
         minWidth: 50, // 拖曳大小最小宽度
@@ -214,6 +215,7 @@
 
             src = src || 'about:blank';
             iframe.setAttribute("id", id);
+            iframe.classList.add("layx-iframe");
             iframe.setAttribute("allowtransparency", true);
             iframe.setAttribute("frameborder", 0);
             iframe.setAttribute("scrolling", "auto");
@@ -551,10 +553,18 @@
                 if (utils.isFunction(config.intercept.load.before) && config.intercept.load.before(winform, windowDom) !== false) {
                     if (config.type === "iframe") {
                         var iframe = utils.createIframe("layx-" + config.id + '-content', config.url ? config.url : config.content, function() {
+                            var windowDomId = iframe.id.substr(0, iframe.id.lastIndexOf('-'));
+                            var layxBody = utils.querySelector('#' + windowDomId + ' .layx-body');
+                            var waitPanel = utils.querySelector('#' + windowDomId + ' .layx-wait');
+                            var _iframe = waitPanel.lastChild.cloneNode(true);
+                            layxBody.appendChild(_iframe);
+                            waitPanel.parentNode.removeChild(waitPanel);
+
                             try {
-                                var iframeDoc = iframe.contentWindow;
+
+                                var iframeDoc = _iframe.contentWindow;
                                 if (config.useFrameTitle === true) {
-                                    var frameTitle = iframe.contentDocument.querySelector('title');
+                                    var frameTitle = _iframe.contentDocument.querySelector('title');
                                     Layx.setTitle(config.id, frameTitle ? frameTitle.innerText : config.title);
                                 }
                                 if (config.focusable === true) {
@@ -570,14 +580,20 @@
                                     config.intercept.load.after(winform, windowDom, iframeDoc);
                                 }
                             } catch (error) {
+                                alert('加载失败');
                                 if (config.useFrameTitle === true) {
                                     Layx.setTitle(config.id, config.title);
                                 }
                                 console.warn(error);
                             }
+
                         });
-                        iframe.classList.add("layx-iframe");
-                        layxBody.appendChild(iframe);
+                        var waitPanel = document.createElement('div');
+                        waitPanel.classList.add('layx-wait');
+                        waitPanel.setAttribute("data-status", "loading");
+                        waitPanel.innerHTML = config.loaddingText;
+                        waitPanel.appendChild(iframe);
+                        layxBody.appendChild(waitPanel);
                     } else {
                         var div = document.createElement('div');
                         div.classList.add('layx-html');
@@ -907,9 +923,9 @@
                 windowDom.classList.add('shadowFlicker');
                 Layx.setZindex(windowDom, winform);
                 filcker = setTimeout(function() {
-                    clearTimeout(filcker);
                     windowDom.classList.remove('shadowFlicker');
                 }, 120 * 8);
+                clearTimeout(filcker);
             }
         }
     };
