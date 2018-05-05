@@ -6,7 +6,7 @@
  * author : 百小僧/MonkSoul
  * version : v1.0.0
  * create time : 2018.05.03
- * update time : 2018.05.04
+ * update time : 2018.05.05
  */
 ;
 ! function(over, win) {
