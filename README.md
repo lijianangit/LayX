@@ -52,7 +52,125 @@ Layx 是一款纯原生Javascript编写的网页弹窗插件，完全模仿Windo
 
 # 参数
 
-正在整理...
+```
+// layx 默认配置参数
+
+    var defaults = {
+        id: 'layx', // 唯一id
+        icon: '', // 图标，设置false不启用，这里支持html代码
+        title: '', // 窗口标题
+        bgColor: '#fff', // 背景颜色，iframe页面背景为透明有效
+        borderColor: '#3baced', // 边框颜色
+        opacity: 1, // 透明度
+        type: 'iframe', // 窗口类型：支持iframe,alert,confirm,error,load,prompt
+        url: '', // iframe类型地址，type=iframe 时有效
+        content: '', // 非iframe类型内容，支持text,html
+        width: 800, // 初始化宽度
+        height: 600, // 初始化高度
+        loaddingText: '内容加载中...', // 内容加载文本内容，支持html
+        position: 'center', // 初始化位置，支持'center', 'lt', 'rt', 'lb', 'rb'以及 [top,left]数组
+        useFrameTitle: false, // 是否自动获取iframe页面标题填充窗口标题
+        minWidth: 150, // 拖曳大小最小宽度
+        minHeight: 150, // 拖曳大小最大宽度
+        shadable: false, // 是否启用窗口阻隔
+        alwaysOnTop: false, // 是否总是置顶
+        pinable: false, // 是否显示图钉按钮，当 alwaysOnTop为true的时候，pinable自动显示
+        minimizable: true, // 是否允许最小化
+        maximizable: true, // 是否允许最大化
+        closable: true, // 是否允许关闭
+        resizable: true, // 是否允许拖曳大小
+        // 拖曳方向控制
+        resizeLimit: {
+            t: true, // 是否允许上边拖曳大小，true允许
+            r: true, // 是否允许右边拖曳大小，true允许
+            b: true, // 是否允许下边拖曳大小，true允许
+            l: true, // 是否允许左边拖曳大小，true允许
+            lt: true, // 是否允许左上边拖曳大小，true允许
+            rt: true, // 是否允许右上边拖曳大小，true允许
+            lb: true, // 是否允许左下边拖曳大小，true允许
+            rb: true // 是否允许右下边拖曳大小，true允许
+        },
+        movable: true, // 是否允许拖动窗口
+        // 拖动窗口显示，vertical为true表示禁止水平拖动，horizontal为true表示禁止垂直拖动
+        moveLimit: {
+            vertical: false, // 是否禁止垂直拖动，false不禁止
+            horizontal: false, // 是否禁止水平拖动，false不禁止
+            leftOut: true, // 是否允许左边拖出，true允许
+            rightOut: true, // 是否允许右边拖出，true允许
+            topOut: true, // 是否允许上边拖出，true允许，此设置不管是false还是true，窗口都不能拖出窗体
+            bottomOut: true, // 是否允许下边拖出，true允许
+        },
+        statusBar: false, // 是否显示状态栏
+        focusable: true, // 是否启用iframe页面点击置顶
+        // scaleAnimatable: false, // 是否启用窗口缩放动画，开发中....
+        allowTitleDblclickToRestore: true, // 是否允许标题双击恢复窗体
+        // parent: null, // 父窗体id，设置此选项时，窗体将在窗体内部页面打开（MDI模式）并和父窗口共用同一个生命周期；注意：只支持非跨域页面。开发中...
+        // menuItems: [], // 自定义顶部下拉菜单，支持无限极，开发中....
+        // 拦截器，可以监听窗口各个状态
+        intercept: {
+            // iframe页面加载监听
+            load: {
+                // 加载之前，return false；禁止加载
+                before: function(windowDom, winform) {},
+                // 加载之后
+                after: function(windowDom, winform, iframe) {}
+            },
+            // 最小化监听
+            min: {
+                // 最小化之前，return false；禁止最小化
+                before: function(windowDom, winform) {},
+                // 最小化之后
+                after: function(windowDom, winform) {}
+            },
+            // 最大化监听
+            max: {
+                // 最大化之前，return false；禁止最大化
+                before: function(windowDom, winform) {},
+                // 最大化之后
+                after: function(windowDom, winform) {}
+            },
+            // 恢复监听
+            restore: {
+                // 恢复之前，return false；禁止恢复
+                before: function(windowDom, winform) {},
+                // 恢复之后
+                after: function(windowDom, winform) {}
+            },
+            // 关闭监听
+            destroy: {
+                // 关闭之前，return false；禁止关闭
+                before: function(windowDom, winform) {},
+                // 关闭之后
+                after: function(windowDom, winform) {}
+            },
+            // 置顶监听
+            pin: {
+                // 置顶之前，return false；禁止操作
+                before: function(windowDom, winform) {},
+                // 置顶之后
+                after: function(windowDom, winform) {}
+            },
+            // 移动窗口监听
+            move: {
+                // 移动之前
+                before: function(windowDom, winform) {},
+                // 移动中
+                moveing: function(windowDom, winform) {},
+                // 移动结束
+                after: function(windowDom, winform) {}
+            },
+            // 拖曳窗口大小监听
+            resize: {
+                // 移动之前
+                before: function(windowDom, winform) {},
+                // 移动中
+                resizing: function(windowDom, winform) {},
+                // 移动结束
+                after: function(windowDom, winform) {}
+            }
+        }
+    };
+```
 
 # 拓展
 
