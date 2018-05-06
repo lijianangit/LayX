@@ -42,6 +42,8 @@ Layx 是一款纯原生Javascript编写的网页弹窗插件，完全模仿Windo
 - 支持自动获取iframe页面标题填充窗口标题
 - 支持窗口状态拦截器，可以拦截窗口所有操作功能
 - 支持窗口加载提示控制
+- 支持窗口自动关闭控制
+- 支持消息提示窗口（alert,confirm,prompt,loadding,error) **只完成了alert**
 - 兼容IE9+、Chrome、Edge、FF、Opera等现代主流浏览器
 
 未来拥有的功能远不止这些...
