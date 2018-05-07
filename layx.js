@@ -1068,6 +1068,7 @@
             if (e) {
                 e.stopPropagation();
             }
+            return false;
         },
         // 最小化管理
         minManager: function () {
