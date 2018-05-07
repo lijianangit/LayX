@@ -136,7 +136,9 @@
     pointer-events:none;
 }
 
-.layx-operator.layx-pin-menu[data-topable="1"] { color: #f00; }
+.layx-operator.layx-pin-menu[data-topable="1"] { 
+    color: #f00; 
+}
 
 .layx-operator.layx-min-menu:hover,
 .layx-operator.layx-restore-menu:hover,
@@ -320,7 +322,7 @@
 .layx-alert-buttons .layx-status-button {
     padding: 0 16px;
     height: 21px;
-    line-height: 21px;
+    line-height: normal;
     color: #000000;
     font-size: 14px;
     border: 1px solid #adadad;

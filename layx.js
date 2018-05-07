@@ -1060,7 +1060,7 @@
                 beforeReval = false;
             }
             if (beforeReval) {
-                Layx[methodName] && Layx[methodName](id);
+                Layx.hasOwnProperty(methodName) && Layx[methodName](id);
             }
             if (winform && winform.config && winform.config.intercept[methodName] && utils.isFunction(winform.config.intercept[methodName].after)) {
                 winform.config.intercept[methodName].after(winform.windowDom, winform);
