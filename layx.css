@@ -132,10 +132,11 @@
     font-size: 12px;
     color: #000;
 }
-
-.layx-operator.layx-pin-menu[data-topable="1"] {
-    color: #f00;
+.layx-operator *{
+    pointer-events:none;
 }
+
+.layx-operator.layx-pin-menu[data-topable="1"] { color: #f00; }
 
 .layx-operator.layx-min-menu:hover,
 .layx-operator.layx-restore-menu:hover,
