@@ -110,7 +110,15 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.layx-title label {
+    max-width: 100%;
+    line-clamp: 1;
+    -moz-line-clamp: 1;
+    -o-line-clamp: 1;
     -webkit-line-clamp: 1;
+    -ms-line-clamp: 1;
     box-orient: vertical;
     -webkit-box-orient: vertical;
     -moz-box-orient: vertical;
@@ -119,6 +127,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    display: inline-block;
 }
 
 .layx-menus {
@@ -132,18 +141,19 @@
     font-size: 12px;
     color: #000;
 }
-.layx-operator *{
-    pointer-events:none;
+
+.layx-operator * {
+    pointer-events: none;
 }
 
-.layx-operator.layx-pin-menu[data-topable="1"] { 
-    color: #f00; 
+.layx-operator.layx-stick-menu[data-topable="1"] {
+    color: #f00;
 }
 
 .layx-operator.layx-min-menu:hover,
 .layx-operator.layx-restore-menu:hover,
 .layx-operator.layx-max-menu:hover,
-.layx-operator.layx-pin-menu:hover {
+.layx-operator.layx-stick-menu:hover {
     background-color: #e5e5e5;
 }
 

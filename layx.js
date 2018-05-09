@@ -33,7 +33,7 @@
         minHeight: 150, // 拖曳大小最大宽度
         shadable: false, // 是否启用窗口阻隔
         alwaysOnTop: false, // 是否总是置顶
-        pinable: false, // 是否显示图钉按钮，当 alwaysOnTop为true的时候，pinable自动显示
+        stickable: false, // 是否显示置顶按钮，当 alwaysOnTop为true的时候，stickable自动显示
         minimizable: true, // 是否允许最小化
         maximizable: true, // 是否允许最大化
         closable: true, // 是否允许关闭
@@ -104,7 +104,7 @@
                 after: function(windowDom, winform) {}
             },
             // 置顶监听
-            pin: {
+            stick: {
                 // 置顶之前，return false；禁止操作
                 before: function(windowDom, winform) {},
                 // 置顶之后
@@ -629,7 +629,7 @@
         // 当前所有窗口信息
         windows: {},
         // 窗口置顶起始zIndex
-        pinZindex: 20000000, // 置顶起始索引
+        stickZindex: 20000000, // 置顶起始索引
         // 创建窗口对象
         create: function(options) {
             var config = layxDeepClone({}, defaults, options || {});
@@ -638,8 +638,8 @@
                 if (config.url) {
                     config.type = 'iframe';
                 }
-                if (config.alwaysOnTop === true && (['alert', 'confirm', 'prompt', 'msg', 'error', 'loading'].indexOf(config.type) < 0) && config.pinable !== false) {
-                    config.pinable = true;
+                if (config.alwaysOnTop === true && (['alert', 'confirm', 'prompt', 'msg', 'error', 'loading'].indexOf(config.type) < 0) && config.stickable !== false) {
+                    config.stickable = true;
                 }
 
                 var winform = {};
@@ -671,7 +671,7 @@
                 };
 
                 // 构建窗口骨架
-                var winTemplate = "\n                " + (config.shadable === true ? '\n                <div class="layx-shade" id="layx-' + config.id + '-shade" style="z-index:' + (config.alwaysOnTop === true ? (++Layx.pinZindex) : (++Layx.zIndex)) + '"></div>\n                ' : "") + '\n                <div class="layx-window" id="layx-' + config.id + '" style="min-width:' + config.minWidth + ';width:' + (typeof config.width === 'string' ? 'auto' : config.width + 'px') + ";min-height:" + config.minHeight + ";height:" + (typeof config.height === 'string' ? 'auto' : config.height + 'px') + ";top:" + position.top + "px;left:" + position.left + "px;z-index: " + (config.alwaysOnTop === true ? (++Layx.pinZindex) : (++Layx.zIndex)) + ";background-color:" + (config.bgColor ? config.bgColor : "transparent") + ";border-color:" + config.borderColor + ";opacity:" + config.opacity + '">\n                    <div class="layx-control-bar">\n                        <div class="layx-icons">\n                            ' + (config.icon === false ? "" : config.icon ? config.icon.toString() : '<div class="layx-icon">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-windows"></use>\n                                </svg>\n                            </div>') + '\n                        </div>\n                        <div class="layx-title" title="' + config.title + '">' + config.title + '</div>\n                        <div class="layx-menus">\n                        ' + (config.pinable === true ? '\n                            <div class="layx-operator layx-pin-menu" ' + (config.alwaysOnTop === true ? ' data-topable="1" ' : '') + '>\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-pin"></use>\n                                </svg>\n                            </div>\n                            ' : "") + "\n                            \n                            " + (config.minimizable === true ? '\n                            <div class="layx-operator layx-min-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-min"></use>\n                                </svg>\n                            </div>\n                            ' : "") + "\n                            \n                            " + (config.maximizable === true ? '\n                            <div class="layx-operator layx-max-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-max"></use>\n                                </svg>\n                            </div>\n                                ' : "") + "\n                            \n                            " + (config.closable === true ? '\n                                <div class="layx-operator layx-destroy-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-destroy"></use>\n                                </svg>\n                            </div>\n                                ' : "") + '\n                            \n                        </div>\n                    </div>\n                    <div class="layx-body">\n                        <div class="layx-fixed" data-enable="0"></div>\n                    </div>\n                    ' + (config.resizable === true ? '\n                        <div class="layx-resizes">\n                        ' + (config.resizeLimit.t === true ? '<div class="layx-resize-top"></div>' : "") + "\n                        " + (config.resizeLimit.r === true ? '<div class="layx-resize-right"></div>' : "") + "\n                        " + (config.resizeLimit.b === true ? '<div class="layx-resize-bottom"></div>' : "") + "\n                        " + (config.resizeLimit.l === true ? '<div class="layx-resize-left"></div>' : "") + "\n                        " + (config.resizeLimit.lt === true ? '<div class="layx-resize-left-top"></div>' : "") + "\n                        " + (config.resizeLimit.rt === true ? '<div class="layx-resize-right-top"></div>' : "") + "\n                        " + (config.resizeLimit.lb === true ? '<div class="layx-resize-left-bottom"></div>' : "") + "\n                        " + (config.resizeLimit.rb === true ? '<div class="layx-resize-right-bottom"></div>' : "") + "\n                    </div>\n                        " : "") + "\n                " + (config.statusBar === false ? "" : config.statusBar === true ? '<div class="layx-status-bar"></div>\n                        ' : '<div class="layx-status-bar">' + config.statusBar + '</div>\n                        ') + "</div>\n                ";
+                var winTemplate = "\n                " + (config.shadable === true ? '\n                <div class="layx-shade" id="layx-' + config.id + '-shade" style="z-index:' + (config.alwaysOnTop === true ? (++Layx.stickZindex) : (++Layx.zIndex)) + '"></div>\n                ' : "") + '\n                <div class="layx-window" id="layx-' + config.id + '" style="min-width:' + config.minWidth + ';width:' + (typeof config.width === 'string' ? 'auto' : config.width + 'px') + ";min-height:" + config.minHeight + ";height:" + (typeof config.height === 'string' ? 'auto' : config.height + 'px') + ";top:" + position.top + "px;left:" + position.left + "px;z-index: " + (config.alwaysOnTop === true ? (++Layx.stickZindex) : (++Layx.zIndex)) + ";background-color:" + (config.bgColor ? config.bgColor : "transparent") + ";border-color:" + config.borderColor + ";opacity:" + config.opacity + '">\n                    <div class="layx-control-bar">\n                        <div class="layx-icons">\n                            ' + (config.icon === false ? "" : config.icon ? config.icon.toString() : '<div class="layx-icon">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-default-icon"></use>\n                                </svg>\n                            </div>') + '\n                        </div>\n                        <div class="layx-title" title="' + config.title + '"><label>' + config.title + '</label></div>\n                        <div class="layx-menus">\n                        ' + (config.stickable === true ? '\n                            <div class="layx-operator layx-stick-menu" ' + (config.alwaysOnTop === true ? ' data-topable="1" ' : '') + '>\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-stick"></use>\n                                </svg>\n                            </div>\n                            ' : "") + "\n                            \n                            " + (config.minimizable === true ? '\n                            <div class="layx-operator layx-min-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-min"></use>\n                                </svg>\n                            </div>\n                            ' : "") + "\n                            \n                            " + (config.maximizable === true ? '\n                            <div class="layx-operator layx-max-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-max"></use>\n                                </svg>\n                            </div>\n                                ' : "") + "\n                            \n                            " + (config.closable === true ? '\n                                <div class="layx-operator layx-destroy-menu">\n                                <svg class="layx-iconfont" aria-hidden="true">\n                                    <use xlink:href="#layx-icon-destroy"></use>\n                                </svg>\n                            </div>\n                                ' : "") + '\n                            \n                        </div>\n                    </div>\n                    <div class="layx-body">\n                        <div class="layx-fixed" data-enable="0"></div>\n                    </div>\n                    ' + (config.resizable === true ? '\n                        <div class="layx-resizes">\n                        ' + (config.resizeLimit.t === true ? '<div class="layx-resize-top"></div>' : "") + "\n                        " + (config.resizeLimit.r === true ? '<div class="layx-resize-right"></div>' : "") + "\n                        " + (config.resizeLimit.b === true ? '<div class="layx-resize-bottom"></div>' : "") + "\n                        " + (config.resizeLimit.l === true ? '<div class="layx-resize-left"></div>' : "") + "\n                        " + (config.resizeLimit.lt === true ? '<div class="layx-resize-left-top"></div>' : "") + "\n                        " + (config.resizeLimit.rt === true ? '<div class="layx-resize-right-top"></div>' : "") + "\n                        " + (config.resizeLimit.lb === true ? '<div class="layx-resize-left-bottom"></div>' : "") + "\n                        " + (config.resizeLimit.rb === true ? '<div class="layx-resize-right-bottom"></div>' : "") + "\n                    </div>\n                        " : "") + "\n                " + (config.statusBar === false ? "" : config.statusBar === true ? '<div class="layx-status-bar"></div>\n                        ' : '<div class="layx-status-bar">' + config.statusBar + '</div>\n                        ') + "</div>\n                ";
 
                 utils.InsertAfter(winTemplate);
                 var windowDom = utils.getElementById('layx-' + config.id);
@@ -686,7 +686,7 @@
                 }
                 winform.windowDom = windowDom;
 
-                winform.zIndex = (config.alwaysOnTop === true ? Layx.pinZindex : Layx.zIndex);
+                winform.zIndex = (config.alwaysOnTop === true ? Layx.stickZindex : Layx.zIndex);
                 Layx.windows[config.id] = winform;
 
                 // 构建内容对象
@@ -765,10 +765,10 @@
                     Layx.triggerMethod('min', config.id, winform, e);
                 };
 
-                var pinMenu = utils.querySelector('.layx-pin-menu', windowDom);
-                if (pinMenu) {
-                    if (pinMenu) pinMenu.onclick = function(e) {
-                        Layx.triggerMethod('pin', config.id, winform, e);
+                var stickMenu = utils.querySelector('.layx-stick-menu', windowDom);
+                if (stickMenu) {
+                    if (stickMenu) stickMenu.onclick = function(e) {
+                        Layx.triggerMethod('stick', config.id, winform, e);
                     };
                 }
 
@@ -1032,24 +1032,24 @@
             }
         },
         // 置顶窗口
-        pin: function(id) {
+        stick: function(id) {
             var windowDom = utils.getElementById("layx-" + id),
                 winform = Layx.windows[id];
             if (windowDom) {
-                var pinMenu = utils.querySelector('.layx-pin-menu', windowDom);
+                var stickMenu = utils.querySelector('.layx-stick-menu', windowDom);
                 if (winform.alwaysOnTop == true) {
                     winform.alwaysOnTop = false;
                     Layx.setZindex(windowDom, winform);
-                    if (pinMenu) {
-                        pinMenu.removeAttribute("data-topable");
+                    if (stickMenu) {
+                        stickMenu.removeAttribute("data-topable");
                     }
                     return;
                 }
                 if (winform.alwaysOnTop == false) {
                     winform.alwaysOnTop = true;
                     Layx.setZindex(windowDom, winform);
-                    if (pinMenu) {
-                        pinMenu.setAttribute("data-topable", "1");
+                    if (stickMenu) {
+                        stickMenu.setAttribute("data-topable", "1");
                     }
                     return;
                 }
@@ -1110,8 +1110,8 @@
         setZindex: function(windowDom, winform) {
             if (windowDom && winform) {
                 if (winform.alwaysOnTop === true) {
-                    windowDom.style.zIndex = ++Layx.pinZindex;
-                    winform.zIndex = Layx.pinZindex;
+                    windowDom.style.zIndex = ++Layx.stickZindex;
+                    winform.zIndex = Layx.stickZindex;
                 } else {
                     windowDom.style.zIndex = ++Layx.zIndex;
                     winform.zIndex = Layx.zIndex;
@@ -1170,7 +1170,7 @@
                 winform = Layx.windows[id];
             if (winform) {
                 winform.alwaysOnTop = false;
-                Layx.triggerMethod('pin', id, winform);
+                Layx.triggerMethod('stick', id, winform);
             }
 
         },
@@ -1180,7 +1180,7 @@
                 winform = Layx.windows[id];
             if (winform) {
                 winform.alwaysOnTop = true;
-                Layx.triggerMethod('pin', id, winform);
+                Layx.triggerMethod('stick', id, winform);
             }
 
         },
@@ -1220,7 +1220,7 @@
             statusBar.appendChild(btnWrap);
         },
         alert: function(content, title, buttoms, options) {
-            var alertId = (options && options["id"]) ? options["id"] : 'layx-alert-' + (++Layx.pinZindex);
+            var alertId = (options && options["id"]) ? options["id"] : 'layx-alert-' + (++Layx.stickZindex);
             var config = layxDeepClone({}, {
                 id: alertId,
                 title: title ? title : '提示消息',
@@ -1233,7 +1233,7 @@
                 maximizable: false,
                 resizable: false,
                 alwaysOnTop: true,
-                pinable: false,
+                stickable: false,
                 borderColor: '#d26c20',
                 content: '<div class="layx-alert-content">' + content + '</div>',
                 statusBar: true,
@@ -1351,7 +1351,7 @@
 // symbol 字体图标
 ;
 !(function(window) {
-    var svgSprite = '<svg><symbol id="layx-icon-restore" viewBox="0 0 1157 1024"><path d="M1016.52185234 724.44050175L833.87364805 724.44050175 833.87364805 898.52098643 833.87364805 960.05279112 833.87364805 961.2211168 772.34184336 961.2211168 772.34184336 960.05279112 124.31068789 960.05279112 124.31068789 961.2211168 62.7788832 961.2211168 62.7788832 960.05279112 62.7788832 898.52098643 62.7788832 360.31241885 62.7788832 298.78061416 124.31068789 298.78061416 298.78061416 298.78061416 298.78061416 62.7788832 303.06447442 62.7788832 360.31241885 62.7788832 1016.52185234 62.7788832 1074.15923838 62.7788832 1078.05365615 62.7788832 1078.05365615 662.90869795 1078.05365615 724.44050175 1016.52185234 724.44050175ZM124.31068789 898.52098643L772.34184336 898.52098643 772.34184336 724.44050175 772.34184336 662.90869795 772.34184336 360.31241885 124.31068789 360.31241885 124.31068789 898.52098643ZM1016.52185234 124.31068789L360.31241885 124.31068789 360.31241885 298.78061416 772.34184336 298.78061416 833.87364805 298.78061416 833.87364805 360.31241885 833.87364805 662.90869795 1016.52185234 662.90869795 1016.52185234 124.31068789Z"  ></path></symbol><symbol id="layx-icon-windows" viewBox="0 0 1024 1024"><path d="M128 512 128 288 384 231.68 384 508.16 128 512M853.333333 128 853.333333 501.333333 426.666667 507.733333 426.666667 222.293333 853.333333 128M128 554.666667 384 558.506667 384 849.066667 128 800 128 554.666667M853.333333 565.333333 853.333333 938.666667 426.666667 857.173333 426.666667 558.933333 853.333333 565.333333Z"  ></path></symbol><symbol id="layx-icon-min" viewBox="0 0 1024 1024"><path d="M65.23884 456.152041 958.760137 456.152041l0 111.695918L65.23884 567.847959 65.23884 456.152041z"  ></path></symbol><symbol id="layx-icon-max" viewBox="0 0 1024 1024"><path d="M75.74912227 948.24738475L75.74912227 75.75145131l872.50059037 0 0 872.49593344L75.74912227 948.24738475zM839.18786674 184.81446115L184.81213326 184.81446115l0 654.37573462 654.37573461 0L839.18786674 184.81446115z"  ></path></symbol><symbol id="layx-icon-destroy" viewBox="0 0 1024 1024"><path d="M933.89254819 139.71606348L884.23129279 90.08990363 511.96490363 462.39138834 140.40044113 90.82692583 90.84447403 140.34779656 462.40893653 511.91225907 90.10745181 884.2137446 139.73361166 933.875 512.03509637 561.53841892 883.59955887 933.10288141 933.15552597 883.58201068 561.59106347 512.01754819Z"  ></path></symbol><symbol id="layx-icon-pin" viewBox="0 0 1024 1024"><path d="M326.4 5.65333333l7.89333333 174.72-224.74666666 376.64 168.32 117.86666667L77.22666667 1012.26666667l8.74666666 6.08 248.42666667-304 168.32 117.86666666L779.73333333 492.37333333l166.93333334-52.37333333L326.4 5.65333333z m-144.96 536.53333334l184.74666667-312.10666667L722.13333333 479.36 492.16 759.78666667l-310.72-217.6z m582.4-100.69333334l-1.92 0.64-374.4-262.18666666-0.10666667-2.02666667-2.98666666-66.56 442.88 310.18666667-63.46666667 19.94666666z" fill="" ></path></symbol></svg>';
+    var svgSprite = '<svg><symbol id="layx-icon-restore" viewBox="0 0 1157 1024"><path d="M1016.52185234 724.44050175L833.87364805 724.44050175 833.87364805 898.52098643 833.87364805 960.05279112 833.87364805 961.2211168 772.34184336 961.2211168 772.34184336 960.05279112 124.31068789 960.05279112 124.31068789 961.2211168 62.7788832 961.2211168 62.7788832 960.05279112 62.7788832 898.52098643 62.7788832 360.31241885 62.7788832 298.78061416 124.31068789 298.78061416 298.78061416 298.78061416 298.78061416 62.7788832 303.06447442 62.7788832 360.31241885 62.7788832 1016.52185234 62.7788832 1074.15923838 62.7788832 1078.05365615 62.7788832 1078.05365615 662.90869795 1078.05365615 724.44050175 1016.52185234 724.44050175ZM124.31068789 898.52098643L772.34184336 898.52098643 772.34184336 724.44050175 772.34184336 662.90869795 772.34184336 360.31241885 124.31068789 360.31241885 124.31068789 898.52098643ZM1016.52185234 124.31068789L360.31241885 124.31068789 360.31241885 298.78061416 772.34184336 298.78061416 833.87364805 298.78061416 833.87364805 360.31241885 833.87364805 662.90869795 1016.52185234 662.90869795 1016.52185234 124.31068789Z"  ></path></symbol><symbol id="layx-icon-default-icon" viewBox="0 0 1024 1024"><path d="M891.88743395 61.93952995L132.11256605 61.93952995c-38.92547129 0-70.60411733 31.65534435-70.60411734 70.5924665L61.50844871 891.46800355c0 38.91382045 31.67864605 70.59246649 70.60411734 70.5924665l759.7748679 0c38.92547129 0 70.60411733-31.67864605 70.60411734-70.5924665L962.49155129 132.53199645C962.49155129 93.59487431 930.81290525 61.93952995 891.88743395 61.93952995zM844.02576498 142.29540409c16.71896178 0 30.25724302 13.54993209 30.25724302 30.26889386 0 16.70731093-13.53828125 30.25724302-30.25724302 30.25724303s-30.25724302-13.54993209-30.25724303-30.25724303C813.76852195 155.84533618 827.3068032 142.29540409 844.02576498 142.29540409zM735.60300658 142.29540409c16.71896178 0 30.25724302 13.54993209 30.25724302 30.26889386 0 16.70731093-13.53828125 30.25724302-30.25724302 30.25724303s-30.25724302-13.54993209-30.25724303-30.25724303C705.34576355 155.84533618 718.8840448 142.29540409 735.60300658 142.29540409zM881.80945351 881.37837227L142.19054649 881.37837227 142.19054649 277.92288427l739.60725618 0L881.79780267 881.37837227zM758.85809209 638.26020125l-0.01165084-180.19196018 90.09598008 90.09598008L758.85809209 638.26020125zM265.15355875 638.26020125l-90.09598008-90.0959801 90.08432924-90.08432924L265.15355875 638.26020125z"  ></path></symbol><symbol id="layx-icon-min" viewBox="0 0 1024 1024"><path d="M65.23884 456.152041 958.760137 456.152041l0 111.695918L65.23884 567.847959 65.23884 456.152041z"  ></path></symbol><symbol id="layx-icon-max" viewBox="0 0 1024 1024"><path d="M75.74912227 948.24738475L75.74912227 75.75145131l872.50059037 0 0 872.49593344L75.74912227 948.24738475zM839.18786674 184.81446115L184.81213326 184.81446115l0 654.37573462 654.37573461 0L839.18786674 184.81446115z"  ></path></symbol><symbol id="layx-icon-destroy" viewBox="0 0 1024 1024"><path d="M933.89254819 139.71606348L884.23129279 90.08990363 511.96490363 462.39138834 140.40044113 90.82692583 90.84447403 140.34779656 462.40893653 511.91225907 90.10745181 884.2137446 139.73361166 933.875 512.03509637 561.53841892 883.59955887 933.10288141 933.15552597 883.58201068 561.59106347 512.01754819Z"  ></path></symbol><symbol id="layx-icon-stick" viewBox="0 0 1024 1024"><path d="M863.92416068 184.3484319H160.07583932a50.27488011 50.27488011 0 0 1 0-100.5497602h703.84832136a50.27488011 50.27488011 0 0 1 0 100.5497602z m-50.27488007 804.39808157a50.22460522 50.22460522 0 0 1-35.69516489-14.57971521L512 708.21268254l-265.95411572 265.95411572A50.27488011 50.27488011 0 0 1 160.07583932 938.47163339V335.1730722a50.27488011 50.27488011 0 0 1 50.27488007-50.27488013h603.29856122a50.27488011 50.27488011 0 0 1 50.27488007 50.27488013v603.29856119a50.27488011 50.27488011 0 0 1-50.27488007 50.27488008z m-301.64928061-402.19904078a50.22460522 50.22460522 0 0 1 35.69516487 14.57971522L763.37440051 816.80642355V385.44795228H260.62559949v431.86122007l215.67923564-215.67923564A50.27488011 50.27488011 0 0 1 512 586.54747269z"  ></path></symbol></svg>';
     var script = function() { var scripts = document.getElementsByTagName("script"); return scripts[scripts.length - 1] }();
     var shouldInjectCss = script.getAttribute("data-injectcss");
     var ready = function(fn) {

@@ -238,10 +238,10 @@
     title: '打开一个置顶窗口，请打开另外一个窗口试试。注：右边按钮可以取消/设置置顶',
     alwaysOnTop: true,
     position: [200, 300],
-    pinable:true
+    stickable:true
 });</code></pre>
 
-    <p>注：pinable为true显示显示图钉按钮，当 alwaysOnTop为true的时候，pinable自动显示</p>
+    <p>注：stickable为true显示显示图钉按钮，当 alwaysOnTop为true的时候，stickable自动显示</p>
 
     <strong style="margin-right: 20px;color:#00f;">打开一个带状态栏窗口</strong>
     <button id="layx23">查看效果</button>
@@ -342,7 +342,7 @@
     minHeight: 150, // 拖曳大小最大宽度
     shadable: false, // 是否启用窗口阻隔
     alwaysOnTop: false, // 是否总是置顶
-    pinable: false, // 是否显示图钉按钮，当 alwaysOnTop为true的时候，pinable自动显示
+    stickable: false, // 是否显示图钉按钮，当 alwaysOnTop为true的时候，stickable自动显示
     minimizable: true, // 是否允许最小化
     maximizable: true, // 是否允许最大化
     closable: true, // 是否允许关闭
@@ -450,7 +450,7 @@
                         id: 'layx',
                         title: 'Layx 网页弹窗最佳选择.',
                         url: 'iframe.html',
-                        pinable: true,
+                        stickable: true,
                         shadable: true
                     });
                 }, 100);
@@ -655,7 +655,7 @@
                         title: '打开一个置顶窗口，请打开另外一个窗口试试。注：右边按钮可以取消/设置置顶',
                         alwaysOnTop: true,
                         position: [200, 300],
-                        pinable: true
+                        stickable: true
                     });
                 }
                 getId('layx23').onclick = function() {

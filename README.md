@@ -76,7 +76,7 @@ Layx 是一款纯原生Javascript编写的网页弹窗插件，完全模仿Windo
         minHeight: 150, // 拖曳大小最大宽度
         shadable: false, // 是否启用窗口阻隔
         alwaysOnTop: false, // 是否总是置顶
-        pinable: false, // 是否显示图钉按钮，当 alwaysOnTop为true的时候，pinable自动显示
+        stickable: false, // 是否显示图钉按钮，当 alwaysOnTop为true的时候，stickable自动显示
         minimizable: true, // 是否允许最小化
         maximizable: true, // 是否允许最大化
         closable: true, // 是否允许关闭
