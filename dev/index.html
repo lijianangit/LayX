@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Layx是一款支持网页多任务窗口解决方案.</title>
+    <link href="layx.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <h3>普通窗口</h3>
+    <div id="layx-normal" class="layx-window layx-flexbox" style="/*position: fixed;top:100px;left:300px;*/box-shadow: 1px 1px 24px rgba(0, 0, 0, .3);-moz-box-shadow: 1px 1px 24px rgba(0, 0, 0, .3);-webkit-box-shadow: 1px 1px 24px rgba(0, 0, 0, .3);z-index: 1000000;width: 800px;height: 600px;min-height:100px;min-width:100px;border: 1px solid #3baced;background-color:#fff;opacity: 1;">
+        <div class="layx-control-bar layx-flexbox">
+            <div class="layx-left-bar layx-flexbox layx-flex-vertical">
+                <div class="layx-icon">
+                    <svg class="layx-iconfont" aria-hidden="true">
+                        <use xlink:href="#layx-icon-default-icon"></use>
+                    </svg>
+                </div>
+            </div>
+            <div class="layx-title layx-flexauto layx-flexbox layx-flex-vertical" title="Layx是一款支持网页多任务窗口解决方案.">
+                <label>Layx是一款支持网页多任务窗口解决方案.</label>
+            </div>
+            <div class="layx-right-bar layx-flexbox">
+                <div class="layx-custom-menus layx-flexbox"></div>
+                <div class="layx-inlay-menus layx-flexbox">
+                    <div class="layx-icon layx-flexbox layx-flex-center layx-stick-menu" title="置顶">
+                        <svg class="layx-iconfont" aria-hidden="true">
+                                            <use xlink:href="#layx-icon-stick"></use>
+                                        </svg>
+                    </div>
+                    <div class="layx-icon layx-flexbox layx-flex-center layx-min-menu" title="最小化">
+                        <svg class="layx-iconfont" aria-hidden="true">
+                                    <use xlink:href="#layx-icon-min"></use>
+                                </svg>
+                    </div>
+                    <div class="layx-icon layx-flexbox layx-flex-center layx-max-menu" title="最大化">
+                        <svg class="layx-iconfont" aria-hidden="true">
+                                    <use xlink:href="#layx-icon-max"></use>
+                                </svg>
+                    </div>
+                    <div class="layx-icon layx-flexbox layx-flex-center layx-destroy-menu" title="关闭">
+                        <svg class="layx-iconfont" aria-hidden="true">
+                                    <use xlink:href="#layx-icon-destroy"></use>
+                                </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layx-main layx-flexauto">
+            <div class="layx-html layx-flexbox">
+                Layx是一款支持网页多任务窗口解决方案.
+            </div>
+        </div>
+        <div class="layx-resizes">
+            <div class="layx-resize-top"></div>
+            <div class="layx-resize-right"></div>
+            <div class="layx-resize-bottom"></div>
+            <div class="layx-resize-left"></div>
+            <div class="layx-resize-left-top"></div>
+            <div class="layx-resize-right-top"></div>
+            <div class="layx-resize-left-bottom"></div>
+            <div class="layx-resize-right-bottom"></div>
+        </div>
+    </div>
+    <!-- ===================================================== -->
+    <h3>嵌套页窗口</h3>
+    <div id="layx-iframe" class="layx-window layx-flexbox" style="/*position: fixed;top:100px;left:300px;*/box-shadow: 1px 1px 24px rgba(0, 0, 0, .3);-moz-box-shadow: 1px 1px 24px rgba(0, 0, 0, .3);-webkit-box-shadow: 1px 1px 24px rgba(0, 0, 0, .3);z-index: 1000000;width: 800px;height: 600px;min-height:100px;min-width:100px;border: 1px solid #3baced;background-color:#fff;opacity: 1;">
+        <div class="layx-control-bar layx-flexbox">
+            <div class="layx-left-bar layx-flexbox layx-flex-vertical">
+                <div class="layx-icon">
+                    <svg class="layx-iconfont" aria-hidden="true">
+                        <use xlink:href="#layx-icon-default-icon"></use>
+                    </svg>
+                </div>
+            </div>
+            <div class="layx-title layx-flexauto layx-flexbox layx-flex-vertical" title="Layx是一款支持网页多任务窗口解决方案.">
+                <label>Layx是一款支持网页多任务窗口解决方案.</label>
+            </div>
+            <div class="layx-right-bar layx-flexbox">
+                <div class="layx-custom-menus layx-flexbox"></div>
+                <div class="layx-inlay-menus layx-flexbox">
+                    <div class="layx-icon layx-flexbox layx-flex-center layx-stick-menu" title="置顶">
+                        <svg class="layx-iconfont" aria-hidden="true">
+                                            <use xlink:href="#layx-icon-stick"></use>
+                                        </svg>
+                    </div>
+                    <div class="layx-icon layx-flexbox layx-flex-center layx-min-menu" title="最小化">
+                        <svg class="layx-iconfont" aria-hidden="true">
+                                    <use xlink:href="#layx-icon-min"></use>
+                                </svg>
+                    </div>
+                    <div class="layx-icon layx-flexbox layx-flex-center layx-max-menu" title="最大化">
+                        <svg class="layx-iconfont" aria-hidden="true">
+                                    <use xlink:href="#layx-icon-max"></use>
+                                </svg>
+                    </div>
+                    <div class="layx-icon layx-flexbox layx-flex-center layx-destroy-menu" title="关闭">
+                        <svg class="layx-iconfont" aria-hidden="true">
+                                    <use xlink:href="#layx-icon-destroy"></use>
+                                </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layx-main layx-flexauto">
+            <iframe class="layx-iframe layx-flexbox" allowtransparency="true" frameborder="0" scrolling="auto" allowfullscreen="" mozallowfullscreen="" webkitallowfullscreen="" src="../doc/iframe.html"></iframe>
+        </div>
+        <div class="layx-resizes">
+            <div class="layx-resize-top"></div>
+            <div class="layx-resize-right"></div>
+            <div class="layx-resize-bottom"></div>
+            <div class="layx-resize-left"></div>
+            <div class="layx-resize-left-top"></div>
+            <div class="layx-resize-right-top"></div>
+            <div class="layx-resize-left-bottom"></div>
+            <div class="layx-resize-right-bottom"></div>
+        </div>
+    </div>
+    <!-- ===================================================== -->
+    <h3>带状态栏窗口</h3>
+    <div id="layx-normal" class="layx-window layx-flexbox" style="/*position: fixed;top:100px;left:300px;*/box-shadow: 1px 1px 24px rgba(0, 0, 0, .3);-moz-box-shadow: 1px 1px 24px rgba(0, 0, 0, .3);-webkit-box-shadow: 1px 1px 24px rgba(0, 0, 0, .3);z-index: 1000000;width: 800px;height: 600px;min-height:100px;min-width:100px;border: 1px solid #3baced;background-color:#fff;opacity: 1;">
+        <div class="layx-control-bar layx-flexbox">
+            <div class="layx-left-bar layx-flexbox layx-flex-vertical">
+                <div class="layx-icon">
+                    <svg class="layx-iconfont" aria-hidden="true">
+                        <use xlink:href="#layx-icon-default-icon"></use>
+                    </svg>
+                </div>
+            </div>
+            <div class="layx-title layx-flexauto layx-flexbox layx-flex-vertical" title="Layx是一款支持网页多任务窗口解决方案.">
+                <label>Layx是一款支持网页多任务窗口解决方案.</label>
+            </div>
+            <div class="layx-right-bar layx-flexbox">
+                <div class="layx-custom-menus layx-flexbox"></div>
+                <div class="layx-inlay-menus layx-flexbox">
+                    <div class="layx-icon layx-flexbox layx-flex-center layx-stick-menu" title="置顶">
+                        <svg class="layx-iconfont" aria-hidden="true">
+                                            <use xlink:href="#layx-icon-stick"></use>
+                                        </svg>
+                    </div>
+                    <div class="layx-icon layx-flexbox layx-flex-center layx-min-menu" title="最小化">
+                        <svg class="layx-iconfont" aria-hidden="true">
+                                    <use xlink:href="#layx-icon-min"></use>
+                                </svg>
+                    </div>
+                    <div class="layx-icon layx-flexbox layx-flex-center layx-max-menu" title="最大化">
+                        <svg class="layx-iconfont" aria-hidden="true">
+                                    <use xlink:href="#layx-icon-max"></use>
+                                </svg>
+                    </div>
+                    <div class="layx-icon layx-flexbox layx-flex-center layx-destroy-menu" title="关闭">
+                        <svg class="layx-iconfont" aria-hidden="true">
+                                    <use xlink:href="#layx-icon-destroy"></use>
+                                </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layx-main layx-flexauto">
+            <div class="layx-html layx-flexbox">
+                Layx是一款支持网页多任务窗口解决方案.
+            </div>
+        </div>
+        <div class="layx-statu-bar" style="background-color: #f0f0f0;">
+            <div style="padding:0 8px;height: 100%;line-height: 25px;">2018年05月09日 12时10分20秒</div>
+        </div>
+        <div class="layx-resizes">
+            <div class="layx-resize-top"></div>
+            <div class="layx-resize-right"></div>
+            <div class="layx-resize-bottom"></div>
+            <div class="layx-resize-left"></div>
+            <div class="layx-resize-left-top"></div>
+            <div class="layx-resize-right-top"></div>
+            <div class="layx-resize-left-bottom"></div>
+            <div class="layx-resize-right-bottom"></div>
+        </div>
+    </div>
+    <!-- ===================================================== -->
+    <h3>窗口组窗口</h3>
+    <div id="layx-iframe" class="layx-window layx-flexbox" style="/*position: fixed;top:100px;left:300px;*/box-shadow: 1px 1px 24px rgba(0, 0, 0, .3);-moz-box-shadow: 1px 1px 24px rgba(0, 0, 0, .3);-webkit-box-shadow: 1px 1px 24px rgba(0, 0, 0, .3);z-index: 1000000;width: 800px;height: 600px;min-height:100px;min-width:100px;border: 1px solid #3baced;background-color:#fff;opacity: 1;">
+        <div class="layx-control-bar layx-flexbox">
+            <div class="layx-left-bar layx-flexbox layx-flex-vertical">
+                <div class="layx-icon">
+                    <svg class="layx-iconfont" aria-hidden="true">
+                        <use xlink:href="#layx-icon-default-icon"></use>
+                    </svg>
+                </div>
+            </div>
+            <div class="layx-title layx-flexauto layx-flexbox layx-flex-vertical" title="Layx是一款支持网页多任务窗口解决方案.">
+                <label>Layx是一款支持网页多任务窗口解决方案.</label>
+            </div>
+            <div class="layx-right-bar layx-flexbox">
+                <div class="layx-custom-menus layx-flexbox"></div>
+                <div class="layx-inlay-menus layx-flexbox">
+                    <div class="layx-icon layx-flexbox layx-flex-center layx-stick-menu" title="置顶">
+                        <svg class="layx-iconfont" aria-hidden="true">
+                                            <use xlink:href="#layx-icon-stick"></use>
+                                        </svg>
+                    </div>
+                    <div class="layx-icon layx-flexbox layx-flex-center layx-min-menu" title="最小化">
+                        <svg class="layx-iconfont" aria-hidden="true">
+                                    <use xlink:href="#layx-icon-min"></use>
+                                </svg>
+                    </div>
+                    <div class="layx-icon layx-flexbox layx-flex-center layx-max-menu" title="最大化">
+                        <svg class="layx-iconfont" aria-hidden="true">
+                                    <use xlink:href="#layx-icon-max"></use>
+                                </svg>
+                    </div>
+                    <div class="layx-icon layx-flexbox layx-flex-center layx-destroy-menu" title="关闭">
+                        <svg class="layx-iconfont" aria-hidden="true">
+                                    <use xlink:href="#layx-icon-destroy"></use>
+                                </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layx-group-bar">
+            <div class="layx-group-items">
+                <div class="layx-group-title" data-activable="1" title="淘宝网"><label>淘宝网</label></div>
+                <div class="layx-group-title" title="百度一下"><label>百度一下</label></div>
+                <div class="layx-group-title" title="开源中国"><label>开源中国</label></div>
+            </div>
+        </div>
+        <div class="layx-main layx-flexauto">
+            <div class="layx-groud-main layx-flexauto" data-activable="1">
+                <iframe class="layx-iframe layx-flexbox" allowtransparency="true" frameborder="0" scrolling="auto" allowfullscreen="" mozallowfullscreen="" webkitallowfullscreen="" src="https://www.taobao.com"></iframe>
+            </div>
+            <div class="layx-groud-main layx-flexauto">
+                <iframe class="layx-iframe layx-flexbox" allowtransparency="true" frameborder="0" scrolling="auto" allowfullscreen="" mozallowfullscreen="" webkitallowfullscreen="" src="https://www.baidu.com"></iframe>
+            </div>
+            <div class="layx-groud-main layx-flexauto">
+                <iframe class="layx-iframe layx-flexbox" allowtransparency="true" frameborder="0" scrolling="auto" allowfullscreen="" mozallowfullscreen="" webkitallowfullscreen="" src="http://www.oschina.net"></iframe>
+            </div>
+        </div>
+        <div class="layx-resizes">
+            <div class="layx-resize-top"></div>
+            <div class="layx-resize-right"></div>
+            <div class="layx-resize-bottom"></div>
+            <div class="layx-resize-left"></div>
+            <div class="layx-resize-left-top"></div>
+            <div class="layx-resize-right-top"></div>
+            <div class="layx-resize-left-bottom"></div>
+            <div class="layx-resize-right-bottom"></div>
+        </div>
+    </div>
+    <div style="height: 500px;"></div>
+    <script src="layx.js" type="text/javascript"></script>
+</body>
+
+</html>
