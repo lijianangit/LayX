@@ -13,7 +13,6 @@
     "use strict";
 
     // layx 默认配置参数
-
     var defaults = {
         id: 'layx', // 唯一id
         icon: '', // 图标，设置false不启用，这里支持html代码

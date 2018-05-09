@@ -323,7 +323,8 @@
 
 
     <h1 style="color:#f00;">还有很多很多案例整理中...，可以先看参数！</p>
-        <pre><code data-language="javascript">var defaults = {
+        <pre><code data-language="javascript">
+    var defaults = {
     id: 'layx', // 唯一id
     icon: '', // 图标，设置false不启用，这里支持html代码
     title: '', // 窗口标题
@@ -342,7 +343,7 @@
     minHeight: 150, // 拖曳大小最大宽度
     shadable: false, // 是否启用窗口阻隔
     alwaysOnTop: false, // 是否总是置顶
-    stickable: false, // 是否显示图钉按钮，当 alwaysOnTop为true的时候，stickable自动显示
+    stickable: false, // 是否显示置顶按钮，当 alwaysOnTop为true的时候，stickable自动显示
     minimizable: true, // 是否允许最小化
     maximizable: true, // 是否允许最大化
     closable: true, // 是否允许关闭
@@ -350,24 +351,24 @@
     autoDestroy: false, // 窗口自动关闭，如果false不启用，参数可以是毫秒时间，比如3000=>3秒
     // 拖曳方向控制
     resizeLimit: {
-        t: true, // 是否允许上边拖曳大小，true允许
-        r: true, // 是否允许右边拖曳大小，true允许
-        b: true, // 是否允许下边拖曳大小，true允许
-        l: true, // 是否允许左边拖曳大小，true允许
-        lt: true, // 是否允许左上边拖曳大小，true允许
-        rt: true, // 是否允许右上边拖曳大小，true允许
-        lb: true, // 是否允许左下边拖曳大小，true允许
-        rb: true // 是否允许右下边拖曳大小，true允许
+    t: true, // 是否允许上边拖曳大小，true允许
+    r: true, // 是否允许右边拖曳大小，true允许
+    b: true, // 是否允许下边拖曳大小，true允许
+    l: true, // 是否允许左边拖曳大小，true允许
+    lt: true, // 是否允许左上边拖曳大小，true允许
+    rt: true, // 是否允许右上边拖曳大小，true允许
+    lb: true, // 是否允许左下边拖曳大小，true允许
+    rb: true // 是否允许右下边拖曳大小，true允许
     },
     movable: true, // 是否允许拖动窗口
     // 拖动窗口显示，vertical为true表示禁止水平拖动，horizontal为true表示禁止垂直拖动
     moveLimit: {
-        vertical: false, // 是否禁止垂直拖动，false不禁止
-        horizontal: false, // 是否禁止水平拖动，false不禁止
-        leftOut: true, // 是否允许左边拖出，true允许
-        rightOut: true, // 是否允许右边拖出，true允许
-        topOut: true, // 是否允许上边拖出，true允许，此设置不管是false还是true，窗口都不能拖出窗体
-        bottomOut: true, // 是否允许下边拖出，true允许
+    vertical: false, // 是否禁止垂直拖动，false不禁止
+    horizontal: false, // 是否禁止水平拖动，false不禁止
+    leftOut: true, // 是否允许左边拖出，true允许
+    rightOut: true, // 是否允许右边拖出，true允许
+    topOut: true, // 是否允许上边拖出，true允许，此设置不管是false还是true，窗口都不能拖出窗体
+    bottomOut: true, // 是否允许下边拖出，true允许
     },
     statusBar: false, // 是否显示状态栏
     focusable: true, // 是否启用iframe页面点击置顶
@@ -377,68 +378,69 @@
     // menuItems: [], // 自定义顶部下拉菜单，支持无限极，开发中....
     // 拦截器，可以监听窗口各个状态
     intercept: {
-        // iframe页面加载监听
-        load: {
-            // 加载之前，return false；禁止加载
-            before: function(windowDom, winform) {},
-            // 加载之后
-            after: function(windowDom, winform, iframe) {}
-        },
-        // 最小化监听
-        min: {
-            // 最小化之前，return false；禁止最小化
-            before: function(windowDom, winform) {},
-            // 最小化之后
-            after: function(windowDom, winform) {}
-        },
-        // 最大化监听
-        max: {
-            // 最大化之前，return false；禁止最大化
-            before: function(windowDom, winform) {},
-            // 最大化之后
-            after: function(windowDom, winform) {}
-        },
-        // 恢复监听
-        restore: {
-            // 恢复之前，return false；禁止恢复
-            before: function(windowDom, winform) {},
-            // 恢复之后
-            after: function(windowDom, winform) {}
-        },
-        // 关闭监听
-        destroy: {
-            // 关闭之前，return false；禁止关闭
-            before: function(windowDom, winform) {},
-            // 关闭之后
-            after: function(windowDom, winform) {}
-        },
-        // 置顶监听
-        pin: {
-            // 置顶之前，return false；禁止操作
-            before: function(windowDom, winform) {},
-            // 置顶之后
-            after: function(windowDom, winform) {}
-        },
-        // 移动窗口监听
-        move: {
-            // 移动之前
-            before: function(windowDom, winform) {},
-            // 移动中
-            moveing: function(windowDom, winform) {},
-            // 移动结束
-            after: function(windowDom, winform) {}
-        },
-        // 拖曳窗口大小监听
-        resize: {
-            // 拖曳之前
-            before: function(windowDom, winform) {},
-            // 拖曳中
-            resizing: function(windowDom, winform) {},
-            // 拖曳结束
-            after: function(windowDom, winform) {}
-        }
+    // iframe页面加载监听
+    load: {
+    // 加载之前，return false；禁止加载
+    before: function(windowDom, winform) {},
+    // 加载之后
+    after: function(windowDom, winform, iframe) {}
+    },
+    // 最小化监听
+    min: {
+    // 最小化之前，return false；禁止最小化
+    before: function(windowDom, winform) {},
+    // 最小化之后
+    after: function(windowDom, winform) {}
+    },
+    // 最大化监听
+    max: {
+    // 最大化之前，return false；禁止最大化
+    before: function(windowDom, winform) {},
+    // 最大化之后
+    after: function(windowDom, winform) {}
+    },
+    // 恢复监听
+    restore: {
+    // 恢复之前，return false；禁止恢复
+    before: function(windowDom, winform) {},
+    // 恢复之后
+    after: function(windowDom, winform) {}
+    },
+    // 关闭监听
+    destroy: {
+    // 关闭之前，return false；禁止关闭
+    before: function(windowDom, winform) {},
+    // 关闭之后
+    after: function(windowDom, winform) {}
+    },
+    // 置顶监听
+    pin: {
+    // 置顶之前，return false；禁止操作
+    before: function(windowDom, winform) {},
+    // 置顶之后
+    after: function(windowDom, winform) {}
+    },
+    // 移动窗口监听
+    move: {
+    // 移动之前
+    before: function(windowDom, winform) {},
+    // 移动中
+    moveing: function(windowDom, winform) {},
+    // 移动结束
+    after: function(windowDom, winform) {}
+    },
+    // 拖曳窗口大小监听
+    resize: {
+    // 拖曳之前
+    before: function(windowDom, winform) {},
+    // 拖曳中
+    resizing: function(windowDom, winform) {},
+    // 拖曳结束
+    after: function(windowDom, winform) {}
     }
-};</code></pre>
+    }
+    };
+</code></pre>
         <script src="../layx.min.js" type="text/javascript"></script>
         <script type="text/javascript">
             function getId(id) {
