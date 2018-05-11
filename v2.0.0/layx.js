@@ -1,0 +1,899 @@
+/*
+ * file : layx.js
+ * gitee : https://gitee.com/monksoul/LayX
+ * author : 百小僧/MonkSoul
+ * version : v2.0.0
+ * create time : 2018.05.11
+ * update time : 2018.05.11
+ */
+
+;
+!(function (over, win, slf) {
+    var Layx = {
+        // 版本号
+        version: '2.0.0',
+        // 默认配置
+        defaults: {
+            id: '',// 窗口唯一id
+            icon: true, // 窗口图标，false为不启用，支持html
+            title: '',  // 标题，支持html
+            width: 800, // 初始化宽度，支持百分比 '100%'
+            height: 600,    // 初始化高度，支持百分比 '100%'
+            minWidth: 100,  // 最小宽度，支持百分比 '100%'
+            minHeight: 100, // 最小高度，支持百分比 '100%'
+            position: 'ct', // 初始化位置，支持'ct', 'lt', 'rt', 'lb', 'rb', 'lc', 'tc', 'rc', 'bc'以及 [top,left]数组
+            control: true, // 是否显示控制栏
+            controlStyle: '', // 控制栏样式
+            bgColor: "#fff",  // 窗口颜色：默认透明
+            shadow: true,   // 是否显示阴影
+            border: "1px solid #3baced", // 边框，false不启用边框
+            type: 'html',   // 窗口类型，支持：html,url
+            content: '', // type为html有效
+            url: '', // type为url有效
+            useFrameTitle: false, // 是否自动获取iframe页面标题填充窗口标题
+            opacity: 1, // 透明度
+            shadable: false, // 是否启用窗口阻隔
+            loaddingText: '正在加载内容...', // 内容加载文本内容，支持html
+            stickable: false, // 是否显示置顶按钮
+            minimizable: true, // 是否显示最小化按钮
+            maximizable: true, // 是否显示最大化按钮
+            closable: true, // 是否显示关闭按钮
+            resizable: true, // 是否显示拖曳操作
+            movable: true,  // 是否允许拖动窗口
+            focusable: true, // 是否启用iframe页面点击置顶，只支持非跨域iframe
+            alwaysOnTop: false, // 是否置顶
+            allowControlDbclick: true,    // 允许控制栏双击切换窗口大小
+        },
+        // 普通层级别
+        zIndex: 10000000,
+        // 窗口集合
+        windows: {},
+        // 置顶层级别
+        stickZIndex: 20000000,
+        // 页面初始化滚动条状态
+        scrollStatus: (function () {
+            var currentStyle = document.body.currentStyle || getComputedStyle(document.body, null);
+            return { x: currentStyle.overflowX, y: currentStyle.overflowY };
+        })(),
+        // 创建窗口骨架
+        create: function (options) {
+            var that = this,
+                config = layxDeepClone({}, that.defaults, options || {}),
+                winform = {};
+
+            var _winform = that.windows[config.id];
+            if (_winform) {
+                return _winform;
+            }
+
+            if (!config.id) {
+                console.error("窗口id不能为空且唯一");
+                return;
+            };
+
+            // 创建窗口阻隔
+            if (config.shadable === true) {
+                var layxShade = document.createElement("div");
+                layxShade.setAttribute("id", "layx-" + config.id + "-shade");
+                layxShade.classList.add("layx-shade");
+                layxShade.style.zIndex = config.alwaysOnTop === true ? (++that.stickZIndex) : (++that.zIndex);
+                document.body.appendChild(layxShade);
+                layxShade.onclick = function (e) {
+                    e = e || window.event;
+                    that.flicker(config.id);
+                    e.stopPropagation();
+                }
+            }
+
+            // 创建layx-window
+            var layxWindow = document.createElement("div");
+            layxWindow.setAttribute("id", "layx-" + config.id);
+            layxWindow.classList.add("layx-window");
+            layxWindow.classList.add("layx-flexbox");
+            if (config.shadow === true) {
+                layxWindow.style.setProperty("box-shadow", "1px 1px 24px rgba(0, 0, 0, .3)");
+                layxWindow.style.setProperty("-moz-box-shadow", "1px 1px 24px rgba(0, 0, 0, .3)");
+                layxWindow.style.setProperty("-webkit-box-shadow", "1px 1px 24px rgba(0, 0, 0, .3)");
+            }
+
+            var _minWidth = Utils.compileLayxWidthOrHeight("width", config.minWidth, that.defaults.minWidth);
+            var _minHeight = Utils.compileLayxWidthOrHeight("height", config._minHeight, that.defaults.minHeight);
+
+            var _width = Utils.compileLayxWidthOrHeight("width", config.width, that.defaults.width);
+            _width = Math.max(_width, _minWidth);
+
+            var _height = Utils.compileLayxWidthOrHeight("height", config.height, that.defaults.height);
+            _height = Math.max(_height, _minHeight);
+
+            var _position = Utils.compileLayxPosition(_width, _height, config.position);
+
+            layxWindow.style.zIndex = config.alwaysOnTop === true ? (++that.stickZIndex) : (++that.zIndex);
+            layxWindow.style.width = _width + "px";
+            layxWindow.style.height = _height + "px";
+            layxWindow.style.minWidth = _minWidth + "px";
+            layxWindow.style.minHeight = _minHeight + "px";
+            layxWindow.style.top = _position.top + "px";
+            layxWindow.style.left = _position.left + "px";
+            if (config.border !== false) {
+                layxWindow.style.setProperty("border", config.border === true ? '1px solid #3baced' : config.border);
+            }
+            layxWindow.style.backgroundColor = config.bgColor;
+            layxWindow.style.opacity = Utils.isNumber(config.opacity) ? config.opacity : 1;
+            document.body.appendChild(layxWindow);
+
+            if (config.control === true) {
+                // 创建控制栏
+                var controlBar = document.createElement("div");
+                controlBar.classList.add("layx-control-bar");
+                controlBar.classList.add("layx-flexbox");
+                config.controlStyle && controlBar.setAttribute("style", config.controlStyle);
+                layxWindow.appendChild(controlBar);
+
+                // 创建窗口默认图标
+                if (config.icon !== false) {
+                    // 创建控制栏左边容器
+                    var leftBar = document.createElement("div");
+                    leftBar.classList.add("layx-left-bar");
+                    leftBar.classList.add("layx-flexbox");
+                    leftBar.classList.add("layx-flex-vertical");
+                    controlBar.appendChild(leftBar);
+
+                    var windowIcon = document.createElement("div");
+                    windowIcon.classList.add("layx-icon");
+                    windowIcon.classList.add("layx-window-icon");
+                    windowIcon.innerHTML = config.icon === true ? '<svg class="layx-iconfont" aria-hidden="true"><use xlink:href="#layx-icon-default-icon"></use></svg>' : config.icon;
+                    leftBar.appendChild(windowIcon);
+                }
+
+                // 窗口标题
+                var title = document.createElement("div");
+                title.classList.add("layx-title");
+                title.classList.add("layx-flexauto");
+                title.classList.add("layx-flexbox");
+                title.classList.add("layx-flex-vertical");
+                if (config.allowControlDbclick === true) {
+                    title.ondblclick = function (e) {
+                        e = e || window.event;
+                        if (winform.status === "normal") {
+                            that.max(config.id);
+                        }
+                        else {
+                            that.restore(config.id);
+                        }
+                        e.stopPropagation();
+                    }
+                }
+                controlBar.appendChild(title);
+                // 标题标签
+                var label = document.createElement("label");
+                label.innerHTML = config.title;
+                title.setAttribute("title", label.innerText);
+                title.appendChild(label);
+
+                // 创建控制栏右边容器
+                var rightBar = document.createElement("div");
+                rightBar.classList.add("layx-right-bar");
+                rightBar.classList.add("layx-flexbox");
+                controlBar.appendChild(rightBar);
+
+                // 创建用户自定义按钮
+                var customMenu = document.createElement("div");
+                customMenu.classList.add("layx-custom-menus");
+                customMenu.classList.add("layx-flexbox");
+                rightBar.appendChild(customMenu);
+
+                if (config.minimizable === true || config.closable === true || config.maximizable === true || config.stickable === true) {
+                    // 创建内置按钮
+                    var inlayMenu = document.createElement("div");
+                    inlayMenu.classList.add("layx-inlay-menus");
+                    inlayMenu.classList.add("layx-flexbox");
+                    rightBar.appendChild(inlayMenu);
+
+                    if (config.stickable === true || (config.alwaysOnTop === true && config.stickable)) {
+                        // 创建置顶按钮
+                        var stickMenu = document.createElement("div");
+                        stickMenu.classList.add("layx-icon");
+                        stickMenu.classList.add("layx-flexbox");
+                        stickMenu.classList.add("layx-flex-center");
+                        stickMenu.classList.add("layx-stick-menu");
+                        config.alwaysOnTop === true ? stickMenu.setAttribute("title", "取消置顶") : stickMenu.setAttribute("title", "置顶");
+                        config.alwaysOnTop === true && stickMenu.setAttribute("data-enable", "1");
+                        stickMenu.innerHTML = '<svg class="layx-iconfont" aria-hidden="true"><use xlink:href="#layx-icon-stick"></use></svg>';
+                        inlayMenu.appendChild(stickMenu);
+                    }
+
+                    if (config.minimizable === true) {
+                        // 创建最小化按钮
+                        var minMenu = document.createElement("div");
+                        minMenu.classList.add("layx-icon");
+                        minMenu.classList.add("layx-flexbox");
+                        minMenu.classList.add("layx-flex-center");
+                        minMenu.classList.add("layx-min-menu");
+                        minMenu.setAttribute("title", "最小化");
+                        minMenu.setAttribute("data-menu", "min");
+                        minMenu.innerHTML = '<svg class="layx-iconfont" aria-hidden="true"><use xlink:href="#layx-icon-min"></use></svg>';
+                        minMenu.onclick = function (e) {
+                            e = e || window.event;
+                            if (!this.classList.contains("layx-restore-menu")) {
+                                that.min(config.id);
+                            }
+                            else {
+                                that.restore(config.id);
+                            }
+                            e.stopPropagation();
+                        }
+                        inlayMenu.appendChild(minMenu);
+                    }
+
+                    if (config.maximizable === true) {
+                        // 创建最大化按钮
+                        var maxMenu = document.createElement("div");
+                        maxMenu.classList.add("layx-icon");
+                        maxMenu.classList.add("layx-flexbox");
+                        maxMenu.classList.add("layx-flex-center");
+                        maxMenu.classList.add("layx-max-menu");
+                        maxMenu.setAttribute("title", "最大化");
+                        maxMenu.setAttribute("data-menu", "max");
+                        maxMenu.innerHTML = '<svg class="layx-iconfont" aria-hidden="true"><use xlink:href="#layx-icon-max"></use></svg>';
+                        maxMenu.onclick = function (e) {
+                            e = e || window.event;
+                            if (!this.classList.contains("layx-restore-menu")) {
+                                that.max(config.id);
+                            }
+                            else {
+                                that.restore(config.id);
+                            }
+                            e.stopPropagation();
+                        }
+                        inlayMenu.appendChild(maxMenu);
+                    }
+
+                    if (config.closable === true) {
+                        // 创建关闭按钮
+                        var destroyMenu = document.createElement("div");
+                        destroyMenu.classList.add("layx-icon");
+                        destroyMenu.classList.add("layx-flexbox");
+                        destroyMenu.classList.add("layx-flex-center");
+                        destroyMenu.classList.add("layx-destroy-menu");
+                        destroyMenu.setAttribute("title", "关闭");
+                        destroyMenu.innerHTML = '<svg class="layx-iconfont" aria-hidden="true"><use xlink:href="#layx-icon-destroy"></use></svg>';
+                        destroyMenu.onclick = function (e) {
+                            e = e || window.event;
+                            that.destroy(config.id);
+                            e.stopPropagation();
+                        }
+                        inlayMenu.appendChild(destroyMenu);
+                    }
+                }
+            }
+
+            //创建内容容器
+            var main = document.createElement("div");
+            main.classList.add("layx-main");
+            main.classList.add("layx-flexauto");
+            layxWindow.appendChild(main);
+
+            // 创建内容遮罩效果
+            var contentShade = document.createElement("div");
+            contentShade.classList.add("layx-content-shade");
+            contentShade.classList.add("layx-flexbox");
+            contentShade.classList.add("layx-flex-center");
+            contentShade.innerHTML = config.loaddingText;
+            main.appendChild(contentShade);
+
+            switch (config.type) {
+                case "html":
+                default:
+                    // 创建html内容
+                    var html = document.createElement("div");
+                    html.classList.add("layx-html");
+                    html.classList.add("layx-flexbox");
+                    html.innerHTML = config.content;
+                    main.appendChild(html);
+                    main.removeChild(contentShade);
+                case "url":
+                    var iframe = document.createElement("iframe");
+                    iframe.setAttribute("id", "layx-" + config.id + "-iframe");
+                    iframe.classList.add("layx-iframe");
+                    iframe.classList.add("layx-flexbox");
+                    iframe.setAttribute("allowtransparency", "true");
+                    iframe.setAttribute("frameborder", "0");
+                    iframe.setAttribute("scrolling", "auto");
+                    iframe.setAttribute("allowfullscreen", "");
+                    iframe.setAttribute("mozallowfullscreen", "");
+                    iframe.setAttribute("webkitallowfullscreen", "");
+                    iframe.src = config.url || 'about:blank';
+
+                    var iframeTitle = "";
+                    // ie9+
+                    if (iframe.attachEvent) {
+                        iframe.attachEvent("onreadystatechange", function () {
+                            if (iframe.readyState === "complete" || iframe.readyState == "loaded") {
+                                iframe.detachEvent("onreadystatechange", arguments.callee);
+                                try {
+                                    if (config.useFrameTitle === true) {
+                                        // 获取iframe标题
+                                        iframeTitle = iframe.contentDocument.querySelector("title").innerText;
+                                        that.setTitle(config.id, iframeTitle);
+                                    }
+                                    if (config.focusable === true) {
+                                        // 添加iframe点击事件
+                                        iframe.contentWindow.onclick = function (e) {
+                                            var _slf = this.self;
+                                            e = e || iframe.contentWindow.event;
+                                            if (_slf !== over && _slf.frameElement && _slf.frameElement.tagName === "IFRAME") {
+                                                // 获取窗口dom对象
+                                                var layxWindow = _slf.frameElement.parentNode.parentElement;
+                                            }
+                                            e.stopPropagation();
+                                        }
+                                    }
+                                } catch (e) {
+                                    console.warn(e);
+                                }
+                                main.removeChild(contentShade);
+                            }
+                        });
+                    }
+                    // chrome,foxfire,opera...
+                    else {
+                        iframe.addEventListener("load", function () {
+                            this.removeEventListener("load", arguments.call, false);
+                            try {
+                                if (config.useFrameTitle === true) {
+                                    // 获取iframe标题
+                                    iframeTitle = iframe.contentDocument.querySelector("title").innerText;
+                                    that.setTitle(config.id, iframeTitle);
+                                }
+                                if (config.focusable === true) {
+                                    // 添加iframe点击事件
+                                    iframe.contentWindow.onclick = function (e) {
+                                        var _slf = this.self;
+                                        e = e || iframe.contentWindow.event;
+                                        if (_slf !== over && _slf.frameElement && _slf.frameElement.tagName === "IFRAME") {
+                                            // 获取窗口dom对象
+                                            var layxWindow = _slf.frameElement.parentNode.parentElement;
+                                        }
+                                        e.stopPropagation();
+                                    }
+                                }
+                            } catch (e) {
+                                console.warn(e);
+                            }
+                            main.removeChild(contentShade);
+                        }, false);
+                    }
+                    main.appendChild(iframe);
+                    break;
+            }
+
+            // 创建拖曳容器
+            var resize = document.createElement("div");
+            resize.classList.add("layx-resizes");
+            layxWindow.appendChild(resize);
+
+            // 创建8个方向拖曳
+            // 上
+            var resizeTop = document.createElement("div");
+            resizeTop.classList.add("layx-resize-top");
+            resize.appendChild(resizeTop);
+            // 右
+            var resizeRight = document.createElement("div");
+            resizeRight.classList.add("layx-resize-right");
+            resize.appendChild(resizeRight);
+            //下
+            var resizeBottom = document.createElement("div");
+            resizeBottom.classList.add("layx-resize-bottom");
+            resize.appendChild(resizeBottom);
+            // 左
+            var resizeLeft = document.createElement("div");
+            resizeLeft.classList.add("layx-resize-left");
+            resize.appendChild(resizeLeft);
+            // 左上
+            var resizeLeftTop = document.createElement("div");
+            resizeLeftTop.classList.add("layx-resize-left-top");
+            resize.appendChild(resizeLeftTop);
+            //右上
+            var resizeRightTop = document.createElement("div");
+            resizeRightTop.classList.add("layx-resize-right-top");
+            resize.appendChild(resizeRightTop);
+            //左下
+            var resizeLeftBottom = document.createElement("div");
+            resizeLeftBottom.classList.add("layx-resize-left-bottom");
+            resize.appendChild(resizeLeftBottom);
+            // 右下
+            var resizeRightBottom = document.createElement("div");
+            resizeRightBottom.classList.add("layx-resize-right-bottom");
+            resize.appendChild(resizeRightBottom);
+
+            // 存储窗口Id
+            winform.id = config.id;
+            // 存储窗口domId
+            winform.windowId = layxWindow.getAttribute("id");
+            // 存储窗口dom对象
+            winform.window = layxWindow;
+            // 存储窗口创建时间
+            winform.createDate = new Date();
+            // 存储窗口状态
+            winform.status = "normal";
+            // 存储窗口类型
+            winform.type = config.type;
+            // 存储窗口初始化区域信息
+            winform.area = {
+                width: _width,
+                height: _height,
+                minWidth: _minWidth,
+                minHeight: _minHeight,
+                top: _position.top,
+                left: _position.left
+            };
+            // 存储置顶状态
+            winform.isStick = config.alwaysOnTop === true;
+            // 存储窗口层级别
+            winform.zIndex = config.alwaysOnTop === true ? that.stickZIndex : that.zIndex;
+
+            // 存储窗口对象
+            that.windows[config.id] = winform;
+            return winform;
+        },
+        // 设置标题
+        setTitle: function (id, content, useFrameTitle) {
+            var windowId = "layx-" + id,
+                layxWindow = document.getElementById(windowId);
+            if (layxWindow) {
+                var title = layxWindow.querySelector(".layx-title");
+                if (title) {
+                    // 获取iframe标题
+                    if (useFrameTitle === true) {
+                        var iframe = layxWindow.querySelector("#" + id + "-iframe");
+                        try {
+                            content = iframe.contentDocument.querySelector("title").innerText;
+                        } catch (e) { }
+                    }
+                    var label = layxWindow.querySelector(".layx-title label");
+                    if (label) {
+                        label.innerHTML = content;
+                        title.setAttribute("title", label.innerHTML);
+                    }
+                }
+            }
+        },
+        // 恢复窗口
+        restore: function (id) {
+            var that = this,
+                windowId = "layx-" + id,
+                layxWindow = document.getElementById(windowId),
+                winform = that.windows[id];
+            if (layxWindow && winform) {
+                var area = winform.area;
+                if (winform.status === "max") {
+                    // 恢复滚动条
+                    var scrollStatus = that.scrollStatus;
+                    document.body.style.overflowX = scrollStatus.x;
+                    document.body.style.overflowY = scrollStatus.y;
+                    // 设置窗口信息
+                    layxWindow.style.top = area.top + "px";
+                    layxWindow.style.left = area.left + "px";
+                    layxWindow.style.width = area.width + "px";
+                    layxWindow.style.height = area.height + "px";
+                    // 存储状态
+                    winform.status = "normal";
+                    // 更新图标
+                    var restoreMenu = layxWindow.querySelector(".layx-restore-menu[data-menu='max']");
+                    if (restoreMenu) {
+                        restoreMenu.classList.remove("layx-restore-menu");
+                        restoreMenu.classList.add("layx-max-menu");
+                        restoreMenu.setAttribute("title", "最大化");
+                        restoreMenu.innerHTML = '<svg class="layx-iconfont" aria-hidden="true"><use xlink:href="#layx-icon-max"></use></svg>';
+                    }
+                    // 显示拖曳
+                    var resizePanel = layxWindow.querySelector(".layx-resizes");
+                    if (resizePanel) {
+                        resizePanel.removeAttribute("data-enable");
+                    }
+                }
+                if (winform.status === "min") {
+                    if (winform.minBefore === "normal") {
+                        // 设置窗口信息
+                        layxWindow.style.top = area.top + "px";
+                        layxWindow.style.left = area.left + "px";
+                        layxWindow.style.width = area.width + "px";
+                        layxWindow.style.height = area.height + "px";
+                        // 存储状态
+                        winform.status = "normal";
+                        // 更新图标
+                        var restoreMenu = layxWindow.querySelector(".layx-restore-menu[data-menu='min']");
+                        if (restoreMenu) {
+                            restoreMenu.classList.remove("layx-restore-menu");
+                            restoreMenu.classList.add("layx-min-menu");
+                            restoreMenu.setAttribute("title", "最小化");
+                            restoreMenu.innerHTML = '<svg class="layx-iconfont" aria-hidden="true"><use xlink:href="#layx-icon-min"></use></svg>';
+                        }
+                    }
+                    else if (winform.minBefore === "max") {
+                        that.max(id);
+                    }
+                    // 更新最小化布局
+                    that.updateMinLayout();
+                }
+            }
+        },
+        // 最小化
+        min: function (id) {
+            var that = this,
+                windowId = "layx-" + id,
+                layxWindow = document.getElementById(windowId),
+                winform = that.windows[id],
+                innertArea = Utils.innerArea();
+            if (layxWindow && winform) {
+                // 存储状态
+                winform.minBefore = winform.status;
+                winform.status = "min";
+                // 更新图标
+                var minMenu = layxWindow.querySelector(".layx-min-menu");
+                if (minMenu) {
+                    minMenu.classList.remove("layx-max-menu");
+                    minMenu.classList.add("layx-restore-menu");
+                    minMenu.setAttribute("title", "恢复");
+                    minMenu.innerHTML = '<svg class="layx-iconfont" aria-hidden="true"><use xlink:href="#layx-icon-restore"></use></svg>';
+                }
+                // 隐藏拖曳
+                var resizePanel = layxWindow.querySelector(".layx-resizes");
+                if (resizePanel) {
+                    resizePanel.setAttribute("data-enable", "0");
+                }
+
+                // 更新最大化图标
+                var restoreMenu = layxWindow.querySelector(".layx-restore-menu[data-menu='max']");
+                if (restoreMenu) {
+                    restoreMenu.classList.remove("layx-restore-menu");
+                    restoreMenu.classList.add("layx-max-menu");
+                    restoreMenu.setAttribute("title", "最大化");
+                    restoreMenu.innerHTML = '<svg class="layx-iconfont" aria-hidden="true"><use xlink:href="#layx-icon-max"></use></svg>';
+                }
+                // 克隆一份
+                var _winform = layxDeepClone({}, winform);
+                delete that.windows[id];
+                that.windows[id] = _winform;
+                // 更新最小化布局
+                that.updateMinLayout();
+            }
+        },
+        // 更新最小化布局
+        updateMinLayout: function () {
+            var that = this,
+                windows = that.windows,
+                innertArea = Utils.innerArea(),
+                paddingLeft = 10,
+                paddingBottom = 10,
+                widthByMinStatu = 220,
+                stepIndex = 0,
+                lineMaxCount = Math.floor(innertArea.width / (widthByMinStatu + paddingLeft));
+            for (var id in windows) {
+                var winform = windows[id],
+                    layxWindow = document.getElementById("layx-" + id);
+                if (layxWindow && winform.status === "min") {
+                    var control = layxWindow.querySelector(".layx-control-bar");
+                    if (control) {
+                        var heightByMinStatus = control.offsetHeight;
+                        layxWindow.classList.add("layx-min-statu");
+                        // 设置最小化区域
+                        layxWindow.style.width = widthByMinStatu + 'px';
+                        layxWindow.style.height = heightByMinStatus + 'px';
+                        layxWindow.style.top = innertArea.height - (Math.floor(stepIndex / lineMaxCount) + 1) * (heightByMinStatus + paddingBottom) + 'px';
+                        layxWindow.style.left = stepIndex % lineMaxCount * (widthByMinStatu + paddingLeft) + paddingLeft + 'px';
+                        stepIndex++;
+                    }
+                }
+            }
+        },
+        // 最大化
+        max: function (id) {
+            var that = this,
+                windowId = "layx-" + id,
+                layxWindow = document.getElementById(windowId),
+                winform = that.windows[id],
+                innertArea = Utils.innerArea();
+            if (layxWindow && winform) {
+                // 隐藏滚动条
+                document.body.style.overflow = "hidden";
+                // 设置窗口信息
+                layxWindow.style.top = 0;
+                layxWindow.style.left = 0;
+                layxWindow.style.width = innertArea.width + "px";
+                layxWindow.style.height = innertArea.height + "px";
+                // 存储状态
+                winform.status = "max";
+                // 更新图标
+                var maxMenu = layxWindow.querySelector(".layx-max-menu");
+                if (maxMenu) {
+                    maxMenu.classList.remove("layx-max-menu");
+                    maxMenu.classList.add("layx-restore-menu");
+                    maxMenu.setAttribute("title", "恢复");
+                    maxMenu.innerHTML = '<svg class="layx-iconfont" aria-hidden="true"><use xlink:href="#layx-icon-restore"></use></svg>';
+                }
+                // 隐藏拖曳
+                var resizePanel = layxWindow.querySelector(".layx-resizes");
+                if (resizePanel) {
+                    resizePanel.setAttribute("data-enable", "0");
+                }
+
+                // 更新最小化图标
+                var restoreMenu = layxWindow.querySelector(".layx-restore-menu[data-menu='min']");
+                if (restoreMenu) {
+                    restoreMenu.classList.remove("layx-restore-menu");
+                    restoreMenu.classList.add("layx-min-menu");
+                    restoreMenu.setAttribute("title", "最小化");
+                    restoreMenu.innerHTML = '<svg class="layx-iconfont" aria-hidden="true"><use xlink:href="#layx-icon-min"></use></svg>';
+                }
+            }
+        },
+        // 销毁
+        destroy: function (id) {
+            var that = this,
+                windowId = "layx-" + id,
+                layxWindow = document.getElementById(windowId),
+                layxShade = document.getElementById(windowId + '-shade'),
+                winform = that.windows[id];
+            if (layxWindow && winform) {
+                layxWindow.parentElement.removeChild(layxWindow);
+                delete that.windows[id];
+            }
+            if (layxShade) {
+                layxShade.parentElement.removeChild(layxShade);
+            }
+        },
+        // 闪烁窗口
+        flicker: function (id) {
+            var that = this,
+                flicker,
+                windowId = "layx-" + id,
+                layxWindow = document.getElementById(windowId);
+            if (layxWindow) {
+                if (layxWindow.classList.contains('layx-flicker')) {
+                    layxWindow.classList.remove('layx-flicker');
+                }
+                layxWindow.classList.add('layx-flicker');
+
+                filcker = setTimeout(function () {
+                    layxWindow.classList.remove('layx-flicker');
+                    clearTimeout(filcker);
+                }, 120 * 8);
+            }
+        }
+    };
+
+    // 工具库
+    var Utils = {
+        // 是否boolean类型
+        isBoolean: function (obj) {
+            return typeof obj === "boolean";
+        },
+        // 是否string类型
+        isString: function (obj) {
+            return typeof obj === "string";
+        },
+        // 是否数值类型
+        isNumber: function (obj) {
+            return typeof obj === "number";
+        },
+        // 是否数组类型
+        isArray: function (o) {
+            return Object.prototype.toString.call(o) == '[object Array]';
+        },
+        // 是否一个方法类型
+        isFunction: function (func) {
+            return func && Object.prototype.toString.call(func) === '[object Function]';
+        },
+        // 获取包含滚动条的浏览器可视区域
+        innerArea: function () {
+            return { width: window.innerWidth, height: window.innerHeight };
+        },
+        // 解析窗口传入的位置参数，并转化为 {left: top: }对象
+        compileLayxPosition: function (width, height, position) {
+            var that = this,
+                postionOptions = ['ct', 'lt', 'rt', 'lb', 'rb', 'lc', 'tc', 'rc', 'bc'],
+                innerArea = that.innerArea();
+
+            var pos = { top: 0, left: 0 };
+            if (that.isArray(position) && position.length === 2 && that.isNumber(position[0]) && that.isNumber(position[1])) {
+                pos.top = position[0];
+                pos.left = position[1];
+            } else {
+                position = postionOptions.indexOf(position.toString()) > -1 ? position.toString() : 'ct';
+                switch (position) {
+                    case 'ct':
+                        pos.top = (innerArea.height - height) / 2;
+                        pos.left = (innerArea.width - width) / 2;
+                        break;
+                    case 'lt':
+                        pos.top = 0;
+                        pos.left = 0;
+                        break;
+                    case 'rt':
+                        pos.top = 0;
+                        pos.left = innerArea.width - width;
+                        break;
+                    case 'lb':
+                        pos.top = innerArea.height - height;
+                        pos.left = 0;
+                        break;
+                    case 'rb':
+                        pos.top = innerArea.height - height;
+                        pos.left = innerArea.width - width;
+                        break;
+                    case 'lc':
+                        pos.left = 0;
+                        pos.top = (innerArea.height - height) / 2;
+                        break;
+                    case 'tc':
+                        pos.top = 0;
+                        pos.left = (innerArea.width - width) / 2;
+                        break;
+                    case 'rc':
+                        pos.left = innerArea.width - width;
+                        pos.top = (innerArea.height - height) / 2;
+                        break;
+                    case 'bc':
+                        pos.top = innerArea.height - height;
+                        pos.left = (innerArea.width - width) / 2;
+                        break;
+                }
+            }
+            return pos;
+        },
+        // 解析传入的宽度或高度
+        compileLayxWidthOrHeight: function (type, widthOrHeight, errorValue) {
+            var that = this,
+                innerArea = that.innerArea();
+            if (/(^[1-9]\d*$)/.test(widthOrHeight)) {
+                return Number(widthOrHeight);
+            }
+            if (/^(100|[1-9]?\d(\.\d\d?)?)%$/.test(widthOrHeight)) {
+                var value = Number(widthOrHeight.toString().replace('%', ''));
+                if (type === "width") {
+                    return innerArea.width * (value / 100);
+                }
+                if (type === "height") {
+                    return innerArea.height * (value / 100);
+                }
+            }
+            return errorValue;
+        }
+    };
+
+    win.layx = {
+        // 打开窗口
+        open: function (options) {
+            var winform = Layx.create(options);
+            return winform;
+        },
+        // 获取窗口列表
+        windows: function () {
+            return Layx.windows;
+        },
+        // 关闭窗口
+        destroy: function (id) {
+            Layx.destroy(id);
+        },
+        // 窗口最大化
+        max: function (id) {
+            Layx.max(id);
+        },
+        // 设置标题
+        setTitle: function (id, title, useFrameTitle) {
+            Layx.setTitle(id, title, useFrameTitle);
+        },
+        // 闪烁窗口
+        flicker: function (id) {
+            Layx.flicker(id);
+        },
+        // 恢复窗口
+        restore: function (id) {
+            Layx.restore(id);
+        }
+    };
+})(top, window, self);
+
+; !(function (global) {
+    var extend,
+        _extend,
+        _isObject;
+
+    _isObject = function (o) {
+        return Object.prototype.toString.call(o) === '[object Object]';
+    }
+
+    _extend = function self(destination, source) {
+        var property;
+        for (property in destination) {
+            if (destination.hasOwnProperty(property)) {
+
+                if (_isObject(destination[property]) && _isObject(source[property])) {
+                    self(destination[property], source[property]);
+                }
+
+                if (source.hasOwnProperty(property)) {
+                    continue;
+                } else {
+                    source[property] = destination[property];
+                }
+            }
+        }
+    }
+
+    extend = function () {
+        var arr = arguments,
+            result = {},
+            i;
+        if (!arr.length) return {};
+        for (i = arr.length - 1; i >= 0; i--) {
+            if (_isObject(arr[i])) {
+                _extend(arr[i], result);
+            }
+        }
+        arr[0] = result;
+        return result;
+    }
+    global.layxDeepClone = extend;
+})(window);
+;
+!
+    (function (window) {
+        var svgSprite = '<svg><symbol id="layx-icon-restore" viewBox="0 0 1157 1024"><path d="M1016.52185234 724.44050175L833.87364805 724.44050175 833.87364805 898.52098643 833.87364805 960.05279112 833.87364805 961.2211168 772.34184336 961.2211168 772.34184336 960.05279112 124.31068789 960.05279112 124.31068789 961.2211168 62.7788832 961.2211168 62.7788832 960.05279112 62.7788832 898.52098643 62.7788832 360.31241885 62.7788832 298.78061416 124.31068789 298.78061416 298.78061416 298.78061416 298.78061416 62.7788832 303.06447442 62.7788832 360.31241885 62.7788832 1016.52185234 62.7788832 1074.15923838 62.7788832 1078.05365615 62.7788832 1078.05365615 662.90869795 1078.05365615 724.44050175 1016.52185234 724.44050175ZM124.31068789 898.52098643L772.34184336 898.52098643 772.34184336 724.44050175 772.34184336 662.90869795 772.34184336 360.31241885 124.31068789 360.31241885 124.31068789 898.52098643ZM1016.52185234 124.31068789L360.31241885 124.31068789 360.31241885 298.78061416 772.34184336 298.78061416 833.87364805 298.78061416 833.87364805 360.31241885 833.87364805 662.90869795 1016.52185234 662.90869795 1016.52185234 124.31068789Z"  ></path></symbol><symbol id="layx-icon-default-icon" viewBox="0 0 1024 1024"><path d="M891.88743395 61.93952995L132.11256605 61.93952995c-38.92547129 0-70.60411733 31.65534435-70.60411734 70.5924665L61.50844871 891.46800355c0 38.91382045 31.67864605 70.59246649 70.60411734 70.5924665l759.7748679 0c38.92547129 0 70.60411733-31.67864605 70.60411734-70.5924665L962.49155129 132.53199645C962.49155129 93.59487431 930.81290525 61.93952995 891.88743395 61.93952995zM844.02576498 142.29540409c16.71896178 0 30.25724302 13.54993209 30.25724302 30.26889386 0 16.70731093-13.53828125 30.25724302-30.25724302 30.25724303s-30.25724302-13.54993209-30.25724303-30.25724303C813.76852195 155.84533618 827.3068032 142.29540409 844.02576498 142.29540409zM735.60300658 142.29540409c16.71896178 0 30.25724302 13.54993209 30.25724302 30.26889386 0 16.70731093-13.53828125 30.25724302-30.25724302 30.25724303s-30.25724302-13.54993209-30.25724303-30.25724303C705.34576355 155.84533618 718.8840448 142.29540409 735.60300658 142.29540409zM881.80945351 881.37837227L142.19054649 881.37837227 142.19054649 277.92288427l739.60725618 0L881.79780267 881.37837227zM758.85809209 638.26020125l-0.01165084-180.19196018 90.09598008 90.09598008L758.85809209 638.26020125zM265.15355875 638.26020125l-90.09598008-90.0959801 90.08432924-90.08432924L265.15355875 638.26020125z"  ></path></symbol><symbol id="layx-icon-min" viewBox="0 0 1024 1024"><path d="M65.23884 456.152041 958.760137 456.152041l0 111.695918L65.23884 567.847959 65.23884 456.152041z"  ></path></symbol><symbol id="layx-icon-max" viewBox="0 0 1024 1024"><path d="M75.74912227 948.24738475L75.74912227 75.75145131l872.50059037 0 0 872.49593344L75.74912227 948.24738475zM839.18786674 184.81446115L184.81213326 184.81446115l0 654.37573462 654.37573461 0L839.18786674 184.81446115z"  ></path></symbol><symbol id="layx-icon-destroy" viewBox="0 0 1024 1024"><path d="M933.89254819 139.71606348L884.23129279 90.08990363 511.96490363 462.39138834 140.40044113 90.82692583 90.84447403 140.34779656 462.40893653 511.91225907 90.10745181 884.2137446 139.73361166 933.875 512.03509637 561.53841892 883.59955887 933.10288141 933.15552597 883.58201068 561.59106347 512.01754819Z"  ></path></symbol><symbol id="layx-icon-stick" viewBox="0 0 1024 1024"><path d="M863.92416068 184.3484319H160.07583932a50.27488011 50.27488011 0 0 1 0-100.5497602h703.84832136a50.27488011 50.27488011 0 0 1 0 100.5497602z m-50.27488007 804.39808157a50.22460522 50.22460522 0 0 1-35.69516489-14.57971521L512 708.21268254l-265.95411572 265.95411572A50.27488011 50.27488011 0 0 1 160.07583932 938.47163339V335.1730722a50.27488011 50.27488011 0 0 1 50.27488007-50.27488013h603.29856122a50.27488011 50.27488011 0 0 1 50.27488007 50.27488013v603.29856119a50.27488011 50.27488011 0 0 1-50.27488007 50.27488008z m-301.64928061-402.19904078a50.22460522 50.22460522 0 0 1 35.69516487 14.57971522L763.37440051 816.80642355V385.44795228H260.62559949v431.86122007l215.67923564-215.67923564A50.27488011 50.27488011 0 0 1 512 586.54747269z"  ></path></symbol></svg>';
+        var script = function () { var scripts = document.getElementsByTagName("script"); return scripts[scripts.length - 1] }();
+        var shouldInjectCss = script.getAttribute("data-injectcss");
+        var ready = function (fn) {
+            if (document.addEventListener) {
+                if (~["complete", "loaded", "interactive"].indexOf(document.readyState)) { setTimeout(fn, 0) } else {
+                    var loadFn = function () {
+                        document.removeEventListener("DOMContentLoaded", loadFn, false);
+                        fn()
+                    };
+                    document.addEventListener("DOMContentLoaded", loadFn, false)
+                }
+            } else if (document.attachEvent) { IEContentLoaded(window, fn) }
+
+            function IEContentLoaded(w, fn) {
+                var d = w.document,
+                    done = false,
+                    init = function () {
+                        if (!done) {
+                            done = true;
+                            fn()
+                        }
+                    };
+                var polling = function () {
+                    try { d.documentElement.doScroll("left") } catch (e) { setTimeout(polling, 50); return }
+                    init()
+                };
+                polling();
+                d.onreadystatechange = function () {
+                    if (d.readyState == "complete") {
+                        d.onreadystatechange = null;
+                        init()
+                    }
+                }
+            }
+        };
+        var before = function (el, target) { target.parentNode.insertBefore(el, target) };
+        var prepend = function (el, target) { if (target.firstChild) { before(el, target.firstChild) } else { target.appendChild(el) } };
+
+        function appendSvg() {
+            var div, svg;
+            div = document.createElement("div");
+            div.innerHTML = svgSprite;
+            svgSprite = null;
+            svg = div.getElementsByTagName("svg")[0];
+            if (svg) {
+                svg.setAttribute("aria-hidden", "true");
+                svg.style.position = "absolute";
+                svg.style.width = 0;
+                svg.style.height = 0;
+                svg.style.overflow = "hidden";
+                prepend(svg, document.body)
+            }
+        }
+        if (shouldInjectCss && !window.__iconfont__svg__cssinject__) { window.__iconfont__svg__cssinject__ = true; try { document.write("<style>.svgfont {display: inline-block;width: 1em;height: 1em;fill: currentColor;vertical-align: -0.1em;font-size:16px;}</style>") } catch (e) { console && console.log(e) } }
+        ready(appendSvg)
+    })(window);
