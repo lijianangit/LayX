@@ -763,6 +763,10 @@
     };
 
     win.layx = {
+        // 版本
+        v: (function () {
+            return Layx.version;
+        })(),
         // 打开窗口
         open: function (options) {
             var winform = Layx.create(options);
