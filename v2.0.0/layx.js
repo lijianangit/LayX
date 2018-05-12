@@ -830,6 +830,13 @@
                     that.updateMinLayout();
                 }
 
+                // 克隆一份
+                var _winform = layxDeepClone({}, winform);
+                delete that.windows[id];
+                that.windows[id] = _winform;
+                // 更新最小化布局
+                that.updateMinLayout();
+
                 // 绑定恢复之后事件
                 if (Utils.isFunction(winform.event.onrestore.after)) {
                     winform.event.onrestore.after(layxWindow, winform);
@@ -990,6 +997,13 @@
                     restoreMenu.innerHTML = '<svg class="layx-iconfont" aria-hidden="true"><use xlink:href="#layx-icon-min"></use></svg>';
                 }
 
+                // 克隆一份
+                var _winform = layxDeepClone({}, winform);
+                delete that.windows[id];
+                that.windows[id] = _winform;
+                // 更新最小化布局
+                that.updateMinLayout();
+
                 // 绑定最大化之后事件
                 if (Utils.isFunction(winform.event.onmax.after)) {
                     winform.event.onmax.after(layxWindow, winform);
@@ -1023,6 +1037,9 @@
                 if (layxShade) {
                     layxShade.parentElement.removeChild(layxShade);
                 }
+
+                // 更新最小化布局
+                that.updateMinLayout();
 
                 // 关闭之后事件
                 if (Utils.isFunction(winform.event.ondestroy.after)) {
