@@ -909,7 +909,10 @@
                         } else if (handle.innerArea.width - moveMouseCoord.x > handle.winform.area.width / 2 && moveMouseCoord.x >= handle.innerArea.width - handle.winform.area.width) {
                             _left = moveMouseCoord.x - handle.winform.area.width / 2;
                         }
+
                         // 更新现在窗口坐标信息
+                        _top = 0;
+                        handle.winform.area.top = 0;
                         handle.winform.area.left = _left;
                         // 恢复窗口
                         Layx.restore(handle.winform.id);
