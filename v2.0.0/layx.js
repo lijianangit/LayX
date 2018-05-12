@@ -67,6 +67,18 @@
             focusable: true, // 是否启用iframe页面点击置顶，只支持非跨域iframe
             alwaysOnTop: false, // 是否置顶
             allowControlDbclick: true,    // 允许控制栏双击切换窗口大小
+            // 事件
+            event: {
+                // 加载事件
+                onload: {
+                    // 加载之前
+                    before: function (layxWindow, winform) {
+                    },
+                    // 加载之后
+                    after: function (layxWindow, winform) {
+                    }
+                }
+            }
         },
         // 普通层级别
         zIndex: 10000000,
@@ -142,6 +154,53 @@
             layxWindow.style.backgroundColor = config.bgColor;
             layxWindow.style.opacity = Utils.isNumber(config.opacity) ? config.opacity : 1;
             document.body.appendChild(layxWindow);
+
+            // ================ 存储对象信息
+            // 存储窗口Id
+            winform.id = config.id;
+            // 存储窗口domId
+            winform.windowId = layxWindow.getAttribute("id");
+            // 存储窗口dom对象
+            winform.window = layxWindow;
+            // 存储窗口创建时间
+            winform.createDate = new Date();
+            // 存储窗口状态
+            winform.status = "normal";
+            // 存储窗口类型
+            winform.type = config.type;
+            // 存储窗口初始化区域信息
+            winform.area = {
+                width: _width,
+                height: _height,
+                minWidth: _minWidth,
+                minHeight: _minHeight,
+                top: _position.top,
+                left: _position.left
+            };
+            // 存储置顶状态
+            winform.isStick = config.alwaysOnTop === true;
+            // 存储窗口层级别
+            winform.zIndex = config.alwaysOnTop === true ? that.stickZIndex : that.zIndex;
+            // 存储拖动状态
+            winform.movable = config.movable;
+            // 存储拖动限制配置信息
+            winform.moveLimit = config.moveLimit;
+            // 存储拖曳状态
+            winform.resizable = config.resizable;
+            // 存储拖曳限制配置信息
+            winform.resizeLimit = config.resizeLimit;
+            // 存储内置按钮操作信息
+            winform.stickable = config.stickable;
+            winform.minable = config.minable;
+            winform.maxable = config.maxable;
+            winform.restorable = config.restorable;
+            winform.closable = config.closable;
+            // 存储当前window
+            winform.currentWindow = win;
+            // 存储事件
+            winform.event = config.event;
+
+            // ================ 正式开始创建内容
 
             if (config.control === true) {
                 // 创建控制栏
@@ -223,6 +282,13 @@
                         config.alwaysOnTop === true ? stickMenu.setAttribute("title", "取消置顶") : stickMenu.setAttribute("title", "置顶");
                         config.alwaysOnTop === true && stickMenu.setAttribute("data-enable", "1");
                         stickMenu.innerHTML = '<svg class="layx-iconfont" aria-hidden="true"><use xlink:href="#layx-icon-stick"></use></svg>';
+                        if (config.stickable === true) {
+                            stickMenu.onclick = function (e) {
+                                e = e || window.event;
+                                that.stickToggle(config.id);
+                                e.stopPropagation();
+                            }
+                        }
                         inlayMenu.appendChild(stickMenu);
                     }
 
@@ -318,6 +384,13 @@
             switch (config.type) {
                 case "html":
                 default:
+                    // 绑定加载之前事件
+                    if (Utils.isFunction(config.event.onload.before)) {
+                        var revel = config.event.onload.before(layxWindow, winform);
+                        if (revel === false) {
+                            return;
+                        }
+                    }
                     // 创建html内容
                     var html = document.createElement("div");
                     html.classList.add("layx-html");
@@ -325,7 +398,21 @@
                     html.innerHTML = config.content;
                     main.appendChild(html);
                     main.removeChild(contentShade);
+
+                    // 绑定加载之后事件
+                    if (Utils.isFunction(config.event.onload.after)) {
+                        config.event.onload.after(layxWindow, winform);
+                    }
+                    break;
                 case "url":
+                    // 绑定加载之前事件
+                    if (Utils.isFunction(config.event.onload.before)) {
+                        var revel = config.event.onload.before(layxWindow, winform);
+                        if (revel === false) {
+                            return;
+                        }
+                    }
+
                     var iframe = document.createElement("iframe");
                     iframe.setAttribute("id", "layx-" + config.id + "-iframe");
                     iframe.classList.add("layx-iframe");
@@ -347,7 +434,7 @@
                                 try {
                                     if (config.useFrameTitle === true) {
                                         // 获取iframe标题
-                                        iframeTitle = iframe.contentDocument.querySelector("title").innerText;
+                                        iframeTitle = iframe.contentWindow.document.querySelector("title").innerText;
                                         that.setTitle(config.id, iframeTitle);
                                     }
                                     if (config.focusable === true) {
@@ -369,6 +456,11 @@
                                     console.warn(e);
                                 }
                                 main.removeChild(contentShade);
+
+                                // 绑定加载之后事件
+                                if (Utils.isFunction(config.event.onload.after)) {
+                                    config.event.onload.after(layxWindow, winform);
+                                }
                             }
                         });
                     }
@@ -379,7 +471,7 @@
                             try {
                                 if (config.useFrameTitle === true) {
                                     // 获取iframe标题
-                                    iframeTitle = iframe.contentDocument.querySelector("title").innerText;
+                                    iframeTitle = iframe.contentWindow.document.querySelector("title").innerText;
                                     that.setTitle(config.id, iframeTitle);
                                 }
                                 if (config.focusable === true) {
@@ -404,6 +496,11 @@
                         }, false);
                     }
                     main.appendChild(iframe);
+                    // 绑定加载之后事件
+                    if (Utils.isFunction(config.event.onload.after)) {
+                        config.event.onload.after(layxWindow, winform);
+                    }
+
                     break;
             }
 
@@ -478,46 +575,6 @@
                 }
             }
 
-            // 存储窗口Id
-            winform.id = config.id;
-            // 存储窗口domId
-            winform.windowId = layxWindow.getAttribute("id");
-            // 存储窗口dom对象
-            winform.window = layxWindow;
-            // 存储窗口创建时间
-            winform.createDate = new Date();
-            // 存储窗口状态
-            winform.status = "normal";
-            // 存储窗口类型
-            winform.type = config.type;
-            // 存储窗口初始化区域信息
-            winform.area = {
-                width: _width,
-                height: _height,
-                minWidth: _minWidth,
-                minHeight: _minHeight,
-                top: _position.top,
-                left: _position.left
-            };
-            // 存储置顶状态
-            winform.isStick = config.alwaysOnTop === true;
-            // 存储窗口层级别
-            winform.zIndex = config.alwaysOnTop === true ? that.stickZIndex : that.zIndex;
-            // 存储拖动状态
-            winform.movable = config.movable;
-            // 存储拖动限制配置信息
-            winform.moveLimit = config.moveLimit;
-            // 存储拖曳状态
-            winform.resizable = config.resizable;
-            // 存储拖曳限制配置信息
-            winform.resizeLimit = config.resizeLimit;
-            // 存储内置按钮操作信息
-            winform.stickable = config.stickable;
-            winform.minable = config.minable;
-            winform.maxable = config.maxable;
-            winform.restorable = config.restorable;
-            winform.closable = config.closable;
-
             // 存储窗口对象
             that.windows[config.id] = winform;
             return winform;
@@ -542,6 +599,21 @@
                         title.setAttribute("title", label.innerHTML);
                     }
                 }
+            }
+        },
+        // 置顶切换
+        stickToggle: function (id) {
+            var that = this,
+                windowId = "layx-" + id,
+                layxWindow = document.getElementById(windowId),
+                winform = that.windows[id];
+            if (layxWindow && winform) {
+                winform.isStick = !winform.isStick;
+                var stickMenu = layxWindow.querySelector(".layx-stick-menu");
+                if (stickMenu) {
+                    stickMenu.setAttribute("data-enable", winform.isStick ? "1" : "0");
+                }
+                that.updateZIndex(id);
             }
         },
         // 恢复窗口
@@ -779,6 +851,44 @@
                     layxWindow.classList.remove('layx-flicker');
                     clearTimeout(filcker);
                 }, 120 * 8);
+            }
+        },
+        // 获取子框架window对象
+        getChildContext: function (id) {
+            var that = this,
+                windowId = "layx-" + id,
+                layxWindow = document.getElementById(windowId),
+                winform = that.windows[id],
+                iframeWindow = null;
+            if (layxWindow && winform && winform.type === "url") {
+                var iframe = layxWindow.querySelector(".layx-iframe");
+                if (iframe) {
+                    try {
+                        iframeWindow = iframe.contentWindow;
+                    } catch (e) { }
+                }
+            }
+            return iframeWindow;
+        },
+        // 获取父框架window对象
+        getParentContext: function (id) {
+            if (id) {
+                var that = this,
+                    windowId = "layx-" + id,
+                    layxWindow = document.getElementById(windowId),
+                    winform = that.windows[id];
+                if (layxWindow && winform) {
+                    // 判断是否是iframe
+                    if (winform.type === "url") {
+                        return winform.currentWindow.parent;
+                    }
+                    else {
+                        return winform.currentWindow;
+                    }
+                }
+            }
+            else {
+                return win.parent;
             }
         }
     };
@@ -1219,6 +1329,10 @@
         windows: function () {
             return Layx.windows;
         },
+        // 获取当前窗口对象
+        getWindow: function (id) {
+            return Layx.windows[id];
+        },
         // 关闭窗口
         destroy: function (id) {
             Layx.destroy(id);
@@ -1246,6 +1360,18 @@
         // 更新最小化布局
         updateMinLayout: function () {
             Layx.updateMinLayout();
+        },
+        // 置顶切换
+        stickToggle: function (id) {
+            Layx.stickToggle(id);
+        },
+        // 获取子框架window对象
+        getChildContext: function (id) {
+            return Layx.getChildContext(id);
+        },
+        // 获取父框架window对象
+        getParentContext: function (id) {
+            return Layx.getParentContext(id);
         }
     };
 })(top, window, self);
