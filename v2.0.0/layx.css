@@ -386,8 +386,10 @@ body.layx-body {
 }
 
 .layx-msg {
-    padding: 8px;
+    color: #000;
     font-size: 15px;
+    padding: 10px;
+    word-break: break-all;
 }
 
 .layx-iframe {
@@ -486,7 +488,7 @@ body.layx-body {
     z-index: 5;
     color: #444;
     font-size: 13px;
-    background: #dfdfdf;
+    background-color: #f1f1f1;
 }
 
 @keyframes layx-flicker {
