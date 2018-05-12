@@ -949,6 +949,7 @@
                 if (mousePreventDefault) {
                     mousePreventDefault.parentElement.removeChild(mousePreventDefault);
                 }
+
                 // 更新窗口位置信息
                 handle.winform.area.top = handle.layxWindow.offsetTop;
                 handle.winform.area.left = handle.layxWindow.offsetLeft;
@@ -960,6 +961,8 @@
 
                 // 判断是否拖到顶部了，顶部自动最大化
                 if (handle.winform.area.top === 0 && handle.winform.status === "normal") {
+                    handle.winform.area.top = handle.defaultArea.top;
+                    handle.winform.area.left = handle.defaultArea.left;
                     Layx.max(handle.winform.id);
                 }
             }
@@ -987,6 +990,8 @@
                         handle.winform = winform;
                         // 存储浏览器可视区域信息
                         handle.innerArea = Utils.innerArea();
+                        // 存储最一开始的位置信息
+                        handle.defaultArea = layxDeepClone({}, winform.area);
                         // 禁止浏览器默认事件
                         e.preventDefault();
                         // 禁止冒泡
