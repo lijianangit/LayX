@@ -392,10 +392,30 @@ body.layx-body {
     word-break: break-all;
 }
 
-.layx-alert, .layx-confirm {
+.layx-alert, .layx-confirm, .layx-prompt {
     font-size: 15px;
     padding: 10px;
     color: #039;
+}
+
+.layx-prompt {
+    width: 100%;
+}
+
+.layx-textarea {
+    display: block;
+    border: 1px solid #dfdfdf;
+    width: 100%;
+    resize: none;
+    height: 60px;
+    margin-top: 8px;
+    padding: 8px;
+    font-size: 15px;
+    color: #000;
+}
+
+.layx-textarea:focus {
+    border: 1px solid #3baced;
 }
 
 .layx-buttons {

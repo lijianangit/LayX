@@ -13,6 +13,7 @@
     <button id="openWin3">消息框</button>
     <button id="openWin4">消息框</button>
     <button id="openWin5">询问框</button>
+    <button id="openWin6">输入框</button>
     <script src="layx.js" type="text/javascript"></script>
     <script type="text/javascript">
         document.getElementById("openWin").onclick = function () {
@@ -44,6 +45,12 @@
         document.getElementById("openWin5").onclick = function () {
             layx.confirm(null, "我是一个询问框", function (id) {
                 alert('你点击了确定');
+                layx.destroy(id);
+            });
+        }
+        document.getElementById("openWin6").onclick = function () {
+            layx.prompt(null, "请输入下面信息：", function (id, value) {
+                alert(value);
                 layx.destroy(id);
             });
         }

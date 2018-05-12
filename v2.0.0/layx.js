@@ -1122,7 +1122,7 @@
             }
         },
         // 创建layx按钮
-        createLayxButtons: function (buttons, id) {
+        createLayxButtons: function (buttons, id, isPrompt) {
             var that = this;
 
             var buttonPanel = document.createElement("div");
@@ -1135,7 +1135,13 @@
                 buttonItem.callback = buttons[i].callback;
                 buttonItem.onclick = function (e) {
                     if (Utils.isFunction(this.callback)) {
-                        this.callback(id);
+                        if (isPrompt === true) {
+                            var textarea = that.getPromptTextArea(id);
+                            this.callback(id, (textarea ? textarea.value : "").replace(/(^\s*)|(\s*$)/g, ""), textarea);
+                        }
+                        else {
+                            this.callback(id);
+                        }
                     }
                 }
                 buttonPanel.appendChild(buttonItem);
@@ -1168,7 +1174,7 @@
                 autodestroyText: false,
             }, that.options));
 
-            that.flicker(winform.id);
+            //that.flicker(winform.id);
             return winform;
         },
         // 提示框
@@ -1211,7 +1217,7 @@
                 position: 'ct',
             }, that.options));
 
-            that.flicker(winform.id);
+            //that.flicker(winform.id);
             return winform;
         },
         // 询问框
@@ -1261,7 +1267,79 @@
                 position: 'ct',
             }, that.options));
 
-            that.flicker(winform.id);
+            //that.flicker(winform.id);
+            return winform;
+        },
+        // 获取prompt输入框对象
+        getPromptTextArea: function (id) {
+            var that = this,
+                windowId = "layx-" + id,
+                layxWindow = document.getElementById(windowId),
+                winform = that.windows[id];
+            if (layxWindow && winform && winform.type === "html") {
+                var promptPanel = layxWindow.querySelector(".layx-prompt");
+                if (promptPanel) {
+                    var textarea = promptPanel.querySelector(".layx-textarea");
+                    if (textarea) {
+                        return textarea;
+                    }
+                }
+            }
+            return null;
+        },
+        // 输入框
+        prompt: function (title, msg, yes, buttons, options) {
+            var that = this,
+                id = 'layx-confirm-' + Utils.rndNum(8);
+
+            // 创建button
+            if (!Utils.isArray(buttons)) {
+                buttons = [
+                    {
+                        label: '确定',
+                        callback: function (id, value, textarea) {
+                            if (textarea && value.length === 0) {
+                                textarea.focus();
+                            }
+                            else {
+                                if (Utils.isFunction(yes)) {
+                                    yes(id, value, textarea);
+                                }
+                            }
+                        }
+                    },
+                    {
+                        label: '取消',
+                        callback: function (id, value, textarea) {
+                            Layx.destroy(id);
+                        }
+                    }
+                ];
+            }
+            var buttonElement = that.createLayxButtons(buttons, id, true);
+            var winform = that.create(layxDeepClone({}, {
+                id: id,
+                title: title || "请输入信息",
+                icon: false,
+                type: 'html',
+                content: "<div class='layx-prompt'><label>" + msg + "</label><textarea class='layx-textarea'></textarea></div>",
+                width: 352,
+                height: 200,
+                minHeight: 200,
+                stickMenu: false,
+                minMenu: false,
+                minable: false,
+                maxMenu: false,
+                maxable: false,
+                alwaysOnTop: true,
+                resizable: false,
+                allowControlDbclick: false,
+                shadable: true,
+                statusBar: buttonElement,
+                position: 'ct',
+            }, that.options));
+
+            //that.flicker(winform.id);
             return winform;
         }
     };
@@ -1825,6 +1903,14 @@
         // 询问框
         confirm: function (title, msg, yes, buttons, options) {
             return Layx.confirm(title, msg, yes, buttons, options);
+        },
+        // 获取prompt输入框textarea对象
+        getPromptTextArea: function (id) {
+            return Layx.getPromptTextArea(id);
+        },
+        // 输入框
+        prompt: function (title, msg, yes, buttons, options) {
+            return Layx.prompt(title, msg, yes, buttons, options);
         }
     };
 })(top, window, self);
