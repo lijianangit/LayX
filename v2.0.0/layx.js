@@ -1969,6 +1969,11 @@
             return Layx.load(id, msg, options);
         }
     };
+
+    // 添加到top对象中
+    if (over === slf) {
+        over.Layx = win.layx;
+    }
 })(top, window, self);
 
 ; !(function (global) {
