@@ -45,6 +45,7 @@
             restorable: true,   // 是否允许恢复操作
             resizable: true, // 是否显示拖曳操作
             autodestroy: false,  // 自动关闭，支持数值类型毫秒
+            autodestroyText: true, // 是否显示关闭倒计时文本
             // 拖曳方向控制
             resizeLimit: {
                 t: true, // 是否允许上边拖曳大小，true允许
@@ -194,7 +195,7 @@
             }
 
             var _minWidth = Utils.compileLayxWidthOrHeight("width", config.minWidth, that.defaults.minWidth);
-            var _minHeight = Utils.compileLayxWidthOrHeight("height", config._minHeight, that.defaults.minHeight);
+            var _minHeight = Utils.compileLayxWidthOrHeight("height", config.minHeight, that.defaults.minHeight);
 
             var _width = Utils.compileLayxWidthOrHeight("width", config.width, that.defaults.width);
             _width = Math.max(_width, _minWidth);
@@ -652,11 +653,13 @@
                 var second = config.autodestroy / 1000;
                 var autodestroyTip = document.createElement("div");
                 autodestroyTip.classList.add("layx-auto-destroy-tip");
-                autodestroyTip.innerHTML = "此窗口 <strong>" + second + " </strong>秒后自动关闭...";
+                config.autodestroyText && (autodestroyTip.innerHTML = "<div style='padding:0 8px;'>此窗口 <strong>" + second + " </strong>秒后自动关闭...</div>");
                 layxWindow.appendChild(autodestroyTip);
                 var destroyTimer = setInterval(function () {
                     --second;
-                    autodestroyTip.innerHTML = "此窗口 <strong>" + second + " </strong>秒后自动关闭...";
+                    if (config.autodestroyText === true) {
+                        config.autodestroyText && (autodestroyTip.innerHTML = "<div style='padding:0 8px;'>此窗口 <strong>" + second + " </strong>秒后自动关闭...</div>");
+                    }
                     if (second <= 0) {
                         clearInterval(destroyTimer);
                         that.destroy(config.id);
@@ -1086,6 +1089,34 @@
             else {
                 return win.parent;
             }
+        },
+        // ================ 内置组件
+        // 消息框
+        msg: function (msg, options) {
+            var that = this;
+            var winform = that.create(layxDeepClone({}, {
+                id: 'layx-msg-' + Utils.rndNum(8),
+                type: 'html',
+                control: false,
+                content: "<div class='layx-msg'>" + msg + "</div>",
+                autodestroy: 5000,
+                width: 300,
+                height: 85,
+                minHeight: 85,
+                stickMenu: false,
+                minMenu: false,
+                maxMenu: false,
+                closeMenu: false,
+                alwaysOnTop: true,
+                resizable: false,
+                movable: false,
+                position: 'tc',
+                border: '1px solid #dedede',
+                autodestroyText: false,
+            }, that.options));
+
+            that.flicker(winform.id);
+            return winform;
         }
     };
 
@@ -1167,6 +1198,13 @@
                 }
             }
             return pos;
+        },
+        //产生随机数函数
+        rndNum: function (n) {
+            var rnd = "";
+            for (var i = 0; i < n; i++)
+                rnd += Math.floor(Math.random() * 10);
+            return rnd;
         },
         // 解析传入的宽度或高度
         compileLayxWidthOrHeight: function (type, widthOrHeight, errorValue) {
@@ -1624,6 +1662,11 @@
         // 关闭所有窗口
         destroyAll: function () {
             Layx.destroyAll();
+        },
+        // ================ 内置组件
+        // 消息框
+        msg: function (msg, options) {
+            return Layx.msg(msg, options);
         }
     };
 })(top, window, self);
