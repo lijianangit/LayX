@@ -44,6 +44,17 @@
             closable: true, // 是否允许关闭操作
             restorable: true,   // 是否允许恢复操作
             resizable: true, // 是否显示拖曳操作
+            // 拖曳方向控制
+            resizeLimit: {
+                t: true, // 是否允许上边拖曳大小，true允许
+                r: true, // 是否允许右边拖曳大小，true允许
+                b: true, // 是否允许下边拖曳大小，true允许
+                l: true, // 是否允许左边拖曳大小，true允许
+                lt: true, // 是否允许左上边拖曳大小，true允许
+                rt: true, // 是否允许右上边拖曳大小，true允许
+                lb: true, // 是否允许左下边拖曳大小，true允许
+                rb: true // 是否允许右下边拖曳大小，true允许
+            },
             movable: true,  // 是否允许拖动窗口
             moveLimit: {
                 vertical: false, // 是否禁止垂直拖动，false不禁止
@@ -166,16 +177,8 @@
                 if (config.allowControlDbclick === true) {
                     title.ondblclick = function (e) {
                         e = e || window.event;
-                        if (winform.status === "normal" || (!winform.status)) {
-                            // 判断是否允许最大化操作
-                            if (config.maxable === true) {
-                                that.max(config.id);
-                            }
-                        }
-                        else {
-                            if (config.restorable === true) {
-                                that.restore(config.id);
-                            }
+                        if (config.restorable === true) {
+                            that.restore(config.id);
                         }
                         e.stopPropagation();
                     }
@@ -404,44 +407,76 @@
                     break;
             }
 
-            // 创建拖曳容器
-            var resize = document.createElement("div");
-            resize.classList.add("layx-resizes");
-            layxWindow.appendChild(resize);
+            if (config.resizable === true) {
+                // 创建拖曳容器
+                var resize = document.createElement("div");
+                resize.classList.add("layx-resizes");
+                layxWindow.appendChild(resize);
 
-            // 创建8个方向拖曳
-            // 上
-            var resizeTop = document.createElement("div");
-            resizeTop.classList.add("layx-resize-top");
-            resize.appendChild(resizeTop);
-            // 右
-            var resizeRight = document.createElement("div");
-            resizeRight.classList.add("layx-resize-right");
-            resize.appendChild(resizeRight);
-            //下
-            var resizeBottom = document.createElement("div");
-            resizeBottom.classList.add("layx-resize-bottom");
-            resize.appendChild(resizeBottom);
-            // 左
-            var resizeLeft = document.createElement("div");
-            resizeLeft.classList.add("layx-resize-left");
-            resize.appendChild(resizeLeft);
-            // 左上
-            var resizeLeftTop = document.createElement("div");
-            resizeLeftTop.classList.add("layx-resize-left-top");
-            resize.appendChild(resizeLeftTop);
-            //右上
-            var resizeRightTop = document.createElement("div");
-            resizeRightTop.classList.add("layx-resize-right-top");
-            resize.appendChild(resizeRightTop);
-            //左下
-            var resizeLeftBottom = document.createElement("div");
-            resizeLeftBottom.classList.add("layx-resize-left-bottom");
-            resize.appendChild(resizeLeftBottom);
-            // 右下
-            var resizeRightBottom = document.createElement("div");
-            resizeRightBottom.classList.add("layx-resize-right-bottom");
-            resize.appendChild(resizeRightBottom);
+                // 创建8个方向拖曳
+                if (config.resizeLimit.t === true) {
+                    // 上
+                    var resizeTop = document.createElement("div");
+                    resizeTop.classList.add("layx-resize-top");
+                    new LayxResize(resizeTop, true, false, true, false);
+                    resize.appendChild(resizeTop);
+                }
+                if (config.resizeLimit.r === true) {
+                    // 右
+                    var resizeRight = document.createElement("div");
+                    resizeRight.classList.add("layx-resize-right");
+                    new LayxResize(resizeRight, false, false, false, true);
+                    resize.appendChild(resizeRight);
+                }
+
+                if (config.resizeLimit.b === true) {
+                    //下
+                    var resizeBottom = document.createElement("div");
+                    resizeBottom.classList.add("layx-resize-bottom");
+                    new LayxResize(resizeBottom, false, false, true, false);
+                    resize.appendChild(resizeBottom);
+                }
+
+                if (config.resizeLimit.l === true) {
+                    // 左
+                    var resizeLeft = document.createElement("div");
+                    resizeLeft.classList.add("layx-resize-left");
+                    new LayxResize(resizeLeft, false, true, false, true);
+                    resize.appendChild(resizeLeft);
+                }
+
+                if (config.resizeLimit.lt === true) {
+                    // 左上
+                    var resizeLeftTop = document.createElement("div");
+                    resizeLeftTop.classList.add("layx-resize-left-top");
+                    new LayxResize(resizeLeftTop, true, true, false, false);
+                    resize.appendChild(resizeLeftTop);
+                }
+
+                if (config.resizeLimit.rt === true) {
+                    //右上
+                    var resizeRightTop = document.createElement("div");
+                    resizeRightTop.classList.add("layx-resize-right-top");
+                    new LayxResize(resizeRightTop, true, false, false, false);
+                    resize.appendChild(resizeRightTop);
+                }
+
+                if (config.resizeLimit.lb === true) {
+                    //左下
+                    var resizeLeftBottom = document.createElement("div");
+                    resizeLeftBottom.classList.add("layx-resize-left-bottom");
+                    new LayxResize(resizeLeftBottom, false, true, false, false);
+                    resize.appendChild(resizeLeftBottom);
+                }
+
+                if (config.resizeLimit.rb === true) {
+                    // 右下
+                    var resizeRightBottom = document.createElement("div");
+                    resizeRightBottom.classList.add("layx-resize-right-bottom");
+                    new LayxResize(resizeRightBottom, false, false, false, false);
+                    resize.appendChild(resizeRightBottom);
+                }
+            }
 
             // 存储窗口Id
             winform.id = config.id;
@@ -472,6 +507,10 @@
             winform.movable = config.movable;
             // 存储拖动限制配置信息
             winform.moveLimit = config.moveLimit;
+            // 存储拖曳状态
+            winform.resizable = config.resizable;
+            // 存储拖曳限制配置信息
+            winform.resizeLimit = config.resizeLimit;
             // 存储内置按钮操作信息
             winform.stickable = config.stickable;
             winform.minable = config.minable;
@@ -515,7 +554,10 @@
                 if (winform.restorable !== true) return;
 
                 var area = winform.area;
-                if (winform.status === "max") {
+                if (winform.status === "normal") {
+                    that.max(id);
+                }
+                else if (winform.status === "max") {
                     // 恢复滚动条
                     if (document.body.classList.contains("layx-body")) {
                         document.body.classList.remove('layx-body');
@@ -863,6 +905,156 @@
         }
     };
 
+    // 拖曳大小类
+    var LayxResize = function (handle, isTop, isLeft, lockX, lockY) {
+        // 移动标识
+        LayxResize.isResizing = false;
+        // 判断是否第一次拖曳
+        LayxResize.isFirstResizing = true;
+
+        var drag = function (e) {
+            e = e || window.event;
+            // 只允许鼠标左键拖曳
+            var button = e.button || e.which;
+            if (button == 1 && e.shiftKey == false) {
+                var moveMouseCoord = Utils.getMousePosition(e),
+                    distX = moveMouseCoord.x - handle.mouseStartCoord.x,
+                    distY = moveMouseCoord.y - handle.mouseStartCoord.y,
+                    _top = handle.winform.area.top + distY,
+                    _left = handle.winform.area.left + distX,
+                    _height = isTop ? handle.winform.area.height - distY : handle.winform.area.height + distY,
+                    _width = isLeft ? handle.winform.area.width - distX : handle.winform.area.width + distX;
+                // 是否有任何移动操作
+                if (distX !== 0 || distY !== 0) {
+                    LayxResize.isResizing = true;
+                    // 隐藏滚动条
+                    document.body.classList.add('layx-body');
+
+                    if (LayxResize.isFirstResizing === true) {
+                        LayxResize.isFirstResizing = false;
+                        // 解决鼠标拖出目标容器bug
+                        var mousePreventDefault = document.createElement("div");
+                        mousePreventDefault.classList.add("layx-mouse-preventDefault");
+                        var main = handle.layxWindow.querySelector(".layx-main");
+                        if (main) {
+                            main.appendChild(mousePreventDefault);
+                        }
+                    }
+                    // 限制最小宽度
+                    _width = Math.max(_width, handle.winform.area.minWidth);
+                    // 显示最小最大左边距
+                    if (isLeft) {
+                        _left = Math.min(_left, handle.winform.area.left + handle.winform.area.width - handle.winform.area.minWidth);
+                        _left = Math.max(0, _left);
+
+                        _width = Math.min(_width, handle.winform.area.left + handle.winform.area.width);
+                    } else {
+                        _left = Math.min(_left, handle.winform.area.left);
+                        _left = Math.max(handle.winform.area.left, _left);
+
+                        _width = Math.min(_width, handle.innerArea.width - handle.winform.area.left);
+                    }
+                    // 限制最小高度
+                    _height = Math.max(_height, handle.winform.area.minHeight);
+                    // 显示最小最大上边距
+                    if (isTop) {
+                        _top = Math.min(_top, handle.winform.area.top + handle.winform.area.height - handle.winform.area.minHeight);
+                        _top = Math.max(0, _top);
+
+                        _height = Math.min(_height, handle.winform.area.top + handle.winform.area.height);
+                    } else {
+                        _top = Math.min(_top, handle.winform.area.top);
+                        _top = Math.max(handle.winform.area.top, _top);
+
+                        _height = Math.min(_height, handle.innerArea.height - handle.winform.area.top);
+                    }
+                    // 是否锁住Y轴
+                    if (lockY) {
+                        handle.layxWindow.style.width = _width + 'px';
+                        handle.layxWindow.style.left = _left + 'px';
+                    }
+                    // 是否锁住X轴
+                    if (lockX) {
+                        handle.layxWindow.style.top = _top + 'px';
+                        handle.layxWindow.style.height = _height + 'px';
+                    }
+                    if (lockY === false && lockX === false) {
+                        handle.layxWindow.style.width = _width + 'px';
+                        handle.layxWindow.style.left = _left + 'px';
+                        handle.layxWindow.style.top = _top + 'px';
+                        handle.layxWindow.style.height = _height + 'px';
+                    }
+                }
+            }
+        };
+
+        var dragend = function (e) {
+            e = e || window.event;
+            document.onmouseup = null;
+            document.onmousemove = null;
+            // 只有发生移动才触发
+            if (LayxResize.isResizing === true) {
+                LayxResize.isResizing = false;
+                LayxResize.isFirstResizing = true;
+                // 移除鼠标拖动遮罩层
+                var mousePreventDefault = handle.layxWindow.querySelector(".layx-mouse-preventDefault");
+                if (mousePreventDefault) {
+                    mousePreventDefault.parentElement.removeChild(mousePreventDefault);
+                }
+
+                // 更新窗口位置信息
+                handle.winform.area.top = handle.layxWindow.offsetTop;
+                handle.winform.area.left = handle.layxWindow.offsetLeft;
+                handle.winform.area.width = handle.layxWindow.offsetWidth;
+                handle.winform.area.height = handle.layxWindow.offsetHeight;
+
+                // 恢复滚动条
+                if (document.body.classList.contains("layx-body")) {
+                    document.body.classList.remove('layx-body');
+                }
+            }
+        };
+
+        var dragstart = function (e) {
+            e = e || window.event;
+
+            var layxWindow = Utils.getNodeByClassName(handle, 'layx-window', win);
+            if (layxWindow) {
+                var id = layxWindow.getAttribute("id").substr(5),
+                    winform = Layx.windows[id];
+                if (winform) {
+                    // 最小化不允许拖曳
+                    if (winform.status !== "min" && winform.resizable === true) {
+                        // 更新层级别
+                        Layx.updateZIndex(id);
+                        // 获取鼠标点击坐标
+                        var mouseCoord = Utils.getMousePosition(e);
+                        // 存储一开始的坐标
+                        handle.mouseStartCoord = mouseCoord;
+                        // 存储layxWindow Dom对象
+                        handle.layxWindow = layxWindow;
+                        // 存储winform对象
+                        handle.winform = winform;
+                        // 存储浏览器可视区域信息
+                        handle.innerArea = Utils.innerArea();
+                        // 禁止浏览器默认事件
+                        e.preventDefault();
+                        // 禁止冒泡
+                        e.stopPropagation();
+
+                        document.onmouseup = dragend;
+                        document.onmousemove = drag;
+                    }
+                    else {
+                        Layx.restore(id);
+                    }
+                }
+            }
+            return false;
+        };
+        handle.onmousedown = dragstart;
+    };
+
     // 拖动类
     var LayxDrag = function (handle) {
         // 移动标识
@@ -980,7 +1172,7 @@
                     winform = Layx.windows[id];
                 if (winform) {
                     // 最小化不允许拖动
-                    if (winform.status !== "min") {
+                    if (winform.status !== "min" && winform.movable === true) {
                         // 更新层级别
                         Layx.updateZIndex(id);
                         // 获取鼠标点击坐标
