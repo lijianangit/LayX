@@ -1110,9 +1110,39 @@
                 alwaysOnTop: true,
                 resizable: false,
                 movable: false,
+                allowControlDbclick: false,
                 position: 'tc',
                 border: '1px solid #dedede',
                 autodestroyText: false,
+            }, that.options));
+
+            that.flicker(winform.id);
+            return winform;
+        },
+        // 提示框
+        alert: function (title, msg, buttons, options) {
+            var that = this;
+            var winform = that.create(layxDeepClone({}, {
+                id: 'layx-alert-' + Utils.rndNum(8),
+                title: title || "提示消息",
+                icon: false,
+                type: 'html',
+                content: "<div class='layx-alert layx-flexbox layx-flex-center'>" + msg + "</div>",
+                width: 352,
+                height: 157,
+                minHeight: 157,
+                stickMenu: false,
+                minMenu: false,
+                minable: false,
+                maxMenu: false,
+                maxable: false,
+                alwaysOnTop: true,
+                resizable: false,
+                movable: false,
+                allowControlDbclick: false,
+                shadable: true,
+                statusBar: '<div class="layx-buttons"><button class="layx-button-item">确定</button></div>',
+                position: 'ct',
             }, that.options));
 
             that.flicker(winform.id);
@@ -1667,6 +1697,10 @@
         // 消息框
         msg: function (msg, options) {
             return Layx.msg(msg, options);
+        },
+        // 提示框
+        alert: function (title, msg, buttons, options) {
+            return Layx.alert(title, msg, buttons, options);
         }
     };
 })(top, window, self);
