@@ -644,7 +644,14 @@
                 var statusBar = document.createElement("div");
                 statusBar.classList.add("layx-statu-bar");
                 config.statusBarStyle && statusBar.setAttribute("style", config.statusBarStyle);
-                statusBar.innerHTML = config.statusBar;
+                // dom元素直接添加
+                if (Utils.isDom(config.statusBar)) {
+                    statusBar.appendChild(config.statusBar);
+                }
+                else {
+                    statusBar.innerHTML = config.statusBar;
+                }
+
                 layxWindow.appendChild(statusBar);
             }
 
@@ -1091,6 +1098,36 @@
             }
         },
         // ================ 内置组件
+        // 按钮配置参数
+        defaultsButtons: {
+            label: '确定',
+            callback: function (id) {
+                Layx.destroy(id);
+            }
+        },
+        // 创建layx按钮
+        createLayxButtons: function (buttons, id) {
+            var that = this;
+            if (!Utils.isArray(buttons)) {
+                buttons = [that.defaultsButtons];
+            }
+            var buttonPanel = document.createElement("div");
+            buttonPanel.classList.add("layx-buttons");
+            for (var i = 0; i < buttons.length; i++) {
+                var buttonConfig = layxDeepClone({}, that.defaultsButtons, buttons[i]);
+                var buttonItem = document.createElement("button");
+                buttonItem.classList.add("layx-button-item");
+                buttonItem.innerText = buttonConfig.label;
+                buttonItem.onclick = function (e) {
+                    if (Utils.isFunction(buttonConfig.callback)) {
+                        buttonConfig.callback(id);
+                    }
+                }
+                buttonPanel.appendChild(buttonItem);
+            }
+
+            return buttonPanel;
+        },
         // 消息框
         msg: function (msg, options) {
             var that = this;
@@ -1121,9 +1158,12 @@
         },
         // 提示框
         alert: function (title, msg, buttons, options) {
-            var that = this;
+            var that = this,
+                id = 'layx-alert-' + Utils.rndNum(8);
+            // 创建button
+            var buttonElement = that.createLayxButtons(buttons, id);
             var winform = that.create(layxDeepClone({}, {
-                id: 'layx-alert-' + Utils.rndNum(8),
+                id: id,
                 title: title || "提示消息",
                 icon: false,
                 type: 'html',
@@ -1141,7 +1181,7 @@
                 movable: false,
                 allowControlDbclick: false,
                 shadable: true,
-                statusBar: '<div class="layx-buttons"><button class="layx-button-item">确定</button></div>',
+                statusBar: buttonElement,
                 position: 'ct',
             }, that.options));
 
@@ -1171,6 +1211,10 @@
         // 是否一个方法类型
         isFunction: function (func) {
             return func && Object.prototype.toString.call(func) === '[object Function]';
+        },
+        // 判断是否是dom对象
+        isDom: function (obj) {
+            return (typeof HTMLElement === 'object') ? obj instanceof HTMLElement : obj && typeof obj === 'object' && obj.nodeType === 1 && typeof obj.nodeName === 'string';
         },
         // 获取包含滚动条的浏览器可视区域
         innerArea: function () {
