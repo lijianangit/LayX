@@ -1863,7 +1863,7 @@
         handle.onmousedown = dragstart;
     };
 
-    over.Layx = win.layx = {
+    win.layx = {
         // 版本
         v: (function () {
             return Layx.version;
