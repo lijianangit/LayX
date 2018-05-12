@@ -1020,6 +1020,13 @@
                 }
             }
         },
+        // 关闭所有窗口
+        destroyAll: function () {
+            var that = this;
+            for (var id in Layx.windows) {
+                that.destroy(id);
+            }
+        },
         // 闪烁窗口
         flicker: function (id) {
             var that = this,
@@ -1613,6 +1620,10 @@
         // 设置iframe地址，iframe窗口有效
         setUrl: function (id, url) {
             Layx.setUrl(id, url);
+        },
+        // 关闭所有窗口
+        destroyAll: function () {
+            Layx.destroyAll();
         }
     };
 })(top, window, self);
