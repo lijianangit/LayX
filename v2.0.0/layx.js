@@ -44,6 +44,7 @@
             closable: true, // 是否允许关闭操作
             restorable: true,   // 是否允许恢复操作
             resizable: true, // 是否显示拖曳操作
+            autodestroy: false,  // 自动关闭，支持数值类型毫秒
             // 拖曳方向控制
             resizeLimit: {
                 t: true, // 是否允许上边拖曳大小，true允许
@@ -644,6 +645,23 @@
                 config.statusBarStyle && statusBar.setAttribute("style", config.statusBarStyle);
                 statusBar.innerHTML = config.statusBar;
                 layxWindow.appendChild(statusBar);
+            }
+
+            // 自动关闭提示
+            if (/(^[1-9]\d*$)/.test(config.autodestroy)) {
+                var second = config.autodestroy / 1000;
+                var autodestroyTip = document.createElement("div");
+                autodestroyTip.classList.add("layx-auto-destroy-tip");
+                autodestroyTip.innerHTML = "此窗口 <strong>" + second + " </strong>秒后自动关闭...";
+                layxWindow.appendChild(autodestroyTip);
+                var destroyTimer = setInterval(function () {
+                    --second;
+                    autodestroyTip.innerHTML = "此窗口 <strong>" + second + " </strong>秒后自动关闭...";
+                    if (second <= 0) {
+                        clearInterval(destroyTimer);
+                        that.destroy(config.id);
+                    }
+                }, 1000);
             }
 
             // 存储窗口对象

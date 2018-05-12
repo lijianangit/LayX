@@ -472,6 +472,19 @@ body.layx-body {
     cursor: se-resize;
 }
 
+.layx-auto-destroy-tip {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    height: 25px;
+    line-height: 25px;
+    z-index: 5;
+    color: #444;
+    font-size: 13px;
+    background: #dfdfdf;
+    padding: 0 8px;
+}
+
 @keyframes layx-flicker {
     from {
         box-shadow: 1px 1px 24px rgba(0, 0, 0, .3);
