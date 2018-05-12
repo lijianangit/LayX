@@ -1102,25 +1102,23 @@
         defaultsButtons: {
             label: '确定',
             callback: function (id) {
-                Layx.destroy(id);
             }
         },
         // 创建layx按钮
         createLayxButtons: function (buttons, id) {
             var that = this;
-            if (!Utils.isArray(buttons)) {
-                buttons = [that.defaultsButtons];
-            }
+
             var buttonPanel = document.createElement("div");
             buttonPanel.classList.add("layx-buttons");
             for (var i = 0; i < buttons.length; i++) {
-                var buttonConfig = layxDeepClone({}, that.defaultsButtons, buttons[i]);
                 var buttonItem = document.createElement("button");
+                var buttonConfig = layxDeepClone({}, that.defaultsButtons, buttons[i]);
                 buttonItem.classList.add("layx-button-item");
                 buttonItem.innerText = buttonConfig.label;
+                buttonItem.callback = buttons[i].callback;
                 buttonItem.onclick = function (e) {
-                    if (Utils.isFunction(buttonConfig.callback)) {
-                        buttonConfig.callback(id);
+                    if (Utils.isFunction(this.callback)) {
+                        this.callback(id);
                     }
                 }
                 buttonPanel.appendChild(buttonItem);
@@ -1160,7 +1158,19 @@
         alert: function (title, msg, buttons, options) {
             var that = this,
                 id = 'layx-alert-' + Utils.rndNum(8);
+
             // 创建button
+            // 创建button
+            if (!Utils.isArray(buttons)) {
+                buttons = [
+                    {
+                        label: '确定',
+                        callback: function (id) {
+                            Layx.destroy(id);
+                        }
+                    }
+                ];
+            }
             var buttonElement = that.createLayxButtons(buttons, id);
             var winform = that.create(layxDeepClone({}, {
                 id: id,
@@ -1168,6 +1178,57 @@
                 icon: false,
                 type: 'html',
                 content: "<div class='layx-alert layx-flexbox layx-flex-center'>" + msg + "</div>",
+                width: 352,
+                height: 157,
+                minHeight: 157,
+                stickMenu: false,
+                minMenu: false,
+                minable: false,
+                maxMenu: false,
+                maxable: false,
+                alwaysOnTop: true,
+                resizable: false,
+                movable: false,
+                allowControlDbclick: false,
+                shadable: true,
+                statusBar: buttonElement,
+                position: 'ct',
+            }, that.options));
+
+            that.flicker(winform.id);
+            return winform;
+        },
+        // 询问框
+        confirm: function (title, msg, yes, buttons, options) {
+            var that = this,
+                id = 'layx-confirm-' + Utils.rndNum(8);
+
+            // 创建button
+            if (!Utils.isArray(buttons)) {
+                buttons = [
+                    {
+                        label: '确定',
+                        callback: function (id) {
+                            if (Utils.isFunction(yes)) {
+                                yes(id);
+                            }
+                        }
+                    },
+                    {
+                        label: '取消',
+                        callback: function (id) {
+                            Layx.destroy(id);
+                        }
+                    }
+                ];
+            }
+            var buttonElement = that.createLayxButtons(buttons, id);
+            var winform = that.create(layxDeepClone({}, {
+                id: id,
+                title: title || "询问消息",
+                icon: false,
+                type: 'html',
+                content: "<div class='layx-confirm layx-flexbox layx-flex-center'>" + msg + "</div>",
                 width: 352,
                 height: 157,
                 minHeight: 157,
@@ -1745,6 +1806,10 @@
         // 提示框
         alert: function (title, msg, buttons, options) {
             return Layx.alert(title, msg, buttons, options);
+        },
+        // 询问框
+        confirm: function (title, msg, yes, buttons, options) {
+            return Layx.confirm(title, msg, yes, buttons, options);
         }
     };
 })(top, window, self);
