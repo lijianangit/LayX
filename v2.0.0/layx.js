@@ -71,10 +71,61 @@
             event: {
                 // 加载事件
                 onload: {
-                    // 加载之前
+                    // 加载之前，return false 不执行
                     before: function (layxWindow, winform) {
                     },
                     // 加载之后
+                    after: function (layxWindow, winform) {
+                    }
+                },
+                // 最小化事件
+                onmin: {
+                    // 最小化之前，return false 不执行
+                    before: function (layxWindow, winform) {
+                    },
+                    // 最小化之后
+                    after: function (layxWindow, winform) {
+                    }
+                },
+                // 最大化事件
+                onmax: {
+                    // 最大化之前，return false 不执行
+                    before: function (layxWindow, winform) {
+                    },
+                    // 最大化之后
+                    after: function (layxWindow, winform) {
+                    }
+                },
+                // 关闭事件
+                ondestroy: {
+                    // 关闭之前，return false 不执行
+                    before: function (layxWindow, winform) {
+                    },
+                    // 关闭之后
+                    after: function () {
+                    }
+                },
+                // 移动事件
+                onmove: {
+                    // 移动之前，return false 不执行
+                    before: function (layxWindow, winform) {
+                    },
+                    // 移动中
+                    progress: function (layxWindow, winform) {
+                    },
+                    // 移动之后
+                    after: function (layxWindow, winform) {
+                    }
+                },
+                // 拖曳事件
+                onresize: {
+                    // 拖曳之前，return false 不执行
+                    before: function (layxWindow, winform) {
+                    },
+                    // 拖曳中
+                    progress: function (layxWindow, winform) {
+                    },
+                    // 拖曳之后
                     after: function (layxWindow, winform) {
                     }
                 }
@@ -696,6 +747,14 @@
             if (layxWindow && winform) {
                 if (winform.minable !== true) return;
 
+                // 绑定最小化之前事件
+                if (Utils.isFunction(winform.event.onmin.before)) {
+                    var revel = winform.event.onmin.before(layxWindow, winform);
+                    if (revel === false) {
+                        return;
+                    }
+                }
+
                 // 存储状态
                 winform.minBefore = winform.status;
                 winform.status = "min";
@@ -727,6 +786,11 @@
                 that.windows[id] = _winform;
                 // 更新最小化布局
                 that.updateMinLayout();
+
+                // 绑定最小化之后事件
+                if (Utils.isFunction(winform.event.onmin.after)) {
+                    winform.event.onmin.after(layxWindow, winform);
+                }
             }
         },
         // 更新层级别
@@ -783,6 +847,14 @@
             if (layxWindow && winform) {
                 if (winform.maxable !== true) return;
 
+                // 绑定最大化之前事件
+                if (Utils.isFunction(winform.event.onmax.before)) {
+                    var revel = winform.event.onmax.before(layxWindow, winform);
+                    if (revel === false) {
+                        return;
+                    }
+                }
+
                 // 隐藏滚动条
                 document.body.classList.add('layx-body');
                 // 设置窗口信息
@@ -814,6 +886,11 @@
                     restoreMenu.setAttribute("title", "最小化");
                     restoreMenu.innerHTML = '<svg class="layx-iconfont" aria-hidden="true"><use xlink:href="#layx-icon-min"></use></svg>';
                 }
+
+                // 绑定最大化之后事件
+                if (Utils.isFunction(winform.event.onmax.after)) {
+                    winform.event.onmax.after(layxWindow, winform);
+                }
             }
         },
         // 销毁
@@ -824,15 +901,27 @@
                 layxShade = document.getElementById(windowId + '-shade'),
                 winform = that.windows[id];
             if (layxWindow && winform) {
+                // 绑定关闭之前事件
+                if (Utils.isFunction(winform.event.ondestroy.before)) {
+                    var revel = winform.event.ondestroy.before(layxWindow, winform);
+                    if (revel === false) {
+                        return;
+                    }
+                }
+
                 if (winform.closable !== true) return;
 
                 layxWindow.parentElement.removeChild(layxWindow);
                 delete that.windows[id];
-            }
-            if (layxShade) {
-                if (winform.closable !== true) return;
 
-                layxShade.parentElement.removeChild(layxShade);
+                if (layxShade) {
+                    layxShade.parentElement.removeChild(layxShade);
+                }
+
+                // 关闭之后事件
+                if (Utils.isFunction(winform.event.ondestroy.after)) {
+                    winform.event.ondestroy.after();
+                }
             }
         },
         // 闪烁窗口
@@ -1049,6 +1138,18 @@
                         if (main) {
                             main.appendChild(mousePreventDefault);
                         }
+
+                        // 绑定拖曳之前事件
+                        if (Utils.isFunction(handle.winform.event.onresize.before)) {
+                            var reval = handle.winform.event.onresize.before(handle.layxWindow, handle.winform);
+                            if (reval === false) {
+                                LayxResize.isResizing = false;
+                                LayxResize.isFirstResizing = true;
+                                document.onmouseup = null;
+                                document.onmousemove = null;
+                                return;
+                            }
+                        }
                     }
                     // 限制最小宽度
                     _width = Math.max(_width, handle.winform.area.minWidth);
@@ -1094,6 +1195,11 @@
                         handle.layxWindow.style.top = _top + 'px';
                         handle.layxWindow.style.height = _height + 'px';
                     }
+
+                    // 绑定拖曳中事件
+                    if (Utils.isFunction(handle.winform.event.onresize.progress)) {
+                        handle.winform.event.onresize.progress(handle.layxWindow, handle.winform);
+                    }
                 }
             }
         };
@@ -1121,6 +1227,11 @@
                 // 恢复滚动条
                 if (document.body.classList.contains("layx-body")) {
                     document.body.classList.remove('layx-body');
+                }
+
+                // 绑定拖曳之后事件
+                if (Utils.isFunction(handle.winform.event.onresize.after)) {
+                    handle.winform.event.onresize.after(handle.layxWindow, handle.winform);
                 }
             }
         };
@@ -1195,6 +1306,18 @@
                         if (main) {
                             main.appendChild(mousePreventDefault);
                         }
+
+                        // 绑定移动之前事件
+                        if (Utils.isFunction(handle.winform.event.onmove.before)) {
+                            var reval = handle.winform.event.onmove.before(handle.layxWindow, handle.winform);
+                            if (reval === false) {
+                                LayxDrag.isMoveing = false;
+                                LayxDrag.isFirstMoveing = true;
+                                document.onmouseup = null;
+                                document.onmousemove = null;
+                                return;
+                            }
+                        }
                     }
                     var _left = handle.winform.area.left + distX;
                     var _top = handle.winform.area.top + distY;
@@ -1237,6 +1360,11 @@
                     // 设置移动
                     handle.layxWindow.style.left = _left + "px";
                     handle.layxWindow.style.top = _top + "px";
+
+                    // 绑定移动中事件
+                    if (Utils.isFunction(handle.winform.event.onmove.progress)) {
+                        handle.winform.event.onmove.progress(handle.layxWindow, handle.winform);
+                    }
                 }
             }
         };
@@ -1269,6 +1397,11 @@
                     handle.winform.area.top = handle.defaultArea.top;
                     handle.winform.area.left = handle.defaultArea.left;
                     Layx.max(handle.winform.id);
+                }
+
+                // 绑定移动之后事件
+                if (Utils.isFunction(handle.winform.event.onmove.after)) {
+                    handle.winform.event.onmove.after(handle.layxWindow, handle.winform);
                 }
             }
         };
