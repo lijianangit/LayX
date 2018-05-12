@@ -67,6 +67,8 @@
             focusable: true, // 是否启用iframe页面点击置顶，只支持非跨域iframe
             alwaysOnTop: false, // 是否置顶
             allowControlDbclick: true,    // 允许控制栏双击切换窗口大小
+            statusBar: false, // 是否显示状态栏
+            statusBarStyle: '',// 状态栏样式
             // 事件
             event: {
                 // 加载事件
@@ -635,6 +637,15 @@
                 }
             }
 
+            // 创建状态栏
+            if (config.statusBar) {
+                var statusBar = document.createElement("div");
+                statusBar.classList.add("layx-statu-bar");
+                config.statusBarStyle && statusBar.setAttribute("style", config.statusBarStyle);
+                statusBar.innerHTML = config.statusBar;
+                layxWindow.appendChild(statusBar);
+            }
+
             // 存储窗口对象
             that.windows[config.id] = winform;
             return winform;
@@ -668,6 +679,9 @@
                 layxWindow = document.getElementById(windowId),
                 winform = that.windows[id];
             if (layxWindow && winform) {
+                // 更新层级别
+                that.updateZIndex(id);
+
                 winform.isStick = !winform.isStick;
                 var stickMenu = layxWindow.querySelector(".layx-stick-menu");
                 if (stickMenu) {
@@ -684,6 +698,8 @@
                 winform = that.windows[id];
             if (layxWindow && winform) {
                 if (winform.restorable !== true) return;
+                // 更新层级别
+                that.updateZIndex(id);
 
                 // 绑定恢复之前事件
                 if (Utils.isFunction(winform.event.onrestore.before)) {
@@ -768,6 +784,8 @@
                 innertArea = Utils.innerArea();
             if (layxWindow && winform) {
                 if (winform.minable !== true) return;
+                // 更新层级别
+                that.updateZIndex(id);
 
                 // 绑定最小化之前事件
                 if (Utils.isFunction(winform.event.onmin.before)) {
@@ -868,6 +886,8 @@
                 innertArea = Utils.innerArea();
             if (layxWindow && winform) {
                 if (winform.maxable !== true) return;
+                // 更新层级别
+                that.updateZIndex(id);
 
                 // 绑定最大化之前事件
                 if (Utils.isFunction(winform.event.onmax.before)) {
@@ -923,6 +943,9 @@
                 layxShade = document.getElementById(windowId + '-shade'),
                 winform = that.windows[id];
             if (layxWindow && winform) {
+                // 更新层级别
+                that.updateZIndex(id);
+
                 // 绑定关闭之前事件
                 if (Utils.isFunction(winform.event.ondestroy.before)) {
                     var revel = winform.event.ondestroy.before(layxWindow, winform);
@@ -951,8 +974,12 @@
             var that = this,
                 flicker,
                 windowId = "layx-" + id,
-                layxWindow = document.getElementById(windowId);
-            if (layxWindow) {
+                layxWindow = document.getElementById(windowId),
+                winform = that.windows[id];
+            if (layxWindow && winform) {
+                // 更新层级别
+                that.updateZIndex(id);
+
                 if (layxWindow.classList.contains('layx-flicker')) {
                     layxWindow.classList.remove('layx-flicker');
                 }
