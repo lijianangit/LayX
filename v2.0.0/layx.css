@@ -385,7 +385,7 @@ body.layx-body {
     word-break: break-all;
 }
 
-.layx-msg {
+.layx-msg, .layx-load {
     color: #000;
     font-size: 15px;
     padding: 10px;

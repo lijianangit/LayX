@@ -21,14 +21,14 @@
             height: 600,    // 初始化高度，支持百分比 '100%'
             minWidth: 100,  // 最小宽度，支持百分比 '100%'
             minHeight: 100, // 最小高度，支持百分比 '100%'
-            position: 'ct', // 初始化位置，支持'ct', 'lt', 'rt', 'lb', 'rb', 'lc', 'tc', 'rc', 'bc'以及 [top,left]数组
+            position: 'ct', // 初始化位置，支持'ct', 'lt', 'rt', 'lb', 'rb', 'lc', 'tc', 'rc', 'bc'，以及 [top,left]数组，同时也数字也支持混合写法，如：[100,'tc']
             control: true, // 是否显示控制栏
             controlStyle: '', // 控制栏样式
             bgColor: "#fff",  // 窗口颜色：默认透明
             shadow: true,   // 是否显示阴影
             border: "1px solid #3baced", // 边框，false不启用边框
             type: 'html',   // 窗口类型，支持：html,url
-            content: '', // type为html有效
+            content: '', // type为html有效，支持字符串和element对象
             url: '', // type为url有效
             useFrameTitle: false, // 是否自动获取iframe页面标题填充窗口标题
             opacity: 1, // 透明度
@@ -69,7 +69,7 @@
             focusable: true, // 是否启用iframe页面点击置顶，只支持非跨域iframe
             alwaysOnTop: false, // 是否置顶
             allowControlDbclick: true,    // 允许控制栏双击切换窗口大小
-            statusBar: false, // 是否显示状态栏
+            statusBar: false, // 是否显示状态栏，支持html，支持字符串和element对象
             statusBarStyle: '',// 状态栏样式
             // 事件
             event: {
@@ -459,7 +459,13 @@
                     var html = document.createElement("div");
                     html.classList.add("layx-html");
                     html.classList.add("layx-flexbox");
-                    html.innerHTML = config.content;
+                    // dom元素直接添加
+                    if (Utils.isDom(config.content)) {
+                        html.appendChild(config.content);
+                    }
+                    else {
+                        html.innerHTML = config.content;
+                    }
                     main.appendChild(html);
                     main.removeChild(contentShade);
 
@@ -1169,8 +1175,7 @@
                 resizable: false,
                 movable: false,
                 allowControlDbclick: false,
-                position: 'tc',
-                border: '1px solid #dedede',
+                position: [10, 'tc'],
                 autodestroyText: false,
             }, that.options));
 
@@ -1290,7 +1295,7 @@
         // 输入框
         prompt: function (title, msg, yes, buttons, options) {
             var that = this,
-                id = 'layx-confirm-' + Utils.rndNum(8);
+                id = 'layx-prompt-' + Utils.rndNum(8);
 
             // 创建button
             if (!Utils.isArray(buttons)) {
@@ -1341,6 +1346,53 @@
 
             //that.flicker(winform.id);
             return winform;
+        },
+        // 加载框
+        load: function (id, msg, options) {
+            var that = this;
+            var loadElement = document.createElement("div");
+            loadElement.classList.add("layx-load");
+            loadElement.classList.add("layx-flexbox");
+            loadElement.classList.add("layx-flex-center");
+            loadElement.style.height = 83 + "px";
+            loadElement.style.width = "100%";
+            loadElement.innerHTML = msg;
+
+            var dotCount = 0;
+            var loadTimer = setInterval(function () {
+                if (dotCount === 5) {
+                    dotCount = 0;
+                }
+                ++dotCount;
+                var dotHtml = "";
+                for (var i = 0; i < dotCount; i++) {
+                    dotHtml += ".";
+                }
+                loadElement.innerHTML = msg + dotHtml;
+            }, 200);
+
+            var winform = that.create(layxDeepClone({}, {
+                id: id ? id : 'layx-load-' + Utils.rndNum(8),
+                type: 'html',
+                control: false,
+                shadable: true,
+                content: loadElement,
+                width: 320,
+                height: 85,
+                minHeight: 85,
+                stickMenu: false,
+                minMenu: false,
+                maxMenu: false,
+                closeMenu: false,
+                alwaysOnTop: true,
+                resizable: false,
+                movable: false,
+                allowControlDbclick: false,
+                position: 'ct',
+            }, that.options));
+
+            //that.flicker(winform.id);
+            return winform;
         }
     };
 
@@ -1381,9 +1433,9 @@
                 innerArea = that.innerArea();
 
             var pos = { top: 0, left: 0 };
-            if (that.isArray(position) && position.length === 2 && that.isNumber(position[0]) && that.isNumber(position[1])) {
-                pos.top = position[0];
-                pos.left = position[1];
+            if (that.isArray(position) && position.length === 2) {
+                pos.top = that.isNumber(position[0]) ? position[0] : that.compileLayxPosition(width, height, position[0]).top;
+                pos.left = that.isNumber(position[1]) ? position[1] : that.compileLayxPosition(width, height, position[1]).left;
             } else {
                 position = postionOptions.indexOf(position.toString()) > -1 ? position.toString() : 'ct';
                 switch (position) {
@@ -1911,6 +1963,10 @@
         // 输入框
         prompt: function (title, msg, yes, buttons, options) {
             return Layx.prompt(title, msg, yes, buttons, options);
+        },
+        // 加载框
+        load: function (id, msg, options) {
+            return Layx.load(id, msg, options);
         }
     };
 })(top, window, self);
