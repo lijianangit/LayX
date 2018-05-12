@@ -650,11 +650,44 @@
             that.windows[config.id] = winform;
             return winform;
         },
+        // 设置窗口内容，文本窗口有效
+        setContent: function (id, content) {
+            var that = this,
+                windowId = "layx-" + id,
+                layxWindow = document.getElementById(windowId),
+                winform = that.windows[id];
+            if (layxWindow && winform) {
+                if (winform.type === "html") {
+                    var html = layxWindow.querySelector(".layx-html");
+                    if (html) {
+                        html.innerHTML = content;
+                    }
+                }
+            }
+        },
+        // 设置iframe地址，iframe窗口有效
+        setUrl: function (id, url) {
+            url = url || 'about:blank';
+            var that = this,
+                windowId = "layx-" + id,
+                layxWindow = document.getElementById(windowId),
+                winform = that.windows[id];
+            if (layxWindow && winform) {
+                if (winform.type === "url") {
+                    var iframe = layxWindow.querySelector(".layx-iframe");
+                    if (iframe) {
+                        iframe.setAttribute("src", url);
+                    }
+                }
+            }
+        },
         // 设置标题
         setTitle: function (id, content, useFrameTitle) {
-            var windowId = "layx-" + id,
-                layxWindow = document.getElementById(windowId);
-            if (layxWindow) {
+            var that = this,
+                windowId = "layx-" + id,
+                layxWindow = document.getElementById(windowId),
+                winform = that.windows[id];
+            if (layxWindow && winform) {
                 var title = layxWindow.querySelector(".layx-title");
                 if (title) {
                     // 获取iframe标题
@@ -1554,6 +1587,14 @@
         // 获取父框架window对象
         getParentContext: function (id) {
             return Layx.getParentContext(id);
+        },
+        // 设置窗口内容，文本窗口有效
+        setContent: function (id, content) {
+            Layx.setContent(id, content);
+        },
+        // 设置iframe地址，iframe窗口有效
+        setUrl: function (id, url) {
+            Layx.setUrl(id, url);
         }
     };
 })(top, window, self);
