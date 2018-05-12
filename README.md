@@ -1,5 +1,7 @@
 > Layx 网页弹窗最佳选择.
 
+![输入图片说明](https://gitee.com/uploads/images/2018/0512/233240_d215028a_974299.png "layx.png")
+
 # 序言
 
 Layx 诞生于一次C/S架构系统往B/S架构系统迁移项目中。起初，我们想在B/S架构上实现类C/S架构窗口功能，但百度、谷歌过后依然没能找到合适的Javascript插件。于是乎在2018年05月01日五一劳动节期间连夜赶工创造出了 Layx 。
@@ -59,6 +61,8 @@ layx.open({
     content: 'Hello World!'
 });
 ```
+
+![输入图片说明](https://gitee.com/uploads/images/2018/0512/233004_05e32570_974299.png "helloworld.png")
 
 # 示例
 
