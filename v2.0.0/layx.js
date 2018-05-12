@@ -96,6 +96,15 @@
                     after: function (layxWindow, winform) {
                     }
                 },
+                // 恢复事件
+                onrestore: {
+                    // 恢复之前，return false 不执行
+                    before: function (layxWindow, winform) {
+                    },
+                    // 恢复之后
+                    after: function (layxWindow, winform) {
+                    }
+                },
                 // 关闭事件
                 ondestroy: {
                     // 关闭之前，return false 不执行
@@ -676,6 +685,14 @@
             if (layxWindow && winform) {
                 if (winform.restorable !== true) return;
 
+                // 绑定恢复之前事件
+                if (Utils.isFunction(winform.event.onrestore.before)) {
+                    var revel = winform.event.onrestore.before(layxWindow, winform);
+                    if (revel === false) {
+                        return;
+                    }
+                }
+
                 var area = winform.area;
                 if (winform.status === "normal") {
                     that.max(id);
@@ -734,6 +751,11 @@
                     }
                     // 更新最小化布局
                     that.updateMinLayout();
+                }
+
+                // 绑定恢复之后事件
+                if (Utils.isFunction(winform.event.onrestore.after)) {
+                    winform.event.onrestore.after(layxWindow, winform);
                 }
             }
         },
