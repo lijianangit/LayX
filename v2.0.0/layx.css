@@ -73,6 +73,10 @@
     background-color: transparent;
 }
 
+body.layx-body {
+    overflow: hidden !important;
+}
+
 .layx-window {
     position: fixed;
     overflow: hidden;
@@ -171,6 +175,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     display: inline-block;
+    pointer-events: none;
 }
 
 .layx-title * {
@@ -331,8 +336,17 @@
     clear: both;
 }
 
-.layx-main[data-enable='0'] {
-    visibility: hidden;
+.layx-mouse-preventDefault {
+    position: absolute;
+    z-index: 3;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    background-color: transparent;
 }
 
 .layx-content-shade {

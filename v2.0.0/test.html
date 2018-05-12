@@ -19,7 +19,15 @@
                 //title: 'Layx是一款支持网页多任务窗口解决方案.',
                 type: 'url',
                 url: "../doc/iframe.html",
-                useFrameTitle: true
+                useFrameTitle: true,
+                moveLimit: {
+                    vertical: false, // 是否禁止垂直拖动，false不禁止
+                    horizontal: false, // 是否禁止水平拖动，false不禁止
+                    leftOut: false, // 是否允许左边拖出，true允许
+                    rightOut: false, // 是否允许右边拖出，true允许
+                    topOut: false, // 是否允许上边拖出，true允许，此设置不管是false还是true，窗口都不能拖出窗体
+                    bottomOut: false, // 是否允许下边拖出，true允许
+                },
             });
         }
         document.getElementById("openWin2").onclick = function () {
@@ -28,7 +36,7 @@
                 icon: true,
                 title: '22Layx是一款支持网页多任务窗口解决方案.',
                 type: 'url',
-                url: "https://www.tmall.com",
+                url: "../doc/iframe.html",
                 position: 'lt'
             });
         }
