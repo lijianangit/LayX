@@ -1101,23 +1101,13 @@
         },
         // 获取父框架window对象
         getParentContext: function (id) {
-            if (id) {
-                var that = this,
-                    windowId = "layx-" + id,
-                    layxWindow = document.getElementById(windowId),
-                    winform = that.windows[id];
-                if (layxWindow && winform) {
-                    // 判断是否是iframe
-                    if (winform.type === "url") {
-                        return winform.currentWindow.parent;
-                    }
-                    else {
-                        return winform.currentWindow;
-                    }
-                }
+            var that = this;
+            var iframeWindow = that.getChildContext(id);
+            if (iframeWindow) {
+                return iframeWindow.parent;
             }
             else {
-                return win.parent;
+                return null;
             }
         },
         // ================ 内置组件
@@ -1873,7 +1863,7 @@
         handle.onmousedown = dragstart;
     };
 
-    win.layx = {
+    over.Layx = win.layx = {
         // 版本
         v: (function () {
             return Layx.version;
@@ -1970,10 +1960,6 @@
         }
     };
 
-    // 添加到top对象中
-    if (over === slf) {
-        over.Layx = win.layx;
-    }
 })(top, window, self);
 
 ; !(function (global) {
