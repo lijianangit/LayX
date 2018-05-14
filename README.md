@@ -271,7 +271,7 @@ document.getElementById('btn').onclick=function(e){
 # 日志
 
 ```
-# 2018.05.14 v2.0.1 发布
+# 2018.05.15 v2.0.1 发布
 
 - [新增] var winform = layx.html(id,title,content,options) 快捷打开文本窗口方法
 - [新增] var winform = layx.iframe(id,title,url,options) 快捷打开网页窗口方法
