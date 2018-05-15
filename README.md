@@ -271,6 +271,10 @@ document.getElementById('btn').onclick=function(e){
 # 日志
 
 ```
+# 2018.05.15 v2.0.2 发布
+
+- [修复] 低版本Chrome 浏览器bug
+
 # 2018.05.15 v2.0.1 发布
 
 - [新增] var winform = layx.html(id,title,content,options) 快捷打开文本窗口方法
