@@ -1,8 +1,8 @@
 [
   {
-    "outputFileName": "layx.min.css",
+    "outputFileName": "layx.min.js",
     "inputFiles": [
-      "layx.css"
+      "layx.js"
     ]
   }
 ]
