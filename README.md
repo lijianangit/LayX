@@ -134,7 +134,7 @@ layx.open({
 buttons:[
     {
         label:'确定',
-        cackback:function(id){
+        callback:function(id){
             // your code...
 
             // 关闭窗口
@@ -143,7 +143,7 @@ buttons:[
     },
     {
         label:'取消',
-        cackback:function(id){
+        callback:function(id){
 
             // 关闭窗口
             layx.destroy(id);   
