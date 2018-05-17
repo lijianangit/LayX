@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Layx 官方示例大全 v2.0.3</title>
+    <title>Layx 官方示例大全 v2.0.4</title>
     <style type="text/css">
         button {
             margin: 5px;
@@ -23,6 +23,7 @@
     <button id="srck">输入窗口</button>
     <button id="jzck">加载窗口</button>
     <button id="tbck">打开淘宝</button>
+    <button id="danniu">带操作按钮</button>
     <h3>窗口外观</h3>
     <button id="mrwg">默认外观</button>
     <button id="btlhs">标题栏灰色</button>
@@ -135,6 +136,33 @@
             }
             $("#tbck").onclick = function (e) {
                 window.top.layx.iframe('tbck', '淘宝网', 'https://www.taobao.com', { position: [randomNum(0, 500), randomNum(0, 500)] });
+                e.stopPropagation();
+            }
+            $("#danniu").onclick = function (e) {
+                window.top.layx.iframe('danniu', '带操作按钮', './iframe.html', {
+                    statusBar: true,
+                    buttons: [
+                        {
+                            label: '其他按钮',
+                            callback: function (id) {
+                                alert("我是其他按钮，点击后啥也不干");
+                            }
+                        },
+                        {
+                            label: '确定',
+                            callback: function (id) {
+                                alert("我是确定按钮，点击后关闭");
+                                top.layx.destroy(id);
+                            }
+                        },
+                        {
+                            label: '取消',
+                            callback: function (id) {
+                                top.layx.destroy(id);
+                            }
+                        }
+                    ], position: [randomNum(0, 500), randomNum(0, 500)]
+                });
                 e.stopPropagation();
             }
             $("#mrwg").onclick = function (e) {
