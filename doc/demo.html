@@ -47,6 +47,7 @@
     <button id="dkzdck">打开置顶窗口</button>
     <button id="bxsbtl">不显示标题栏</button>
     <button id="bxscktb">不显示窗口图标</button>
+    <button id="zdyztl">自定义状态栏并绑定自己的事件</button>
     <h3>窗口位置</h3>
     <button id="zjdk">中间打开</button>
     <button id="zsj">左上角</button>
@@ -67,6 +68,14 @@
     <h3>窗口事件</h3>
     整理中...
     <script type="text/javascript">
+        function func1() {
+            alert("我是按钮1，点击后关闭");
+            top.layx.destroy("zdyztl");
+        }
+
+        function func2() {
+            alert("我是按钮2，点击后我不想关闭");
+        }
         //生成从minNum到maxNum的随机数
         function randomNum(minNum, maxNum) {
             switch (arguments.length) {
@@ -273,6 +282,14 @@
             }
             $("#zdy").onclick = function (e) {
                 window.top.layx.iframe('zdy', '自定义 上 200，左 200', './iframe.html', { position: [100, 100] });
+                e.stopPropagation();
+            }
+
+            $("#zdyztl").onclick = function (e) {
+                window.top.layx.iframe('zdyztl', '自定义状态栏并绑定自己的事件', './iframe.html', {
+                    statusBar: '<div style="padding:10px;text-align:right;"><button onclick="top.layx.getChildContext(\'doc\').func1();">自定义按钮1</button> <button onclick="top.layx.getChildContext(\'doc\').func2();">自定义按钮2</button></div>',
+                    position: 'ct'
+                });
                 e.stopPropagation();
             }
         }
