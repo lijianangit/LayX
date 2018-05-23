@@ -208,7 +208,7 @@ window.onload = function () {
     -ms-box-sizing: border-box;
     -o-box-sizing: border-box;}
      #evel-panel{padding:10px;height: 100%;}
-     #eval-textarea{height:100%;background:#f9f9f9;margin:0;}
+     #eval-textarea{height:100%;background:#f9f9f9;margin:0; font-family: Arial;}
  </style>
 
 <div id="evel-panel">
@@ -235,7 +235,12 @@ window.onload = function () {
                                             callback: function (id, button) {
                                                 try {
                                                     var codeStr = document.querySelector("#eval-textarea");
-                                                    eval(codeStr.value);
+                                                    if (!codeStr.value) {
+                                                        codeStr.focus();
+                                                    }
+                                                    else {
+                                                        eval(codeStr.value);
+                                                    }
                                                 } catch (e) {
                                                     alert("请输入正确的代码再执行。");
                                                 }
