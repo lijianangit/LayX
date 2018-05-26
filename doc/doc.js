@@ -91,7 +91,7 @@ window.onload = function () {
                 </ul>
                 <h2>特性</h2>
                 <ul>
-                    <li>纯原生Javascript实现，不依赖任何第三方框架</li>
+                    <li>纯原生Javascript实现，不依赖任何第三方框架</li> 
                     <li>支持IE10+（含IE10）、Chrome、Firefox、Opera、Edge等主流浏览器</li>
                     <li>支持多种窗口类型：文本窗口，页面窗口，窗口组，提示窗口，消息窗口，询问窗口，输入窗口，加载窗口、浮动窗口、置顶窗口、倒计时窗口</li>
                     <li>支持窗口最大化、最小化、恢复、置顶、关闭控制及事件监听</li>
