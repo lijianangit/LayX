@@ -85,7 +85,7 @@ window.onload = function () {
                 <ul>
                     <li><label>原创作者</label>：百小僧</li>
                     <li><label>开源协议</label>：MIT</li>
-                    <li><label>当前版本</label>：v2.2.2</li>
+                    <li><label>当前版本</label>：v2.2.3</li>
                     <li><label>发布日期</label>：2018.05.26</li>
                     <li><label>交流Q群</label>：18863883</li>
                 </ul>
@@ -115,10 +115,14 @@ window.onload = function () {
                 </ul>
                 <h2>日志</h2>
                 <pre>
-# 2018.05.26 v2.2.2 发布
+# 2018.05.26 v2.2.3 发布
 
+- [新增] 浮动窗口方向控制（上、下、左、右）
 - [新增] 窗口组切换前后事件 event.onswitch
-- [优化] 窗口组切换代码
+- [更新] 拖曳容器代码
+- [更新] layx.updateFloatTargetPosition(id) 为 layx.updateFloatWinPosition(id,direction);
+- [更新] 窗口组切换代码
+- [更新] 拖曳容器样式
 - [修复] layx.prompt 默认值 bug
 
 # 2018.05.25 v2.2.0 发布
@@ -271,6 +275,18 @@ window.onload = function () {
                     rightOut: false,
                     topOut: false,
                     bottomOut: false
+                },
+                event: {
+                    onmove: {
+                        progress: function (layxWindow, winform) {
+                            layx.updateFloatWinPosition("float-right");
+                            layx.updateFloatWinPosition("float-left");
+                            layx.updateFloatWinPosition("float-top");
+                            layx.updateFloatWinPosition("float-bottom");
+                            var directions = ['top', 'bottom', 'left', 'right'];
+                            layx.updateFloatWinPosition("float-auto", directions[Math.floor(Math.random() * 4)]);
+                        }
+                    }
                 },
                 statusBar: true,
                 buttons: [
