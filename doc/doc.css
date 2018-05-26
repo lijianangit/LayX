@@ -23,9 +23,7 @@
 }
 
 #mulu {
-    position: absolute;
-    position: -webkit-sticky;
-    position: sticky;
+    position: fixed;
     top: 10px;
     right: 10px;
     font-weight: normal;
@@ -44,9 +42,7 @@
 }
 
 #toc {
-    position: absolute;
-    position: -webkit-sticky;
-    position: sticky;
+    position: fixed;
     left: 0;
     top: 0;
     bottom: 0;
@@ -115,7 +111,12 @@
     border: 1px solid #999;
 }
 
-#code, #code * {
+#fix {
+    height: 100%;
+    position: relative;
+}
+
+#fix, #code, #code * {
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
