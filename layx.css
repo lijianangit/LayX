@@ -303,6 +303,8 @@ body.ilayx-body {
     width: 100%;
     z-index: 0;
     visibility: hidden;
+    -webkit-overflow-scrolling: touch;
+    overflow: auto;
 }
 
 .layx-group-main[data-enable="1"] {
