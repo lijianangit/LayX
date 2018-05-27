@@ -2395,13 +2395,16 @@
         LayxDrag.isFirstMoveing = true;
         var drag = function (e) {
             e = e || window.event;
+            var moveMouseCoord = Utils.getMousePosition(e),
+                distX = moveMouseCoord.x - handle.mouseStartCoord.x,
+                distY = moveMouseCoord.y - handle.mouseStartCoord.y;
             if (Utils.isSupportTouch) {
                 if (e.cancelable) {
                     if (!e.defaultPrevented) {
                         e.preventDefault();
                     }
                 }
-                if ((distX !== 5 || distY !== 5) === false) return;
+                if ((distX !== 0 || distY !== 0) === false) return;
             }
             else {
                 var button = e.button || e.which;
@@ -2411,9 +2414,7 @@
                 }
                 if ((distX !== 0 || distY !== 0) === false) return;
             }
-            var moveMouseCoord = Utils.getMousePosition(e),
-                distX = moveMouseCoord.x - handle.mouseStartCoord.x,
-                distY = moveMouseCoord.y - handle.mouseStartCoord.y;
+
             LayxDrag.isMoveing = true;
             document.body.classList.add('ilayx-body');
             if (LayxDrag.isFirstMoveing === true) {
