@@ -181,6 +181,7 @@ window.onload = function () {
 <pre style="margin-top:0"># 2018.05.27 v2.2.5 发布
 
 - [更新] 触摸代码、新增触摸电脑的支持（同时支持鼠标、触摸）
+- [修复] ios safari iframe bug
 
 # 2018.05.27 v2.2.4 发布
 

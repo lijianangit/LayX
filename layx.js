@@ -972,8 +972,7 @@
             iframe.setAttribute("frameborder", "0");
             if (win.navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
                 iframe.setAttribute("scrolling", "no");
-            }
-            else {
+            } else {
                 iframe.setAttribute("scrolling", "auto");
             }
             iframe.setAttribute("allowfullscreen", "");
