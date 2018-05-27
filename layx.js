@@ -970,7 +970,7 @@
             iframe.classList.add("layx-flexbox");
             iframe.setAttribute("allowtransparency", "true");
             iframe.setAttribute("frameborder", "0");
-            if (win.navigator.userAgent.toLowerCase().indexOf('iphone')) {
+            if (win.navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
                 iframe.setAttribute("scrolling", "no");
             }
             else {
