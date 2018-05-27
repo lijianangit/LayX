@@ -408,7 +408,8 @@ window.onload = function () {
                 }
                 else {
                     if (window.navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
-                        (document.documentElement || document.body).scrollTop = scrollDiv.offsetTop;
+                        //(document.documentElement || document.body).scrollTop = scrollDiv.offsetTop;
+                        alert('dd');
                     }
                     else {
                         (document.documentElement || document.body).scrollTop = scrollDiv.offsetTop;
