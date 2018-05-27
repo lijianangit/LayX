@@ -2404,7 +2404,7 @@
                         e.preventDefault();
                     }
                 }
-                if ((distX !== 0 || distY !== 0) === false) return;
+                if (((distX !== 0 || distY !== 0) && (new Date() - handle.touchDate > 300)) === false) return;
             }
             else {
                 var button = e.button || e.which;
@@ -2536,6 +2536,7 @@
                         handle.winform = winform;
                         handle.innerArea = Utils.innerArea();
                         handle.defaultArea = layxDeepClone({}, winform.area);
+                        handle.touchDate = new Date();
                         var mousePreventDefault = layxWindow.querySelector(".layx-mouse-preventDefault");
                         if (!mousePreventDefault) {
                             mousePreventDefault = document.createElement("div");
