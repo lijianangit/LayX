@@ -291,7 +291,6 @@ body.ilayx-body {
     overflow: hidden;
     position: relative;
     clear: both;
-    -webkit-overflow-scrolling: touch;
 }
 
 .layx-group-main {
@@ -304,7 +303,6 @@ body.ilayx-body {
     width: 100%;
     z-index: 0;
     visibility: hidden;
-    -webkit-overflow-scrolling: touch;
 }
 
 .layx-group-main[data-enable="1"] {
@@ -430,7 +428,6 @@ body.ilayx-body {
     bottom: 0;
     left: 0;
     z-index: 1;
-    -webkit-overflow-scrolling: touch;
 }
 
 .layx-statu-bar {
