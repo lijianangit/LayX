@@ -2061,10 +2061,6 @@
         }
     };
     var Utils = {
-        isIOS: function () {
-            var u = navigator.userAgent;
-            return !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-        },
         isSupportTouch: "ontouchstart" in document ? true : false,
         isSupportMouse: "onmouseup" in document ? true : false,
         IsPC: function () {
@@ -2734,7 +2730,6 @@
             return Layx.version;
         })(),
         open: function (options) {
-            alert(Utils.isIOS());
             var winform = Layx.create(options);
             return winform;
         },
