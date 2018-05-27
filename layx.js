@@ -970,7 +970,7 @@
             iframe.classList.add("layx-flexbox");
             iframe.setAttribute("allowtransparency", "true");
             iframe.setAttribute("frameborder", "0");
-            iframe.setAttribute("scrolling", "no");
+            iframe.setAttribute("scrolling", "auto");
             iframe.setAttribute("allowfullscreen", "");
             iframe.setAttribute("mozallowfullscreen", "");
             iframe.setAttribute("webkitallowfullscreen", "");
