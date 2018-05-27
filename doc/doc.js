@@ -406,7 +406,7 @@ window.onload = function () {
                 if (navigator.userAgent.indexOf("Firefox") > 0 || window.navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
                     (document.documentElement || document.body).scrollTop = scrollDiv.offsetTop - window.innerHeight - 50;
                     if (window.navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
-                        code.scrollTop = scrollDiv.offsetTop;
+                        code.scrollTop = scrollDiv.offsetTop - window.innerHeight - 50;
                     }
                 }
                 else {
