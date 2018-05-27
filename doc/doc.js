@@ -409,9 +409,9 @@ window.onload = function () {
                 else {
                     if (window.navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
                         code.style['-webkit-overflow-scrolling'] = 'auto';
+
                         setTimeout(function () {
-                            (document.documentElement || document.body).scrollTop = scrollDiv.offsetTop;
-                            code.scrollTop = scrollDiv.offsetTop;
+                            code.scrollTop = 130;
                             code.style['-webkit-overflow-scrolling'] = 'touch';
                         }, 2);
                     }
