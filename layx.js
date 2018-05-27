@@ -2396,12 +2396,20 @@
         var drag = function (e) {
             e = e || window.event;
             if (Utils.isSupportTouch) {
+                if (e.cancelable) {
+                    if (!e.defaultPrevented) {
+                        e.preventDefault();
+                    }
+                }
             }
             else {
                 var button = e.button || e.which;
                 if ((button == 1 && e.shiftKey == false) === false) return;
+                if (!e.defaultPrevented) {
+                    e.preventDefault();
+                }
             }
-            e.preventDefault();
+
             var moveMouseCoord = Utils.getMousePosition(e),
                 distX = moveMouseCoord.x - handle.mouseStartCoord.x,
                 distY = moveMouseCoord.y - handle.mouseStartCoord.y;
@@ -2523,7 +2531,6 @@
                         Layx.updateZIndex(id);
                         layxMove.style.zIndex = winform.zIndex - 1;
                         var mouseCoord = Utils.getMousePosition(e);
-                        console.log(mouseCoord);
                         handle.mouseStartCoord = mouseCoord;
                         handle.layxWindow = layxWindow;
                         handle.winform = winform;

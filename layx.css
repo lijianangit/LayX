@@ -177,6 +177,8 @@ body.ilayx-body {
     user-select: none;
     margin-right: 8px;
     min-width: 0;
+    -ms-touch-action: none;
+    touch-action: none;
 }
 
 .layx-title label, .layx-group-tab label {
