@@ -1,4 +1,4 @@
-/*
+/*!
  * file : layx.js
  * gitee : https://gitee.com/monksoul/LayX
  * author : 百小僧/MonkSoul
