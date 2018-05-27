@@ -408,7 +408,9 @@ window.onload = function () {
                 }
                 else {
                     if (window.navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
-                        code.scrollTop = scrollDiv.offsetTop - code.offsetHeight - 50;
+                        document.documentElement.scrollTop = scrollDiv.offsetTop;
+                        window.pageYOffset = scrollDiv.offsetTop;
+                        document.body.scrollTop = scrollDiv.offsetTop;
                     }
                     else {
                         (document.documentElement || document.body).scrollTop = scrollDiv.offsetTop;
@@ -417,7 +419,7 @@ window.onload = function () {
                 }
             }
             else {
-                if (navigator.userAgent.indexOf("Firefox") > 0 || window.navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
+                if (navigator.userAgent.indexOf("Firefox") > 0) {
                     code.scrollTop = scrollDiv.offsetTop - code.offsetHeight - 50;
                 }
                 else {
