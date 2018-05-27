@@ -408,7 +408,7 @@ window.onload = function () {
                 }
                 else {
                     if (window.navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
-                        alert(scrollDiv.offsetTop);
+                        code.scrollTop = scrollDiv.offsetTop - code.offsetHeight - 50;
                     }
                     else {
                         (document.documentElement || document.body).scrollTop = scrollDiv.offsetTop;
