@@ -658,6 +658,9 @@
             layxWindow.appendChild(resize);
             var resizeTop = document.createElement("div");
             resizeTop.classList.add("layx-resize-top");
+            if (Utils.isSupportTouch) {
+                resizeTop.classList.add("layx-reisize-touch");
+            }
             if (config.resizeLimit.t === true) {
                 resizeTop.setAttribute("data-enable", "0");
             }
@@ -665,6 +668,9 @@
             resize.appendChild(resizeTop);
             var resizeLeft = document.createElement("div");
             resizeLeft.classList.add("layx-resize-left");
+            if (Utils.isSupportTouch) {
+                resizeLeft.classList.add("layx-reisize-touch");
+            }
             if (config.resizeLimit.l === true) {
                 resizeLeft.setAttribute("data-enable", "0");
             }
@@ -672,6 +678,9 @@
             resize.appendChild(resizeLeft);
             var resizeLeftTop = document.createElement("div");
             resizeLeftTop.classList.add("layx-resize-left-top");
+            if (Utils.isSupportTouch) {
+                resizeLeftTop.classList.add("layx-reisize-touch");
+            }
             if (config.resizeLimit.lt === true) {
                 resizeLeftTop.setAttribute("data-enable", "0");
             }
@@ -679,6 +688,9 @@
             resize.appendChild(resizeLeftTop);
             var resizeRightTop = document.createElement("div");
             resizeRightTop.classList.add("layx-resize-right-top");
+            if (Utils.isSupportTouch) {
+                resizeRightTop.classList.add("layx-reisize-touch");
+            }
             if (config.resizeLimit.rt === true) {
                 resizeRightTop.setAttribute("data-enable", "0");
             }
@@ -686,6 +698,9 @@
             resize.appendChild(resizeRightTop);
             var resizeLeftBottom = document.createElement("div");
             resizeLeftBottom.classList.add("layx-resize-left-bottom");
+            if (Utils.isSupportTouch) {
+                resizeLeftBottom.classList.add("layx-reisize-touch");
+            }
             if (config.resizeLimit.lb === true) {
                 resizeLeftBottom.setAttribute("data-enable", "0");
             }
@@ -693,6 +708,9 @@
             resize.appendChild(resizeLeftBottom);
             var resizeRight = document.createElement("div");
             resizeRight.classList.add("layx-resize-right");
+            if (Utils.isSupportTouch) {
+                resizeRight.classList.add("layx-reisize-touch");
+            }
             if (config.resizeLimit.r === true) {
                 resizeRight.setAttribute("data-enable", "0");
             }
@@ -700,6 +718,9 @@
             resize.appendChild(resizeRight);
             var resizeBottom = document.createElement("div");
             resizeBottom.classList.add("layx-resize-bottom");
+            if (Utils.isSupportTouch) {
+                resizeBottom.classList.add("layx-reisize-touch");
+            }
             if (config.resizeLimit.b === true) {
                 resizeBottom.setAttribute("data-enable", "0");
             }
@@ -707,6 +728,9 @@
             resize.appendChild(resizeBottom);
             var resizeRightBottom = document.createElement("div");
             resizeRightBottom.classList.add("layx-resize-right-bottom");
+            if (Utils.isSupportTouch) {
+                resizeRightBottom.classList.add("layx-reisize-touch");
+            }
             if (config.resizeLimit.rb === true) {
                 resizeRightBottom.setAttribute("data-enable", "0");
             }
@@ -2250,76 +2274,98 @@
         LayxResize.isFirstResizing = true;
         var drag = function (e) {
             e = e || window.event;
-            var button = e.button || e.which;
-            if (button == 1 && e.shiftKey == false) {
-                e.preventDefault();
-                var moveMouseCoord = Utils.getMousePosition(e),
-                    distX = moveMouseCoord.x - handle.mouseStartCoord.x,
-                    distY = moveMouseCoord.y - handle.mouseStartCoord.y,
-                    _top = handle.winform.area.top + distY,
-                    _left = handle.winform.area.left + distX,
-                    _height = isTop ? handle.winform.area.height - distY : handle.winform.area.height + distY,
-                    _width = isLeft ? handle.winform.area.width - distX : handle.winform.area.width + distX;
-                if (distX !== 0 || distY !== 0) {
-                    LayxResize.isResizing = true;
-                    document.body.classList.add('ilayx-body');
-                    if (LayxResize.isFirstResizing === true) {
-                        LayxResize.isFirstResizing = false;
-                        if (Utils.isFunction(handle.winform.event.onresize.before)) {
-                            var reval = handle.winform.event.onresize.before(handle.layxWindow, handle.winform);
-                            if (reval === false) {
-                                LayxResize.isResizing = false;
-                                LayxResize.isFirstResizing = true;
-                                document.onmouseup = null;
-                                document.onmousemove = null;
-                                return;
-                            }
-                        }
-                    }
-                    _width = Math.max(_width, handle.winform.area.minWidth);
-                    if (isLeft) {
-                        _left = Math.min(_left, handle.winform.area.left + handle.winform.area.width - handle.winform.area.minWidth);
-                        _left = Math.max(0, _left);
-                        _width = Math.min(_width, handle.winform.area.left + handle.winform.area.width);
-                    } else {
-                        _left = Math.min(_left, handle.winform.area.left);
-                        _left = Math.max(handle.winform.area.left, _left);
-                        _width = Math.min(_width, handle.innerArea.width - handle.winform.area.left);
-                    }
-                    _height = Math.max(_height, handle.winform.area.minHeight);
-                    if (isTop) {
-                        _top = Math.min(_top, handle.winform.area.top + handle.winform.area.height - handle.winform.area.minHeight);
-                        _top = Math.max(0, _top);
-                        _height = Math.min(_height, handle.winform.area.top + handle.winform.area.height);
-                    } else {
-                        _top = Math.min(_top, handle.winform.area.top);
-                        _top = Math.max(handle.winform.area.top, _top);
-                        _height = Math.min(_height, handle.innerArea.height - handle.winform.area.top);
-                    }
-                    if (lockY) {
-                        handle.layxWindow.style.width = _width + 'px';
-                        handle.layxWindow.style.left = _left + 'px';
-                    }
-                    if (lockX) {
-                        handle.layxWindow.style.top = _top + 'px';
-                        handle.layxWindow.style.height = _height + 'px';
-                    }
-                    if (lockY === false && lockX === false) {
-                        handle.layxWindow.style.width = _width + 'px';
-                        handle.layxWindow.style.left = _left + 'px';
-                        handle.layxWindow.style.top = _top + 'px';
-                        handle.layxWindow.style.height = _height + 'px';
-                    }
-                    if (Utils.isFunction(handle.winform.event.onresize.progress)) {
-                        handle.winform.event.onresize.progress(handle.layxWindow, handle.winform);
+            var moveMouseCoord = Utils.getMousePosition(e),
+                distX = moveMouseCoord.x - handle.mouseStartCoord.x,
+                distY = moveMouseCoord.y - handle.mouseStartCoord.y;
+            if (Utils.isSupportTouch) {
+                if (e.cancelable) {
+                    if (!e.defaultPrevented) {
+                        e.preventDefault();
                     }
                 }
+                if (((distX !== 0 || distY !== 0) && (new Date() - handle.touchDate > 100)) === false) return;
+            }
+            else {
+                var button = e.button || e.which;
+                if ((button == 1 && e.shiftKey == false) === false) return;
+                if (!e.defaultPrevented) {
+                    e.preventDefault();
+                }
+                if ((distX !== 0 || distY !== 0) === false) return;
+            }
+            var _top = handle.winform.area.top + distY,
+                _left = handle.winform.area.left + distX,
+                _height = isTop ? handle.winform.area.height - distY : handle.winform.area.height + distY,
+                _width = isLeft ? handle.winform.area.width - distX : handle.winform.area.width + distX;
+            LayxResize.isResizing = true;
+            document.body.classList.add('ilayx-body');
+            if (LayxResize.isFirstResizing === true) {
+                LayxResize.isFirstResizing = false;
+                if (Utils.isFunction(handle.winform.event.onresize.before)) {
+                    var reval = handle.winform.event.onresize.before(handle.layxWindow, handle.winform);
+                    if (reval === false) {
+                        LayxResize.isResizing = false;
+                        LayxResize.isFirstResizing = true;
+                        if (Utils.isSupportTouch) {
+                            document.ontouchend = null;
+                            document.ontouchmove = null;
+                        }
+                        else {
+                            document.onmouseup = null;
+                            document.onmousemove = null;
+                        }
+                        return;
+                    }
+                }
+            }
+            _width = Math.max(_width, handle.winform.area.minWidth);
+            if (isLeft) {
+                _left = Math.min(_left, handle.winform.area.left + handle.winform.area.width - handle.winform.area.minWidth);
+                _left = Math.max(0, _left);
+                _width = Math.min(_width, handle.winform.area.left + handle.winform.area.width);
+            } else {
+                _left = Math.min(_left, handle.winform.area.left);
+                _left = Math.max(handle.winform.area.left, _left);
+                _width = Math.min(_width, handle.innerArea.width - handle.winform.area.left);
+            }
+            _height = Math.max(_height, handle.winform.area.minHeight);
+            if (isTop) {
+                _top = Math.min(_top, handle.winform.area.top + handle.winform.area.height - handle.winform.area.minHeight);
+                _top = Math.max(0, _top);
+                _height = Math.min(_height, handle.winform.area.top + handle.winform.area.height);
+            } else {
+                _top = Math.min(_top, handle.winform.area.top);
+                _top = Math.max(handle.winform.area.top, _top);
+                _height = Math.min(_height, handle.innerArea.height - handle.winform.area.top);
+            }
+            if (lockY) {
+                handle.layxWindow.style.width = _width + 'px';
+                handle.layxWindow.style.left = _left + 'px';
+            }
+            if (lockX) {
+                handle.layxWindow.style.top = _top + 'px';
+                handle.layxWindow.style.height = _height + 'px';
+            }
+            if (lockY === false && lockX === false) {
+                handle.layxWindow.style.width = _width + 'px';
+                handle.layxWindow.style.left = _left + 'px';
+                handle.layxWindow.style.top = _top + 'px';
+                handle.layxWindow.style.height = _height + 'px';
+            }
+            if (Utils.isFunction(handle.winform.event.onresize.progress)) {
+                handle.winform.event.onresize.progress(handle.layxWindow, handle.winform);
             }
         };
         var dragend = function (e) {
             e = e || window.event;
-            document.onmouseup = null;
-            document.onmousemove = null;
+            if (Utils.isSupportTouch) {
+                document.ontouchend = null;
+                document.ontouchmove = null;
+            }
+            else {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
             var mousePreventDefault = handle.layxWindow.querySelector(".layx-mouse-preventDefault");
             if (mousePreventDefault) {
                 mousePreventDefault.parentNode.removeChild(mousePreventDefault);
@@ -2370,6 +2416,7 @@
                         handle.layxWindow = layxWindow;
                         handle.winform = winform;
                         handle.innerArea = Utils.innerArea();
+                        handle.touchDate = new Date();
                         var mousePreventDefault = layxWindow.querySelector(".layx-mouse-preventDefault");
                         if (!mousePreventDefault) {
                             mousePreventDefault = document.createElement("div");
@@ -2379,8 +2426,14 @@
                                 main.appendChild(mousePreventDefault);
                             }
                         }
-                        document.onmouseup = dragend;
-                        document.onmousemove = drag;
+                        if (Utils.isSupportTouch) {
+                            document.ontouchend = dragend;
+                            document.ontouchmove = drag;
+                        }
+                        else {
+                            document.onmouseup = dragend;
+                            document.onmousemove = drag;
+                        }
                     } else {
                         Layx.restore(id);
                     }
@@ -2388,7 +2441,12 @@
             }
             return false;
         };
-        handle.onmousedown = dragstart;
+        if (Utils.isSupportTouch) {
+            handle.ontouchstart = dragstart;
+        }
+        else {
+            handle.onmousedown = dragstart;
+        }
     };
     var LayxDrag = function (handle) {
         LayxDrag.isMoveing = false;
