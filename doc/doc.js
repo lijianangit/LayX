@@ -403,12 +403,17 @@ window.onload = function () {
             e = e || window.event;
             var scrollDiv = code.querySelector("*[name='" + this.innerHTML + "']");
             if (self != top && self.frameElement && self.frameElement.tagName == "IFRAME") {
-                if (navigator.userAgent.indexOf("Firefox") > 0 || window.navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
+                if (navigator.userAgent.indexOf("Firefox") > 0) {
                     (document.documentElement || document.body).scrollTop = scrollDiv.offsetTop - window.innerHeight - 50;
                 }
                 else {
-                    (document.documentElement || document.body).scrollTop = scrollDiv.offsetTop;
-                    code.scrollTop = scrollDiv.offsetTop;
+                    if (window.navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
+                        code.scrollTop = scrollDiv.offsetTop;
+                    }
+                    else {
+                        (document.documentElement || document.body).scrollTop = scrollDiv.offsetTop;
+                        code.scrollTop = scrollDiv.offsetTop;
+                    }
                 }
             }
             else {
