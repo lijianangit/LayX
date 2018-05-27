@@ -2,14 +2,14 @@
  * file : layx.js
  * gitee : https://gitee.com/monksoul/LayX
  * author : 百小僧/MonkSoul
- * version : v2.2.4
+ * version : v2.2.5
  * create time : 2018.05.11
  * update time : 2018.05.27
  */
 ;
 !(function (over, win, slf) {
     var Layx = {
-        version: '2.2.4',
+        version: '2.2.5',
         defaults: {
             id: '',
             icon: true,
