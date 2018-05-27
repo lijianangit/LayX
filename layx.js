@@ -2404,7 +2404,7 @@
                         e.preventDefault();
                     }
                 }
-                if (((distX !== 0 || distY !== 0) && (new Date() - handle.touchDate > 100)) === false) return;
+                if (((distX !== 0 || distY !== 0) && (new Date() - handle.touchDate > 30)) === false) return;
             }
             else {
                 var button = e.button || e.which;
