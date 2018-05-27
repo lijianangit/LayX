@@ -2,14 +2,14 @@
  * file : layx.js
  * gitee : https://gitee.com/monksoul/LayX
  * author : 百小僧/MonkSoul
- * version : v2.2.3
+ * version : v2.2.4
  * create time : 2018.05.11
- * update time : 2018.05.26
+ * update time : 2018.05.27
  */
 ;
 !(function (over, win, slf) {
     var Layx = {
-        version: '2.2.3',
+        version: '2.2.4',
         defaults: {
             id: '',
             icon: true,
@@ -2199,8 +2199,7 @@
                     x: e.touches[0].clientX,
                     y: e.touches[0].clientY
                 };
-            }
-            else {
+            } else {
                 var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
                 var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
                 var x = e.pageX || e.clientX + scrollX;
@@ -2283,15 +2282,17 @@
                         e.preventDefault();
                     }
                 }
-                if (((distX !== 0 || distY !== 0) && (new Date() - handle.touchDate > 100)) === false) return;
-            }
-            else {
+                if (((distX !== 0 || distY !== 0) && (new Date() - handle.touchDate > 100)) === false)
+                    return;
+            } else {
                 var button = e.button || e.which;
-                if ((button == 1 && e.shiftKey == false) === false) return;
+                if ((button == 1 && e.shiftKey == false) === false)
+                    return;
                 if (!e.defaultPrevented) {
                     e.preventDefault();
                 }
-                if ((distX !== 0 || distY !== 0) === false) return;
+                if ((distX !== 0 || distY !== 0) === false)
+                    return;
             }
             var _top = handle.winform.area.top + distY,
                 _left = handle.winform.area.left + distX,
@@ -2309,8 +2310,7 @@
                         if (Utils.isSupportTouch) {
                             document.ontouchend = null;
                             document.ontouchmove = null;
-                        }
-                        else {
+                        } else {
                             document.onmouseup = null;
                             document.onmousemove = null;
                         }
@@ -2361,8 +2361,7 @@
             if (Utils.isSupportTouch) {
                 document.ontouchend = null;
                 document.ontouchmove = null;
-            }
-            else {
+            } else {
                 document.onmouseup = null;
                 document.onmousemove = null;
             }
@@ -2429,8 +2428,7 @@
                         if (Utils.isSupportTouch) {
                             document.ontouchend = dragend;
                             document.ontouchmove = drag;
-                        }
-                        else {
+                        } else {
                             document.onmouseup = dragend;
                             document.onmousemove = drag;
                         }
@@ -2443,8 +2441,7 @@
         };
         if (Utils.isSupportTouch) {
             handle.ontouchstart = dragstart;
-        }
-        else {
+        } else {
             handle.onmousedown = dragstart;
         }
     };
@@ -2462,17 +2459,18 @@
                         e.preventDefault();
                     }
                 }
-                if (((distX !== 0 || distY !== 0) && (new Date() - handle.touchDate > 100)) === false) return;
-            }
-            else {
+                if (((distX !== 0 || distY !== 0) && (new Date() - handle.touchDate > 100)) === false)
+                    return;
+            } else {
                 var button = e.button || e.which;
-                if ((button == 1 && e.shiftKey == false) === false) return;
+                if ((button == 1 && e.shiftKey == false) === false)
+                    return;
                 if (!e.defaultPrevented) {
                     e.preventDefault();
                 }
-                if ((distX !== 0 || distY !== 0) === false) return;
+                if ((distX !== 0 || distY !== 0) === false)
+                    return;
             }
-
             LayxDrag.isMoveing = true;
             document.body.classList.add('ilayx-body');
             if (LayxDrag.isFirstMoveing === true) {
@@ -2485,8 +2483,7 @@
                         if (Utils.isSupportTouch) {
                             document.ontouchend = null;
                             document.ontouchmove = null;
-                        }
-                        else {
+                        } else {
                             document.onmouseup = null;
                             document.onmousemove = null;
                         }
@@ -2529,8 +2526,7 @@
             if (Utils.isSupportTouch) {
                 document.ontouchend = null;
                 document.ontouchmove = null;
-            }
-            else {
+            } else {
                 document.onmouseup = null;
                 document.onmousemove = null;
             }
@@ -2607,8 +2603,7 @@
                         if (Utils.isSupportTouch) {
                             document.ontouchend = dragend;
                             document.ontouchmove = drag;
-                        }
-                        else {
+                        } else {
                             document.onmouseup = dragend;
                             document.onmousemove = drag;
                         }
@@ -2621,8 +2616,7 @@
         };
         if (Utils.isSupportTouch) {
             handle.ontouchstart = dragstart;
-        }
-        else {
+        } else {
             handle.onmousedown = dragstart;
         }
     };
