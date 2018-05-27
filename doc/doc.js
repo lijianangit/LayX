@@ -417,7 +417,7 @@ window.onload = function () {
                 }
             }
             else {
-                if (navigator.userAgent.indexOf("Firefox") > 0) {
+                if (navigator.userAgent.indexOf("Firefox") > 0 || window.navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
                     code.scrollTop = scrollDiv.offsetTop - code.offsetHeight - 50;
                 }
                 else {
