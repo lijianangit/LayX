@@ -410,7 +410,7 @@ window.onload = function () {
                     if (window.navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
                         code.style['-webkit-overflow-scrolling'] = 'auto';
                         setTimeout(function () {
-                            code.scrollTop = scrollDiv.offsetTop;
+                            code.scrollTop = 0;
                             code.style['-webkit-overflow-scrolling'] = 'touch';
                         }, 2);
                     }
