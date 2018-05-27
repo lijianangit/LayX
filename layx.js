@@ -2023,6 +2023,7 @@
         }
     };
     var Utils = {
+        isSupportTouch: "ontouchstart" in document ? true : false,
         isBoolean: function (obj) {
             return typeof obj === "boolean";
         },
@@ -2169,14 +2170,22 @@
         },
         getMousePosition: function (e) {
             e = e || window.event;
-            var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
-            var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
-            var x = e.pageX || e.clientX + scrollX;
-            var y = e.pageY || e.clientY + scrollY;
-            return {
-                'x': x,
-                'y': y
-            };
+            if (e.touches) {
+                return {
+                    x: e.touches[0].clientX,
+                    y: e.touches[0].clientY
+                };
+            }
+            else {
+                var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+                var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+                var x = e.pageX || e.clientX + scrollX;
+                var y = e.pageY || e.clientY + scrollY;
+                return {
+                    x: x,
+                    y: y
+                };
+            }
         },
         getElementPos: function (el) {
             var ua = navigator.userAgent.toLowerCase();
@@ -2386,64 +2395,79 @@
         LayxDrag.isFirstMoveing = true;
         var drag = function (e) {
             e = e || window.event;
-            var button = e.button || e.which;
-            if (button == 1 && e.shiftKey == false) {
-                e.preventDefault();
-                var moveMouseCoord = Utils.getMousePosition(e),
-                    distX = moveMouseCoord.x - handle.mouseStartCoord.x,
-                    distY = moveMouseCoord.y - handle.mouseStartCoord.y;
-                if (distX !== 0 || distY !== 0) {
-                    LayxDrag.isMoveing = true;
-                    document.body.classList.add('ilayx-body');
-                    if (LayxDrag.isFirstMoveing === true) {
-                        LayxDrag.isFirstMoveing = false;
-                        if (Utils.isFunction(handle.winform.event.onmove.before)) {
-                            var reval = handle.winform.event.onmove.before(handle.layxWindow, handle.winform);
-                            if (reval === false) {
-                                LayxDrag.isMoveing = false;
-                                LayxDrag.isFirstMoveing = true;
+            if (Utils.isSupportTouch) {
+            }
+            else {
+                var button = e.button || e.which;
+                if ((button == 1 && e.shiftKey == false) === false) return;
+            }
+            e.preventDefault();
+            var moveMouseCoord = Utils.getMousePosition(e),
+                distX = moveMouseCoord.x - handle.mouseStartCoord.x,
+                distY = moveMouseCoord.y - handle.mouseStartCoord.y;
+            if (distX !== 0 || distY !== 0) {
+                LayxDrag.isMoveing = true;
+                document.body.classList.add('ilayx-body');
+                if (LayxDrag.isFirstMoveing === true) {
+                    LayxDrag.isFirstMoveing = false;
+                    if (Utils.isFunction(handle.winform.event.onmove.before)) {
+                        var reval = handle.winform.event.onmove.before(handle.layxWindow, handle.winform);
+                        if (reval === false) {
+                            LayxDrag.isMoveing = false;
+                            LayxDrag.isFirstMoveing = true;
+                            if (Utils.isSupportTouch) {
+                                document.ontouchend = null;
+                                document.ontouchmove = null;
+                            }
+                            else {
                                 document.onmouseup = null;
                                 document.onmousemove = null;
-                                return;
                             }
+                            return;
                         }
                     }
-                    var _left = handle.winform.area.left + distX;
-                    var _top = handle.winform.area.top + distY;
-                    if (handle.winform.status === "max" && handle.winform.resizable === true) {
-                        if (moveMouseCoord.x < handle.winform.area.width / 2) {
-                            _left = 0;
-                        } else if (moveMouseCoord.x > handle.winform.area.width / 2 && moveMouseCoord.x < handle.innerArea.width - handle.winform.area.width) {
-                            _left = moveMouseCoord.x - handle.winform.area.width / 2;
-                        } else if (handle.innerArea.width - moveMouseCoord.x < handle.winform.area.width / 2) {
-                            _left = handle.innerArea.width - handle.winform.area.width;
-                        } else if (handle.innerArea.width - moveMouseCoord.x > handle.winform.area.width / 2 && moveMouseCoord.x >= handle.innerArea.width - handle.winform.area.width) {
-                            _left = moveMouseCoord.x - handle.winform.area.width / 2;
-                        }
-                        _top = 0;
-                        handle.winform.area.top = 0;
-                        handle.winform.area.left = _left;
-                        Layx.restore(handle.winform.id);
+                }
+                var _left = handle.winform.area.left + distX;
+                var _top = handle.winform.area.top + distY;
+                if (handle.winform.status === "max" && handle.winform.resizable === true) {
+                    if (moveMouseCoord.x < handle.winform.area.width / 2) {
+                        _left = 0;
+                    } else if (moveMouseCoord.x > handle.winform.area.width / 2 && moveMouseCoord.x < handle.innerArea.width - handle.winform.area.width) {
+                        _left = moveMouseCoord.x - handle.winform.area.width / 2;
+                    } else if (handle.innerArea.width - moveMouseCoord.x < handle.winform.area.width / 2) {
+                        _left = handle.innerArea.width - handle.winform.area.width;
+                    } else if (handle.innerArea.width - moveMouseCoord.x > handle.winform.area.width / 2 && moveMouseCoord.x >= handle.innerArea.width - handle.winform.area.width) {
+                        _left = moveMouseCoord.x - handle.winform.area.width / 2;
                     }
-                    handle.winform.moveLimit.horizontal === true && (_left = handle.winform.area.left);
-                    handle.winform.moveLimit.vertical === true && (_top = handle.winform.area.top);
-                    handle.winform.moveLimit.leftOut === false && (_left = Math.max(_left, 0));
-                    handle.winform.moveLimit.rightOut === false && (_left = Math.min(_left, handle.innerArea.width - handle.winform.area.width));
-                    handle.winform.moveLimit.bottomOut === false && (_top = Math.min(_top, handle.innerArea.height - handle.winform.area.height));
-                    _top = Math.max(_top, 0);
-                    _top = Math.min(handle.innerArea.height - 15, _top);
-                    handle.layxWindow.style.left = _left + "px";
-                    handle.layxWindow.style.top = _top + "px";
-                    if (Utils.isFunction(handle.winform.event.onmove.progress)) {
-                        handle.winform.event.onmove.progress(handle.layxWindow, handle.winform);
-                    }
+                    _top = 0;
+                    handle.winform.area.top = 0;
+                    handle.winform.area.left = _left;
+                    Layx.restore(handle.winform.id);
+                }
+                handle.winform.moveLimit.horizontal === true && (_left = handle.winform.area.left);
+                handle.winform.moveLimit.vertical === true && (_top = handle.winform.area.top);
+                handle.winform.moveLimit.leftOut === false && (_left = Math.max(_left, 0));
+                handle.winform.moveLimit.rightOut === false && (_left = Math.min(_left, handle.innerArea.width - handle.winform.area.width));
+                handle.winform.moveLimit.bottomOut === false && (_top = Math.min(_top, handle.innerArea.height - handle.winform.area.height));
+                _top = Math.max(_top, 0);
+                _top = Math.min(handle.innerArea.height - 15, _top);
+                handle.layxWindow.style.left = _left + "px";
+                handle.layxWindow.style.top = _top + "px";
+                if (Utils.isFunction(handle.winform.event.onmove.progress)) {
+                    handle.winform.event.onmove.progress(handle.layxWindow, handle.winform);
                 }
             }
         };
         var dragend = function (e) {
             e = e || window.event;
-            document.onmouseup = null;
-            document.onmousemove = null;
+            if (Utils.isSupportTouch) {
+                document.ontouchend = null;
+                document.ontouchmove = null;
+            }
+            else {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
             var mousePreventDefault = handle.layxWindow.querySelector(".layx-mouse-preventDefault");
             if (mousePreventDefault) {
                 mousePreventDefault.parentNode.removeChild(mousePreventDefault);
@@ -2499,6 +2523,7 @@
                         Layx.updateZIndex(id);
                         layxMove.style.zIndex = winform.zIndex - 1;
                         var mouseCoord = Utils.getMousePosition(e);
+                        console.log(mouseCoord);
                         handle.mouseStartCoord = mouseCoord;
                         handle.layxWindow = layxWindow;
                         handle.winform = winform;
@@ -2513,8 +2538,14 @@
                                 main.appendChild(mousePreventDefault);
                             }
                         }
-                        document.onmouseup = dragend;
-                        document.onmousemove = drag;
+                        if (Utils.isSupportTouch) {
+                            document.ontouchend = dragend;
+                            document.ontouchmove = drag;
+                        }
+                        else {
+                            document.onmouseup = dragend;
+                            document.onmousemove = drag;
+                        }
                     } else {
                         Layx.restore(id);
                     }
@@ -2522,7 +2553,12 @@
             }
             return false;
         };
-        handle.onmousedown = dragstart;
+        if (Utils.isSupportTouch) {
+            handle.ontouchstart = dragstart;
+        }
+        else {
+            handle.onmousedown = dragstart;
+        }
     };
     win.layx = {
         v: (function () {
