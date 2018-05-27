@@ -408,8 +408,11 @@ window.onload = function () {
                 }
                 else {
                     if (window.navigator.userAgent.toLowerCase().indexOf('iphone') > -1) {
-                        //(document.documentElement || document.body).scrollTop = scrollDiv.offsetTop;
-                        alert('dd');
+                        code.style['-webkit-overflow-scrolling'] = 'auto';
+                        setTimeout(function () {
+                            code.scrollTop = scrollDiv.offsetTop;
+                            code.style['-webkit-overflow-scrolling'] = 'touch';
+                        }, 2);
                     }
                     else {
                         (document.documentElement || document.body).scrollTop = scrollDiv.offsetTop;
