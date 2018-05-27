@@ -384,11 +384,20 @@
                             if (i === config.frameIndex) {
                                 frameTitle.setAttribute("data-enable", "1");
                             }
-                            frameTitle.onclick = function (e) {
-                                e = e || window.event;
-                                that._setGroupIndex(config.id, this);
-                                e.stopPropagation();
-                            };
+                            if (Utils.isSupportTouch) {
+                                frameTitle.ontouchstart = function (e) {
+                                    e = e || window.event;
+                                    that._setGroupIndex(config.id, this);
+                                    e.stopPropagation();
+                                };
+                            }
+                            else {
+                                frameTitle.onclick = function (e) {
+                                    e = e || window.event;
+                                    that._setGroupIndex(config.id, this);
+                                    e.stopPropagation();
+                                };
+                            }
                             if (config.mergeTitle === false) {
                                 groupTab.appendChild(frameTitle);
                             } else {
