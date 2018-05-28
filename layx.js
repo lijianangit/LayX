@@ -968,7 +968,11 @@
             html.classList.add("layx-html");
             html.setAttribute("id", "layx-" + config.id + (type === "group" ? "-" + frameConfig.id + "-" : "-") + "html");
             if (Utils.isDom(content)) {
-                html.appendChild((type === "group" ? frameConfig : config).cloneElementContent === true ? content.cloneNode(true) : content);
+                var newContent = html.appendChild((type === "group" ? frameConfig : config).cloneElementContent === true ? content.cloneNode(true) : content);
+                var contentStyle = content.currentStyle ? content.currentStyle : window.getComputedStyle(content, null);
+                if (contentStyle.display === "none") {
+                    newContent.style.display = "";
+                }
             } else {
                 html.innerHTML = content;
             }
