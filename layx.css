@@ -187,6 +187,7 @@ body.ilayx-body {
     min-width: 0;
     -ms-touch-action: none;
     touch-action: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .layx-title {
