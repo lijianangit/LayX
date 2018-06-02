@@ -236,7 +236,7 @@ window.onload = function () {
                     },
                     {
                         id: 'source',
-                        label: '源码',
+                        label: '鉴赏',
                         classes: 'custom-button',
                         callback: function (id, button, event) {
                             event.stopPropagation();
