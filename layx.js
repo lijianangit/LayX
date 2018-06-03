@@ -837,7 +837,7 @@
                 } else {
                     clearInterval(fixFocus);
                 }
-            }, 0);
+            }, 200);
             return winform;
         },
         updateFloatWinPosition: function (id, direction) {
@@ -2284,7 +2284,7 @@
         });
     }
     var IframeOnClick = {
-        resolution: 0,
+        resolution: 200,
         iframes: [],
         interval: null,
         Iframe: function () {
