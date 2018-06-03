@@ -3,14 +3,14 @@
  * gitee : https://gitee.com/monksoul/LayX
  * github : https://github.com/MonkSoul/Layx/
  * author : 百小僧/MonkSoul
- * version : v2.3.8
+ * version : v2.3.9
  * create time : 2018.05.11
  * update time : 2018.06.03
  */
 ;
 !(function (over, win, slf) {
     var Layx = {
-        version: '2.3.8',
+        version: '2.3.9',
         defaults: {
             id: '',
             icon: true,
@@ -834,8 +834,7 @@
             var fixFocus = setInterval(function () {
                 if (config.id !== Layx.focusId) {
                     that.updateZIndex(config.id);
-                }
-                else {
+                } else {
                     clearInterval(fixFocus);
                 }
             }, 0);
