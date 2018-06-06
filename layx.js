@@ -2674,10 +2674,10 @@
             }
             if (/^[1-9]\d*v[hw]$/.test(widthOrHeight)) {
                 if (type === "width") {
-                    return innerArea.width * widthOrHeight / 100;
+                    return innerArea.width * parseFloat(widthOrHeight) / 100;
                 }
                 if (type === "height") {
-                    return innerArea.height * widthOrHeight / 100;
+                    return innerArea.height * parseFloat(widthOrHeight) / 100;
                 }
             }
             return errorValue;
