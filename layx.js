@@ -292,8 +292,8 @@
                 bubble.appendChild(bubbleInlay);
             }
             layxWindow.style.zIndex = config.alwaysOnTop === true ? (++that.stickZIndex) : (++that.zIndex);
-            layxWindow.style.width = Utils.isVwOrVhUnit(config.width) ? config.width : (_width + "px");
-            layxWindow.style.height = Utils.isVwOrVhUnit(config.height) ? config.height : (_height + "px");
+            layxWindow.style.width = _width + "px";
+            layxWindow.style.height = _height + "px";
             layxWindow.style.minWidth = _minWidth + "px";
             layxWindow.style.minHeight = _minHeight + "px";
             layxWindow.style.top = _top + "px";
@@ -2411,9 +2411,6 @@
         }
     };
     var Utils = {
-        isVwOrVhUnit: function (str) {
-            return /^[1-9]\d*v[hw]$/.test(str);
-        },
         isSupportTouch: "ontouchstart" in document ? true : false,
         isSupportMouse: "onmouseup" in document ? true : false,
         IsPC: function () {
