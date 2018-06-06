@@ -291,7 +291,7 @@ body.ilayx-body {
 }
 
 .layx-main {
-    overflow: hidden;
+    overflow: auto;
     position: relative;
     clear: both;
     -webkit-overflow-scrolling: touch;
