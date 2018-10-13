@@ -4,11 +4,5 @@
     "inputFiles": [
       "layx.js"
     ]
-  },
-  {
-    "outputFileName": "layx.min.css",
-    "inputFiles": [
-      "layx.css"
-    ]
   }
 ]
