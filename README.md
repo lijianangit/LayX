@@ -1,3 +1,6 @@
+# Layx v3.x 版本开发中，新增更多特性：[新特性](https://gitee.com/monksoul/LayX/issues/IRK3V)
+
+
 # 序言
 
 Layx 新一代Web弹窗组件。
