@@ -1,0 +1,35 @@
+{
+  "name": "layx",
+  "version": "3.0.0",
+  "description": "Creative elements container.",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc -w",
+    "build": "tsc",
+    "webpack": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitee.com:monksoul/LayX.git"
+  },
+  "keywords": [
+    "layx",
+    "dialog",
+    "PopupWindow",
+    "layer",
+    "百小僧",
+    "Monk",
+    "MonkSoul",
+    "弹窗",
+    "弹层",
+    "窗口"
+  ],
+  "author": "百小僧/MonkSoul",
+  "license": "MIT",
+  "devDependencies": {
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.3.3",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3"
+  }
+}
