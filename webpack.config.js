@@ -11,8 +11,16 @@ module.exports = {
     "module": {
         "rules": [
             {
+                "test": /\.css$/,
+                "use": ["style-loader", "css-loader", "postcss-loader"]
+            },
+            {
                 "test": /\.ts?$/,
-                "loader": "ts-loader"
+                "use": "ts-loader"
+            },
+            {
+                "test": /\.(eot|ttf|woff|svg)$/,
+                "use": 'file-loader'
             }
         ]
     },
