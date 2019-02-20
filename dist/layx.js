@@ -403,9 +403,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Container_1 = __importDefault(__webpack_require__(/*! ./components/Container */ "./src/components/Container.ts"));
 function layxInstance() {
     var layx = function (options) { };
+    layx.zIndex = 10000000;
+    var containerOptions = { id: "hello", background: "#dedede" };
+    var container = new Container_1.default(containerOptions);
     layx.create = function (options) {
-        var containerOptions = { id: "hello", background: "#dedede" };
-        var container = new Container_1.default(containerOptions);
         var containerFragment = container.createView();
         document.body.appendChild(containerFragment);
     };

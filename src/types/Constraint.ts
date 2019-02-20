@@ -3,6 +3,7 @@ import { Theme } from "../enums/Theme";
 export interface Layx {
     (options: any): void;
     create(options: any): void;
+    zIndex?: number;
 }
 
 export interface JsonObject {
