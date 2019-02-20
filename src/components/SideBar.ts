@@ -2,6 +2,8 @@ import Container from "./Container";
 import Component from "./Componet";
 
 export default class SideBar implements Component {
+    readonly name: string = "sideBar";
+
     width: number = 60;
     background: string = "#eeeef2";
 

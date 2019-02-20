@@ -2,6 +2,8 @@ import Component from "./Componet";
 import Container from "./Container";
 
 export default class StatuBar implements Component {
+    readonly  name: string = "statuBar";
+
     height: number = 30;
     background: string = "#eeeef2";
 

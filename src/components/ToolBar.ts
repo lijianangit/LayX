@@ -2,6 +2,8 @@ import Component from "./Componet";
 import Container from "./Container";
 
 export default class ToolBar implements Component {
+    readonly name: string = "toolBar";
+
     height: number = 30;
     background: string = "#ffffff";
 

@@ -2,6 +2,8 @@ import Container from "./Container";
 import Component from "./Componet";
 
 export default class TopMenu implements Component {
+    readonly name: string = "topMenu";
+
     background: string = "#eeeef2";
 
     constructor(public container: Container) {

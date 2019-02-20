@@ -3,13 +3,14 @@ import { Theme } from "../enums/Theme";
 import { ContainerOptions, ResizeOptions, ToolBarOptions, TopMenuOptions, StatuBarOptions, SideBarOptions } from "../types/Constraint";
 import { convertDimension, getKebabCase } from "../utils/ValueHelper";
 import { leastOneTrue, reverseBooleanObject, merge } from "../utils/ObjectHelper";
-import { ResizeDirection } from "../enums/ResizeDirection";
 import ToolBar from "./ToolBar";
 import TopMenu from "./TopMenu";
 import StatuBar from "./StatuBar";
 import SideBar from "./SideBar";
 
 export default class Container implements Component {
+    readonly name: string = "container";
+
     readonly prefix: string = "layx-";
 
     readonly id: string;
@@ -91,34 +92,13 @@ export default class Container implements Component {
         containerElement.style.maxHeight = this.maxHeight === innerHeight ? null : `${this.maxHeight}px`;
         containerElement.style.background = this.background;
 
-
         const parcloseElement = this.createParcloseView();
         if (parcloseElement) {
             fragment.appendChild(parcloseElement);
         }
 
-        if (this.toolBar !== undefined) {
-            const toolBar = new ToolBar(this);
-            const toolBarFragment = toolBar.createView();
-            containerElement.appendChild(toolBarFragment);
-        }
-
-        if (this.topMenu !== undefined) {
-            const topMenu = new TopMenu(this);
-            const topMenuFragment = topMenu.createView();
-            containerElement.appendChild(topMenuFragment);
-        }
-
-        if (this.sideBar !== undefined) {
-            const sideBar = new SideBar(this);
-            const sideBarFragment = sideBar.createView();
-            containerElement.appendChild(sideBarFragment);
-        }
-
-        if (this.statuBar !== undefined) {
-            const statuBar = new StatuBar(this);
-            const statuBarFragment = statuBar.createView();
-            containerElement.appendChild(statuBarFragment);
+        for (const component of [ToolBar, TopMenu, SideBar, StatuBar]) {
+            this.initComponet(containerElement, component);
         }
 
         const resizeElements = this.createResizeView();
@@ -157,5 +137,14 @@ export default class Container implements Component {
         const resize = document.createElement("div");
         resize.classList.add(`${this.prefix}resize-${direction}`);
         parent.appendChild(resize);
+    }
+
+    private initComponet<T extends Component>(parent: HTMLElement, ctor: { new(container: Container): T; }): T | undefined {
+        const componet = new ctor(this);
+        if ((<any>this)[componet.name] !== undefined) {
+            const componentFragment = componet.createView();
+            parent.appendChild(componentFragment);
+            return componet;
+        }
     }
 }

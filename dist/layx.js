@@ -118,6 +118,7 @@ var StatuBar_1 = __importDefault(__webpack_require__(/*! ./StatuBar */ "./src/co
 var SideBar_1 = __importDefault(__webpack_require__(/*! ./SideBar */ "./src/components/SideBar.ts"));
 var Container = (function () {
     function Container(options) {
+        this.name = "container";
         this.prefix = "layx-";
         this.width = 800;
         this.height = 600;
@@ -190,25 +191,9 @@ var Container = (function () {
         if (parcloseElement) {
             fragment.appendChild(parcloseElement);
         }
-        if (this.toolBar !== undefined) {
-            var toolBar = new ToolBar_1.default(this);
-            var toolBarFragment = toolBar.createView();
-            containerElement.appendChild(toolBarFragment);
-        }
-        if (this.topMenu !== undefined) {
-            var topMenu = new TopMenu_1.default(this);
-            var topMenuFragment = topMenu.createView();
-            containerElement.appendChild(topMenuFragment);
-        }
-        if (this.sideBar !== undefined) {
-            var sideBar = new SideBar_1.default(this);
-            var sideBarFragment = sideBar.createView();
-            containerElement.appendChild(sideBarFragment);
-        }
-        if (this.statuBar !== undefined) {
-            var statuBar = new StatuBar_1.default(this);
-            var statuBarFragment = statuBar.createView();
-            containerElement.appendChild(statuBarFragment);
+        for (var _i = 0, _a = [ToolBar_1.default, TopMenu_1.default, SideBar_1.default, StatuBar_1.default]; _i < _a.length; _i++) {
+            var component = _a[_i];
+            this.initComponet(containerElement, component);
         }
         var resizeElements = this.createResizeView();
         if (resizeElements) {
@@ -243,6 +228,14 @@ var Container = (function () {
         resize.classList.add(this.prefix + "resize-" + direction);
         parent.appendChild(resize);
     };
+    Container.prototype.initComponet = function (parent, ctor) {
+        var componet = new ctor(this);
+        if (this[componet.name] !== undefined) {
+            var componentFragment = componet.createView();
+            parent.appendChild(componentFragment);
+            return componet;
+        }
+    };
     return Container;
 }());
 exports.default = Container;
@@ -263,6 +256,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var SideBar = (function () {
     function SideBar(container) {
         this.container = container;
+        this.name = "sideBar";
         this.width = 60;
         this.background = "#eeeef2";
         if (typeof container.sideBar === "object") {
@@ -299,6 +293,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var StatuBar = (function () {
     function StatuBar(container) {
         this.container = container;
+        this.name = "statuBar";
         this.height = 30;
         this.background = "#eeeef2";
         if (typeof container.statuBar === "object") {
@@ -335,6 +330,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ToolBar = (function () {
     function ToolBar(container) {
         this.container = container;
+        this.name = "toolBar";
         this.height = 30;
         this.background = "#ffffff";
         if (typeof container.toolBar === "object") {
@@ -371,6 +367,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var TopMenu = (function () {
     function TopMenu(container) {
         this.container = container;
+        this.name = "topMenu";
         this.background = "#eeeef2";
         if (typeof container.topMenu === "object") {
             this.background = container.topMenu.background || this.background;
