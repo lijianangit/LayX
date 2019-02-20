@@ -1,7 +1,7 @@
 import Component from "./Componet";
 import { Theme } from "../enums/Theme";
 import { ContainerOptions, ResizeOptions, ToolBarOptions, TopMenuOptions, StatuBarOptions, SideBarOptions } from "../types/Constraint";
-import { convertDimension } from "../utils/ValueHelper";
+import { convertDimension, getKebabCase } from "../utils/ValueHelper";
 import { leastOneTrue, reverseBooleanObject, merge } from "../utils/ObjectHelper";
 import { ResizeDirection } from "../enums/ResizeDirection";
 import ToolBar from "./ToolBar";
@@ -144,20 +144,14 @@ export default class Container implements Component {
             const resizeElements = document.createElement("div");
             resizeElements.classList.add(`${this.prefix}resizes`);
 
-            this.createResizeItem(resizeElements, <boolean>this.resize.top, ResizeDirection.TOP);
-            this.createResizeItem(resizeElements, <boolean>this.resize.left, ResizeDirection.LEFT);
-            this.createResizeItem(resizeElements, <boolean>this.resize.right, ResizeDirection.RIGHT);
-            this.createResizeItem(resizeElements, <boolean>this.resize.bottom, ResizeDirection.BOTTOM);
-            this.createResizeItem(resizeElements, <boolean>this.resize.leftTop, ResizeDirection.LEFT_TOP);
-            this.createResizeItem(resizeElements, <boolean>this.resize.rightTop, ResizeDirection.RIGHT_TOP);
-            this.createResizeItem(resizeElements, <boolean>this.resize.leftBottom, ResizeDirection.LEFT_BOTTOM);
-            this.createResizeItem(resizeElements, <boolean>this.resize.rightBottom, ResizeDirection.RIGHT_BOTTOM);
-
+            for (const key of Object.keys(this.resize)) {
+                this.createResizeItem(resizeElements, <boolean>this.resize.top, getKebabCase(key));
+            }
             return resizeElements;
         }
     }
 
-    private createResizeItem(parent: HTMLElement, isCreate: boolean, direction: ResizeDirection): void {
+    private createResizeItem(parent: HTMLElement, isCreate: boolean, direction: string): void {
         if (!isCreate) return;
 
         const resize = document.createElement("div");

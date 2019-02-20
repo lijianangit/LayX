@@ -112,10 +112,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Theme_1 = __webpack_require__(/*! ../enums/Theme */ "./src/enums/Theme.ts");
 var ValueHelper_1 = __webpack_require__(/*! ../utils/ValueHelper */ "./src/utils/ValueHelper.ts");
 var ObjectHelper_1 = __webpack_require__(/*! ../utils/ObjectHelper */ "./src/utils/ObjectHelper.ts");
-var ResizeDirection_1 = __webpack_require__(/*! ../enums/ResizeDirection */ "./src/enums/ResizeDirection.ts");
 var ToolBar_1 = __importDefault(__webpack_require__(/*! ./ToolBar */ "./src/components/ToolBar.ts"));
 var TopMenu_1 = __importDefault(__webpack_require__(/*! ./TopMenu */ "./src/components/TopMenu.ts"));
 var StatuBar_1 = __importDefault(__webpack_require__(/*! ./StatuBar */ "./src/components/StatuBar.ts"));
+var SideBar_1 = __importDefault(__webpack_require__(/*! ./SideBar */ "./src/components/SideBar.ts"));
 var Container = (function () {
     function Container(options) {
         this.prefix = "layx-";
@@ -141,6 +141,7 @@ var Container = (function () {
         this.toolBar = {};
         this.topMenu = undefined;
         this.statuBar = undefined;
+        this.sideBar = undefined;
         this.id = "" + this.prefix + options.id;
         this.width = ValueHelper_1.convertDimension(options.width) || this.width;
         this.height = ValueHelper_1.convertDimension(options.height, "BROWSER_INNER_HEIGHT") || this.height;
@@ -169,6 +170,9 @@ var Container = (function () {
         if (typeof options.statuBar === "object") {
             this.statuBar = ObjectHelper_1.merge({}, options.statuBar);
         }
+        if (typeof options.sideBar === "object") {
+            this.sideBar = ObjectHelper_1.merge({}, options.sideBar);
+        }
     }
     Container.prototype.createView = function () {
         var fragment = document.createDocumentFragment();
@@ -196,6 +200,11 @@ var Container = (function () {
             var topMenuFragment = topMenu.createView();
             containerElement.appendChild(topMenuFragment);
         }
+        if (this.sideBar !== undefined) {
+            var sideBar = new SideBar_1.default(this);
+            var sideBarFragment = sideBar.createView();
+            containerElement.appendChild(sideBarFragment);
+        }
         if (this.statuBar !== undefined) {
             var statuBar = new StatuBar_1.default(this);
             var statuBarFragment = statuBar.createView();
@@ -220,14 +229,10 @@ var Container = (function () {
         if (ObjectHelper_1.leastOneTrue(this.resize)) {
             var resizeElements = document.createElement("div");
             resizeElements.classList.add(this.prefix + "resizes");
-            this.createResizeItem(resizeElements, this.resize.top, ResizeDirection_1.ResizeDirection.TOP);
-            this.createResizeItem(resizeElements, this.resize.left, ResizeDirection_1.ResizeDirection.LEFT);
-            this.createResizeItem(resizeElements, this.resize.right, ResizeDirection_1.ResizeDirection.RIGHT);
-            this.createResizeItem(resizeElements, this.resize.bottom, ResizeDirection_1.ResizeDirection.BOTTOM);
-            this.createResizeItem(resizeElements, this.resize.leftTop, ResizeDirection_1.ResizeDirection.LEFT_TOP);
-            this.createResizeItem(resizeElements, this.resize.rightTop, ResizeDirection_1.ResizeDirection.RIGHT_TOP);
-            this.createResizeItem(resizeElements, this.resize.leftBottom, ResizeDirection_1.ResizeDirection.LEFT_BOTTOM);
-            this.createResizeItem(resizeElements, this.resize.rightBottom, ResizeDirection_1.ResizeDirection.RIGHT_BOTTOM);
+            for (var _i = 0, _a = Object.keys(this.resize); _i < _a.length; _i++) {
+                var key = _a[_i];
+                this.createResizeItem(resizeElements, this.resize.top, ValueHelper_1.getKebabCase(key));
+            }
             return resizeElements;
         }
     };
@@ -241,6 +246,42 @@ var Container = (function () {
     return Container;
 }());
 exports.default = Container;
+
+
+/***/ }),
+
+/***/ "./src/components/SideBar.ts":
+/*!***********************************!*\
+  !*** ./src/components/SideBar.ts ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var SideBar = (function () {
+    function SideBar(container) {
+        this.container = container;
+        this.width = 60;
+        this.background = "#eeeef2";
+        if (typeof container.sideBar === "object") {
+            this.width = container.sideBar.width || this.width;
+            this.background = container.sideBar.background || this.background;
+        }
+    }
+    SideBar.prototype.createView = function () {
+        var fragment = document.createDocumentFragment();
+        var sideBarElement = document.createElement("div");
+        sideBarElement.classList.add(this.container.prefix + "side-bar");
+        sideBarElement.style.width = this.width + "px";
+        sideBarElement.style.background = this.background;
+        fragment.appendChild(sideBarElement);
+        return fragment;
+    };
+    return SideBar;
+}());
+exports.default = SideBar;
 
 
 /***/ }),
@@ -269,8 +310,8 @@ var StatuBar = (function () {
         var fragment = document.createDocumentFragment();
         var statuBarElement = document.createElement("div");
         statuBarElement.classList.add(this.container.prefix + "statu-bar");
-        statuBarElement.style.background = this.background;
         statuBarElement.style.height = this.height + "px";
+        statuBarElement.style.background = this.background;
         fragment.appendChild(statuBarElement);
         return fragment;
     };
@@ -297,16 +338,16 @@ var ToolBar = (function () {
         this.height = 30;
         this.background = "#ffffff";
         if (typeof container.toolBar === "object") {
-            this.background = container.toolBar.background || this.background;
             this.height = container.toolBar.height || this.height;
+            this.background = container.toolBar.background || this.background;
         }
     }
     ToolBar.prototype.createView = function () {
         var fragment = document.createDocumentFragment();
         var toolBarElement = document.createElement("div");
         toolBarElement.classList.add(this.container.prefix + "tool-bar");
-        toolBarElement.style.background = this.background;
         toolBarElement.style.height = this.height + "px";
+        toolBarElement.style.background = this.background;
         fragment.appendChild(toolBarElement);
         return fragment;
     };
@@ -331,6 +372,9 @@ var TopMenu = (function () {
     function TopMenu(container) {
         this.container = container;
         this.background = "#eeeef2";
+        if (typeof container.topMenu === "object") {
+            this.background = container.topMenu.background || this.background;
+        }
     }
     TopMenu.prototype.createView = function () {
         var fragment = document.createDocumentFragment();
@@ -343,31 +387,6 @@ var TopMenu = (function () {
     return TopMenu;
 }());
 exports.default = TopMenu;
-
-
-/***/ }),
-
-/***/ "./src/enums/ResizeDirection.ts":
-/*!**************************************!*\
-  !*** ./src/enums/ResizeDirection.ts ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var ResizeDirection;
-(function (ResizeDirection) {
-    ResizeDirection["TOP"] = "top";
-    ResizeDirection["LEFT"] = "left";
-    ResizeDirection["RIGHT"] = "right";
-    ResizeDirection["BOTTOM"] = "bottom";
-    ResizeDirection["LEFT_TOP"] = "left-top";
-    ResizeDirection["RIGHT_TOP"] = "right-top";
-    ResizeDirection["LEFT_BOTTOM"] = "left-bottom";
-    ResizeDirection["RIGHT_BOTTOM"] = "right-bottom";
-})(ResizeDirection = exports.ResizeDirection || (exports.ResizeDirection = {}));
 
 
 /***/ }),
@@ -510,6 +529,12 @@ function convertDimension(dimension, reference) {
     }
 }
 exports.convertDimension = convertDimension;
+function getKebabCase(str) {
+    return str.replace(/[A-Z]/g, function (item) {
+        return "-" + item.toLowerCase();
+    });
+}
+exports.getKebabCase = getKebabCase;
 
 
 /***/ })
