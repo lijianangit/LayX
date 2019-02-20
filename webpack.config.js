@@ -1,8 +1,8 @@
 module.exports = {
-    "mode": "development",// production|development
+    "mode": "production",// production|development
     "entry": "./src/index.ts",
     "output": {
-        "filename": "layx.js",
+        "filename": "layx.min.js",
         "path": __dirname + "/dist",
         "libraryTarget": "umd",
         "library": "layx",
