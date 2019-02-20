@@ -16,7 +16,7 @@ export default class ToolBar implements Component {
         const fragment = document.createDocumentFragment();
 
         const toolBarElement = document.createElement("div");
-        toolBarElement.classList.add(`${this.container.prefix}toolbar`);
+        toolBarElement.classList.add(`${this.container.prefix}tool-bar`);
         toolBarElement.style.background = this.background;
         toolBarElement.style.height = `${this.height}px`;
 

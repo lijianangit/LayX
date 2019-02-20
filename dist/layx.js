@@ -115,6 +115,7 @@ var ObjectHelper_1 = __webpack_require__(/*! ../utils/ObjectHelper */ "./src/uti
 var ResizeDirection_1 = __webpack_require__(/*! ../enums/ResizeDirection */ "./src/enums/ResizeDirection.ts");
 var ToolBar_1 = __importDefault(__webpack_require__(/*! ./ToolBar */ "./src/components/ToolBar.ts"));
 var TopMenu_1 = __importDefault(__webpack_require__(/*! ./TopMenu */ "./src/components/TopMenu.ts"));
+var StatuBar_1 = __importDefault(__webpack_require__(/*! ./StatuBar */ "./src/components/StatuBar.ts"));
 var Container = (function () {
     function Container(options) {
         this.prefix = "layx-";
@@ -139,6 +140,7 @@ var Container = (function () {
         };
         this.toolBar = {};
         this.topMenu = undefined;
+        this.statuBar = undefined;
         this.id = "" + this.prefix + options.id;
         this.width = ValueHelper_1.convertDimension(options.width) || this.width;
         this.height = ValueHelper_1.convertDimension(options.height, "BROWSER_INNER_HEIGHT") || this.height;
@@ -163,6 +165,9 @@ var Container = (function () {
         }
         if (typeof options.topMenu === "object") {
             this.topMenu = ObjectHelper_1.merge({}, options.topMenu);
+        }
+        if (typeof options.statuBar === "object") {
+            this.statuBar = ObjectHelper_1.merge({}, options.statuBar);
         }
     }
     Container.prototype.createView = function () {
@@ -190,6 +195,11 @@ var Container = (function () {
             var topMenu = new TopMenu_1.default(this);
             var topMenuFragment = topMenu.createView();
             containerElement.appendChild(topMenuFragment);
+        }
+        if (this.statuBar !== undefined) {
+            var statuBar = new StatuBar_1.default(this);
+            var statuBarFragment = statuBar.createView();
+            containerElement.appendChild(statuBarFragment);
         }
         var resizeElements = this.createResizeView();
         if (resizeElements) {
@@ -235,6 +245,42 @@ exports.default = Container;
 
 /***/ }),
 
+/***/ "./src/components/StatuBar.ts":
+/*!************************************!*\
+  !*** ./src/components/StatuBar.ts ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var StatuBar = (function () {
+    function StatuBar(container) {
+        this.container = container;
+        this.height = 30;
+        this.background = "#eeeef2";
+        if (typeof container.statuBar === "object") {
+            this.background = container.statuBar.background || this.background;
+            this.height = container.statuBar.height || this.height;
+        }
+    }
+    StatuBar.prototype.createView = function () {
+        var fragment = document.createDocumentFragment();
+        var statuBarElement = document.createElement("div");
+        statuBarElement.classList.add(this.container.prefix + "statu-bar");
+        statuBarElement.style.background = this.background;
+        statuBarElement.style.height = this.height + "px";
+        fragment.appendChild(statuBarElement);
+        return fragment;
+    };
+    return StatuBar;
+}());
+exports.default = StatuBar;
+
+
+/***/ }),
+
 /***/ "./src/components/ToolBar.ts":
 /*!***********************************!*\
   !*** ./src/components/ToolBar.ts ***!
@@ -258,7 +304,7 @@ var ToolBar = (function () {
     ToolBar.prototype.createView = function () {
         var fragment = document.createDocumentFragment();
         var toolBarElement = document.createElement("div");
-        toolBarElement.classList.add(this.container.prefix + "toolbar");
+        toolBarElement.classList.add(this.container.prefix + "tool-bar");
         toolBarElement.style.background = this.background;
         toolBarElement.style.height = this.height + "px";
         fragment.appendChild(toolBarElement);

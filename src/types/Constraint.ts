@@ -19,6 +19,7 @@ export interface ContainerOptions {
     resize?: ResizeOptions | boolean;
     toolBar?: ToolBarOptions | boolean;
     topMenu?: TopMenuOptions;
+    statuBar?: StatuBarOptions | boolean;
 }
 
 export interface ResizeOptions {
@@ -38,5 +39,10 @@ export interface ToolBarOptions {
 }
 
 export interface TopMenuOptions {
+    background?: string;
+}
+
+export interface StatuBarOptions {
+    height?: number;
     background?: string;
 }

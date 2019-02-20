@@ -1,11 +1,12 @@
 import Component from "./Componet";
 import { Theme } from "../enums/Theme";
-import { ContainerOptions, ResizeOptions, ToolBarOptions, TopMenuOptions } from "../types/Constraint";
+import { ContainerOptions, ResizeOptions, ToolBarOptions, TopMenuOptions, StatuBarOptions } from "../types/Constraint";
 import { convertDimension } from "../utils/ValueHelper";
 import { leastOneTrue, reverseBooleanObject, merge } from "../utils/ObjectHelper";
 import { ResizeDirection } from "../enums/ResizeDirection";
 import ToolBar from "./ToolBar";
 import TopMenu from "./TopMenu";
+import StatuBar from "./StatuBar";
 
 export default class Container implements Component {
     readonly prefix: string = "layx-";
@@ -32,6 +33,7 @@ export default class Container implements Component {
     };
     toolBar: ToolBarOptions | undefined = {};
     topMenu: TopMenuOptions | undefined = undefined;
+    statuBar: StatuBarOptions | undefined = undefined;
 
     constructor(options: ContainerOptions) {
         this.id = `${this.prefix}${options.id}`;
@@ -62,6 +64,10 @@ export default class Container implements Component {
 
         if (typeof options.topMenu === "object") {
             this.topMenu = merge(<TopMenuOptions>{}, options.topMenu);
+        }
+
+        if (typeof options.statuBar === "object") {
+            this.statuBar = merge(<StatuBarOptions>{}, options.statuBar);
         }
     }
 
@@ -95,6 +101,12 @@ export default class Container implements Component {
             const topMenu = new TopMenu(this);
             const topMenuFragment = topMenu.createView();
             containerElement.appendChild(topMenuFragment);
+        }
+
+        if (this.statuBar !== undefined) {
+            const statuBar = new StatuBar(this);
+            const statuBarFragment = statuBar.createView();
+            containerElement.appendChild(statuBarFragment);
         }
 
         const resizeElements = this.createResizeView();
