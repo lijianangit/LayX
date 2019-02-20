@@ -17,6 +17,7 @@ export interface ContainerOptions {
     theme?: Theme;
     parclose?: boolean;
     resize?: ResizeOptions | boolean;
+    toolBar?: ToolBarOptions | boolean;
 }
 
 export interface ResizeOptions {
@@ -28,4 +29,9 @@ export interface ResizeOptions {
     rightTop?: boolean;
     leftBottom?: boolean;
     rightBottom?: boolean;
+}
+
+export interface ToolBarOptions {
+    height?: number;
+    background?: string;
 }

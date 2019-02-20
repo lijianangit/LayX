@@ -1,8 +1,8 @@
 import Container from "./components/Container";
-import { ContainerOptions } from "./types/Constraint";
+import { ContainerOptions, ToolBarOptions } from "./types/Constraint";
 
 const containerOptions: ContainerOptions = { id: "hello", background: "#dedede" };
 const container = new Container(containerOptions);
-const fragment = container.createView(container);
+const containerFragment = container.createView();
 
-document.body.appendChild(fragment);
+document.body.appendChild(containerFragment);

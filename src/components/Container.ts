@@ -1,12 +1,13 @@
 import Component from "./Componet";
 import { Theme } from "../enums/Theme";
-import { ContainerOptions, ResizeOptions } from "../types/Constraint";
+import { ContainerOptions, ResizeOptions, ToolBarOptions } from "../types/Constraint";
 import { convertDimension } from "../utils/ValueHelper";
 import { leastOneTrue, reverseBooleanObject, merge } from "../utils/ObjectHelper";
 import { ResizeDirection } from "../enums/ResizeDirection";
+import ToolBar from "./ToolBar";
 
 export default class Container implements Component {
-    private prefix: string = "layx-";
+    readonly prefix: string = "layx-";
 
     readonly id: string;
     width: number = 800;
@@ -28,6 +29,7 @@ export default class Container implements Component {
         leftBottom: true,
         rightBottom: true
     };
+    toolBar: ToolBarOptions | undefined = {};
 
     constructor(options: ContainerOptions) {
         this.id = `${this.prefix}${options.id}`;
@@ -47,28 +49,41 @@ export default class Container implements Component {
         else if (typeof options.resize === "object") {
             this.resize = merge(this.resize, options.resize);
         }
+        if (typeof options.toolBar === "boolean" && options.toolBar === false) {
+            this.toolBar = undefined;
+        }
+        else if (typeof options.toolBar === "object") {
+            this.toolBar = merge(<ToolBarOptions>this.toolBar, options.toolBar);
+        }
     }
 
-    createView(container: Container): DocumentFragment {
+    createView(): DocumentFragment {
         const fragment = document.createDocumentFragment();
 
         const containerElement = document.createElement("div");
-        containerElement.id = container.id;
-        containerElement.classList.add(`${this.prefix}container`, `${container.prefix}theme-${container.theme}`);
-        containerElement.style.width = `${container.width}px`;
-        containerElement.style.height = `${container.height}px`;
-        containerElement.style.minWidth = `${container.minWidth}px`;
-        containerElement.style.minHeight = `${container.minHeight}px`;
-        containerElement.style.maxWidth = container.maxWidth === innerWidth ? null : `${container.maxWidth}px`;
-        containerElement.style.maxHeight = container.maxHeight === innerHeight ? null : `${container.maxHeight}px`;
-        containerElement.style.background = container.background;
+        containerElement.id = this.id;
+        containerElement.classList.add(`${this.prefix}container`, `${this.prefix}theme-${this.theme}`);
+        containerElement.style.width = `${this.width}px`;
+        containerElement.style.height = `${this.height}px`;
+        containerElement.style.minWidth = `${this.minWidth}px`;
+        containerElement.style.minHeight = `${this.minHeight}px`;
+        containerElement.style.maxWidth = this.maxWidth === innerWidth ? null : `${this.maxWidth}px`;
+        containerElement.style.maxHeight = this.maxHeight === innerHeight ? null : `${this.maxHeight}px`;
+        containerElement.style.background = this.background;
 
-        const parcloseElement = this.createParcloseView(container);
+
+        const parcloseElement = this.createParcloseView();
         if (parcloseElement) {
             fragment.appendChild(parcloseElement);
         }
 
-        const resizeElements = this.createResizeView(container);
+        if (this.toolBar !== undefined) {
+            const toolBar = new ToolBar(this);
+            const toolBarFragment = toolBar.createView();
+            containerElement.appendChild(toolBarFragment);
+        }
+
+        const resizeElements = this.createResizeView();
         if (resizeElements) {
             containerElement.appendChild(resizeElements);
         }
@@ -77,28 +92,28 @@ export default class Container implements Component {
         return fragment;
     }
 
-    createParcloseView(container: Container): HTMLElement | undefined {
-        if (container.parclose === true) {
+    createParcloseView(): HTMLElement | undefined {
+        if (this.parclose === true) {
             const parcloseElement = document.createElement("div");
-            parcloseElement.id = `${container.id}-parclose`;
+            parcloseElement.id = `${this.id}-parclose`;
             parcloseElement.classList.add(`${this.prefix}parclose`);
             return parcloseElement;
         }
     }
 
-    private createResizeView(container: Container): HTMLElement | undefined {
-        if (leastOneTrue<ResizeOptions>(container.resize)) {
+    private createResizeView(): HTMLElement | undefined {
+        if (leastOneTrue<ResizeOptions>(this.resize)) {
             const resizeElements = document.createElement("div");
             resizeElements.classList.add(`${this.prefix}resizes`);
 
-            this.createResizeItem(resizeElements, <boolean>container.resize.top, ResizeDirection.TOP);
-            this.createResizeItem(resizeElements, <boolean>container.resize.left, ResizeDirection.LEFT);
-            this.createResizeItem(resizeElements, <boolean>container.resize.right, ResizeDirection.RIGHT);
-            this.createResizeItem(resizeElements, <boolean>container.resize.bottom, ResizeDirection.BOTTOM);
-            this.createResizeItem(resizeElements, <boolean>container.resize.leftTop, ResizeDirection.LEFT_TOP);
-            this.createResizeItem(resizeElements, <boolean>container.resize.rightTop, ResizeDirection.RIGHT_TOP);
-            this.createResizeItem(resizeElements, <boolean>container.resize.leftBottom, ResizeDirection.LEFT_BOTTOM);
-            this.createResizeItem(resizeElements, <boolean>container.resize.rightBottom, ResizeDirection.RIGHT_BOTTOM);
+            this.createResizeItem(resizeElements, <boolean>this.resize.top, ResizeDirection.TOP);
+            this.createResizeItem(resizeElements, <boolean>this.resize.left, ResizeDirection.LEFT);
+            this.createResizeItem(resizeElements, <boolean>this.resize.right, ResizeDirection.RIGHT);
+            this.createResizeItem(resizeElements, <boolean>this.resize.bottom, ResizeDirection.BOTTOM);
+            this.createResizeItem(resizeElements, <boolean>this.resize.leftTop, ResizeDirection.LEFT_TOP);
+            this.createResizeItem(resizeElements, <boolean>this.resize.rightTop, ResizeDirection.RIGHT_TOP);
+            this.createResizeItem(resizeElements, <boolean>this.resize.leftBottom, ResizeDirection.LEFT_BOTTOM);
+            this.createResizeItem(resizeElements, <boolean>this.resize.rightBottom, ResizeDirection.RIGHT_BOTTOM);
 
             return resizeElements;
         }

@@ -105,11 +105,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var Theme_1 = __webpack_require__(/*! ../enums/Theme */ "./src/enums/Theme.ts");
 var ValueHelper_1 = __webpack_require__(/*! ../utils/ValueHelper */ "./src/utils/ValueHelper.ts");
 var ObjectHelper_1 = __webpack_require__(/*! ../utils/ObjectHelper */ "./src/utils/ObjectHelper.ts");
 var ResizeDirection_1 = __webpack_require__(/*! ../enums/ResizeDirection */ "./src/enums/ResizeDirection.ts");
+var ToolBar_1 = __importDefault(__webpack_require__(/*! ./ToolBar */ "./src/components/ToolBar.ts"));
 var Container = (function () {
     function Container(options) {
         this.prefix = "layx-";
@@ -132,6 +136,7 @@ var Container = (function () {
             leftBottom: true,
             rightBottom: true
         };
+        this.toolBar = {};
         this.id = "" + this.prefix + options.id;
         this.width = ValueHelper_1.convertDimension(options.width) || this.width;
         this.height = ValueHelper_1.convertDimension(options.height, "BROWSER_INNER_HEIGHT") || this.height;
@@ -148,50 +153,61 @@ var Container = (function () {
         else if (typeof options.resize === "object") {
             this.resize = ObjectHelper_1.merge(this.resize, options.resize);
         }
+        if (typeof options.toolBar === "boolean" && options.toolBar === false) {
+            this.toolBar = undefined;
+        }
+        else if (typeof options.toolBar === "object") {
+            this.toolBar = ObjectHelper_1.merge(this.toolBar, options.toolBar);
+        }
     }
-    Container.prototype.createView = function (container) {
+    Container.prototype.createView = function () {
         var fragment = document.createDocumentFragment();
         var containerElement = document.createElement("div");
-        containerElement.id = container.id;
-        containerElement.classList.add(this.prefix + "container", container.prefix + "theme-" + container.theme);
-        containerElement.style.width = container.width + "px";
-        containerElement.style.height = container.height + "px";
-        containerElement.style.minWidth = container.minWidth + "px";
-        containerElement.style.minHeight = container.minHeight + "px";
-        containerElement.style.maxWidth = container.maxWidth === innerWidth ? null : container.maxWidth + "px";
-        containerElement.style.maxHeight = container.maxHeight === innerHeight ? null : container.maxHeight + "px";
-        containerElement.style.background = container.background;
-        var parcloseElement = this.createParcloseView(container);
+        containerElement.id = this.id;
+        containerElement.classList.add(this.prefix + "container", this.prefix + "theme-" + this.theme);
+        containerElement.style.width = this.width + "px";
+        containerElement.style.height = this.height + "px";
+        containerElement.style.minWidth = this.minWidth + "px";
+        containerElement.style.minHeight = this.minHeight + "px";
+        containerElement.style.maxWidth = this.maxWidth === innerWidth ? null : this.maxWidth + "px";
+        containerElement.style.maxHeight = this.maxHeight === innerHeight ? null : this.maxHeight + "px";
+        containerElement.style.background = this.background;
+        var parcloseElement = this.createParcloseView();
         if (parcloseElement) {
             fragment.appendChild(parcloseElement);
         }
-        var resizeElements = this.createResizeView(container);
+        if (this.toolBar !== undefined) {
+            var toolBar = new ToolBar_1.default(this);
+            var toolBarFragment = toolBar.createView();
+            containerElement.appendChild(toolBarFragment);
+        }
+        var resizeElements = this.createResizeView();
         if (resizeElements) {
             containerElement.appendChild(resizeElements);
         }
         fragment.appendChild(containerElement);
         return fragment;
     };
-    Container.prototype.createParcloseView = function (container) {
-        if (container.parclose === true) {
+    Container.prototype.createParcloseView = function () {
+        if (this.parclose === true) {
             var parcloseElement = document.createElement("div");
-            parcloseElement.id = container.id + "-parclose";
+            parcloseElement.id = this.id + "-parclose";
             parcloseElement.classList.add(this.prefix + "parclose");
             return parcloseElement;
         }
     };
-    Container.prototype.createResizeView = function (container) {
-        if (ObjectHelper_1.leastOneTrue(container.resize)) {
+    Container.prototype.createResizeView = function () {
+        if (ObjectHelper_1.leastOneTrue(this.resize)) {
             var resizeElements = document.createElement("div");
             resizeElements.classList.add(this.prefix + "resizes");
-            this.createResizeItem(resizeElements, container.resize.top, ResizeDirection_1.ResizeDirection.TOP);
-            this.createResizeItem(resizeElements, container.resize.left, ResizeDirection_1.ResizeDirection.LEFT);
-            this.createResizeItem(resizeElements, container.resize.right, ResizeDirection_1.ResizeDirection.RIGHT);
-            this.createResizeItem(resizeElements, container.resize.bottom, ResizeDirection_1.ResizeDirection.BOTTOM);
-            this.createResizeItem(resizeElements, container.resize.leftTop, ResizeDirection_1.ResizeDirection.LEFT_TOP);
-            this.createResizeItem(resizeElements, container.resize.rightTop, ResizeDirection_1.ResizeDirection.RIGHT_TOP);
-            this.createResizeItem(resizeElements, container.resize.leftBottom, ResizeDirection_1.ResizeDirection.LEFT_BOTTOM);
-            this.createResizeItem(resizeElements, container.resize.rightBottom, ResizeDirection_1.ResizeDirection.RIGHT_BOTTOM);
+            this.createResizeItem(resizeElements, this.resize.top, ResizeDirection_1.ResizeDirection.TOP);
+            this.createResizeItem(resizeElements, this.resize.left, ResizeDirection_1.ResizeDirection.LEFT);
+            this.createResizeItem(resizeElements, this.resize.right, ResizeDirection_1.ResizeDirection.RIGHT);
+            this.createResizeItem(resizeElements, this.resize.bottom, ResizeDirection_1.ResizeDirection.BOTTOM);
+            this.createResizeItem(resizeElements, this.resize.leftTop, ResizeDirection_1.ResizeDirection.LEFT_TOP);
+            this.createResizeItem(resizeElements, this.resize.rightTop, ResizeDirection_1.ResizeDirection.RIGHT_TOP);
+            this.createResizeItem(resizeElements, this.resize.leftBottom, ResizeDirection_1.ResizeDirection.LEFT_BOTTOM);
+            this.createResizeItem(resizeElements, this.resize.rightBottom, ResizeDirection_1.ResizeDirection.RIGHT_BOTTOM);
             return resizeElements;
         }
     };
@@ -205,6 +221,42 @@ var Container = (function () {
     return Container;
 }());
 exports.default = Container;
+
+
+/***/ }),
+
+/***/ "./src/components/ToolBar.ts":
+/*!***********************************!*\
+  !*** ./src/components/ToolBar.ts ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ToolBar = (function () {
+    function ToolBar(container) {
+        this.container = container;
+        this.height = 30;
+        this.background = "#ffffff";
+        if (typeof container.toolBar === "object") {
+            this.background = container.toolBar.background || this.background;
+            this.height = container.toolBar.height || this.height;
+        }
+    }
+    ToolBar.prototype.createView = function () {
+        var fragment = document.createDocumentFragment();
+        var toolBarElement = document.createElement("div");
+        toolBarElement.classList.add(this.container.prefix + "toolbar");
+        toolBarElement.style.background = this.background;
+        toolBarElement.style.height = this.height + "px";
+        fragment.appendChild(toolBarElement);
+        return fragment;
+    };
+    return ToolBar;
+}());
+exports.default = ToolBar;
 
 
 /***/ }),
@@ -268,8 +320,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Container_1 = __importDefault(__webpack_require__(/*! ./components/Container */ "./src/components/Container.ts"));
 var containerOptions = { id: "hello", background: "#dedede" };
 var container = new Container_1.default(containerOptions);
-var fragment = container.createView(container);
-document.body.appendChild(fragment);
+var containerFragment = container.createView();
+document.body.appendChild(containerFragment);
 
 
 /***/ }),
