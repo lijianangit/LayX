@@ -1,3 +1,3 @@
-export enum ThemeEnum {
+export enum Theme {
     DEFAULT = "default"
 }

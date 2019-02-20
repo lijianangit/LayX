@@ -1,5 +1,5 @@
 module.exports = {
-    "mode": "development",
+    "mode": "development",// production|development
     "entry": "./src/index.ts",
     "output": {
         "filename": "layx.js",

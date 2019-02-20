@@ -1,4 +1,9 @@
-import { ThemeEnum } from "../enums/ThemeEnum";
+import { Theme } from "../enums/Theme";
+
+export interface JsonObject {
+    constructor: Object;
+    [key: string]: any;
+}
 
 export interface ContainerOptions {
     id: string;
@@ -8,5 +13,19 @@ export interface ContainerOptions {
     minHeight?: number | string;
     maxWidth?: number | string;
     maxHeight?: number | string;
-    theme?: ThemeEnum;
+    background?: string;
+    theme?: Theme;
+    parclose?: boolean;
+    resize?: ResizeOptions | boolean;
+}
+
+export interface ResizeOptions {
+    top?: boolean;
+    left?: boolean;
+    right?: boolean;
+    bottom?: boolean;
+    leftTop?: boolean;
+    rightTop?: boolean;
+    leftBottom?: boolean;
+    rightBottom?: boolean;
 }

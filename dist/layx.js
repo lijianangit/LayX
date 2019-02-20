@@ -106,8 +106,10 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var ThemeEnum_1 = __webpack_require__(/*! ../enums/ThemeEnum */ "./src/enums/ThemeEnum.ts");
-var ValueTypeHelper_1 = __webpack_require__(/*! ../utils/ValueTypeHelper */ "./src/utils/ValueTypeHelper.ts");
+var Theme_1 = __webpack_require__(/*! ../enums/Theme */ "./src/enums/Theme.ts");
+var ValueHelper_1 = __webpack_require__(/*! ../utils/ValueHelper */ "./src/utils/ValueHelper.ts");
+var ObjectHelper_1 = __webpack_require__(/*! ../utils/ObjectHelper */ "./src/utils/ObjectHelper.ts");
+var ResizeDirection_1 = __webpack_require__(/*! ../enums/ResizeDirection */ "./src/enums/ResizeDirection.ts");
 var Container = (function () {
     function Container(options) {
         this.prefix = "layx-";
@@ -117,29 +119,88 @@ var Container = (function () {
         this.minHeight = 200;
         this.maxWidth = innerWidth;
         this.maxHeight = innerHeight;
-        this.theme = ThemeEnum_1.ThemeEnum.DEFAULT;
+        this.theme = Theme_1.Theme.DEFAULT;
+        this.background = "#ffffff";
+        this.parclose = false;
+        this.resize = {
+            top: true,
+            left: true,
+            right: true,
+            bottom: true,
+            leftTop: true,
+            rightTop: true,
+            leftBottom: true,
+            rightBottom: true
+        };
         this.id = "" + this.prefix + options.id;
-        this.width = ValueTypeHelper_1.convertDimension(options.width) || this.width;
-        this.height = ValueTypeHelper_1.convertDimension(options.height, "BROWSER_INNER_HEIGHT") || this.height;
-        this.minWidth = ValueTypeHelper_1.convertDimension(options.minWidth) || this.minWidth;
-        this.minHeight = ValueTypeHelper_1.convertDimension(options.minHeight, "BROWSER_INNER_HEIGHT") || this.minHeight;
-        this.maxWidth = ValueTypeHelper_1.convertDimension(options.maxWidth) || this.maxWidth;
-        this.maxHeight = ValueTypeHelper_1.convertDimension(options.maxHeight, "BROWSER_INNER_HEIGHT") || this.maxHeight;
+        this.width = ValueHelper_1.convertDimension(options.width) || this.width;
+        this.height = ValueHelper_1.convertDimension(options.height, "BROWSER_INNER_HEIGHT") || this.height;
+        this.minWidth = ValueHelper_1.convertDimension(options.minWidth) || this.minWidth;
+        this.minHeight = ValueHelper_1.convertDimension(options.minHeight, "BROWSER_INNER_HEIGHT") || this.minHeight;
+        this.maxWidth = ValueHelper_1.convertDimension(options.maxWidth) || this.maxWidth;
+        this.maxHeight = ValueHelper_1.convertDimension(options.maxHeight, "BROWSER_INNER_HEIGHT") || this.maxHeight;
         this.theme = options.theme || this.theme;
+        this.background = options.background || this.background;
+        this.parclose = typeof options.parclose === "boolean" ? options.parclose : this.parclose;
+        if (typeof options.resize === "boolean" && options.resize === false) {
+            this.resize = ObjectHelper_1.reverseBooleanObject(this.resize);
+        }
+        else if (typeof options.resize === "object") {
+            this.resize = ObjectHelper_1.merge(this.resize, options.resize);
+        }
     }
     Container.prototype.createView = function (container) {
         var fragment = document.createDocumentFragment();
         var containerElement = document.createElement("div");
         containerElement.id = container.id;
-        containerElement.classList.add(container.prefix + "container", "" + (container.prefix + container.theme));
+        containerElement.classList.add(this.prefix + "container", container.prefix + "theme-" + container.theme);
         containerElement.style.width = container.width + "px";
         containerElement.style.height = container.height + "px";
         containerElement.style.minWidth = container.minWidth + "px";
         containerElement.style.minHeight = container.minHeight + "px";
         containerElement.style.maxWidth = container.maxWidth === innerWidth ? null : container.maxWidth + "px";
         containerElement.style.maxHeight = container.maxHeight === innerHeight ? null : container.maxHeight + "px";
+        containerElement.style.background = container.background;
+        var parcloseElement = this.createParcloseView(container);
+        if (parcloseElement) {
+            fragment.appendChild(parcloseElement);
+        }
+        var resizeElements = this.createResizeView(container);
+        if (resizeElements) {
+            containerElement.appendChild(resizeElements);
+        }
         fragment.appendChild(containerElement);
         return fragment;
+    };
+    Container.prototype.createParcloseView = function (container) {
+        if (container.parclose === true) {
+            var parcloseElement = document.createElement("div");
+            parcloseElement.id = container.id + "-parclose";
+            parcloseElement.classList.add(this.prefix + "parclose");
+            return parcloseElement;
+        }
+    };
+    Container.prototype.createResizeView = function (container) {
+        if (ObjectHelper_1.leastOneTrue(container.resize)) {
+            var resizeElements = document.createElement("div");
+            resizeElements.classList.add(this.prefix + "resizes");
+            this.createResizeItem(resizeElements, container.resize.top, ResizeDirection_1.ResizeDirection.TOP);
+            this.createResizeItem(resizeElements, container.resize.left, ResizeDirection_1.ResizeDirection.LEFT);
+            this.createResizeItem(resizeElements, container.resize.right, ResizeDirection_1.ResizeDirection.RIGHT);
+            this.createResizeItem(resizeElements, container.resize.bottom, ResizeDirection_1.ResizeDirection.BOTTOM);
+            this.createResizeItem(resizeElements, container.resize.leftTop, ResizeDirection_1.ResizeDirection.LEFT_TOP);
+            this.createResizeItem(resizeElements, container.resize.rightTop, ResizeDirection_1.ResizeDirection.RIGHT_TOP);
+            this.createResizeItem(resizeElements, container.resize.leftBottom, ResizeDirection_1.ResizeDirection.LEFT_BOTTOM);
+            this.createResizeItem(resizeElements, container.resize.rightBottom, ResizeDirection_1.ResizeDirection.RIGHT_BOTTOM);
+            return resizeElements;
+        }
+    };
+    Container.prototype.createResizeItem = function (parent, isCreate, direction) {
+        if (!isCreate)
+            return;
+        var resize = document.createElement("div");
+        resize.classList.add(this.prefix + "resize-" + direction);
+        parent.appendChild(resize);
     };
     return Container;
 }());
@@ -148,20 +209,45 @@ exports.default = Container;
 
 /***/ }),
 
-/***/ "./src/enums/ThemeEnum.ts":
-/*!********************************!*\
-  !*** ./src/enums/ThemeEnum.ts ***!
-  \********************************/
+/***/ "./src/enums/ResizeDirection.ts":
+/*!**************************************!*\
+  !*** ./src/enums/ResizeDirection.ts ***!
+  \**************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var ThemeEnum;
-(function (ThemeEnum) {
-    ThemeEnum["DEFAULT"] = "default";
-})(ThemeEnum = exports.ThemeEnum || (exports.ThemeEnum = {}));
+var ResizeDirection;
+(function (ResizeDirection) {
+    ResizeDirection["TOP"] = "top";
+    ResizeDirection["LEFT"] = "left";
+    ResizeDirection["RIGHT"] = "right";
+    ResizeDirection["BOTTOM"] = "bottom";
+    ResizeDirection["LEFT_TOP"] = "left-top";
+    ResizeDirection["RIGHT_TOP"] = "right-top";
+    ResizeDirection["LEFT_BOTTOM"] = "left-bottom";
+    ResizeDirection["RIGHT_BOTTOM"] = "right-bottom";
+})(ResizeDirection = exports.ResizeDirection || (exports.ResizeDirection = {}));
+
+
+/***/ }),
+
+/***/ "./src/enums/Theme.ts":
+/*!****************************!*\
+  !*** ./src/enums/Theme.ts ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Theme;
+(function (Theme) {
+    Theme["DEFAULT"] = "default";
+})(Theme = exports.Theme || (exports.Theme = {}));
 
 
 /***/ }),
@@ -180,17 +266,85 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Container_1 = __importDefault(__webpack_require__(/*! ./components/Container */ "./src/components/Container.ts"));
-var container = new Container_1.default({ id: "hello", width: "30%" });
+var containerOptions = { id: "hello", background: "#dedede" };
+var container = new Container_1.default(containerOptions);
 var fragment = container.createView(container);
 document.body.appendChild(fragment);
 
 
 /***/ }),
 
-/***/ "./src/utils/ValueTypeHelper.ts":
-/*!**************************************!*\
-  !*** ./src/utils/ValueTypeHelper.ts ***!
-  \**************************************/
+/***/ "./src/utils/ObjectHelper.ts":
+/*!***********************************!*\
+  !*** ./src/utils/ObjectHelper.ts ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function isJsonObject(target) {
+    return typeof target === "object" && target.constructor === Object;
+}
+exports.isJsonObject = isJsonObject;
+function clone(source) {
+    var newT = {};
+    for (var _i = 0, _a = Object.keys(source); _i < _a.length; _i++) {
+        var key = _a[_i];
+        newT[key] = isJsonObject(source[key]) ? clone(source[key]) : source[key];
+    }
+    return newT;
+}
+exports.clone = clone;
+function merge(source, dest) {
+    var target = clone(source);
+    for (var _i = 0, _a = Object.keys(dest); _i < _a.length; _i++) {
+        var key = _a[_i];
+        if (target[key] === undefined || !isJsonObject(dest[key])) {
+            target[key] = dest[key];
+            continue;
+        }
+        target[key] = merge(target[key], dest[key]);
+    }
+    return target;
+}
+exports.merge = merge;
+function leastOneTrue(obj) {
+    if (typeof obj === "boolean")
+        return obj;
+    var flag = false;
+    for (var _i = 0, _a = Object.keys(obj); _i < _a.length; _i++) {
+        var key = _a[_i];
+        if (obj[key] === true) {
+            flag = true;
+            break;
+        }
+    }
+    return flag;
+}
+exports.leastOneTrue = leastOneTrue;
+function reverseBooleanObject(source) {
+    var target = {};
+    for (var _i = 0, _a = Object.keys(source); _i < _a.length; _i++) {
+        var key = _a[_i];
+        target[key] = !source[key];
+    }
+    return target;
+}
+exports.reverseBooleanObject = reverseBooleanObject;
+function getProperty(obj, key) {
+    return obj[key];
+}
+exports.getProperty = getProperty;
+
+
+/***/ }),
+
+/***/ "./src/utils/ValueHelper.ts":
+/*!**********************************!*\
+  !*** ./src/utils/ValueHelper.ts ***!
+  \**********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
