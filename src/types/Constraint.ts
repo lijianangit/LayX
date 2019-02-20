@@ -1,4 +1,6 @@
-interface ContainerOptions {
+import { ThemeEnum } from "../enums/ThemeEnum";
+
+export interface ContainerOptions {
     id: string;
     width?: number | string;
     height?: number | string;
@@ -6,4 +8,5 @@ interface ContainerOptions {
     minHeight?: number | string;
     maxWidth?: number | string;
     maxHeight?: number | string;
+    theme?: ThemeEnum;
 }
