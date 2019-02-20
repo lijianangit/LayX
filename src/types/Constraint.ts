@@ -18,6 +18,7 @@ export interface ContainerOptions {
     parclose?: boolean;
     resize?: ResizeOptions | boolean;
     toolBar?: ToolBarOptions | boolean;
+    topMenu?: TopMenuOptions;
 }
 
 export interface ResizeOptions {
@@ -33,5 +34,9 @@ export interface ResizeOptions {
 
 export interface ToolBarOptions {
     height?: number;
+    background?: string;
+}
+
+export interface TopMenuOptions {
     background?: string;
 }

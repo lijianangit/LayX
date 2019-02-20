@@ -1,10 +1,11 @@
 import Component from "./Componet";
 import { Theme } from "../enums/Theme";
-import { ContainerOptions, ResizeOptions, ToolBarOptions } from "../types/Constraint";
+import { ContainerOptions, ResizeOptions, ToolBarOptions, TopMenuOptions } from "../types/Constraint";
 import { convertDimension } from "../utils/ValueHelper";
 import { leastOneTrue, reverseBooleanObject, merge } from "../utils/ObjectHelper";
 import { ResizeDirection } from "../enums/ResizeDirection";
 import ToolBar from "./ToolBar";
+import TopMenu from "./TopMenu";
 
 export default class Container implements Component {
     readonly prefix: string = "layx-";
@@ -14,8 +15,8 @@ export default class Container implements Component {
     height: number = 600;
     minWidth: number = 200;
     minHeight: number = 200;
-    maxWidth: number | null = innerWidth;
-    maxHeight: number | null = innerHeight;
+    maxWidth: number = innerWidth;
+    maxHeight: number = innerHeight;
     theme: Theme = Theme.DEFAULT;
     background: string = "#ffffff";
     parclose: boolean = false;
@@ -30,6 +31,7 @@ export default class Container implements Component {
         rightBottom: true
     };
     toolBar: ToolBarOptions | undefined = {};
+    topMenu: TopMenuOptions | undefined = undefined;
 
     constructor(options: ContainerOptions) {
         this.id = `${this.prefix}${options.id}`;
@@ -43,17 +45,23 @@ export default class Container implements Component {
         this.theme = options.theme || this.theme;
         this.background = options.background || this.background;
         this.parclose = typeof options.parclose === "boolean" ? options.parclose : this.parclose;
+
         if (typeof options.resize === "boolean" && options.resize === false) {
             this.resize = reverseBooleanObject<ResizeOptions>(this.resize);
         }
         else if (typeof options.resize === "object") {
             this.resize = merge(this.resize, options.resize);
         }
+
         if (typeof options.toolBar === "boolean" && options.toolBar === false) {
             this.toolBar = undefined;
         }
         else if (typeof options.toolBar === "object") {
             this.toolBar = merge(<ToolBarOptions>this.toolBar, options.toolBar);
+        }
+
+        if (typeof options.topMenu === "object") {
+            this.topMenu = merge(<TopMenuOptions>{}, options.topMenu);
         }
     }
 
@@ -81,6 +89,12 @@ export default class Container implements Component {
             const toolBar = new ToolBar(this);
             const toolBarFragment = toolBar.createView();
             containerElement.appendChild(toolBarFragment);
+        }
+
+        if (this.topMenu !== undefined) {
+            const topMenu = new TopMenu(this);
+            const topMenuFragment = topMenu.createView();
+            containerElement.appendChild(topMenuFragment);
         }
 
         const resizeElements = this.createResizeView();

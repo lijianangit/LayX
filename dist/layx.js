@@ -114,6 +114,7 @@ var ValueHelper_1 = __webpack_require__(/*! ../utils/ValueHelper */ "./src/utils
 var ObjectHelper_1 = __webpack_require__(/*! ../utils/ObjectHelper */ "./src/utils/ObjectHelper.ts");
 var ResizeDirection_1 = __webpack_require__(/*! ../enums/ResizeDirection */ "./src/enums/ResizeDirection.ts");
 var ToolBar_1 = __importDefault(__webpack_require__(/*! ./ToolBar */ "./src/components/ToolBar.ts"));
+var TopMenu_1 = __importDefault(__webpack_require__(/*! ./TopMenu */ "./src/components/TopMenu.ts"));
 var Container = (function () {
     function Container(options) {
         this.prefix = "layx-";
@@ -137,6 +138,7 @@ var Container = (function () {
             rightBottom: true
         };
         this.toolBar = {};
+        this.topMenu = undefined;
         this.id = "" + this.prefix + options.id;
         this.width = ValueHelper_1.convertDimension(options.width) || this.width;
         this.height = ValueHelper_1.convertDimension(options.height, "BROWSER_INNER_HEIGHT") || this.height;
@@ -159,6 +161,9 @@ var Container = (function () {
         else if (typeof options.toolBar === "object") {
             this.toolBar = ObjectHelper_1.merge(this.toolBar, options.toolBar);
         }
+        if (typeof options.topMenu === "object") {
+            this.topMenu = ObjectHelper_1.merge({}, options.topMenu);
+        }
     }
     Container.prototype.createView = function () {
         var fragment = document.createDocumentFragment();
@@ -180,6 +185,11 @@ var Container = (function () {
             var toolBar = new ToolBar_1.default(this);
             var toolBarFragment = toolBar.createView();
             containerElement.appendChild(toolBarFragment);
+        }
+        if (this.topMenu !== undefined) {
+            var topMenu = new TopMenu_1.default(this);
+            var topMenuFragment = topMenu.createView();
+            containerElement.appendChild(topMenuFragment);
         }
         var resizeElements = this.createResizeView();
         if (resizeElements) {
@@ -257,6 +267,36 @@ var ToolBar = (function () {
     return ToolBar;
 }());
 exports.default = ToolBar;
+
+
+/***/ }),
+
+/***/ "./src/components/TopMenu.ts":
+/*!***********************************!*\
+  !*** ./src/components/TopMenu.ts ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var TopMenu = (function () {
+    function TopMenu(container) {
+        this.container = container;
+        this.background = "#eeeef2";
+    }
+    TopMenu.prototype.createView = function () {
+        var fragment = document.createDocumentFragment();
+        var topMenuElement = document.createElement("div");
+        topMenuElement.classList.add(this.container.prefix + "top-menu");
+        topMenuElement.style.background = this.background;
+        fragment.appendChild(topMenuElement);
+        return fragment;
+    };
+    return TopMenu;
+}());
+exports.default = TopMenu;
 
 
 /***/ }),
