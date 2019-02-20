@@ -3,7 +3,11 @@ import Component from "./Componet";
 
 export default class TopMenu implements Component {
     background: string = "#eeeef2";
+
     constructor(public container: Container) {
+        if (typeof container.topMenu === "object") {
+            this.background = container.topMenu.background || this.background;
+        }
     }
 
     createView(): DocumentFragment {

@@ -17,8 +17,8 @@ export default class StatuBar implements Component {
 
         const statuBarElement = document.createElement("div");
         statuBarElement.classList.add(`${this.container.prefix}statu-bar`);
-        statuBarElement.style.background = this.background;
         statuBarElement.style.height = `${this.height}px`;
+        statuBarElement.style.background = this.background;
 
         fragment.appendChild(statuBarElement);
         return fragment;

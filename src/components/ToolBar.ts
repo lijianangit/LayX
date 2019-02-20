@@ -7,8 +7,8 @@ export default class ToolBar implements Component {
 
     constructor(public container: Container) {
         if (typeof container.toolBar === "object") {
-            this.background = container.toolBar.background || this.background;
             this.height = container.toolBar.height || this.height;
+            this.background = container.toolBar.background || this.background;
         }
     }
 
@@ -17,8 +17,8 @@ export default class ToolBar implements Component {
 
         const toolBarElement = document.createElement("div");
         toolBarElement.classList.add(`${this.container.prefix}tool-bar`);
-        toolBarElement.style.background = this.background;
         toolBarElement.style.height = `${this.height}px`;
+        toolBarElement.style.background = this.background;
 
         fragment.appendChild(toolBarElement);
         return fragment;
