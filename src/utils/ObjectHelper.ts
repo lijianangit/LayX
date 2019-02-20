@@ -1,4 +1,4 @@
-import { JsonObject } from "../types/Constraint";
+import { JsonObject } from "../types/Index";
 
 export function isJsonObject(target: any): boolean {
     return typeof target === "object" && target.constructor === Object;

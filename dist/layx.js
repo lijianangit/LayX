@@ -96,29 +96,281 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/components/Container.ts":
+/***/ "./src/components/UIDefaultWindow.ts":
+/*!*******************************************!*\
+  !*** ./src/components/UIDefaultWindow.ts ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var UIToolBar_1 = __importDefault(__webpack_require__(/*! ./UIToolBar */ "./src/components/UIToolBar.ts"));
+var UITopMenu_1 = __importDefault(__webpack_require__(/*! ./UITopMenu */ "./src/components/UITopMenu.ts"));
+var UISideBar_1 = __importDefault(__webpack_require__(/*! ./UISideBar */ "./src/components/UISideBar.ts"));
+var UIWindow_1 = __importDefault(__webpack_require__(/*! ./base/UIWindow */ "./src/components/base/UIWindow.ts"));
+var UIDefaultWindow = (function (_super) {
+    __extends(UIDefaultWindow, _super);
+    function UIDefaultWindow(options, layx) {
+        return _super.call(this, options, layx) || this;
+    }
+    UIDefaultWindow.prototype.createView = function () {
+        var fragment = document.createDocumentFragment();
+        var windowElement = document.createElement("div");
+        windowElement.id = this.id;
+        windowElement.classList.add(this.layx.prefix + "window", this.layx.prefix + "theme-" + this.theme);
+        windowElement.style.width = this.width + "px";
+        windowElement.style.height = this.height + "px";
+        windowElement.style.minWidth = this.minWidth + "px";
+        windowElement.style.minHeight = this.minHeight + "px";
+        windowElement.style.maxWidth = this.maxWidth === innerWidth ? null : this.maxWidth + "px";
+        windowElement.style.maxHeight = this.maxHeight === innerHeight ? null : this.maxHeight + "px";
+        windowElement.style.background = this.background;
+        var parcloseElement = this.createParcloseView();
+        if (parcloseElement) {
+            fragment.appendChild(parcloseElement);
+        }
+        for (var _i = 0, _a = [UIToolBar_1.default, UITopMenu_1.default, UISideBar_1.default, UISideBar_1.default]; _i < _a.length; _i++) {
+            var component = _a[_i];
+            this.initComponet(windowElement, component);
+        }
+        var resizeElements = this.createResizeView();
+        if (resizeElements) {
+            windowElement.appendChild(resizeElements);
+        }
+        fragment.appendChild(windowElement);
+        return fragment;
+    };
+    return UIDefaultWindow;
+}(UIWindow_1.default));
+exports.default = UIDefaultWindow;
+
+
+/***/ }),
+
+/***/ "./src/components/UISideBar.ts":
 /*!*************************************!*\
-  !*** ./src/components/Container.ts ***!
+  !*** ./src/components/UISideBar.ts ***!
   \*************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ValueHelper_1 = __webpack_require__(/*! ../utils/ValueHelper */ "./src/utils/ValueHelper.ts");
-var ObjectHelper_1 = __webpack_require__(/*! ../utils/ObjectHelper */ "./src/utils/ObjectHelper.ts");
-var ToolBar_1 = __importDefault(__webpack_require__(/*! ./ToolBar */ "./src/components/ToolBar.ts"));
-var TopMenu_1 = __importDefault(__webpack_require__(/*! ./TopMenu */ "./src/components/TopMenu.ts"));
-var StatuBar_1 = __importDefault(__webpack_require__(/*! ./StatuBar */ "./src/components/StatuBar.ts"));
-var SideBar_1 = __importDefault(__webpack_require__(/*! ./SideBar */ "./src/components/SideBar.ts"));
-var Container = (function () {
-    function Container(options) {
-        this.name = "container";
-        this.prefix = "layx-";
+var UIComponent_1 = __importDefault(__webpack_require__(/*! ./base/UIComponent */ "./src/components/base/UIComponent.ts"));
+var UISideBar = (function (_super) {
+    __extends(UISideBar, _super);
+    function UISideBar(window, layx) {
+        var _this = _super.call(this, window, layx) || this;
+        _this.name = "sideBar";
+        _this.width = 60;
+        _this.background = "#eeeef2";
+        if (typeof window.sideBar === "object") {
+            _this.width = window.sideBar.width || _this.width;
+            _this.background = window.sideBar.background || _this.background;
+        }
+        return _this;
+    }
+    UISideBar.prototype.createView = function () {
+        var fragment = document.createDocumentFragment();
+        var sideBarElement = document.createElement("div");
+        sideBarElement.classList.add("" + (this.layx.prefix + ValueHelper_1.getKebabCase(this.name)));
+        sideBarElement.style.width = this.width + "px";
+        sideBarElement.style.background = this.background;
+        fragment.appendChild(sideBarElement);
+        return fragment;
+    };
+    return UISideBar;
+}(UIComponent_1.default));
+exports.default = UISideBar;
+
+
+/***/ }),
+
+/***/ "./src/components/UIToolBar.ts":
+/*!*************************************!*\
+  !*** ./src/components/UIToolBar.ts ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var ValueHelper_1 = __webpack_require__(/*! ../utils/ValueHelper */ "./src/utils/ValueHelper.ts");
+var UIComponent_1 = __importDefault(__webpack_require__(/*! ./base/UIComponent */ "./src/components/base/UIComponent.ts"));
+var UIToolBar = (function (_super) {
+    __extends(UIToolBar, _super);
+    function UIToolBar(window, layx) {
+        var _this = _super.call(this, window, layx) || this;
+        _this.name = "toolBar";
+        _this.height = 30;
+        _this.background = "#ffffff";
+        if (typeof window.toolBar === "object") {
+            _this.height = window.toolBar.height || _this.height;
+            _this.background = window.toolBar.background || _this.background;
+        }
+        return _this;
+    }
+    UIToolBar.prototype.createView = function () {
+        var fragment = document.createDocumentFragment();
+        var toolBarElement = document.createElement("div");
+        toolBarElement.classList.add("" + (this.layx.prefix + ValueHelper_1.getKebabCase(this.name)));
+        toolBarElement.style.height = this.height + "px";
+        toolBarElement.style.background = this.background;
+        fragment.appendChild(toolBarElement);
+        return fragment;
+    };
+    return UIToolBar;
+}(UIComponent_1.default));
+exports.default = UIToolBar;
+
+
+/***/ }),
+
+/***/ "./src/components/UITopMenu.ts":
+/*!*************************************!*\
+  !*** ./src/components/UITopMenu.ts ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var ValueHelper_1 = __webpack_require__(/*! ../utils/ValueHelper */ "./src/utils/ValueHelper.ts");
+var UIComponent_1 = __importDefault(__webpack_require__(/*! ./base/UIComponent */ "./src/components/base/UIComponent.ts"));
+var UITopMenu = (function (_super) {
+    __extends(UITopMenu, _super);
+    function UITopMenu(window, layx) {
+        var _this = _super.call(this, window, layx) || this;
+        _this.name = "topMenu";
+        _this.background = "#eeeef2";
+        if (typeof window.topMenu === "object") {
+            _this.background = window.topMenu.background || _this.background;
+        }
+        return _this;
+    }
+    UITopMenu.prototype.createView = function () {
+        var fragment = document.createDocumentFragment();
+        var topMenuElement = document.createElement("div");
+        topMenuElement.classList.add("" + (this.layx.prefix + ValueHelper_1.getKebabCase(this.name)));
+        topMenuElement.style.background = this.background;
+        fragment.appendChild(topMenuElement);
+        return fragment;
+    };
+    return UITopMenu;
+}(UIComponent_1.default));
+exports.default = UITopMenu;
+
+
+/***/ }),
+
+/***/ "./src/components/base/UIComponent.ts":
+/*!********************************************!*\
+  !*** ./src/components/base/UIComponent.ts ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var UIComponent = (function () {
+    function UIComponent(window, layx) {
+        this.window = window;
+        this.layx = layx;
+    }
+    return UIComponent;
+}());
+exports.default = UIComponent;
+
+
+/***/ }),
+
+/***/ "./src/components/base/UIWindow.ts":
+/*!*****************************************!*\
+  !*** ./src/components/base/UIWindow.ts ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ValueHelper_1 = __webpack_require__(/*! ../../utils/ValueHelper */ "./src/utils/ValueHelper.ts");
+var ObjectHelper_1 = __webpack_require__(/*! ../../utils/ObjectHelper */ "./src/utils/ObjectHelper.ts");
+var UIWindow = (function () {
+    function UIWindow(options, layx) {
+        this.options = options;
+        this.layx = layx;
         this.width = 800;
         this.height = 600;
         this.minWidth = 200;
@@ -142,7 +394,7 @@ var Container = (function () {
         this.topMenu = undefined;
         this.statuBar = undefined;
         this.sideBar = undefined;
-        this.id = "" + this.prefix + options.id;
+        this.id = "" + layx.prefix + options.id;
         this.width = ValueHelper_1.convertDimension(options.width) || this.width;
         this.height = ValueHelper_1.convertDimension(options.height, "BROWSER_INNER_HEIGHT") || this.height;
         this.minWidth = ValueHelper_1.convertDimension(options.minWidth) || this.minWidth;
@@ -174,45 +426,18 @@ var Container = (function () {
             this.sideBar = ObjectHelper_1.merge({}, options.sideBar);
         }
     }
-    Container.prototype.createView = function () {
-        var fragment = document.createDocumentFragment();
-        var containerElement = document.createElement("div");
-        containerElement.id = this.id;
-        containerElement.classList.add(this.prefix + "container", this.prefix + "theme-" + this.theme);
-        containerElement.style.width = this.width + "px";
-        containerElement.style.height = this.height + "px";
-        containerElement.style.minWidth = this.minWidth + "px";
-        containerElement.style.minHeight = this.minHeight + "px";
-        containerElement.style.maxWidth = this.maxWidth === innerWidth ? null : this.maxWidth + "px";
-        containerElement.style.maxHeight = this.maxHeight === innerHeight ? null : this.maxHeight + "px";
-        containerElement.style.background = this.background;
-        var parcloseElement = this.createParcloseView();
-        if (parcloseElement) {
-            fragment.appendChild(parcloseElement);
-        }
-        for (var _i = 0, _a = [ToolBar_1.default, TopMenu_1.default, SideBar_1.default, StatuBar_1.default]; _i < _a.length; _i++) {
-            var component = _a[_i];
-            this.initComponet(containerElement, component);
-        }
-        var resizeElements = this.createResizeView();
-        if (resizeElements) {
-            containerElement.appendChild(resizeElements);
-        }
-        fragment.appendChild(containerElement);
-        return fragment;
-    };
-    Container.prototype.createParcloseView = function () {
+    UIWindow.prototype.createParcloseView = function () {
         if (this.parclose === true) {
             var parcloseElement = document.createElement("div");
             parcloseElement.id = this.id + "-parclose";
-            parcloseElement.classList.add(this.prefix + "parclose");
+            parcloseElement.classList.add(this.layx.prefix + "parclose");
             return parcloseElement;
         }
     };
-    Container.prototype.createResizeView = function () {
+    UIWindow.prototype.createResizeView = function () {
         if (ObjectHelper_1.leastOneTrue(this.resize)) {
             var resizeElements = document.createElement("div");
-            resizeElements.classList.add(this.prefix + "resizes");
+            resizeElements.classList.add(this.layx.prefix + "resizes");
             for (var _i = 0, _a = Object.keys(this.resize); _i < _a.length; _i++) {
                 var key = _a[_i];
                 this.createResizeItem(resizeElements, this.resize.top, ValueHelper_1.getKebabCase(key));
@@ -220,169 +445,24 @@ var Container = (function () {
             return resizeElements;
         }
     };
-    Container.prototype.createResizeItem = function (parent, isCreate, direction) {
+    UIWindow.prototype.createResizeItem = function (parent, isCreate, direction) {
         if (!isCreate)
             return;
         var resize = document.createElement("div");
-        resize.classList.add(this.prefix + "resize-" + direction);
+        resize.classList.add(this.layx.prefix + "resize-" + direction);
         parent.appendChild(resize);
     };
-    Container.prototype.initComponet = function (parent, ctor) {
-        var componet = new ctor(this);
+    UIWindow.prototype.initComponet = function (parent, ctor) {
+        var componet = new ctor(this, this.layx);
         if (this[componet.name] !== undefined) {
             var componentFragment = componet.createView();
             parent.appendChild(componentFragment);
             return componet;
         }
     };
-    return Container;
+    return UIWindow;
 }());
-exports.default = Container;
-
-
-/***/ }),
-
-/***/ "./src/components/SideBar.ts":
-/*!***********************************!*\
-  !*** ./src/components/SideBar.ts ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var SideBar = (function () {
-    function SideBar(container) {
-        this.container = container;
-        this.name = "sideBar";
-        this.width = 60;
-        this.background = "#eeeef2";
-        if (typeof container.sideBar === "object") {
-            this.width = container.sideBar.width || this.width;
-            this.background = container.sideBar.background || this.background;
-        }
-    }
-    SideBar.prototype.createView = function () {
-        var fragment = document.createDocumentFragment();
-        var sideBarElement = document.createElement("div");
-        sideBarElement.classList.add(this.container.prefix + "side-bar");
-        sideBarElement.style.width = this.width + "px";
-        sideBarElement.style.background = this.background;
-        fragment.appendChild(sideBarElement);
-        return fragment;
-    };
-    return SideBar;
-}());
-exports.default = SideBar;
-
-
-/***/ }),
-
-/***/ "./src/components/StatuBar.ts":
-/*!************************************!*\
-  !*** ./src/components/StatuBar.ts ***!
-  \************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var StatuBar = (function () {
-    function StatuBar(container) {
-        this.container = container;
-        this.name = "statuBar";
-        this.height = 30;
-        this.background = "#eeeef2";
-        if (typeof container.statuBar === "object") {
-            this.background = container.statuBar.background || this.background;
-            this.height = container.statuBar.height || this.height;
-        }
-    }
-    StatuBar.prototype.createView = function () {
-        var fragment = document.createDocumentFragment();
-        var statuBarElement = document.createElement("div");
-        statuBarElement.classList.add(this.container.prefix + "statu-bar");
-        statuBarElement.style.height = this.height + "px";
-        statuBarElement.style.background = this.background;
-        fragment.appendChild(statuBarElement);
-        return fragment;
-    };
-    return StatuBar;
-}());
-exports.default = StatuBar;
-
-
-/***/ }),
-
-/***/ "./src/components/ToolBar.ts":
-/*!***********************************!*\
-  !*** ./src/components/ToolBar.ts ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var ToolBar = (function () {
-    function ToolBar(container) {
-        this.container = container;
-        this.name = "toolBar";
-        this.height = 30;
-        this.background = "#ffffff";
-        if (typeof container.toolBar === "object") {
-            this.height = container.toolBar.height || this.height;
-            this.background = container.toolBar.background || this.background;
-        }
-    }
-    ToolBar.prototype.createView = function () {
-        var fragment = document.createDocumentFragment();
-        var toolBarElement = document.createElement("div");
-        toolBarElement.classList.add(this.container.prefix + "tool-bar");
-        toolBarElement.style.height = this.height + "px";
-        toolBarElement.style.background = this.background;
-        fragment.appendChild(toolBarElement);
-        return fragment;
-    };
-    return ToolBar;
-}());
-exports.default = ToolBar;
-
-
-/***/ }),
-
-/***/ "./src/components/TopMenu.ts":
-/*!***********************************!*\
-  !*** ./src/components/TopMenu.ts ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var TopMenu = (function () {
-    function TopMenu(container) {
-        this.container = container;
-        this.name = "topMenu";
-        this.background = "#eeeef2";
-        if (typeof container.topMenu === "object") {
-            this.background = container.topMenu.background || this.background;
-        }
-    }
-    TopMenu.prototype.createView = function () {
-        var fragment = document.createDocumentFragment();
-        var topMenuElement = document.createElement("div");
-        topMenuElement.classList.add(this.container.prefix + "top-menu");
-        topMenuElement.style.background = this.background;
-        fragment.appendChild(topMenuElement);
-        return fragment;
-    };
-    return TopMenu;
-}());
-exports.default = TopMenu;
+exports.default = UIWindow;
 
 
 /***/ }),
@@ -400,20 +480,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Container_1 = __importDefault(__webpack_require__(/*! ./components/Container */ "./src/components/Container.ts"));
+var UIDefaultWindow_1 = __importDefault(__webpack_require__(/*! ./components/UIDefaultWindow */ "./src/components/UIDefaultWindow.ts"));
 function layxInstance() {
     var layx = function (options) { };
     layx.zIndex = 10000000;
-    var containerOptions = { id: "hello", background: "#dedede" };
-    var container = new Container_1.default(containerOptions);
+    layx.prefix = "layx-";
     layx.create = function (options) {
-        var containerFragment = container.createView();
-        document.body.appendChild(containerFragment);
+        var windowOptions = { id: "hello", background: "#dedede" };
+        var window = new UIDefaultWindow_1.default(windowOptions, layx);
+        var windowFragment = window.createView();
+        document.body.appendChild(windowFragment);
     };
     return layx;
 }
-var layx = layxInstance();
-exports.default = layx;
+exports.default = layxInstance();
 
 
 /***/ }),

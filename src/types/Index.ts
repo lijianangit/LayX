@@ -2,8 +2,9 @@ import { Theme } from "../enums/Theme";
 
 export interface Layx {
     (options: any): void;
-    create(options: any): void;
+    prefix: string;
     zIndex?: number;
+    create(options: any): void;
 }
 
 export interface JsonObject {
@@ -11,7 +12,7 @@ export interface JsonObject {
     [key: string]: any;
 }
 
-export interface ContainerOptions {
+export interface WindowOptions {
     id: string;
     width?: number | string;
     height?: number | string;

@@ -1,18 +1,10 @@
-import Component from "./Componet";
-import { Theme } from "../enums/Theme";
-import { ContainerOptions, ResizeOptions, ToolBarOptions, TopMenuOptions, StatuBarOptions, SideBarOptions } from "../types/Constraint";
-import { convertDimension, getKebabCase } from "../utils/ValueHelper";
-import { leastOneTrue, reverseBooleanObject, merge } from "../utils/ObjectHelper";
-import ToolBar from "./ToolBar";
-import TopMenu from "./TopMenu";
-import StatuBar from "./StatuBar";
-import SideBar from "./SideBar";
+import { WindowOptions, Layx, ToolBarOptions, TopMenuOptions, StatuBarOptions, SideBarOptions, ResizeOptions } from "../../types/Index";
+import UIComponent from "./UIComponent";
+import { Theme } from "../../enums/Theme";
+import { convertDimension, getKebabCase } from "../../utils/ValueHelper";
+import { reverseBooleanObject, merge, leastOneTrue } from "../../utils/ObjectHelper";
 
-export default class Container implements Component {
-    readonly name: string = "container";
-
-    readonly prefix: string = "layx-";
-
+abstract class UIWindow {
     readonly id: string;
     width: number = 800;
     height: number = 600;
@@ -38,8 +30,8 @@ export default class Container implements Component {
     statuBar: StatuBarOptions | undefined = undefined;
     sideBar: SideBarOptions | undefined = undefined;
 
-    constructor(options: ContainerOptions) {
-        this.id = `${this.prefix}${options.id}`;
+    constructor(public options: WindowOptions, public layx: Layx) {
+        this.id = `${layx.prefix}${options.id}`;
 
         this.width = convertDimension(options.width) || this.width;
         this.height = convertDimension(options.height, "BROWSER_INNER_HEIGHT") || this.height;
@@ -78,51 +70,21 @@ export default class Container implements Component {
         }
     }
 
-    createView(): DocumentFragment {
-        const fragment = document.createDocumentFragment();
-
-        const containerElement = document.createElement("div");
-        containerElement.id = this.id;
-        containerElement.classList.add(`${this.prefix}container`, `${this.prefix}theme-${this.theme}`);
-        containerElement.style.width = `${this.width}px`;
-        containerElement.style.height = `${this.height}px`;
-        containerElement.style.minWidth = `${this.minWidth}px`;
-        containerElement.style.minHeight = `${this.minHeight}px`;
-        containerElement.style.maxWidth = this.maxWidth === innerWidth ? null : `${this.maxWidth}px`;
-        containerElement.style.maxHeight = this.maxHeight === innerHeight ? null : `${this.maxHeight}px`;
-        containerElement.style.background = this.background;
-
-        const parcloseElement = this.createParcloseView();
-        if (parcloseElement) {
-            fragment.appendChild(parcloseElement);
-        }
-
-        for (const component of [ToolBar, TopMenu, SideBar, StatuBar]) {
-            this.initComponet(containerElement, component);
-        }
-
-        const resizeElements = this.createResizeView();
-        if (resizeElements) {
-            containerElement.appendChild(resizeElements);
-        }
-
-        fragment.appendChild(containerElement);
-        return fragment;
-    }
+    abstract createView(): DocumentFragment;
 
     createParcloseView(): HTMLElement | undefined {
         if (this.parclose === true) {
             const parcloseElement = document.createElement("div");
             parcloseElement.id = `${this.id}-parclose`;
-            parcloseElement.classList.add(`${this.prefix}parclose`);
+            parcloseElement.classList.add(`${this.layx.prefix}parclose`);
             return parcloseElement;
         }
     }
 
-    private createResizeView(): HTMLElement | undefined {
+    createResizeView(): HTMLElement | undefined {
         if (leastOneTrue<ResizeOptions>(this.resize)) {
             const resizeElements = document.createElement("div");
-            resizeElements.classList.add(`${this.prefix}resizes`);
+            resizeElements.classList.add(`${this.layx.prefix}resizes`);
 
             for (const key of Object.keys(this.resize)) {
                 this.createResizeItem(resizeElements, <boolean>this.resize.top, getKebabCase(key));
@@ -131,16 +93,16 @@ export default class Container implements Component {
         }
     }
 
-    private createResizeItem(parent: HTMLElement, isCreate: boolean, direction: string): void {
+    createResizeItem(parent: HTMLElement, isCreate: boolean, direction: string): void {
         if (!isCreate) return;
 
         const resize = document.createElement("div");
-        resize.classList.add(`${this.prefix}resize-${direction}`);
+        resize.classList.add(`${this.layx.prefix}resize-${direction}`);
         parent.appendChild(resize);
     }
 
-    private initComponet<T extends Component>(parent: HTMLElement, ctor: { new(container: Container): T; }): T | undefined {
-        const componet = new ctor(this);
+    protected initComponet<T extends UIComponent>(parent: HTMLElement, ctor: { new(window: UIWindow, layx: Layx): T; }): T | undefined {
+        const componet = new ctor(this, this.layx);
         if ((<any>this)[componet.name] !== undefined) {
             const componentFragment = componet.createView();
             parent.appendChild(componentFragment);
@@ -148,3 +110,5 @@ export default class Container implements Component {
         }
     }
 }
+
+export default UIWindow;

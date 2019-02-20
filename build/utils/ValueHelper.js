@@ -2,8 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 function convertDimension(dimension, reference) {
     if (reference === void 0) { reference = "BROWSER_INNER_WIDTH"; }
-    var a = {};
-    console.log(typeof a);
     if (typeof dimension === "undefined")
         return undefined;
     if (typeof dimension === "number") {
@@ -23,4 +21,10 @@ function convertDimension(dimension, reference) {
     }
 }
 exports.convertDimension = convertDimension;
+function getKebabCase(str) {
+    return str.replace(/[A-Z]/g, function (item) {
+        return "-" + item.toLowerCase();
+    });
+}
+exports.getKebabCase = getKebabCase;
 //# sourceMappingURL=ValueHelper.js.map
