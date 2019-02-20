@@ -1,4 +1,4 @@
-export enum ResizeDirection {
+export const enum ResizeDirection {
     TOP = "top",
     LEFT = "left",
     RIGHT = "right",

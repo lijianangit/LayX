@@ -5,6 +5,7 @@ module.exports = {
         "filename": "layx.js",
         "path": __dirname + "/dist",
         "libraryTarget": "umd",
+        "library": "layx",
         "libraryExport": "default"
     },
     "devtool": "source-map",

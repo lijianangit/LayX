@@ -1,5 +1,10 @@
 import { Theme } from "../enums/Theme";
 
+export interface Layx {
+    (options: any): void;
+    create(options: any): void;
+}
+
 export interface JsonObject {
     constructor: Object;
     [key: string]: any;

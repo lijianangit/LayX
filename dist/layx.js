@@ -3,10 +3,10 @@
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
-	else {
-		var a = factory();
-		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
-	}
+	else if(typeof exports === 'object')
+		exports["layx"] = factory();
+	else
+		root["layx"] = factory();
 })(window, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -109,7 +109,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Theme_1 = __webpack_require__(/*! ../enums/Theme */ "./src/enums/Theme.ts");
 var ValueHelper_1 = __webpack_require__(/*! ../utils/ValueHelper */ "./src/utils/ValueHelper.ts");
 var ObjectHelper_1 = __webpack_require__(/*! ../utils/ObjectHelper */ "./src/utils/ObjectHelper.ts");
 var ToolBar_1 = __importDefault(__webpack_require__(/*! ./ToolBar */ "./src/components/ToolBar.ts"));
@@ -126,7 +125,7 @@ var Container = (function () {
         this.minHeight = 200;
         this.maxWidth = innerWidth;
         this.maxHeight = innerHeight;
-        this.theme = Theme_1.Theme.DEFAULT;
+        this.theme = "default";
         this.background = "#ffffff";
         this.parclose = false;
         this.resize = {
@@ -388,24 +387,6 @@ exports.default = TopMenu;
 
 /***/ }),
 
-/***/ "./src/enums/Theme.ts":
-/*!****************************!*\
-  !*** ./src/enums/Theme.ts ***!
-  \****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Theme;
-(function (Theme) {
-    Theme["DEFAULT"] = "default";
-})(Theme = exports.Theme || (exports.Theme = {}));
-
-
-/***/ }),
-
 /***/ "./src/index.ts":
 /*!**********************!*\
   !*** ./src/index.ts ***!
@@ -420,10 +401,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Container_1 = __importDefault(__webpack_require__(/*! ./components/Container */ "./src/components/Container.ts"));
-var containerOptions = { id: "hello", background: "#dedede" };
-var container = new Container_1.default(containerOptions);
-var containerFragment = container.createView();
-document.body.appendChild(containerFragment);
+function layxInstance() {
+    var layx = function (options) { };
+    layx.create = function (options) {
+        var containerOptions = { id: "hello", background: "#dedede" };
+        var container = new Container_1.default(containerOptions);
+        var containerFragment = container.createView();
+        document.body.appendChild(containerFragment);
+    };
+    return layx;
+}
+var layx = layxInstance();
+exports.default = layx;
 
 
 /***/ }),

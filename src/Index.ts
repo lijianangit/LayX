@@ -1,8 +1,18 @@
 import Container from "./components/Container";
-import { ContainerOptions } from "./types/Constraint";
+import { ContainerOptions, Layx } from "./types/Constraint";
 
-const containerOptions: ContainerOptions = { id: "hello", background: "#dedede" };
-const container = new Container(containerOptions);
-const containerFragment = container.createView();
+function layxInstance(): Layx {
+    const layx = <Layx>function (options: any): void { };
 
-document.body.appendChild(containerFragment);
+    layx.create = function (options: any) {
+        const containerOptions: ContainerOptions = { id: "hello", background: "#dedede" };
+        const container = new Container(containerOptions);
+        const containerFragment = container.createView();
+
+        document.body.appendChild(containerFragment);
+    };
+    return layx;
+}
+
+const layx = layxInstance();
+export default layx;
