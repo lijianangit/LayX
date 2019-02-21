@@ -1,5 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
@@ -17,8 +17,9 @@ module.exports = {
         "rules": [
             {
                 "test": /\.css$/,
-                "use": ExtractTextWebpackPlugin.extract({
-                    "use": "css-loader"
+                "use": ExtractTextPlugin.extract({
+                    "fallback": "style-loader",
+                    "use": ["css-loader", "postcss-loader"]
                 })
             },
             {
@@ -38,19 +39,19 @@ module.exports = {
             ".js"
         ]
     },
-    plugins: [
+    "plugins": [
         new OptimizeCSSAssetsPlugin({
-            assetNameRegExp: /\.style\.css$/g,
-            cssProcessor: require('cssnano'),
-            cssProcessorOptions: {
-                preset: ['default', {
-                    discardComments: {
-                        removeAll: true,
+            "assetNameRegExp": /\.style\.css$/g,
+            "cssProcessor": require('cssnano'),
+            "cssProcessorOptions": {
+                "preset": ['default', {
+                    "discardComments": {
+                        "removeAll": true,
                     },
-                    normalizeUnicode: false
+                    "normalizeUnicode": false,
                 }]
             },
-            canPrint: true
+            "canPrint": true,
         }),
         new HtmlWebpackPlugin({
             "title": "Layx - Creative elements container.",
@@ -58,6 +59,9 @@ module.exports = {
             "inject": "head",
             "hash": true
         }),
-        new ExtractTextWebpackPlugin('layx.min.css')
-    ]
+        new ExtractTextPlugin('layx.min.css')
+    ],
+    "optimization": {
+        "minimizer": [new OptimizeCSSAssetsPlugin()],
+    }
 };
