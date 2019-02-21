@@ -4,7 +4,7 @@ import UITopMenu from "./UITopMenu";
 import UISideBar from "./UISideBar";
 import UIWindow from "./base/UIWindow";
 
-export default class UIDefaultWindow extends UIWindow {
+export default class UIContentWindow extends UIWindow {
     constructor(options: WindowOptions, layx: Layx) {
         super(options, layx);
     }

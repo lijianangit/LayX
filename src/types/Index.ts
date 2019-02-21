@@ -2,6 +2,8 @@ import { Theme } from "../enums/Theme";
 
 export interface Layx {
     (options: any): void;
+    version: string;
+    v: string;
     prefix: string;
     zIndex?: number;
     create(options: any): void;
