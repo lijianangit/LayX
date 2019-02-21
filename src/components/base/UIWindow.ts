@@ -1,4 +1,4 @@
-import { WindowOptions, Layx, ToolBarOptions, TopMenuOptions, StatuBarOptions, SideBarOptions, ResizeOptions } from "../../types/Index";
+import { WindowOptions, Layx, ToolBarOptions, TopMenuOptions, StatuBarOptions, SideBarOptions, ResizeOptions } from "../../typings/Index";
 import UIComponent from "./UIComponent";
 import { Theme } from "../../enums/Theme";
 import { convertDimension, getKebabCase } from "../../utils/ValueHelper";

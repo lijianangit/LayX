@@ -1,5 +1,7 @@
-import { Layx, WindowOptions } from "./types/Index";
+import { Layx, WindowOptions } from "./typings/Index";
 import UIContentWindow from "./components/UIContentWindow";
+
+import "./assets/styles/common.css";
 
 function layxInstance(): Layx {
     const layx = <Layx>function (options: any): void { };

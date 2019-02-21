@@ -1,3 +1,7 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
 module.exports = {
     "mode": "production",// production|development
     "entry": "./src/index.ts",
@@ -13,7 +17,9 @@ module.exports = {
         "rules": [
             {
                 "test": /\.css$/,
-                "use": ["style-loader", "css-loader", "postcss-loader"]
+                "use": ExtractTextWebpackPlugin.extract({
+                    "use": "css-loader"
+                })
             },
             {
                 "test": /\.ts?$/,
@@ -31,5 +37,27 @@ module.exports = {
             ".tsx",
             ".js"
         ]
-    }
+    },
+    plugins: [
+        new OptimizeCSSAssetsPlugin({
+            assetNameRegExp: /\.style\.css$/g,
+            cssProcessor: require('cssnano'),
+            cssProcessorOptions: {
+                preset: ['default', {
+                    discardComments: {
+                        removeAll: true,
+                    },
+                    normalizeUnicode: false
+                }]
+            },
+            canPrint: true
+        }),
+        new HtmlWebpackPlugin({
+            "title": "Layx - Creative elements container.",
+            "template": './index.html',
+            "inject": "head",
+            "hash": true
+        }),
+        new ExtractTextWebpackPlugin('layx.min.css')
+    ]
 };

@@ -1,4 +1,4 @@
-import { Layx } from "../types/Index";
+import { Layx } from "../typings/Index";
 import { getKebabCase } from "../utils/ValueHelper";
 import UIWindow from "./base/UIWindow";
 import UIComponent from "./base/UIComponent";

@@ -1,4 +1,4 @@
-import { WindowOptions, Layx } from "../types/Index";
+import { WindowOptions, Layx } from "../typings/Index";
 import UIToolBar from "./UIToolBar";
 import UITopMenu from "./UITopMenu";
 import UISideBar from "./UISideBar";

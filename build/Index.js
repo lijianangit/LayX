@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIContentWindow_1 = __importDefault(require("./components/UIContentWindow"));
+require("./assets/styles/common.css");
 function layxInstance() {
     var layx = function (options) { };
     layx.v = layx.version = "3.0.0";

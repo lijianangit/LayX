@@ -1,4 +1,4 @@
-import { JsonObject } from "../types/Index";
+import { JsonObject } from "../typings/Index";
 
 export function isJsonObject(target: any): boolean {
     return typeof target === "object" && target.constructor === Object;

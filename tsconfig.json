@@ -11,7 +11,10 @@
     "noImplicitThis": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "traceResolution": true
+    "traceResolution": true,
+    "typeRoots": [
+      "./typings"
+    ]
   },
   "include": [
     "./src/**/*"
