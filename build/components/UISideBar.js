@@ -43,4 +43,3 @@ var UISideBar = (function (_super) {
     return UISideBar;
 }(UIComponent_1.default));
 exports.default = UISideBar;
-//# sourceMappingURL=UISideBar.js.map

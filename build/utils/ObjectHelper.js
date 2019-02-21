@@ -53,4 +53,3 @@ function getProperty(obj, key) {
     return obj[key];
 }
 exports.getProperty = getProperty;
-//# sourceMappingURL=ObjectHelper.js.map

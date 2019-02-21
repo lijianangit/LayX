@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const UglifyjsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
     "mode": "production",// production|development
@@ -12,7 +13,6 @@ module.exports = {
         "library": "layx",
         "libraryExport": "default"
     },
-    "devtool": "source-map",
     "module": {
         "rules": [
             {
@@ -40,6 +40,7 @@ module.exports = {
         ]
     },
     "plugins": [
+        new UglifyjsPlugin(),
         new OptimizeCSSAssetsPlugin({
             "assetNameRegExp": /\.style\.css$/g,
             "cssProcessor": require('cssnano'),

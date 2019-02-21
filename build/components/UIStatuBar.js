@@ -43,4 +43,3 @@ var StatuBar = (function (_super) {
     return StatuBar;
 }(UIComponent_1.default));
 exports.default = StatuBar;
-//# sourceMappingURL=UIStatuBar.js.map

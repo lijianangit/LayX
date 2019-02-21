@@ -40,4 +40,3 @@ var UITopMenu = (function (_super) {
     return UITopMenu;
 }(UIComponent_1.default));
 exports.default = UITopMenu;
-//# sourceMappingURL=UITopMenu.js.map

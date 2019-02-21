@@ -18,4 +18,3 @@ function layxInstance() {
     return layx;
 }
 exports.default = layxInstance();
-//# sourceMappingURL=Index.js.map

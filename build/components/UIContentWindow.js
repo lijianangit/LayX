@@ -55,4 +55,3 @@ var UIContentWindow = (function (_super) {
     return UIContentWindow;
 }(UIWindow_1.default));
 exports.default = UIContentWindow;
-//# sourceMappingURL=UIContentWindow.js.map

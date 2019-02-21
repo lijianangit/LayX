@@ -8,4 +8,3 @@ var UIComponent = (function () {
     return UIComponent;
 }());
 exports.default = UIComponent;
-//# sourceMappingURL=UIComponent.js.map

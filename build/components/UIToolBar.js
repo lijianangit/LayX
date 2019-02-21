@@ -43,4 +43,3 @@ var UIToolBar = (function (_super) {
     return UIToolBar;
 }(UIComponent_1.default));
 exports.default = UIToolBar;
-//# sourceMappingURL=UIToolBar.js.map

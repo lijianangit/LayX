@@ -98,4 +98,3 @@ var UIWindow = (function () {
     return UIWindow;
 }());
 exports.default = UIWindow;
-//# sourceMappingURL=UIWindow.js.map
