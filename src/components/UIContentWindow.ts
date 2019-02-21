@@ -1,9 +1,10 @@
-import { WindowOptions, Layx } from "../typings/Index";
+import { WindowOptions } from "../typings/Index";
 import UIToolBar from "./UIToolBar";
 import UITopMenu from "./UITopMenu";
 import UISideBar from "./UISideBar";
 import UIWindow from "./base/UIWindow";
 import AppProcess from "../core/AppProcess";
+import { batchClasses, batchStyles } from "../utils/StyleHelper";
 
 export default class UIContentWindow extends UIWindow {
     constructor(options: WindowOptions, app: AppProcess) {
@@ -15,14 +16,17 @@ export default class UIContentWindow extends UIWindow {
 
         const windowElement = document.createElement("div");
         windowElement.id = this.id;
-        windowElement.classList.add(`${this.app.prefix}window`, `${this.app.prefix}theme-${this.theme}`);
-        windowElement.style.width = `${this.width}px`;
-        windowElement.style.height = `${this.height}px`;
-        windowElement.style.minWidth = `${this.minWidth}px`;
-        windowElement.style.minHeight = `${this.minHeight}px`;
-        windowElement.style.maxWidth = this.maxWidth === innerWidth ? null : `${this.maxWidth}px`;
-        windowElement.style.maxHeight = this.maxHeight === innerHeight ? null : `${this.maxHeight}px`;
-        windowElement.style.background = this.background;
+
+        windowElement.classList.add(...batchClasses(this.app.prefix, "window", "flexbox", `theme-${this.theme}`));
+        batchStyles(windowElement, <CSSStyleDeclaration>{
+            width: `${this.width}px`,
+            height: `${this.height}px`,
+            minWidth: `${this.minWidth}px`,
+            minHeight: `${this.minHeight}px`,
+            maxWidth: this.maxWidth === innerWidth ? null : `${this.maxWidth}px`,
+            maxHeight: this.maxHeight === innerHeight ? null : `${this.maxHeight}px`,
+            background: this.background
+        });
 
         const parcloseElement = this.createParcloseView();
         if (parcloseElement) {
