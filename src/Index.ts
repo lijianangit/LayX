@@ -7,8 +7,7 @@ function layxInstance(): Layx {
     layx.zIndex = 10000000;
     layx.prefix = "layx-";
 
-    layx.create = function (options: any) {
-        const windowOptions: WindowOptions = { id: "hello", background: "#dedede" };
+    layx.create = function (windowOptions: WindowOptions) {
         const window = new UIContentWindow(windowOptions, layx);
         const windowFragment = window.createView();
         document.body.appendChild(windowFragment);
