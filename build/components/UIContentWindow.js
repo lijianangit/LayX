@@ -20,29 +20,33 @@ var UIToolBar_1 = __importDefault(require("./UIToolBar"));
 var UITopMenu_1 = __importDefault(require("./UITopMenu"));
 var UISideBar_1 = __importDefault(require("./UISideBar"));
 var UIWindow_1 = __importDefault(require("./base/UIWindow"));
+var StyleHelper_1 = require("../utils/StyleHelper");
 var UIContentWindow = (function (_super) {
     __extends(UIContentWindow, _super);
     function UIContentWindow(options, app) {
         return _super.call(this, options, app) || this;
     }
     UIContentWindow.prototype.createView = function () {
+        var _a;
         var fragment = document.createDocumentFragment();
         var windowElement = document.createElement("div");
         windowElement.id = this.id;
-        windowElement.classList.add(this.app.prefix + "window", this.app.prefix + "theme-" + this.theme);
-        windowElement.style.width = this.width + "px";
-        windowElement.style.height = this.height + "px";
-        windowElement.style.minWidth = this.minWidth + "px";
-        windowElement.style.minHeight = this.minHeight + "px";
-        windowElement.style.maxWidth = this.maxWidth === innerWidth ? null : this.maxWidth + "px";
-        windowElement.style.maxHeight = this.maxHeight === innerHeight ? null : this.maxHeight + "px";
-        windowElement.style.background = this.background;
+        (_a = windowElement.classList).add.apply(_a, StyleHelper_1.batchClasses(this.app.prefix, "window", "flexbox", "theme-" + this.theme));
+        StyleHelper_1.batchStyles(windowElement, {
+            width: this.width + "px",
+            height: this.height + "px",
+            minWidth: this.minWidth + "px",
+            minHeight: this.minHeight + "px",
+            maxWidth: this.maxWidth === innerWidth ? null : this.maxWidth + "px",
+            maxHeight: this.maxHeight === innerHeight ? null : this.maxHeight + "px",
+            background: this.background
+        });
         var parcloseElement = this.createParcloseView();
         if (parcloseElement) {
             fragment.appendChild(parcloseElement);
         }
-        for (var _i = 0, _a = [UIToolBar_1.default, UITopMenu_1.default, UISideBar_1.default, UISideBar_1.default]; _i < _a.length; _i++) {
-            var component = _a[_i];
+        for (var _i = 0, _b = [UIToolBar_1.default, UITopMenu_1.default, UISideBar_1.default, UISideBar_1.default]; _i < _b.length; _i++) {
+            var component = _b[_i];
             this.initComponet(windowElement, component);
         }
         var resizeElements = this.createResizeView();
