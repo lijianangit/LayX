@@ -1,5 +1,7 @@
 # Layx v3.x 版本开发中，新增更多特性：[新特性](https://gitee.com/monksoul/LayX/issues/IRK3V)
 
+[v3.x 进度](https://gitee.com/monksoul/LayX/tree/v3/)
+
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0219/172155_e701fa71_974299.jpeg "layx.jpg")
 
 # 序言
