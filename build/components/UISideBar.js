@@ -20,8 +20,8 @@ var ValueHelper_1 = require("../utils/ValueHelper");
 var UIComponent_1 = __importDefault(require("./base/UIComponent"));
 var UISideBar = (function (_super) {
     __extends(UISideBar, _super);
-    function UISideBar(window, layx) {
-        var _this = _super.call(this, window, layx) || this;
+    function UISideBar(window, app) {
+        var _this = _super.call(this, window, app) || this;
         _this.name = "sideBar";
         _this.width = 60;
         _this.background = "#eeeef2";
@@ -34,7 +34,7 @@ var UISideBar = (function (_super) {
     UISideBar.prototype.createView = function () {
         var fragment = document.createDocumentFragment();
         var sideBarElement = document.createElement("div");
-        sideBarElement.classList.add("" + (this.layx.prefix + ValueHelper_1.getKebabCase(this.name)));
+        sideBarElement.classList.add("" + (this.app.prefix + ValueHelper_1.getKebabCase(this.name)));
         sideBarElement.style.width = this.width + "px";
         sideBarElement.style.background = this.background;
         fragment.appendChild(sideBarElement);

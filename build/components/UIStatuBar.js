@@ -20,8 +20,8 @@ var ValueHelper_1 = require("../utils/ValueHelper");
 var UIComponent_1 = __importDefault(require("./base/UIComponent"));
 var StatuBar = (function (_super) {
     __extends(StatuBar, _super);
-    function StatuBar(window, layx) {
-        var _this = _super.call(this, window, layx) || this;
+    function StatuBar(window, app) {
+        var _this = _super.call(this, window, app) || this;
         _this.name = "statuBar";
         _this.width = 60;
         _this.background = "#eeeef2";
@@ -34,7 +34,7 @@ var StatuBar = (function (_super) {
     StatuBar.prototype.createView = function () {
         var fragment = document.createDocumentFragment();
         var sideBarElement = document.createElement("div");
-        sideBarElement.classList.add("" + (this.layx.prefix + ValueHelper_1.getKebabCase(this.name)));
+        sideBarElement.classList.add("" + (this.app.prefix + ValueHelper_1.getKebabCase(this.name)));
         sideBarElement.style.width = this.width + "px";
         sideBarElement.style.background = this.background;
         fragment.appendChild(sideBarElement);

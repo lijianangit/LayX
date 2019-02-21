@@ -20,8 +20,8 @@ var ValueHelper_1 = require("../utils/ValueHelper");
 var UIComponent_1 = __importDefault(require("./base/UIComponent"));
 var UIToolBar = (function (_super) {
     __extends(UIToolBar, _super);
-    function UIToolBar(window, layx) {
-        var _this = _super.call(this, window, layx) || this;
+    function UIToolBar(window, app) {
+        var _this = _super.call(this, window, app) || this;
         _this.name = "toolBar";
         _this.height = 30;
         _this.background = "#ffffff";
@@ -34,7 +34,7 @@ var UIToolBar = (function (_super) {
     UIToolBar.prototype.createView = function () {
         var fragment = document.createDocumentFragment();
         var toolBarElement = document.createElement("div");
-        toolBarElement.classList.add("" + (this.layx.prefix + ValueHelper_1.getKebabCase(this.name)));
+        toolBarElement.classList.add("" + (this.app.prefix + ValueHelper_1.getKebabCase(this.name)));
         toolBarElement.style.height = this.height + "px";
         toolBarElement.style.background = this.background;
         fragment.appendChild(toolBarElement);

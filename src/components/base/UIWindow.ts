@@ -1,8 +1,9 @@
-import { WindowOptions, Layx, ToolBarOptions, TopMenuOptions, StatuBarOptions, SideBarOptions, ResizeOptions } from "../../typings/Index";
+import { WindowOptions, ToolBarOptions, TopMenuOptions, StatuBarOptions, SideBarOptions, ResizeOptions } from "../../typings/Index";
 import UIComponent from "./UIComponent";
 import { Theme } from "../../enums/Theme";
 import { convertDimension, getKebabCase } from "../../utils/ValueHelper";
 import { reverseBooleanObject, merge, leastOneTrue } from "../../utils/ObjectHelper";
+import AppProcess from "../../core/AppProcess";
 
 abstract class UIWindow {
     readonly id: string;
@@ -30,8 +31,8 @@ abstract class UIWindow {
     statuBar: StatuBarOptions | undefined = undefined;
     sideBar: SideBarOptions | undefined = undefined;
 
-    constructor(public options: WindowOptions, public layx: Layx) {
-        this.id = `${layx.prefix}${options.id}`;
+    constructor(public options: WindowOptions, public app: AppProcess) {
+        this.id = `${app.prefix}${options.id}`;
 
         this.width = convertDimension(options.width) || this.width;
         this.height = convertDimension(options.height, "BROWSER_INNER_HEIGHT") || this.height;
@@ -76,7 +77,7 @@ abstract class UIWindow {
         if (this.parclose === true) {
             const parcloseElement = document.createElement("div");
             parcloseElement.id = `${this.id}-parclose`;
-            parcloseElement.classList.add(`${this.layx.prefix}parclose`);
+            parcloseElement.classList.add(`${this.app.prefix}parclose`);
             return parcloseElement;
         }
     }
@@ -84,7 +85,7 @@ abstract class UIWindow {
     createResizeView(): HTMLElement | undefined {
         if (leastOneTrue<ResizeOptions>(this.resize)) {
             const resizeElements = document.createElement("div");
-            resizeElements.classList.add(`${this.layx.prefix}resizes`);
+            resizeElements.classList.add(`${this.app.prefix}resizes`);
 
             for (const key of Object.keys(this.resize)) {
                 this.createResizeItem(resizeElements, <boolean>this.resize.top, getKebabCase(key));
@@ -97,12 +98,12 @@ abstract class UIWindow {
         if (!isCreate) return;
 
         const resize = document.createElement("div");
-        resize.classList.add(`${this.layx.prefix}resize-${direction}`);
+        resize.classList.add(`${this.app.prefix}resize-${direction}`);
         parent.appendChild(resize);
     }
 
-    protected initComponet<T extends UIComponent>(parent: HTMLElement, ctor: { new(window: UIWindow, layx: Layx): T; }): T | undefined {
-        const componet = new ctor(this, this.layx);
+    protected initComponet<T extends UIComponent>(parent: HTMLElement, ctor: { new(window: UIWindow, app: AppProcess): T; }): T | undefined {
+        const componet = new ctor(this, this.app);
         if ((<any>this)[componet.name] !== undefined) {
             const componentFragment = componet.createView();
             parent.appendChild(componentFragment);

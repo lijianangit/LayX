@@ -22,14 +22,14 @@ var UISideBar_1 = __importDefault(require("./UISideBar"));
 var UIWindow_1 = __importDefault(require("./base/UIWindow"));
 var UIContentWindow = (function (_super) {
     __extends(UIContentWindow, _super);
-    function UIContentWindow(options, layx) {
-        return _super.call(this, options, layx) || this;
+    function UIContentWindow(options, app) {
+        return _super.call(this, options, app) || this;
     }
     UIContentWindow.prototype.createView = function () {
         var fragment = document.createDocumentFragment();
         var windowElement = document.createElement("div");
         windowElement.id = this.id;
-        windowElement.classList.add(this.layx.prefix + "window", this.layx.prefix + "theme-" + this.theme);
+        windowElement.classList.add(this.app.prefix + "window", this.app.prefix + "theme-" + this.theme);
         windowElement.style.width = this.width + "px";
         windowElement.style.height = this.height + "px";
         windowElement.style.minWidth = this.minWidth + "px";

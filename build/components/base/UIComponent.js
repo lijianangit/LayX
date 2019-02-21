@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIComponent = (function () {
-    function UIComponent(window, layx) {
+    function UIComponent(window, app) {
         this.window = window;
-        this.layx = layx;
+        this.app = app;
     }
     return UIComponent;
 }());

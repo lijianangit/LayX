@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ValueHelper_1 = require("../../utils/ValueHelper");
 var ObjectHelper_1 = require("../../utils/ObjectHelper");
 var UIWindow = (function () {
-    function UIWindow(options, layx) {
+    function UIWindow(options, app) {
         this.options = options;
-        this.layx = layx;
+        this.app = app;
         this.width = 800;
         this.height = 600;
         this.minWidth = 200;
@@ -29,7 +29,7 @@ var UIWindow = (function () {
         this.topMenu = undefined;
         this.statuBar = undefined;
         this.sideBar = undefined;
-        this.id = "" + layx.prefix + options.id;
+        this.id = "" + app.prefix + options.id;
         this.width = ValueHelper_1.convertDimension(options.width) || this.width;
         this.height = ValueHelper_1.convertDimension(options.height, "BROWSER_INNER_HEIGHT") || this.height;
         this.minWidth = ValueHelper_1.convertDimension(options.minWidth) || this.minWidth;
@@ -65,14 +65,14 @@ var UIWindow = (function () {
         if (this.parclose === true) {
             var parcloseElement = document.createElement("div");
             parcloseElement.id = this.id + "-parclose";
-            parcloseElement.classList.add(this.layx.prefix + "parclose");
+            parcloseElement.classList.add(this.app.prefix + "parclose");
             return parcloseElement;
         }
     };
     UIWindow.prototype.createResizeView = function () {
         if (ObjectHelper_1.leastOneTrue(this.resize)) {
             var resizeElements = document.createElement("div");
-            resizeElements.classList.add(this.layx.prefix + "resizes");
+            resizeElements.classList.add(this.app.prefix + "resizes");
             for (var _i = 0, _a = Object.keys(this.resize); _i < _a.length; _i++) {
                 var key = _a[_i];
                 this.createResizeItem(resizeElements, this.resize.top, ValueHelper_1.getKebabCase(key));
@@ -84,11 +84,11 @@ var UIWindow = (function () {
         if (!isCreate)
             return;
         var resize = document.createElement("div");
-        resize.classList.add(this.layx.prefix + "resize-" + direction);
+        resize.classList.add(this.app.prefix + "resize-" + direction);
         parent.appendChild(resize);
     };
     UIWindow.prototype.initComponet = function (parent, ctor) {
-        var componet = new ctor(this, this.layx);
+        var componet = new ctor(this, this.app);
         if (this[componet.name] !== undefined) {
             var componentFragment = componet.createView();
             parent.appendChild(componentFragment);

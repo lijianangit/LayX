@@ -7,10 +7,7 @@ export interface JsonObject {
 
 export interface Layx {
     (options: any): void;
-    version: string;
     v: string;
-    prefix: string;
-    zIndex?: number;
     create(options: any): void;
 }
 

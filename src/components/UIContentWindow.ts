@@ -3,10 +3,11 @@ import UIToolBar from "./UIToolBar";
 import UITopMenu from "./UITopMenu";
 import UISideBar from "./UISideBar";
 import UIWindow from "./base/UIWindow";
+import AppProcess from "../core/AppProcess";
 
 export default class UIContentWindow extends UIWindow {
-    constructor(options: WindowOptions, layx: Layx) {
-        super(options, layx);
+    constructor(options: WindowOptions, app: AppProcess) {
+        super(options, app);
     }
 
     createView(): DocumentFragment {
@@ -14,7 +15,7 @@ export default class UIContentWindow extends UIWindow {
 
         const windowElement = document.createElement("div");
         windowElement.id = this.id;
-        windowElement.classList.add(`${this.layx.prefix}window`, `${this.layx.prefix}theme-${this.theme}`);
+        windowElement.classList.add(`${this.app.prefix}window`, `${this.app.prefix}theme-${this.theme}`);
         windowElement.style.width = `${this.width}px`;
         windowElement.style.height = `${this.height}px`;
         windowElement.style.minWidth = `${this.minWidth}px`;

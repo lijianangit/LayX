@@ -20,8 +20,8 @@ var ValueHelper_1 = require("../utils/ValueHelper");
 var UIComponent_1 = __importDefault(require("./base/UIComponent"));
 var UITopMenu = (function (_super) {
     __extends(UITopMenu, _super);
-    function UITopMenu(window, layx) {
-        var _this = _super.call(this, window, layx) || this;
+    function UITopMenu(window, app) {
+        var _this = _super.call(this, window, app) || this;
         _this.name = "topMenu";
         _this.background = "#eeeef2";
         if (typeof window.topMenu === "object") {
@@ -32,7 +32,7 @@ var UITopMenu = (function (_super) {
     UITopMenu.prototype.createView = function () {
         var fragment = document.createDocumentFragment();
         var topMenuElement = document.createElement("div");
-        topMenuElement.classList.add("" + (this.layx.prefix + ValueHelper_1.getKebabCase(this.name)));
+        topMenuElement.classList.add("" + (this.app.prefix + ValueHelper_1.getKebabCase(this.name)));
         topMenuElement.style.background = this.background;
         fragment.appendChild(topMenuElement);
         return fragment;
