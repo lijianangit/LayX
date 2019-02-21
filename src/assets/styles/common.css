@@ -1,3 +1,10 @@
-body{
+body {
     background: #ccc;
+    display: flex;
+    border-radius: 10px;
+}
+
+#link {
+    color: #ccc;
+    font-size: 12px;
 }

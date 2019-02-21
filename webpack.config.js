@@ -1,7 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyjsPlugin = require('uglifyjs-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
     "mode": "production",// production|development
@@ -17,10 +17,11 @@ module.exports = {
         "rules": [
             {
                 "test": /\.css$/,
-                "use": ExtractTextPlugin.extract({
-                    "fallback": "style-loader",
-                    "use": ["css-loader", "postcss-loader"]
-                })
+                "use": [
+                    MiniCssExtractPlugin.loader,
+                    "css-loader",
+                    "postcss-loader"
+                ]
             },
             {
                 "test": /\.ts?$/,
@@ -60,7 +61,9 @@ module.exports = {
             "inject": "head",
             "hash": true
         }),
-        new ExtractTextPlugin('layx.min.css')
+        new MiniCssExtractPlugin({
+            filename: "layx.min.css"
+        })
     ],
     "optimization": {
         "minimizer": [new OptimizeCSSAssetsPlugin()],
