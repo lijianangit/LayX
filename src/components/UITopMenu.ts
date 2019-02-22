@@ -2,6 +2,7 @@ import { getKebabCase } from "../utils/ValueHelper";
 import UIWindow from "./base/UIWindow";
 import UIComponent from "./base/UIComponent";
 import AppProcess from "../core/AppProcess";
+import { batchClasses, batchStyles } from "../utils/StyleHelper";
 
 export default class UITopMenu extends UIComponent {
     readonly name: string = "topMenu";
@@ -20,8 +21,11 @@ export default class UITopMenu extends UIComponent {
         const fragment = document.createDocumentFragment();
 
         const topMenuElement = document.createElement("div");
-        topMenuElement.classList.add(`${this.app.prefix + getKebabCase(this.name)}`);
-        topMenuElement.style.background = this.background;
+
+        topMenuElement.classList.add(...batchClasses(this.app.prefix, getKebabCase(this.name)));
+        batchStyles(topMenuElement, <CSSStyleDeclaration>{
+            background: this.background
+        });
 
         fragment.appendChild(topMenuElement);
         return fragment;

@@ -4,8 +4,9 @@ import { Theme } from "../../enums/Theme";
 import { convertDimension, getKebabCase } from "../../utils/ValueHelper";
 import { reverseBooleanObject, merge, leastOneTrue } from "../../utils/ObjectHelper";
 import AppProcess from "../../core/AppProcess";
+import { batchClasses } from "../../utils/StyleHelper";
 
-abstract class UIWindow {
+export default abstract class UIWindow {
     readonly id: string;
     width: number = 800;
     height: number = 600;
@@ -77,7 +78,8 @@ abstract class UIWindow {
         if (this.parclose === true) {
             const parcloseElement = document.createElement("div");
             parcloseElement.id = `${this.id}-parclose`;
-            parcloseElement.classList.add(`${this.app.prefix}parclose`);
+
+            parcloseElement.classList.add(...batchClasses(this.app.prefix, "parclose"));
             return parcloseElement;
         }
     }
@@ -85,7 +87,8 @@ abstract class UIWindow {
     createResizeView(): HTMLElement | undefined {
         if (leastOneTrue<ResizeOptions>(this.resize)) {
             const resizeElements = document.createElement("div");
-            resizeElements.classList.add(`${this.app.prefix}resizes`);
+
+            resizeElements.classList.add(...batchClasses(this.app.prefix, "resizes"));
 
             for (const key of Object.keys(this.resize)) {
                 this.createResizeItem(resizeElements, <boolean>this.resize.top, getKebabCase(key));
@@ -97,13 +100,14 @@ abstract class UIWindow {
     createResizeItem(parent: HTMLElement, isCreate: boolean, direction: string): void {
         if (!isCreate) return;
 
-        const resize = document.createElement("div");
-        resize.classList.add(`${this.app.prefix}resize-${direction}`);
-        parent.appendChild(resize);
+        const resizeElement = document.createElement("div");
+        resizeElement.classList.add(...batchClasses(this.app.prefix, `resize-${direction}`));
+        parent.appendChild(resizeElement);
     }
 
     protected initComponet<T extends UIComponent>(parent: HTMLElement, ctor: { new(window: UIWindow, app: AppProcess): T; }): T | undefined {
         const componet = new ctor(this, this.app);
+
         if ((<any>this)[componet.name] !== undefined) {
             const componentFragment = componet.createView();
             parent.appendChild(componentFragment);
@@ -111,5 +115,3 @@ abstract class UIWindow {
         }
     }
 }
-
-export default UIWindow;

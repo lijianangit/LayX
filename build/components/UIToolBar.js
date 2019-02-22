@@ -18,6 +18,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ValueHelper_1 = require("../utils/ValueHelper");
 var UIComponent_1 = __importDefault(require("./base/UIComponent"));
+var StyleHelper_1 = require("../utils/StyleHelper");
 var UIToolBar = (function (_super) {
     __extends(UIToolBar, _super);
     function UIToolBar(window, app) {
@@ -32,11 +33,14 @@ var UIToolBar = (function (_super) {
         return _this;
     }
     UIToolBar.prototype.createView = function () {
+        var _a;
         var fragment = document.createDocumentFragment();
         var toolBarElement = document.createElement("div");
-        toolBarElement.classList.add("" + (this.app.prefix + ValueHelper_1.getKebabCase(this.name)));
-        toolBarElement.style.height = this.height + "px";
-        toolBarElement.style.background = this.background;
+        (_a = toolBarElement.classList).add.apply(_a, StyleHelper_1.batchClasses(this.app.prefix, ValueHelper_1.getKebabCase(this.name)));
+        StyleHelper_1.batchStyles(toolBarElement, {
+            height: this.height + "px",
+            background: this.background
+        });
         fragment.appendChild(toolBarElement);
         return fragment;
     };

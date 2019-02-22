@@ -23,8 +23,8 @@ export default class UISideBar extends UIComponent {
         const fragment = document.createDocumentFragment();
 
         const sideBarElement = document.createElement("div");
+        
         sideBarElement.classList.add(...batchClasses(this.app.prefix, getKebabCase(this.name)));
-
         batchStyles(sideBarElement, <CSSStyleDeclaration>{
             width: `${this.width}px`,
             background: this.background

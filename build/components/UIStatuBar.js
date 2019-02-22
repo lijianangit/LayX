@@ -18,6 +18,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ValueHelper_1 = require("../utils/ValueHelper");
 var UIComponent_1 = __importDefault(require("./base/UIComponent"));
+var StyleHelper_1 = require("../utils/StyleHelper");
 var StatuBar = (function (_super) {
     __extends(StatuBar, _super);
     function StatuBar(window, app) {
@@ -32,12 +33,15 @@ var StatuBar = (function (_super) {
         return _this;
     }
     StatuBar.prototype.createView = function () {
+        var _a;
         var fragment = document.createDocumentFragment();
-        var sideBarElement = document.createElement("div");
-        sideBarElement.classList.add("" + (this.app.prefix + ValueHelper_1.getKebabCase(this.name)));
-        sideBarElement.style.width = this.width + "px";
-        sideBarElement.style.background = this.background;
-        fragment.appendChild(sideBarElement);
+        var statuBarElement = document.createElement("div");
+        (_a = statuBarElement.classList).add.apply(_a, StyleHelper_1.batchClasses(this.app.prefix, ValueHelper_1.getKebabCase(this.name)));
+        StyleHelper_1.batchStyles(statuBarElement, {
+            width: this.width + "px",
+            background: this.background
+        });
+        fragment.appendChild(statuBarElement);
         return fragment;
     };
     return StatuBar;

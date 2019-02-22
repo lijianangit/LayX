@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var ValueHelper_1 = require("../../utils/ValueHelper");
 var ObjectHelper_1 = require("../../utils/ObjectHelper");
+var StyleHelper_1 = require("../../utils/StyleHelper");
 var UIWindow = (function () {
     function UIWindow(options, app) {
         this.options = options;
@@ -62,30 +63,33 @@ var UIWindow = (function () {
         }
     }
     UIWindow.prototype.createParcloseView = function () {
+        var _a;
         if (this.parclose === true) {
             var parcloseElement = document.createElement("div");
             parcloseElement.id = this.id + "-parclose";
-            parcloseElement.classList.add(this.app.prefix + "parclose");
+            (_a = parcloseElement.classList).add.apply(_a, StyleHelper_1.batchClasses(this.app.prefix, "parclose"));
             return parcloseElement;
         }
     };
     UIWindow.prototype.createResizeView = function () {
+        var _a;
         if (ObjectHelper_1.leastOneTrue(this.resize)) {
             var resizeElements = document.createElement("div");
-            resizeElements.classList.add(this.app.prefix + "resizes");
-            for (var _i = 0, _a = Object.keys(this.resize); _i < _a.length; _i++) {
-                var key = _a[_i];
+            (_a = resizeElements.classList).add.apply(_a, StyleHelper_1.batchClasses(this.app.prefix, "resizes"));
+            for (var _i = 0, _b = Object.keys(this.resize); _i < _b.length; _i++) {
+                var key = _b[_i];
                 this.createResizeItem(resizeElements, this.resize.top, ValueHelper_1.getKebabCase(key));
             }
             return resizeElements;
         }
     };
     UIWindow.prototype.createResizeItem = function (parent, isCreate, direction) {
+        var _a;
         if (!isCreate)
             return;
-        var resize = document.createElement("div");
-        resize.classList.add(this.app.prefix + "resize-" + direction);
-        parent.appendChild(resize);
+        var resizeElement = document.createElement("div");
+        (_a = resizeElement.classList).add.apply(_a, StyleHelper_1.batchClasses(this.app.prefix, "resize-" + direction));
+        parent.appendChild(resizeElement);
     };
     UIWindow.prototype.initComponet = function (parent, ctor) {
         var componet = new ctor(this, this.app);

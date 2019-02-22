@@ -18,6 +18,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ValueHelper_1 = require("../utils/ValueHelper");
 var UIComponent_1 = __importDefault(require("./base/UIComponent"));
+var StyleHelper_1 = require("../utils/StyleHelper");
 var UITopMenu = (function (_super) {
     __extends(UITopMenu, _super);
     function UITopMenu(window, app) {
@@ -30,10 +31,13 @@ var UITopMenu = (function (_super) {
         return _this;
     }
     UITopMenu.prototype.createView = function () {
+        var _a;
         var fragment = document.createDocumentFragment();
         var topMenuElement = document.createElement("div");
-        topMenuElement.classList.add("" + (this.app.prefix + ValueHelper_1.getKebabCase(this.name)));
-        topMenuElement.style.background = this.background;
+        (_a = topMenuElement.classList).add.apply(_a, StyleHelper_1.batchClasses(this.app.prefix, ValueHelper_1.getKebabCase(this.name)));
+        StyleHelper_1.batchStyles(topMenuElement, {
+            background: this.background
+        });
         fragment.appendChild(topMenuElement);
         return fragment;
     };

@@ -2,6 +2,7 @@ import { getKebabCase } from "../utils/ValueHelper";
 import UIWindow from "./base/UIWindow";
 import UIComponent from "./base/UIComponent";
 import AppProcess from "../core/AppProcess";
+import { batchClasses, batchStyles } from "../utils/StyleHelper";
 
 export default class StatuBar extends UIComponent {
     readonly name: string = "statuBar";
@@ -21,12 +22,15 @@ export default class StatuBar extends UIComponent {
     createView(): DocumentFragment {
         const fragment = document.createDocumentFragment();
 
-        const sideBarElement = document.createElement("div");
-        sideBarElement.classList.add(`${this.app.prefix + getKebabCase(this.name)}`);
-        sideBarElement.style.width = `${this.width}px`;
-        sideBarElement.style.background = this.background;
+        const statuBarElement = document.createElement("div");
+        
+        statuBarElement.classList.add(...batchClasses(this.app.prefix, getKebabCase(this.name)));
+        batchStyles(statuBarElement, <CSSStyleDeclaration>{
+            width: `${this.width}px`,
+            background: this.background
+        });
 
-        fragment.appendChild(sideBarElement);
+        fragment.appendChild(statuBarElement);
         return fragment;
     }
 }
