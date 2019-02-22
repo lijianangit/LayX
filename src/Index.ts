@@ -1,8 +1,7 @@
 import AppProcess from "./core/AppProcess";
 import { Layx, WindowOptions } from "./typings/Index";
 
-import "./assets/styles/common.css";
-import "./assets/styles/window.css";
+import "./assets/app.css";
 
 function layxInstance(): Layx {
     const layx = <Layx>function (options: any): void { };
