@@ -14,16 +14,16 @@ export default class StatuBar extends UIComponent {
         super(window, app);
 
         if (typeof window.sideBar === "object") {
-            this.width = window.sideBar.width || this.width;
-            this.background = window.sideBar.background || this.background;
+            window.sideBar.width = this.width = window.sideBar.width || this.width;
+            window.sideBar.background = this.background = window.sideBar.background || this.background;
         }
     }
 
-    createView(): DocumentFragment {
+    createView(): DocumentFragment | undefined {
         const fragment = document.createDocumentFragment();
 
         const statuBarElement = document.createElement("div");
-        
+
         statuBarElement.classList.add(...batchClasses(this.app.prefix, getKebabCase(this.name)));
         batchStyles(statuBarElement, <CSSStyleDeclaration>{
             width: `${this.width}px`,

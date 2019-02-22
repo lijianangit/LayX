@@ -26,7 +26,7 @@ var UITopMenu = (function (_super) {
         _this.name = "topMenu";
         _this.background = "#eeeef2";
         if (typeof window.topMenu === "object") {
-            _this.background = window.topMenu.background || _this.background;
+            window.topMenu.background = _this.background = window.topMenu.background || _this.background;
         }
         return _this;
     }

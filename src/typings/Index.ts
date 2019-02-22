@@ -22,14 +22,14 @@ export interface WindowOptions {
     background?: string;
     theme?: Theme;
     parclose?: boolean;
-    resize?: ResizeOptions | boolean;
+    resizeBar?: ResizeBarOptions | boolean;
     toolBar?: ToolBarOptions | boolean;
     topMenu?: TopMenuOptions;
     statuBar?: StatuBarOptions | boolean;
     sideBar?: SideBarOptions;
 }
 
-export interface ResizeOptions {
+export interface ResizeBarOptions {
     top?: boolean;
     left?: boolean;
     right?: boolean;

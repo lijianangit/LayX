@@ -1,8 +1,8 @@
-import { WindowOptions, ToolBarOptions, TopMenuOptions, StatuBarOptions, SideBarOptions, ResizeOptions } from "../../typings/Index";
+import { WindowOptions, ToolBarOptions, TopMenuOptions, StatuBarOptions, SideBarOptions, ResizeBarOptions } from "../../typings/Index";
 import UIComponent from "./UIComponent";
 import { Theme } from "../../enums/Theme";
-import { convertDimension, getKebabCase } from "../../utils/ValueHelper";
-import { reverseBooleanObject, merge, leastOneTrue } from "../../utils/ObjectHelper";
+import { convertDimension } from "../../utils/ValueHelper";
+import { merge } from "../../utils/ObjectHelper";
 import AppProcess from "../../core/AppProcess";
 import { batchClasses } from "../../utils/StyleHelper";
 
@@ -17,16 +17,7 @@ export default abstract class UIWindow {
     theme: Theme = Theme.DEFAULT;
     background: string = "#ffffff";
     parclose: boolean = false;
-    resize: ResizeOptions = {
-        top: true,
-        left: true,
-        right: true,
-        bottom: true,
-        leftTop: true,
-        rightTop: true,
-        leftBottom: true,
-        rightBottom: true
-    };
+    resizeBar: ResizeBarOptions | undefined = {};
     toolBar: ToolBarOptions | undefined = {};
     topMenu: TopMenuOptions | undefined = undefined;
     statuBar: StatuBarOptions | undefined = undefined;
@@ -45,11 +36,11 @@ export default abstract class UIWindow {
         this.background = options.background || this.background;
         this.parclose = typeof options.parclose === "boolean" ? options.parclose : this.parclose;
 
-        if (typeof options.resize === "boolean" && options.resize === false) {
-            this.resize = reverseBooleanObject<ResizeOptions>(this.resize);
+        if (typeof options.resizeBar === "boolean" && options.resizeBar === false) {
+            this.resizeBar = undefined;
         }
-        else if (typeof options.resize === "object") {
-            this.resize = merge(this.resize, options.resize);
+        else if (typeof options.resizeBar === "object") {
+            this.resizeBar = merge(<ResizeBarOptions>this.resizeBar, options.resizeBar);
         }
 
         if (typeof options.toolBar === "boolean" && options.toolBar === false) {
@@ -72,7 +63,7 @@ export default abstract class UIWindow {
         }
     }
 
-    abstract createView(): DocumentFragment;
+    abstract createView(): DocumentFragment | undefined;
 
     createParcloseView(): HTMLElement | undefined {
         if (this.parclose === true) {
@@ -84,34 +75,15 @@ export default abstract class UIWindow {
         }
     }
 
-    createResizeView(): HTMLElement | undefined {
-        if (leastOneTrue<ResizeOptions>(this.resize)) {
-            const resizeElements = document.createElement("div");
-
-            resizeElements.classList.add(...batchClasses(this.app.prefix, "resizes"));
-
-            for (const key of Object.keys(this.resize)) {
-                this.createResizeItem(resizeElements, <boolean>this.resize.top, getKebabCase(key));
-            }
-            return resizeElements;
-        }
-    }
-
-    createResizeItem(parent: HTMLElement, isCreate: boolean, direction: string): void {
-        if (!isCreate) return;
-
-        const resizeElement = document.createElement("div");
-        resizeElement.classList.add(...batchClasses(this.app.prefix, `resize-${direction}`));
-        parent.appendChild(resizeElement);
-    }
-
-    protected initComponet<T extends UIComponent>(parent: HTMLElement, ctor: { new(window: UIWindow, app: AppProcess): T; }): T | undefined {
+    protected initComponet<T extends UIComponent>(parent: HTMLElement, ctor: { new(window: UIWindow, app: AppProcess): UIComponent; }): T | undefined {
         const componet = new ctor(this, this.app);
 
         if ((<any>this)[componet.name] !== undefined) {
             const componentFragment = componet.createView();
-            parent.appendChild(componentFragment);
-            return componet;
+            if (componentFragment) {
+                parent.appendChild(componentFragment);
+            }
+            return <T>componet;
         }
     }
 }

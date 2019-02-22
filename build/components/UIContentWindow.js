@@ -21,6 +21,7 @@ var UITopMenu_1 = __importDefault(require("./UITopMenu"));
 var UISideBar_1 = __importDefault(require("./UISideBar"));
 var UIWindow_1 = __importDefault(require("./base/UIWindow"));
 var StyleHelper_1 = require("../utils/StyleHelper");
+var UIResizeBar_1 = __importDefault(require("./UIResizeBar"));
 var UIContentWindow = (function (_super) {
     __extends(UIContentWindow, _super);
     function UIContentWindow(options, app) {
@@ -45,13 +46,9 @@ var UIContentWindow = (function (_super) {
         if (parcloseElement) {
             fragment.appendChild(parcloseElement);
         }
-        for (var _i = 0, _b = [UIToolBar_1.default, UITopMenu_1.default, UISideBar_1.default, UISideBar_1.default]; _i < _b.length; _i++) {
+        for (var _i = 0, _b = [UIResizeBar_1.default, UIToolBar_1.default, UITopMenu_1.default, UISideBar_1.default, UISideBar_1.default]; _i < _b.length; _i++) {
             var component = _b[_i];
             this.initComponet(windowElement, component);
-        }
-        var resizeElements = this.createResizeView();
-        if (resizeElements) {
-            windowElement.appendChild(resizeElements);
         }
         fragment.appendChild(windowElement);
         return fragment;

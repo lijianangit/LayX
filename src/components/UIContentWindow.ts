@@ -5,13 +5,14 @@ import UISideBar from "./UISideBar";
 import UIWindow from "./base/UIWindow";
 import AppProcess from "../core/AppProcess";
 import { batchClasses, batchStyles } from "../utils/StyleHelper";
+import UIResizeBar from "./UIResizeBar";
 
 export default class UIContentWindow extends UIWindow {
     constructor(options: WindowOptions, app: AppProcess) {
         super(options, app);
     }
 
-    createView(): DocumentFragment {
+    createView(): DocumentFragment | undefined {
         const fragment = document.createDocumentFragment();
 
         const windowElement = document.createElement("div");
@@ -33,13 +34,8 @@ export default class UIContentWindow extends UIWindow {
             fragment.appendChild(parcloseElement);
         }
 
-        for (const component of [UIToolBar, UITopMenu, UISideBar, UISideBar]) {
+        for (const component of [UIResizeBar, UIToolBar, UITopMenu, UISideBar, UISideBar]) {
             this.initComponet(windowElement, component);
-        }
-
-        const resizeElements = this.createResizeView();
-        if (resizeElements) {
-            windowElement.appendChild(resizeElements);
         }
 
         fragment.appendChild(windowElement);

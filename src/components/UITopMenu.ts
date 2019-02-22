@@ -13,11 +13,11 @@ export default class UITopMenu extends UIComponent {
         super(window, app);
 
         if (typeof window.topMenu === "object") {
-            this.background = window.topMenu.background || this.background;
+            window.topMenu.background = this.background = window.topMenu.background || this.background;
         }
     }
 
-    createView(): DocumentFragment {
+    createView(): DocumentFragment | undefined {
         const fragment = document.createDocumentFragment();
 
         const topMenuElement = document.createElement("div");

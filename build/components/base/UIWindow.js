@@ -16,16 +16,7 @@ var UIWindow = (function () {
         this.theme = "default";
         this.background = "#ffffff";
         this.parclose = false;
-        this.resize = {
-            top: true,
-            left: true,
-            right: true,
-            bottom: true,
-            leftTop: true,
-            rightTop: true,
-            leftBottom: true,
-            rightBottom: true
-        };
+        this.resizeBar = {};
         this.toolBar = {};
         this.topMenu = undefined;
         this.statuBar = undefined;
@@ -40,11 +31,11 @@ var UIWindow = (function () {
         this.theme = options.theme || this.theme;
         this.background = options.background || this.background;
         this.parclose = typeof options.parclose === "boolean" ? options.parclose : this.parclose;
-        if (typeof options.resize === "boolean" && options.resize === false) {
-            this.resize = ObjectHelper_1.reverseBooleanObject(this.resize);
+        if (typeof options.resizeBar === "boolean" && options.resizeBar === false) {
+            this.resizeBar = undefined;
         }
-        else if (typeof options.resize === "object") {
-            this.resize = ObjectHelper_1.merge(this.resize, options.resize);
+        else if (typeof options.resizeBar === "object") {
+            this.resizeBar = ObjectHelper_1.merge(this.resizeBar, options.resizeBar);
         }
         if (typeof options.toolBar === "boolean" && options.toolBar === false) {
             this.toolBar = undefined;
@@ -71,31 +62,13 @@ var UIWindow = (function () {
             return parcloseElement;
         }
     };
-    UIWindow.prototype.createResizeView = function () {
-        var _a;
-        if (ObjectHelper_1.leastOneTrue(this.resize)) {
-            var resizeElements = document.createElement("div");
-            (_a = resizeElements.classList).add.apply(_a, StyleHelper_1.batchClasses(this.app.prefix, "resizes"));
-            for (var _i = 0, _b = Object.keys(this.resize); _i < _b.length; _i++) {
-                var key = _b[_i];
-                this.createResizeItem(resizeElements, this.resize.top, ValueHelper_1.getKebabCase(key));
-            }
-            return resizeElements;
-        }
-    };
-    UIWindow.prototype.createResizeItem = function (parent, isCreate, direction) {
-        var _a;
-        if (!isCreate)
-            return;
-        var resizeElement = document.createElement("div");
-        (_a = resizeElement.classList).add.apply(_a, StyleHelper_1.batchClasses(this.app.prefix, "resize-" + direction));
-        parent.appendChild(resizeElement);
-    };
     UIWindow.prototype.initComponet = function (parent, ctor) {
         var componet = new ctor(this, this.app);
         if (this[componet.name] !== undefined) {
             var componentFragment = componet.createView();
-            parent.appendChild(componentFragment);
+            if (componentFragment) {
+                parent.appendChild(componentFragment);
+            }
             return componet;
         }
     };

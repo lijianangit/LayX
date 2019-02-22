@@ -12,6 +12,9 @@ export default class AppProcess {
     create(options: WindowOptions): void {
         const window = new UIContentWindow(options, this);
         const windowFragment = window.createView();
-        document.body.appendChild(windowFragment);
+
+        if (windowFragment) {
+            document.body.appendChild(windowFragment);
+        }
     }
 }

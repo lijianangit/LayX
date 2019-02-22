@@ -27,6 +27,8 @@ function merge(source, dest) {
 }
 exports.merge = merge;
 function leastOneTrue(obj) {
+    if (obj === undefined)
+        return false;
     if (typeof obj === "boolean")
         return obj;
     var flag = false;

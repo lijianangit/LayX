@@ -13,7 +13,9 @@ var AppProcess = (function () {
     AppProcess.prototype.create = function (options) {
         var window = new UIContentWindow_1.default(options, this);
         var windowFragment = window.createView();
-        document.body.appendChild(windowFragment);
+        if (windowFragment) {
+            document.body.appendChild(windowFragment);
+        }
     };
     return AppProcess;
 }());

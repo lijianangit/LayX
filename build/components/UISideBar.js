@@ -27,8 +27,8 @@ var UISideBar = (function (_super) {
         _this.width = 60;
         _this.background = "#eeeef2";
         if (typeof window.sideBar === "object") {
-            _this.width = window.sideBar.width || _this.width;
-            _this.background = window.sideBar.background || _this.background;
+            window.sideBar.width = _this.width = window.sideBar.width || _this.width;
+            window.sideBar.background = _this.background = window.sideBar.background || _this.background;
         }
         return _this;
     }

@@ -27,8 +27,8 @@ var UIToolBar = (function (_super) {
         _this.height = 30;
         _this.background = "#ffffff";
         if (typeof window.toolBar === "object") {
-            _this.height = window.toolBar.height || _this.height;
-            _this.background = window.toolBar.background || _this.background;
+            window.toolBar.height = _this.height = window.toolBar.height || _this.height;
+            window.toolBar.background = _this.background = window.toolBar.background || _this.background;
         }
         return _this;
     }

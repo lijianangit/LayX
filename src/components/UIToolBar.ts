@@ -13,12 +13,12 @@ export default class UIToolBar extends UIComponent {
     constructor(window: UIWindow, app: AppProcess) {
         super(window, app);
         if (typeof window.toolBar === "object") {
-            this.height = window.toolBar.height || this.height;
-            this.background = window.toolBar.background || this.background;
+            window.toolBar.height = this.height = window.toolBar.height || this.height;
+            window.toolBar.background = this.background = window.toolBar.background || this.background;
         }
     }
 
-    createView(): DocumentFragment {
+    createView(): DocumentFragment | undefined {
         const fragment = document.createDocumentFragment();
 
         const toolBarElement = document.createElement("div");

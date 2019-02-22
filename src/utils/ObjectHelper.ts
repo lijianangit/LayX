@@ -24,7 +24,8 @@ export function merge<T extends JsonObject>(source: T, dest: T): T {
     return target;
 }
 
-export function leastOneTrue<T extends JsonObject>(obj: { [key in keyof T]: boolean; } | boolean): boolean {
+export function leastOneTrue<T extends JsonObject>(obj: { [key in keyof T]: boolean; } | boolean | undefined): boolean {
+    if (obj === undefined) return false;
     if (typeof obj === "boolean") return obj;
 
     let flag = false;
