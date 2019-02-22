@@ -25,26 +25,130 @@ var UIResizeBar = (function (_super) {
     function UIResizeBar(window, app) {
         var _this = _super.call(this, window, app) || this;
         _this.name = "resizeBar";
-        _this.top = true;
-        _this.left = true;
-        _this.right = true;
-        _this.bottom = true;
-        _this.leftTop = true;
-        _this.rightTop = true;
-        _this.leftBottom = true;
-        _this.rightBottom = true;
+        _this._top = true;
+        _this._left = true;
+        _this._right = true;
+        _this._bottom = true;
+        _this._leftTop = true;
+        _this._rightTop = true;
+        _this._leftBottom = true;
+        _this._rightBottom = true;
         if (typeof window.resizeBar === "object") {
-            window.resizeBar.top = _this.top = typeof window.resizeBar.top === "boolean" ? window.resizeBar.top : _this.top;
-            window.resizeBar.left = _this.left = typeof window.resizeBar.left === "boolean" ? window.resizeBar.left : _this.left;
-            window.resizeBar.right = _this.right = typeof window.resizeBar.right === "boolean" ? window.resizeBar.right : _this.right;
-            window.resizeBar.bottom = _this.bottom = typeof window.resizeBar.bottom === "boolean" ? window.resizeBar.bottom : _this.bottom;
-            window.resizeBar.leftTop = _this.leftTop = typeof window.resizeBar.leftTop === "boolean" ? window.resizeBar.leftTop : _this.leftTop;
-            window.resizeBar.rightTop = _this.rightTop = typeof window.resizeBar.rightTop === "boolean" ? window.resizeBar.rightTop : _this.rightTop;
-            window.resizeBar.leftBottom = _this.leftBottom = typeof window.resizeBar.leftBottom === "boolean" ? window.resizeBar.leftBottom : _this.leftBottom;
-            window.resizeBar.rightBottom = _this.rightBottom = typeof window.resizeBar.rightBottom === "boolean" ? window.resizeBar.rightBottom : _this.rightBottom;
+            _this.top = typeof window.resizeBar.top === "boolean" ? window.resizeBar.top : _this.top;
+            _this.left = typeof window.resizeBar.left === "boolean" ? window.resizeBar.left : _this.left;
+            _this.right = typeof window.resizeBar.right === "boolean" ? window.resizeBar.right : _this.right;
+            _this.bottom = typeof window.resizeBar.bottom === "boolean" ? window.resizeBar.bottom : _this.bottom;
+            _this.leftTop = typeof window.resizeBar.leftTop === "boolean" ? window.resizeBar.leftTop : _this.leftTop;
+            _this.rightTop = typeof window.resizeBar.rightTop === "boolean" ? window.resizeBar.rightTop : _this.rightTop;
+            _this.leftBottom = typeof window.resizeBar.leftBottom === "boolean" ? window.resizeBar.leftBottom : _this.leftBottom;
+            _this.rightBottom = typeof window.resizeBar.rightBottom === "boolean" ? window.resizeBar.rightBottom : _this.rightBottom;
         }
         return _this;
     }
+    Object.defineProperty(UIResizeBar.prototype, "top", {
+        get: function () {
+            return this._top;
+        },
+        set: function (newValue) {
+            this._top = newValue;
+            if (typeof this.window.resizeBar === "object") {
+                this.window.resizeBar.top = newValue;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIResizeBar.prototype, "left", {
+        get: function () {
+            return this._left;
+        },
+        set: function (newValue) {
+            this._left = newValue;
+            if (typeof this.window.resizeBar === "object") {
+                this.window.resizeBar.left = newValue;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIResizeBar.prototype, "right", {
+        get: function () {
+            return this._right;
+        },
+        set: function (newValue) {
+            this._right = newValue;
+            if (typeof this.window.resizeBar === "object") {
+                this.window.resizeBar.right = newValue;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIResizeBar.prototype, "bottom", {
+        get: function () {
+            return this._bottom;
+        },
+        set: function (newValue) {
+            this._bottom = newValue;
+            if (typeof this.window.resizeBar === "object") {
+                this.window.resizeBar.bottom = newValue;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIResizeBar.prototype, "leftTop", {
+        get: function () {
+            return this._leftTop;
+        },
+        set: function (newValue) {
+            this._leftTop = newValue;
+            if (typeof this.window.resizeBar === "object") {
+                this.window.resizeBar.leftTop = newValue;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIResizeBar.prototype, "rightTop", {
+        get: function () {
+            return this._rightTop;
+        },
+        set: function (newValue) {
+            this._rightTop = newValue;
+            if (typeof this.window.resizeBar === "object") {
+                this.window.resizeBar.rightTop = newValue;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIResizeBar.prototype, "leftBottom", {
+        get: function () {
+            return this._leftBottom;
+        },
+        set: function (newValue) {
+            this._leftBottom = newValue;
+            if (typeof this.window.resizeBar === "object") {
+                this.window.resizeBar.leftBottom = newValue;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIResizeBar.prototype, "rightBottom", {
+        get: function () {
+            return this._rightBottom;
+        },
+        set: function (newValue) {
+            this._rightBottom = newValue;
+            if (typeof this.window.resizeBar === "object") {
+                this.window.resizeBar.rightBottom = newValue;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     UIResizeBar.prototype.createView = function () {
         var _a;
         if (ObjectHelper_1.leastOneTrue(this.window.resizeBar)) {

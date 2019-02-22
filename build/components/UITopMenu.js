@@ -24,12 +24,25 @@ var UITopMenu = (function (_super) {
     function UITopMenu(window, app) {
         var _this = _super.call(this, window, app) || this;
         _this.name = "topMenu";
-        _this.background = "#eeeef2";
+        _this._background = "#eeeef2";
         if (typeof window.topMenu === "object") {
-            window.topMenu.background = _this.background = window.topMenu.background || _this.background;
+            _this.background = window.topMenu.background || _this.background;
         }
         return _this;
     }
+    Object.defineProperty(UITopMenu.prototype, "background", {
+        get: function () {
+            return this._background;
+        },
+        set: function (newValue) {
+            this._background = newValue;
+            if (typeof this.window.topMenu === "object") {
+                this.window.topMenu.background = newValue;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     UITopMenu.prototype.createView = function () {
         var _a;
         var fragment = document.createDocumentFragment();

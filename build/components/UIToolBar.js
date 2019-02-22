@@ -24,14 +24,40 @@ var UIToolBar = (function (_super) {
     function UIToolBar(window, app) {
         var _this = _super.call(this, window, app) || this;
         _this.name = "toolBar";
-        _this.height = 30;
-        _this.background = "#ffffff";
+        _this._height = 30;
+        _this._background = "#ffffff";
         if (typeof window.toolBar === "object") {
-            window.toolBar.height = _this.height = window.toolBar.height || _this.height;
-            window.toolBar.background = _this.background = window.toolBar.background || _this.background;
+            _this.height = window.toolBar.height || _this.height;
+            _this.background = window.toolBar.background || _this.background;
         }
         return _this;
     }
+    Object.defineProperty(UIToolBar.prototype, "height", {
+        get: function () {
+            return this._height;
+        },
+        set: function (newValue) {
+            this._height = newValue;
+            if (typeof this.window.toolBar === "object") {
+                this.window.toolBar.height = newValue;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIToolBar.prototype, "background", {
+        get: function () {
+            return this._background;
+        },
+        set: function (newValue) {
+            this._background = newValue;
+            if (typeof this.window.toolBar === "object") {
+                this.window.toolBar.background = newValue;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     UIToolBar.prototype.createView = function () {
         var _a;
         var fragment = document.createDocumentFragment();

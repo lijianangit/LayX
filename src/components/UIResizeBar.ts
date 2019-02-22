@@ -9,14 +9,93 @@ import { ResizeBarOptions } from "../typings/Index";
 export default class UIResizeBar extends UIComponent {
     readonly name: string = "resizeBar";
 
-    top?: boolean = true;
-    left?: boolean = true;
-    right?: boolean = true;
-    bottom?: boolean = true;
-    leftTop?: boolean = true;
-    rightTop?: boolean = true;
-    leftBottom?: boolean = true;
-    rightBottom?: boolean = true;
+    private _top: boolean = true;
+    get top(): boolean {
+        return this._top;
+    }
+    set top(newValue: boolean) {
+        this._top = newValue;
+        if (typeof this.window.resizeBar === "object") {
+            this.window.resizeBar.top = newValue;
+        }
+    }
+
+    private _left: boolean = true;
+    get left(): boolean {
+        return this._left;
+    }
+    set left(newValue: boolean) {
+        this._left = newValue;
+        if (typeof this.window.resizeBar === "object") {
+            this.window.resizeBar.left = newValue;
+        }
+    }
+
+    private _right: boolean = true;
+    get right(): boolean {
+        return this._right;
+    }
+    set right(newValue: boolean) {
+        this._right = newValue;
+        if (typeof this.window.resizeBar === "object") {
+            this.window.resizeBar.right = newValue;
+        }
+    }
+
+    private _bottom: boolean = true;
+    get bottom(): boolean {
+        return this._bottom;
+    }
+    set bottom(newValue: boolean) {
+        this._bottom = newValue;
+        if (typeof this.window.resizeBar === "object") {
+            this.window.resizeBar.bottom = newValue;
+        }
+    }
+
+    private _leftTop: boolean = true;
+    get leftTop(): boolean {
+        return this._leftTop;
+    }
+    set leftTop(newValue: boolean) {
+        this._leftTop = newValue;
+        if (typeof this.window.resizeBar === "object") {
+            this.window.resizeBar.leftTop = newValue;
+        }
+    }
+
+    private _rightTop: boolean = true;
+    get rightTop(): boolean {
+        return this._rightTop;
+    }
+    set rightTop(newValue: boolean) {
+        this._rightTop = newValue;
+        if (typeof this.window.resizeBar === "object") {
+            this.window.resizeBar.rightTop = newValue;
+        }
+    }
+
+    private _leftBottom: boolean = true;
+    get leftBottom(): boolean {
+        return this._leftBottom;
+    }
+    set leftBottom(newValue: boolean) {
+        this._leftBottom = newValue;
+        if (typeof this.window.resizeBar === "object") {
+            this.window.resizeBar.leftBottom = newValue;
+        }
+    }
+
+    private _rightBottom: boolean = true;
+    get rightBottom(): boolean {
+        return this._rightBottom;
+    }
+    set rightBottom(newValue: boolean) {
+        this._rightBottom = newValue;
+        if (typeof this.window.resizeBar === "object") {
+            this.window.resizeBar.rightBottom = newValue;
+        }
+    }
 
     [key: string]: any;
 
@@ -24,14 +103,14 @@ export default class UIResizeBar extends UIComponent {
         super(window, app);
 
         if (typeof window.resizeBar === "object") {
-            window.resizeBar.top = this.top = typeof window.resizeBar.top === "boolean" ? window.resizeBar.top : this.top;
-            window.resizeBar.left = this.left = typeof window.resizeBar.left === "boolean" ? window.resizeBar.left : this.left;
-            window.resizeBar.right = this.right = typeof window.resizeBar.right === "boolean" ? window.resizeBar.right : this.right;
-            window.resizeBar.bottom = this.bottom = typeof window.resizeBar.bottom === "boolean" ? window.resizeBar.bottom : this.bottom;
-            window.resizeBar.leftTop = this.leftTop = typeof window.resizeBar.leftTop === "boolean" ? window.resizeBar.leftTop : this.leftTop;
-            window.resizeBar.rightTop = this.rightTop = typeof window.resizeBar.rightTop === "boolean" ? window.resizeBar.rightTop : this.rightTop;
-            window.resizeBar.leftBottom = this.leftBottom = typeof window.resizeBar.leftBottom === "boolean" ? window.resizeBar.leftBottom : this.leftBottom;
-            window.resizeBar.rightBottom = this.rightBottom = typeof window.resizeBar.rightBottom === "boolean" ? window.resizeBar.rightBottom : this.rightBottom;
+            this.top = typeof window.resizeBar.top === "boolean" ? window.resizeBar.top : this.top;
+            this.left = typeof window.resizeBar.left === "boolean" ? window.resizeBar.left : this.left;
+            this.right = typeof window.resizeBar.right === "boolean" ? window.resizeBar.right : this.right;
+            this.bottom = typeof window.resizeBar.bottom === "boolean" ? window.resizeBar.bottom : this.bottom;
+            this.leftTop = typeof window.resizeBar.leftTop === "boolean" ? window.resizeBar.leftTop : this.leftTop;
+            this.rightTop = typeof window.resizeBar.rightTop === "boolean" ? window.resizeBar.rightTop : this.rightTop;
+            this.leftBottom = typeof window.resizeBar.leftBottom === "boolean" ? window.resizeBar.leftBottom : this.leftBottom;
+            this.rightBottom = typeof window.resizeBar.rightBottom === "boolean" ? window.resizeBar.rightBottom : this.rightBottom;
         }
     }
 

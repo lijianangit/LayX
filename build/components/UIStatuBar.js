@@ -24,21 +24,47 @@ var StatuBar = (function (_super) {
     function StatuBar(window, app) {
         var _this = _super.call(this, window, app) || this;
         _this.name = "statuBar";
-        _this.width = 60;
-        _this.background = "#eeeef2";
-        if (typeof window.sideBar === "object") {
-            window.sideBar.width = _this.width = window.sideBar.width || _this.width;
-            window.sideBar.background = _this.background = window.sideBar.background || _this.background;
+        _this._height = 60;
+        _this._background = "#eeeef2";
+        if (typeof window.statuBar === "object") {
+            _this.height = window.statuBar.height || _this.height;
+            _this.background = window.statuBar.background || _this.background;
         }
         return _this;
     }
+    Object.defineProperty(StatuBar.prototype, "height", {
+        get: function () {
+            return this._height;
+        },
+        set: function (newValue) {
+            this._height = newValue;
+            if (typeof this.window.statuBar === "object") {
+                this.window.statuBar.height = newValue;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(StatuBar.prototype, "background", {
+        get: function () {
+            return this._background;
+        },
+        set: function (newValue) {
+            this._background = newValue;
+            if (typeof this.window.statuBar === "object") {
+                this.window.statuBar.background = newValue;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     StatuBar.prototype.createView = function () {
         var _a;
         var fragment = document.createDocumentFragment();
         var statuBarElement = document.createElement("div");
         (_a = statuBarElement.classList).add.apply(_a, StyleHelper_1.batchClasses(this.app.prefix, ValueHelper_1.getKebabCase(this.name)));
         StyleHelper_1.batchStyles(statuBarElement, {
-            width: this.width + "px",
+            height: this.height + "px",
             background: this.background
         });
         fragment.appendChild(statuBarElement);

@@ -7,13 +7,22 @@ import { batchClasses, batchStyles } from "../utils/StyleHelper";
 export default class UITopMenu extends UIComponent {
     readonly name: string = "topMenu";
 
-    background: string = "#eeeef2";
+    private _background: string = "#eeeef2";
+    get background(): string {
+        return this._background;
+    }
+    set background(newValue: string) {
+        this._background = newValue;
+        if (typeof this.window.topMenu === "object") {
+            this.window.topMenu.background = newValue;
+        }
+    }
 
     constructor(window: UIWindow, app: AppProcess) {
         super(window, app);
 
         if (typeof window.topMenu === "object") {
-            window.topMenu.background = this.background = window.topMenu.background || this.background;
+            this.background = window.topMenu.background || this.background;
         }
     }
 

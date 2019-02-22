@@ -24,14 +24,40 @@ var UISideBar = (function (_super) {
     function UISideBar(window, app) {
         var _this = _super.call(this, window, app) || this;
         _this.name = "sideBar";
-        _this.width = 60;
-        _this.background = "#eeeef2";
+        _this._width = 60;
+        _this._background = "#eeeef2";
         if (typeof window.sideBar === "object") {
-            window.sideBar.width = _this.width = window.sideBar.width || _this.width;
-            window.sideBar.background = _this.background = window.sideBar.background || _this.background;
+            _this.width = window.sideBar.width || _this.width;
+            _this.background = window.sideBar.background || _this.background;
         }
         return _this;
     }
+    Object.defineProperty(UISideBar.prototype, "width", {
+        get: function () {
+            return this._width;
+        },
+        set: function (newValue) {
+            this._width = newValue;
+            if (typeof this.window.sideBar === "object") {
+                this.window.sideBar.width = newValue;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UISideBar.prototype, "background", {
+        get: function () {
+            return this._background;
+        },
+        set: function (newValue) {
+            this._background = newValue;
+            if (typeof this.window.sideBar === "object") {
+                this.window.sideBar.background = newValue;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     UISideBar.prototype.createView = function () {
         var _a;
         var fragment = document.createDocumentFragment();
