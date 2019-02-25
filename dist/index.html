@@ -6,13 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Layx - Creative elements container.</title>
-<link href="layx.min.css?4f8dd35c99638cc75367" rel="stylesheet"><script type="text/javascript" src="layx.min.js?4f8dd35c99638cc75367"></script></head>
+<link href="layx.min.css?99f6815a7b14a1a856da" rel="stylesheet"><script type="text/javascript" src="layx.min.js?99f6815a7b14a1a856da"></script></head>
 
 <body>
     <button id="btn1">open</button>
+    <button id="btn2">destroy</button>
     <script>
         document.getElementById("btn1").onclick = function () {
-            layx.create({ id: "hello-world" + (new Date()), background: "#eee", animate: true });
+            layx.create({ id: "hello-world", background: "#eee", animate: true });
+        }
+
+        document.getElementById("btn2").onclick = function () {
+            layx.destroy("hello-world");
         }
     </script>
 </body>

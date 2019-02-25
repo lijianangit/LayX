@@ -1,5 +1,6 @@
 import { WindowOptions } from "../typings/Index";
 import UIContentWindow from "../components/UIContentWindow";
+import { batchClasses } from "../utils/StyleHelper";
 
 export default class AppProcess {
     readonly version: string = "3.0.0";
@@ -18,6 +19,19 @@ export default class AppProcess {
 
         if (windowFragment) {
             document.body.appendChild(windowFragment);
+        }
+    }
+
+    destroy(id: string): void {
+        const currentWindow = document.getElementById(`${this.prefix + id}`);
+        if (currentWindow != null) {
+            currentWindow.classList.add(...batchClasses(this.prefix, "animated-zoomOut"));
+            currentWindow.addEventListener("animationend", function () {
+                if (currentWindow.parentNode != null) {
+                    currentWindow.parentNode.removeChild(currentWindow);
+                }
+            });
+
         }
     }
 }

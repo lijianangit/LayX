@@ -12,6 +12,9 @@ function layxInstance() {
     layx.create = function (options) {
         appProcess.create(options);
     };
+    layx.destroy = function (id) {
+        appProcess.destroy(id);
+    };
     return layx;
 }
 exports.default = layxInstance();

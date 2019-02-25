@@ -12,6 +12,7 @@ export interface Layx {
     (options: any): void;
     v: string;
     create(options: any): void;
+    destroy(id: string): void;
 }
 
 export interface WindowOptions {

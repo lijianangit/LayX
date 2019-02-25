@@ -12,6 +12,10 @@ function layxInstance(): Layx {
     layx.create = function (options: WindowOptions) {
         appProcess.create(options);
     };
+
+    layx.destroy = function (id: string) {
+        appProcess.destroy(id);
+    }
     return layx;
 }
 

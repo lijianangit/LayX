@@ -9,3 +9,7 @@
 .layx-window.layx-animated-zoomIn {
     animation-name: layx-zoomIn;
 }
+
+.layx-window.layx-animated-zoomOut {
+    animation-name: layx-zoomOut;
+}
