@@ -1,7 +1,11 @@
-.layx-window.layx-mode-embed {
-    position: absolute;
+.layx-window.layx-animated-zoomIn {
+    animation-name: layx-zoomIn;
 }
 
-.layx-window.layx-mode-static {
+.layx-window.layx-mode-embed {
     position: relative;
+}
+
+.layx-window.layx-mode-layer {
+    position: absolute;
 }

@@ -6,6 +6,7 @@ import { merge } from "../../utils/ObjectHelper";
 import AppProcess from "../../core/AppProcess";
 import { batchClasses } from "../../utils/StyleHelper";
 import { WindowMode } from "../../enums/WindowMode";
+import { Animate } from "../../enums/Animate";
 
 export default abstract class UIWindow {
     readonly id: string;
@@ -20,8 +21,9 @@ export default abstract class UIWindow {
     border: string = "1px solid #3baced";
     boxShadow: string = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
     parclose: boolean = false;
+    animate: Animate | boolean = false;
     coord: [number, number] | null = null;
-    mode: WindowMode = WindowMode.EMBED;
+    mode: WindowMode = WindowMode.LAYER;
     resizeBar: ResizeBarOptions | undefined = {};
     toolBar: ToolBarOptions | undefined = {};
     topMenu: TopMenuOptions | undefined = undefined;
@@ -55,10 +57,21 @@ export default abstract class UIWindow {
             this.boxShadow = options.boxShadow;
         }
 
-        if (this.mode === WindowMode.EMBED) {
+        if (this.mode === WindowMode.LAYER) {
             if (typeof options.coord === "string" || options.coord === undefined) {
                 this.coord = calcCoord(this.width, this.height, options.coord);
             }
+            if (options.coord instanceof Array) {
+                const [left, top] = options.coord;
+                this.coord = [left, top];
+            }
+        }
+
+        if (typeof options.animate === "boolean" && options.animate === true) {
+            this.animate = Animate.ZOOM;
+        }
+        if (typeof options.animate === "string") {
+            this.animate = options.animate;
         }
 
         if (typeof options.resizeBar === "boolean" && options.resizeBar === false) {

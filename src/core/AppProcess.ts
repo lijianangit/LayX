@@ -4,7 +4,10 @@ import UIContentWindow from "../components/UIContentWindow";
 export default class AppProcess {
     readonly version: string = "3.0.0";
     readonly prefix: string = "layx-";
-    readonly zIndex: number = 10000000;
+    private _zIndex: number = 10000000
+    get zIndex(): number {
+        return this._zIndex++;
+    }
 
     constructor() {
     }

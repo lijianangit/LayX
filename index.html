@@ -9,8 +9,11 @@
 </head>
 
 <body>
+    <button id="btn1">open</button>
     <script>
-        layx.create({ id: "hello-world", background: "#eee" });
+        document.getElementById("btn1").onclick = function () {
+            layx.create({ id: "hello-world" + (new Date()), background: "#eee", animate: true });
+        }
     </script>
 </body>
 

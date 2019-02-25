@@ -18,7 +18,7 @@ export default class UIContentWindow extends UIWindow {
         const windowElement = document.createElement("div");
         windowElement.id = this.id;
 
-        windowElement.classList.add(...batchClasses(this.app.prefix, "window", `mode-${this.mode}`, "flexbox", `theme-${this.theme}`));
+        windowElement.classList.add(...batchClasses(this.app.prefix, "window", `mode-${this.mode}`, "flexbox", `theme-${this.theme}`, this.animate !== false ? "animated" : "", this.animate !== false ? `animated-${this.animate}In` : ""));
         batchStyles(windowElement, <CSSStyleDeclaration>{
             zIndex: `${this.app.zIndex}`,
             boxShadow: this.boxShadow,

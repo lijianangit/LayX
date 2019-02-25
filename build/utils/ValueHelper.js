@@ -27,3 +27,50 @@ function getKebabCase(str) {
     });
 }
 exports.getKebabCase = getKebabCase;
+function calcCoord(width, height, coordEnum) {
+    var coord = [0, 0];
+    switch (coordEnum) {
+        case "center":
+            coord[0] = (innerWidth - width) / 2;
+            coord[1] = (innerHeight - height) / 2;
+            break;
+        case "left_center":
+            coord[0] = 0;
+            coord[1] = (innerHeight - height) / 2;
+            break;
+        case "right_center":
+            coord[0] = innerWidth - width;
+            coord[1] = (innerHeight - height) / 2;
+            break;
+        case "top_center":
+            coord[0] = (innerWidth - width) / 2;
+            coord[1] = 0;
+            break;
+        case "bottom_center":
+            coord[0] = (innerWidth - width) / 2;
+            coord[1] = innerHeight - height;
+            break;
+        case "left_top":
+            coord[0] = 0;
+            coord[1] = 0;
+            break;
+        case "right_top":
+            coord[0] = innerWidth - width;
+            coord[1] = 0;
+            break;
+        case "left_bottom":
+            coord[0] = 0;
+            coord[1] = innerHeight - height;
+            break;
+        case "right_bottom":
+            coord[0] = innerWidth - width;
+            coord[1] = innerHeight - height;
+            break;
+        default:
+            coord[0] = (innerWidth - width) / 2;
+            coord[1] = (innerHeight - height) / 2;
+            break;
+    }
+    return coord;
+}
+exports.calcCoord = calcCoord;

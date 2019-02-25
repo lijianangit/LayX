@@ -1,0 +1,14 @@
+.layx-animated {
+    animation-duration: .15s;
+    animation-fill-mode: both;
+}
+
+@keyframes layx-zoomIn {
+    from {
+        opacity: 0;
+        transform: scale3d(0.3, 0.3, 0.3);
+    }
+    50% {
+        opacity: 1;
+    }
+}

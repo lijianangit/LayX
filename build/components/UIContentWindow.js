@@ -32,8 +32,14 @@ var UIContentWindow = (function (_super) {
         var fragment = document.createDocumentFragment();
         var windowElement = document.createElement("div");
         windowElement.id = this.id;
-        (_a = windowElement.classList).add.apply(_a, StyleHelper_1.batchClasses(this.app.prefix, "window", "flexbox", "theme-" + this.theme));
+        (_a = windowElement.classList).add.apply(_a, StyleHelper_1.batchClasses(this.app.prefix, "window", "mode-" + this.mode, "flexbox", "theme-" + this.theme, this.animate !== false ? "animated" : "", this.animate !== false ? "animated-" + this.animate + "In" : ""));
         StyleHelper_1.batchStyles(windowElement, {
+            zIndex: "" + this.app.zIndex,
+            boxShadow: this.boxShadow,
+            webkitBoxShadow: this.boxShadow,
+            left: this.coord === null ? null : this.coord[0] + "px",
+            top: this.coord === null ? null : this.coord[1] + "px",
+            border: this.border,
             width: this.width + "px",
             height: this.height + "px",
             minWidth: this.minWidth + "px",

@@ -8,8 +8,15 @@ var AppProcess = (function () {
     function AppProcess() {
         this.version = "3.0.0";
         this.prefix = "layx-";
-        this.zIndex = 10000000;
+        this._zIndex = 10000000;
     }
+    Object.defineProperty(AppProcess.prototype, "zIndex", {
+        get: function () {
+            return this._zIndex++;
+        },
+        enumerable: true,
+        configurable: true
+    });
     AppProcess.prototype.create = function (options) {
         var window = new UIContentWindow_1.default(options, this);
         var windowFragment = window.createView();

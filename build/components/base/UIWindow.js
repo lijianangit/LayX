@@ -15,7 +15,12 @@ var UIWindow = (function () {
         this.maxHeight = innerHeight;
         this.theme = "default";
         this.background = "#ffffff";
+        this.border = "1px solid #3baced";
+        this.boxShadow = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
         this.parclose = false;
+        this.animate = false;
+        this.coord = null;
+        this.mode = "layer";
         this.resizeBar = {};
         this.toolBar = {};
         this.topMenu = undefined;
@@ -31,6 +36,34 @@ var UIWindow = (function () {
         this.theme = options.theme || this.theme;
         this.background = options.background || this.background;
         this.parclose = typeof options.parclose === "boolean" ? options.parclose : this.parclose;
+        this.mode = options.mode || this.mode;
+        if (typeof options.border === "boolean" && options.border === false) {
+            this.border = "none";
+        }
+        if (typeof options.border === "string") {
+            this.border = options.border;
+        }
+        if (typeof options.boxShadow === "boolean" && options.boxShadow === false) {
+            this.boxShadow = "none";
+        }
+        if (typeof options.boxShadow === "string") {
+            this.boxShadow = options.boxShadow;
+        }
+        if (this.mode === "layer") {
+            if (typeof options.coord === "string" || options.coord === undefined) {
+                this.coord = ValueHelper_1.calcCoord(this.width, this.height, options.coord);
+            }
+            if (options.coord instanceof Array) {
+                var _a = options.coord, left = _a[0], top_1 = _a[1];
+                this.coord = [left, top_1];
+            }
+        }
+        if (typeof options.animate === "boolean" && options.animate === true) {
+            this.animate = "zoom";
+        }
+        if (typeof options.animate === "string") {
+            this.animate = options.animate;
+        }
         if (typeof options.resizeBar === "boolean" && options.resizeBar === false) {
             this.resizeBar = undefined;
         }
