@@ -18,8 +18,14 @@ export default class UIContentWindow extends UIWindow {
         const windowElement = document.createElement("div");
         windowElement.id = this.id;
 
-        windowElement.classList.add(...batchClasses(this.app.prefix, "window", "flexbox", `theme-${this.theme}`));
+        windowElement.classList.add(...batchClasses(this.app.prefix, "window", `mode-${this.mode}`, "flexbox", `theme-${this.theme}`));
         batchStyles(windowElement, <CSSStyleDeclaration>{
+            zIndex: `${this.app.zIndex}`,
+            boxShadow: this.boxShadow,
+            webkitBoxShadow: this.boxShadow,
+            left: this.coord === null ? null : `${this.coord[0]}px`,
+            top: this.coord === null ? null : `${this.coord[1]}px`,
+            border: this.border,
             width: `${this.width}px`,
             height: `${this.height}px`,
             minWidth: `${this.minWidth}px`,

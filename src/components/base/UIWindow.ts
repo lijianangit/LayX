@@ -1,10 +1,11 @@
 import { WindowOptions, ToolBarOptions, TopMenuOptions, StatuBarOptions, SideBarOptions, ResizeBarOptions } from "../../typings/Index";
 import UIComponent from "./UIComponent";
 import { Theme } from "../../enums/Theme";
-import { convertDimension } from "../../utils/ValueHelper";
+import { convertDimension, calcCoord } from "../../utils/ValueHelper";
 import { merge } from "../../utils/ObjectHelper";
 import AppProcess from "../../core/AppProcess";
 import { batchClasses } from "../../utils/StyleHelper";
+import { WindowMode } from "../../enums/WindowMode";
 
 export default abstract class UIWindow {
     readonly id: string;
@@ -16,7 +17,11 @@ export default abstract class UIWindow {
     maxHeight: number = innerHeight;
     theme: Theme = Theme.DEFAULT;
     background: string = "#ffffff";
+    border: string = "1px solid #3baced";
+    boxShadow: string = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
     parclose: boolean = false;
+    coord: [number, number] | null = null;
+    mode: WindowMode = WindowMode.EMBED;
     resizeBar: ResizeBarOptions | undefined = {};
     toolBar: ToolBarOptions | undefined = {};
     topMenu: TopMenuOptions | undefined = undefined;
@@ -35,6 +40,26 @@ export default abstract class UIWindow {
         this.theme = options.theme || this.theme;
         this.background = options.background || this.background;
         this.parclose = typeof options.parclose === "boolean" ? options.parclose : this.parclose;
+        this.mode = options.mode || this.mode;
+        if (typeof options.border === "boolean" && options.border === false) {
+            this.border = "none";
+        }
+        if (typeof options.border === "string") {
+            this.border = options.border;
+        }
+
+        if (typeof options.boxShadow === "boolean" && options.boxShadow === false) {
+            this.boxShadow = "none";
+        }
+        if (typeof options.boxShadow === "string") {
+            this.boxShadow = options.boxShadow;
+        }
+
+        if (this.mode === WindowMode.EMBED) {
+            if (typeof options.coord === "string" || options.coord === undefined) {
+                this.coord = calcCoord(this.width, this.height, options.coord);
+            }
+        }
 
         if (typeof options.resizeBar === "boolean" && options.resizeBar === false) {
             this.resizeBar = undefined;

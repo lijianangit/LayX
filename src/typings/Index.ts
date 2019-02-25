@@ -1,4 +1,6 @@
 import { Theme } from "../enums/Theme";
+import { WindowMode } from "../enums/WindowMode";
+import { WindowCoord } from "../enums/WindowCoord";
 
 export interface JsonObject {
     constructor: Object;
@@ -20,7 +22,11 @@ export interface WindowOptions {
     maxWidth?: number | string;
     maxHeight?: number | string;
     background?: string;
+    border: string | boolean;
+    boxShadow: string | boolean;
     theme?: Theme;
+    mode?: WindowMode,
+    coord?: WindowCoord | [number, number],
     parclose?: boolean;
     resizeBar?: ResizeBarOptions | boolean;
     toolBar?: ToolBarOptions | boolean;

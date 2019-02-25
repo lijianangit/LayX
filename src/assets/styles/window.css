@@ -1,0 +1,7 @@
+.layx-window.layx-mode-embed {
+    position: absolute;
+}
+
+.layx-window.layx-mode-static {
+    position: relative;
+}

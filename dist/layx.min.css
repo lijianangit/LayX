@@ -1,1 +1,1 @@
-.layx-flexbox{display:flex}.layx-tool-bar{width:100%}
+[class^=layx-]{box-sizing:border-box;background-color:transparent}.layx-flexbox{display:flex}.layx-window.layx-mode-embed{position:absolute}.layx-window.layx-mode-static{position:relative}.layx-tool-bar{width:100%}
