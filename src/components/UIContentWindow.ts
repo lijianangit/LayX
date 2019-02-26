@@ -34,6 +34,9 @@ export default class UIContentWindow extends UIWindow {
             maxHeight: this.maxHeight === innerHeight ? null : `${this.maxHeight}px`,
             background: this.background
         });
+        windowElement.addEventListener("animationend", () => {
+            windowElement.classList.remove(`${this.app.prefix}animated-zoomIn`)
+        });
 
         const parcloseElement = this.createParcloseView();
         if (parcloseElement) {

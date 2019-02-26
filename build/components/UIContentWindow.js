@@ -28,6 +28,7 @@ var UIContentWindow = (function (_super) {
         return _super.call(this, options, app) || this;
     }
     UIContentWindow.prototype.createView = function () {
+        var _this = this;
         var _a;
         var fragment = document.createDocumentFragment();
         var windowElement = document.createElement("div");
@@ -47,6 +48,9 @@ var UIContentWindow = (function (_super) {
             maxWidth: this.maxWidth === innerWidth ? null : this.maxWidth + "px",
             maxHeight: this.maxHeight === innerHeight ? null : this.maxHeight + "px",
             background: this.background
+        });
+        windowElement.addEventListener("animationend", function () {
+            windowElement.classList.remove(_this.app.prefix + "animated-zoomIn");
         });
         var parcloseElement = this.createParcloseView();
         if (parcloseElement) {

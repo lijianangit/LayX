@@ -26,7 +26,8 @@ export default class AppProcess {
         const currentWindow = document.getElementById(`${this.prefix + id}`);
         if (currentWindow != null) {
             currentWindow.classList.add(...batchClasses(this.prefix, "animated-zoomOut"));
-            currentWindow.addEventListener("animationend", function () {
+            currentWindow.addEventListener("animationend", () => {
+                currentWindow.classList.remove(`${this.prefix}animated-zoomOut`)
                 if (currentWindow.parentNode != null) {
                     currentWindow.parentNode.removeChild(currentWindow);
                 }

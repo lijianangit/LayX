@@ -26,11 +26,13 @@ var AppProcess = (function () {
         }
     };
     AppProcess.prototype.destroy = function (id) {
+        var _this = this;
         var _a;
         var currentWindow = document.getElementById("" + (this.prefix + id));
         if (currentWindow != null) {
             (_a = currentWindow.classList).add.apply(_a, StyleHelper_1.batchClasses(this.prefix, "animated-zoomOut"));
             currentWindow.addEventListener("animationend", function () {
+                currentWindow.classList.remove(_this.prefix + "animated-zoomOut");
                 if (currentWindow.parentNode != null) {
                     currentWindow.parentNode.removeChild(currentWindow);
                 }
