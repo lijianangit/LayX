@@ -1,0 +1,22 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "lib": [
+            "es5"
+        ],
+        "target": "es5",
+        "module": "commonjs",
+        "outDir": "./build",
+        "removeComments": true,
+        "strict": true,
+        "preserveConstEnums": true,
+        "experimentalDecorators": true,
+        "pretty": true
+    },
+    "include": [
+        "./src/**/*"
+    ],
+    "exclude": [
+        "./node_modules"
+    ]
+}
