@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIComponent_1 = require("../basic/UIComponent");
 var ElementHelper_1 = require("../utils/ElementHelper");
+var WindowAnimate_1 = require("../basic/enums/WindowAnimate");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
     function UIWindow(app, options) {
@@ -22,7 +23,14 @@ var UIWindow = (function (_super) {
         _this.kind = "window";
         _this._width = 800;
         _this._height = 600;
+        _this._mode = "layer";
+        _this._background = "#ffffff";
+        _this._border = "1px solid #3baced";
+        _this._boxShadow = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
+        _this._animate = WindowAnimate_1.WindowAnimate.ZOOM;
         _this._id = options.id;
+        _this._left = (innerWidth - _this._width) / 2;
+        _this._top = (innerHeight - _this._height) / 2;
         return _this;
     }
     Object.defineProperty(UIWindow.prototype, "id", {
@@ -52,15 +60,97 @@ var UIWindow = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(UIWindow.prototype, "mode", {
+        get: function () {
+            return this._mode;
+        },
+        set: function (value) {
+            this._mode = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIWindow.prototype, "background", {
+        get: function () {
+            return this._background;
+        },
+        set: function (value) {
+            this._background = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIWindow.prototype, "border", {
+        get: function () {
+            return this._border;
+        },
+        set: function (value) {
+            this._border = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIWindow.prototype, "boxShadow", {
+        get: function () {
+            return this._boxShadow;
+        },
+        set: function (value) {
+            this._boxShadow = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIWindow.prototype, "animate", {
+        get: function () {
+            return this._animate;
+        },
+        set: function (value) {
+            this._animate = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIWindow.prototype, "left", {
+        get: function () {
+            return this._left;
+        },
+        set: function (value) {
+            this._left = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIWindow.prototype, "top", {
+        get: function () {
+            return this._top;
+        },
+        set: function (value) {
+            this._top = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     UIWindow.prototype.present = function () {
+        var _this = this;
         var fragment = document.createDocumentFragment();
         var windowElement = document.createElement("div");
         windowElement.id = this.app.prefix + this.id;
-        ElementHelper_1.addClasses(windowElement, this.app.prefix, this.kind, "flexbox");
+        var isNeedAnimation = this.animate !== WindowAnimate_1.WindowAnimate.NONE;
+        ElementHelper_1.addClasses(windowElement, this.app.prefix, this.kind, "window-" + this.mode, "flexbox", isNeedAnimation ? "animate" : "", isNeedAnimation ? "animate-" + this.animate + "In" : "");
         ElementHelper_1.addStyles(windowElement, {
+            zIndex: this.mode === "layer" ? "" + this.app.zIndex : null,
             width: this.width + "px",
-            height: this.height + "px"
+            height: this.height + "px",
+            top: this.top + "px",
+            left: this.left + "px",
+            background: this.background,
+            border: this.border,
+            boxShadow: this.boxShadow,
+            webkitBoxShadow: this.boxShadow,
         });
+        isNeedAnimation && (windowElement.addEventListener("animationend", function (ev) {
+            ElementHelper_1.removeClasses(windowElement, _this.app.prefix, "animate-" + _this.animate + "In");
+        }));
         fragment.appendChild(windowElement);
         return fragment;
     };

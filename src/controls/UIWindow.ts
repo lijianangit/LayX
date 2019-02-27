@@ -2,7 +2,9 @@ import UIComponent from "../basic/UIComponent";
 import UIControl from "../basic/interfaces/UIControl";
 import App from "../core/App";
 import { WindowOptions, CSSStyleObject } from "../../types";
-import { addStyles, addClasses } from "../utils/ElementHelper";
+import { addStyles, addClasses, removeClasses } from "../utils/ElementHelper";
+import { WindowMode } from "../basic/enums/WindowMode";
+import { WindowAnimate } from "../basic/enums/WindowAnimate";
 
 
 export default class UIWindow extends UIComponent implements UIControl {
@@ -29,9 +31,67 @@ export default class UIWindow extends UIComponent implements UIControl {
         this._height = value;
     }
 
+    private _mode: WindowMode = WindowMode.LAYER;
+    get mode() {
+        return this._mode;
+    }
+    set mode(value: WindowMode) {
+        this._mode = value;
+    }
+
+    private _background: string = "#ffffff";
+    get background() {
+        return this._background;
+    }
+    set background(value: string) {
+        this._background = value;
+    }
+
+    private _border: string | null = "1px solid #3baced";
+    get border() {
+        return this._border;
+    }
+    set border(value: string | null) {
+        this._border = value;
+    }
+
+    private _boxShadow: string | null = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
+    get boxShadow() {
+        return this._boxShadow;
+    }
+    set boxShadow(value: string | null) {
+        this._boxShadow = value;
+    }
+
+    private _animate: WindowAnimate = WindowAnimate.ZOOM;
+    get animate() {
+        return this._animate;
+    }
+    set animate(value: WindowAnimate) {
+        this._animate = value;
+    }
+
+    private _left: number;
+    get left() {
+        return this._left;
+    }
+    set left(value: number) {
+        this._left = value;
+    }
+
+    private _top: number;
+    get top() {
+        return this._top;
+    }
+    set top(value: number) {
+        this._top = value;
+    }
+
     constructor(app: App, options: WindowOptions) {
         super(app);
         this._id = options.id;
+        this._left = (innerWidth - this._width) / 2;
+        this._top = (innerHeight - this._height) / 2;
     }
 
     present(): DocumentFragment {
@@ -40,11 +100,29 @@ export default class UIWindow extends UIComponent implements UIControl {
         const windowElement = document.createElement("div");
         windowElement.id = this.app.prefix + this.id;
 
-        addClasses(windowElement, this.app.prefix, this.kind, "flexbox");
+        const isNeedAnimation = this.animate !== WindowAnimate.NONE;
+        addClasses(windowElement, this.app.prefix,
+            this.kind,
+            `window-${this.mode}`,
+            "flexbox",
+            isNeedAnimation ? "animate" : "",
+            isNeedAnimation ? `animate-${this.animate}In` : ""
+        );
         addStyles(windowElement, <CSSStyleObject>{
+            zIndex: this.mode === WindowMode.LAYER ? `${this.app.zIndex}` : null,
             width: `${this.width}px`,
-            height: `${this.height}px`
+            height: `${this.height}px`,
+            top: `${this.top}px`,
+            left: `${this.left}px`,
+            background: this.background,
+            border: this.border,
+            boxShadow: this.boxShadow,
+            webkitBoxShadow: this.boxShadow,
         });
+
+        isNeedAnimation && (windowElement.addEventListener("animationend", (ev: AnimationEvent) => {
+            removeClasses(windowElement, this.app.prefix, `animate-${this.animate}In`);
+        }));
 
         fragment.appendChild(windowElement);
         return fragment;

@@ -1,0 +1,15 @@
+.layx-window {
+    position: relative;
+}
+
+.layx-window.layx-window-layer {
+    position: absolute;
+}
+
+.layx-window.layx-animate-zoomIn {
+    animation-name: layx-animate-zoomIn;
+}
+
+.layx-window.layx-animate-zoomOut {
+    animation-name: layx-animate-zoomOut;
+}

@@ -1,4 +1,5 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCssAssetsWebPackPlugin = require("optimize-css-assets-webpack-plugin");
 const MiniCssExtractWebpackPlugin = require("mini-css-extract-plugin");
 
@@ -15,19 +16,24 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.ts?$/,
-                use: "ts-loader"
-            },
-            {
                 test: /\.css$/, use: [
                     MiniCssExtractWebpackPlugin.loader,
-                    { loader: "css-loader", options: { importLoaders: 1 } },
+                    {
+                        loader: "css-loader",
+                        options: {
+                            importLoaders: 1
+                        }
+                    },
                     "postcss-loader"
                 ]
             },
             {
                 test: /\.(eot|ttf|woff|svg)$/,
                 use: "file-loader"
+            },
+            {
+                test: /\.ts?$/,
+                use: "ts-loader"
             }
         ]
     },
@@ -39,12 +45,6 @@ module.exports = {
         ]
     },
     plugins: [
-        new HtmlWebPackPlugin({
-            title: "A magical window. - Layx",
-            template: "./template.html",
-            inject: "head",
-            hash: true
-        }),
         new MiniCssExtractWebpackPlugin({
             filename: "layx.min.css"
         }),
@@ -63,10 +63,17 @@ module.exports = {
                 ]
             },
             canPrint: true
+        }),
+        new HtmlWebPackPlugin({
+            title: "A magical window. - Layx",
+            template: "./template.html",
+            inject: "head",
+            hash: true
         })
     ],
     optimization: {
         minimizer: [
+            new UglifyJsWebpackPlugin(),
             new OptimizeCssAssetsWebPackPlugin()
         ]
     }

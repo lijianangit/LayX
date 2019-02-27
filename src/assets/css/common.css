@@ -1,0 +1,8 @@
+[class^="layx-"] {
+    box-sizing: border-box;
+    background-color: transparent;
+}
+
+.layx-flexbox {
+    display: flex;
+}

@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function addStyles(element, styles) {
     for (var _i = 0, _a = Object.keys(styles); _i < _a.length; _i++) {
         var key = _a[_i];
-        element.style.setProperty(key, styles[key]);
+        element.style[key] = styles[key];
     }
     return element;
 }

@@ -2,7 +2,7 @@ import { CSSStyleObject } from "../../types";
 
 export function addStyles(element: HTMLElement, styles: CSSStyleObject): HTMLElement {
     for (const key of Object.keys(styles)) {
-        element.style.setProperty(key, styles[key]);
+        (<CSSStyleObject>element.style)[key] = styles[key];
     }
     return element;
 }
