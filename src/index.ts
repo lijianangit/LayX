@@ -3,7 +3,7 @@ import { Layx, WindowOptions } from "../types";
 
 import "./assets/app.css";
 
-function layx(): Layx {
+export default (function layx(): Layx {
     const app = new App();
     const layx = <Layx>function (options: any): void { };
 
@@ -13,6 +13,4 @@ function layx(): Layx {
     }
 
     return layx;
-}
-
-export default layx();
+})();
