@@ -30,7 +30,7 @@ var UIWindow = (function (_super) {
         _this._background = "#ffffff";
         _this._border = null;
         _this._borderRadius = null;
-        _this._boxShadow = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
+        _this._shadow = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
         _this._animate = WindowAnimate_1.WindowAnimate.ZOOM;
         if (!options.id)
             throw new Error("`id` is required.");
@@ -41,7 +41,7 @@ var UIWindow = (function (_super) {
         _this._left = coord[0];
         _this._top = coord[1];
         (_this._mode = options.mode || _this._mode) && TypeHelper_1.isWindowMode(_this._mode);
-        _this._background = options.background || _this.background;
+        _this._background = options.background || _this._background;
         var defaultBorder = {
             width: 1,
             style: "solid",
@@ -54,6 +54,10 @@ var UIWindow = (function (_super) {
         var borderStyle = ElementHelper_1.borderCast(borderOption);
         _this._border = borderStyle[0];
         _this._borderRadius = borderStyle[1];
+        _this._shadow = (options.shadow === undefined ? true : options.shadow) === false ?
+            null :
+            typeof options.shadow === "string" ? options.shadow : _this._shadow;
+        _this._animate = ValueHelper_1.animateCast(options.animate === undefined ? _this._animate : options.animate);
         return _this;
     }
     Object.defineProperty(UIWindow.prototype, "id", {
@@ -123,22 +127,12 @@ var UIWindow = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UIWindow.prototype, "boxShadow", {
+    Object.defineProperty(UIWindow.prototype, "shadow", {
         get: function () {
-            return this._boxShadow;
+            return this._shadow;
         },
         set: function (value) {
-            this._boxShadow = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(UIWindow.prototype, "animate", {
-        get: function () {
-            return this._animate;
-        },
-        set: function (value) {
-            this._animate = value;
+            this._shadow = value;
         },
         enumerable: true,
         configurable: true
@@ -163,6 +157,16 @@ var UIWindow = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(UIWindow.prototype, "animate", {
+        get: function () {
+            return this._animate;
+        },
+        set: function (value) {
+            this._animate = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     UIWindow.prototype.present = function () {
         var _this = this;
         var fragment = document.createDocumentFragment();
@@ -180,8 +184,8 @@ var UIWindow = (function (_super) {
             border: this.border,
             borderRadius: this.borderRadius,
             webkitBorderRadius: this.borderRadius,
-            boxShadow: this.boxShadow,
-            webkitBoxShadow: this.boxShadow
+            boxShadow: this.shadow,
+            webkitBoxShadow: this.shadow
         });
         isNeedAnimation && (windowElement.addEventListener("animationend", function (ev) {
             ElementHelper_1.removeClasses(windowElement, _this.app.prefix, "animate-" + _this.animate + "In");

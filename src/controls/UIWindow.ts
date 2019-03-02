@@ -5,7 +5,7 @@ import { WindowOptions, CSSStyleObject, WindowCoord, BorderOptions } from "../..
 import { addStyles, addClasses, removeClasses, borderCast } from "../utils/ElementHelper";
 import { WindowMode } from "../basic/enums/WindowMode";
 import { WindowAnimate } from "../basic/enums/WindowAnimate";
-import { numberCast, offsetCast } from "../utils/ValueHelper";
+import { numberCast, offsetCast, animateCast } from "../utils/ValueHelper";
 import { isWindowMode, isJsonObject } from "../utils/TypeHelper";
 import { merge } from "../utils/JsonHelper";
 
@@ -66,20 +66,12 @@ export default class UIWindow extends UIComponent implements UIControl {
         this._borderRadius = value;
     }
 
-    private _boxShadow: string | null = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
-    get boxShadow() {
-        return this._boxShadow;
+    private _shadow: string | null = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
+    get shadow() {
+        return this._shadow;
     }
-    set boxShadow(value: string | null) {
-        this._boxShadow = value;
-    }
-
-    private _animate: WindowAnimate = WindowAnimate.ZOOM;
-    get animate() {
-        return this._animate;
-    }
-    set animate(value: WindowAnimate) {
-        this._animate = value;
+    set shadow(value: string | null) {
+        this._shadow = value;
     }
 
     private _left: number;
@@ -98,6 +90,14 @@ export default class UIWindow extends UIComponent implements UIControl {
         this._top = value;
     }
 
+    private _animate: WindowAnimate = WindowAnimate.ZOOM;
+    get animate() {
+        return this._animate;
+    }
+    set animate(value: WindowAnimate) {
+        this._animate = value;
+    }
+
     constructor(app: App, options: WindowOptions) {
         super(app);
 
@@ -113,7 +113,7 @@ export default class UIWindow extends UIComponent implements UIControl {
 
         (this._mode = options.mode || this._mode) && isWindowMode(this._mode);
 
-        this._background = options.background || this.background;
+        this._background = options.background || this._background;
 
         const defaultBorder: BorderOptions = {
             width: 1,
@@ -127,6 +127,12 @@ export default class UIWindow extends UIComponent implements UIControl {
         const borderStyle = borderCast(borderOption);
         this._border = borderStyle[0];
         this._borderRadius = borderStyle[1];
+
+        this._shadow = (options.shadow === undefined ? true : options.shadow) === false ?
+            null :
+            typeof options.shadow === "string" ? options.shadow : this._shadow;
+
+        this._animate = animateCast(options.animate === undefined ? this._animate : options.animate);
     }
 
     present(): DocumentFragment {
@@ -153,8 +159,8 @@ export default class UIWindow extends UIComponent implements UIControl {
             border: this.border,
             borderRadius: this.borderRadius,
             webkitBorderRadius: this.borderRadius,
-            boxShadow: this.boxShadow,
-            webkitBoxShadow: this.boxShadow
+            boxShadow: this.shadow,
+            webkitBoxShadow: this.shadow
         });
 
         isNeedAnimation && (windowElement.addEventListener("animationend", (ev: AnimationEvent) => {

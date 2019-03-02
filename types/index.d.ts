@@ -29,8 +29,8 @@ export type WindowOptions = {
     offset?: WindowOffset | WindowCoord;
     background?: string;
     border?: string | BorderOptions;
-    boxShadow?: string;
-    animate?: WindowAnimate;
+    shadow?: string | boolean;
+    animate?: WindowAnimate | false;
 }
 
 export type ConfigOptions = {};

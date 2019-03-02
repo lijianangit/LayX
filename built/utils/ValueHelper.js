@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var TypeHelper_1 = require("./TypeHelper");
 var ExceptionHelper_1 = require("./ExceptionHelper");
+var WindowAnimate_1 = require("../basic/enums/WindowAnimate");
 function numberCast(value) {
     if (value === undefined || typeof value === "number")
         return value;
@@ -60,3 +61,16 @@ function offsetCast(value, width, height) {
     return coord;
 }
 exports.offsetCast = offsetCast;
+function animateCast(animate) {
+    if (animate === false)
+        return WindowAnimate_1.WindowAnimate.NONE;
+    switch (animate) {
+        case WindowAnimate_1.WindowAnimate.NONE:
+            return WindowAnimate_1.WindowAnimate.NONE;
+        case WindowAnimate_1.WindowAnimate.ZOOM:
+            return WindowAnimate_1.WindowAnimate.ZOOM;
+        default:
+            return ExceptionHelper_1.assertNever(animate);
+    }
+}
+exports.animateCast = animateCast;

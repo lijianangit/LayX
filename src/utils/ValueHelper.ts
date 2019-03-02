@@ -2,6 +2,7 @@ import { WindowOffset } from "../basic/enums/WindowOffset";
 import { WindowCoord } from "../../types";
 import { isWindowCoord } from "./TypeHelper";
 import { assertNever } from "./ExceptionHelper";
+import { WindowAnimate } from "../basic/enums/WindowAnimate";
 
 export function numberCast(value: string | number | undefined): number | undefined {
     if (value === undefined || typeof value === "number") return value;
@@ -61,4 +62,17 @@ export function offsetCast(value: WindowOffset | WindowCoord | undefined, width:
     }
 
     return coord;
+}
+
+export function animateCast(animate: WindowAnimate | false): WindowAnimate {
+    if (animate === false) return WindowAnimate.NONE;
+
+    switch (animate) {
+        case WindowAnimate.NONE:
+            return WindowAnimate.NONE;
+        case WindowAnimate.ZOOM:
+            return WindowAnimate.ZOOM;
+        default:
+            return assertNever(animate);
+    }
 }
