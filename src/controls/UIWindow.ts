@@ -1,11 +1,13 @@
 import UIComponent from "../basic/UIComponent";
 import UIControl from "../basic/interfaces/UIControl";
 import App from "../core/App";
-import { WindowOptions, CSSStyleObject, WindowCoord } from "../../types";
-import { addStyles, addClasses, removeClasses } from "../utils/ElementHelper";
+import { WindowOptions, CSSStyleObject, WindowCoord, BorderOptions } from "../../types";
+import { addStyles, addClasses, removeClasses, borderCast } from "../utils/ElementHelper";
 import { WindowMode } from "../basic/enums/WindowMode";
 import { WindowAnimate } from "../basic/enums/WindowAnimate";
 import { numberCast, offsetCast } from "../utils/ValueHelper";
+import { isWindowMode, isJsonObject } from "../utils/TypeHelper";
+import { merge } from "../utils/JsonHelper";
 
 
 export default class UIWindow extends UIComponent implements UIControl {
@@ -48,12 +50,20 @@ export default class UIWindow extends UIComponent implements UIControl {
         this._background = value;
     }
 
-    private _border: string | null = "1px solid #3baced";
+    private _border: string | null = null;
     get border() {
         return this._border;
     }
     set border(value: string | null) {
         this._border = value;
+    }
+
+    private _borderRadius: string | null = null;
+    get borderRadius() {
+        return this._borderRadius;
+    }
+    set borderRadius(value: string | null) {
+        this._borderRadius = value;
     }
 
     private _boxShadow: string | null = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
@@ -100,6 +110,23 @@ export default class UIWindow extends UIComponent implements UIControl {
         const coord: WindowCoord = offsetCast(options.offset, this._width, this._height) || [(innerWidth - this._width) / 2, (innerHeight - this._height) / 2];
         this._left = coord[0];
         this._top = coord[1];
+
+        (this._mode = options.mode || this._mode) && isWindowMode(this._mode);
+
+        this._background = options.background || this.background;
+
+        const defaultBorder: BorderOptions = {
+            width: 1,
+            style: "solid",
+            color: "#3baced",
+            radius: 4
+        };
+        const borderOption = options.border === undefined ?
+            defaultBorder :
+            (isJsonObject(options.border) ? merge(defaultBorder, options.border) : options.border);
+        const borderStyle = borderCast(borderOption);
+        this._border = borderStyle[0];
+        this._borderRadius = borderStyle[1];
     }
 
     present(): DocumentFragment {
@@ -124,8 +151,10 @@ export default class UIWindow extends UIComponent implements UIControl {
             left: `${this.left}px`,
             background: this.background,
             border: this.border,
+            borderRadius: this.borderRadius,
+            webkitBorderRadius: this.borderRadius,
             boxShadow: this.boxShadow,
-            webkitBoxShadow: this.boxShadow,
+            webkitBoxShadow: this.boxShadow
         });
 
         isNeedAnimation && (windowElement.addEventListener("animationend", (ev: AnimationEvent) => {

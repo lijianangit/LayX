@@ -1,4 +1,4 @@
-import { CSSStyleObject } from "../../types";
+import { CSSStyleObject, BorderOptions } from "../../types";
 
 export function addStyles(element: HTMLElement, styles: CSSStyleObject): HTMLElement {
     for (const key of Object.keys(styles)) {
@@ -40,4 +40,20 @@ export function containClass(element: HTMLElement, prefix: string = "layx-", cls
     const currentClasses = element.className.split(/\s+/g);
     const index = currentClasses.indexOf(cls);
     return !!~index;
+}
+
+export function borderCast(border: string | BorderOptions): [string | null, string | null] {
+    if (typeof border === "string") return [border, null];
+
+    let borderStyle: [string | null, string | null] = [null, null];
+    if (typeof border.width === "number"
+        && typeof border.color === "string"
+        && (typeof border.style === "string" && ["none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "outset", "inherit"].indexOf(border.style) > -1)) {
+        borderStyle[0] = `${border.width}px ${border.style} ${border.color}`;
+    }
+    if (typeof border.radius === "number") {
+        borderStyle[1] = `${border.radius}px`;
+    }
+
+    return borderStyle;
 }

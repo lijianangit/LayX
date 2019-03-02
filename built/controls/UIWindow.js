@@ -17,6 +17,8 @@ var UIComponent_1 = require("../basic/UIComponent");
 var ElementHelper_1 = require("../utils/ElementHelper");
 var WindowAnimate_1 = require("../basic/enums/WindowAnimate");
 var ValueHelper_1 = require("../utils/ValueHelper");
+var TypeHelper_1 = require("../utils/TypeHelper");
+var JsonHelper_1 = require("../utils/JsonHelper");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
     function UIWindow(app, options) {
@@ -26,7 +28,8 @@ var UIWindow = (function (_super) {
         _this._height = 600;
         _this._mode = "layer";
         _this._background = "#ffffff";
-        _this._border = "1px solid #3baced";
+        _this._border = null;
+        _this._borderRadius = null;
         _this._boxShadow = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
         _this._animate = WindowAnimate_1.WindowAnimate.ZOOM;
         if (!options.id)
@@ -37,6 +40,20 @@ var UIWindow = (function (_super) {
         var coord = ValueHelper_1.offsetCast(options.offset, _this._width, _this._height) || [(innerWidth - _this._width) / 2, (innerHeight - _this._height) / 2];
         _this._left = coord[0];
         _this._top = coord[1];
+        (_this._mode = options.mode || _this._mode) && TypeHelper_1.isWindowMode(_this._mode);
+        _this._background = options.background || _this.background;
+        var defaultBorder = {
+            width: 1,
+            style: "solid",
+            color: "#3baced",
+            radius: 4
+        };
+        var borderOption = options.border === undefined ?
+            defaultBorder :
+            (TypeHelper_1.isJsonObject(options.border) ? JsonHelper_1.merge(defaultBorder, options.border) : options.border);
+        var borderStyle = ElementHelper_1.borderCast(borderOption);
+        _this._border = borderStyle[0];
+        _this._borderRadius = borderStyle[1];
         return _this;
     }
     Object.defineProperty(UIWindow.prototype, "id", {
@@ -96,6 +113,16 @@ var UIWindow = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(UIWindow.prototype, "borderRadius", {
+        get: function () {
+            return this._borderRadius;
+        },
+        set: function (value) {
+            this._borderRadius = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(UIWindow.prototype, "boxShadow", {
         get: function () {
             return this._boxShadow;
@@ -151,8 +178,10 @@ var UIWindow = (function (_super) {
             left: this.left + "px",
             background: this.background,
             border: this.border,
+            borderRadius: this.borderRadius,
+            webkitBorderRadius: this.borderRadius,
             boxShadow: this.boxShadow,
-            webkitBoxShadow: this.boxShadow,
+            webkitBoxShadow: this.boxShadow
         });
         isNeedAnimation && (windowElement.addEventListener("animationend", function (ev) {
             ElementHelper_1.removeClasses(windowElement, _this.app.prefix, "animate-" + _this.animate + "In");

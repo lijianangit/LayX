@@ -1,5 +1,6 @@
 import App from "./core/App";
-import { Layx, WindowOptions } from "../types";
+import Layx from "./basic/interfaces/Layx";
+import { WindowOptions } from "../types";
 
 import "./assets/app.css";
 

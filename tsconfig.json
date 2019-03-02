@@ -7,7 +7,7 @@
             "dom"
         ],
         "module": "commonjs",
-        "outDir": "./build",
+        "outDir": "./built",
         "removeComments": true,
         "strict": true,
         "preserveConstEnums": true,

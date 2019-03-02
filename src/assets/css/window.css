@@ -1,5 +1,6 @@
 .layx-window {
     position: relative;
+    overflow: hidden;
 }
 
 .layx-window.layx-window-layer {
