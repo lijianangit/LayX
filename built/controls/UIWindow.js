@@ -190,15 +190,28 @@ var UIWindow = (function (_super) {
         isNeedAnimation && (windowElement.addEventListener("animationend", function (ev) {
             ElementHelper_1.removeClasses(windowElement, _this.app.prefix, "animate-" + _this.animate + "In");
         }));
+        windowElement.addEventListener("click", function (ev) {
+            _this.updateZIndex();
+        }, false);
         fragment.appendChild(windowElement);
         return fragment;
     };
-    UIWindow.prototype.updateZIndex = function () {
+    UIWindow.prototype.updateZIndex = function (disabled) {
+        if (disabled === void 0) { disabled = false; }
+        if (this === this.app.window)
+            return;
         if (this.app.getWindow(this.id)) {
             var windowDom = document.getElementById(this.app.prefix + this.id);
-            windowDom && (ElementHelper_1.addStyles(windowDom, {
-                zIndex: "" + this.app.zIndex
-            }));
+            if (windowDom) {
+                var isNeedAnimation = this.animate !== WindowAnimate_1.WindowAnimate.NONE;
+                ElementHelper_1.addStyles(windowDom, {
+                    zIndex: "" + this.app.zIndex
+                });
+                if (disabled === false) {
+                    ElementHelper_1.addClasses(windowDom, this.app.prefix, isNeedAnimation ? "animate-" + this.animate + "In" : "");
+                }
+                this.app.window = this;
+            }
         }
     };
     return UIWindow;

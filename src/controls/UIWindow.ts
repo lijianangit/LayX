@@ -167,11 +167,17 @@ export default class UIWindow extends UIComponent implements UIControl {
             removeClasses(windowElement, this.app.prefix, `animate-${this.animate}In`);
         }));
 
+        windowElement.addEventListener("click", (ev: MouseEvent) => {
+            this.updateZIndex();
+        }, false);
+
         fragment.appendChild(windowElement);
         return fragment;
     }
 
-    updateZIndex(): void {
+    updateZIndex(disabled: boolean = false): void {
+        if (this === this.app.window) return;
+
         if (this.app.getWindow(this.id)) {
             const windowDom = document.getElementById(this.app.prefix + this.id);
             if (windowDom) {
@@ -179,10 +185,12 @@ export default class UIWindow extends UIComponent implements UIControl {
                 addStyles(windowDom, <CSSStyleObject>{
                     zIndex: `${this.app.zIndex}`
                 });
-
-                addClasses(windowDom, this.app.prefix,
-                    isNeedAnimation ? `animate-${this.animate}In` : ""
-                );
+                if (disabled === false) {
+                    addClasses(windowDom, this.app.prefix,
+                        isNeedAnimation ? `animate-${this.animate}In` : ""
+                    );
+                }
+                this.app.window = this;
             }
         }
     }
