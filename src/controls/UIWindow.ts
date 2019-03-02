@@ -174,9 +174,16 @@ export default class UIWindow extends UIComponent implements UIControl {
     updateZIndex(): void {
         if (this.app.getWindow(this.id)) {
             const windowDom = document.getElementById(this.app.prefix + this.id);
-            windowDom && (addStyles(windowDom, <CSSStyleObject>{
-                zIndex: `${this.app.zIndex}`
-            }));
+            if (windowDom) {
+                const isNeedAnimation = this.animate !== WindowAnimate.NONE;
+                addStyles(windowDom, <CSSStyleObject>{
+                    zIndex: `${this.app.zIndex}`
+                });
+
+                addClasses(windowDom, this.app.prefix,
+                    isNeedAnimation ? `animate-${this.animate}In` : ""
+                );
+            }
         }
     }
 }
