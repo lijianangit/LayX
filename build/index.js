@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var App_1 = require("./core/App");
 require("./assets/app.css");
-function layx() {
+exports.default = (function layx() {
     var app = new App_1.default();
     var layx = function (options) { };
     layx.v = app.version;
@@ -10,5 +10,4 @@ function layx() {
         app.create(options);
     };
     return layx;
-}
-exports.default = layx();
+})();

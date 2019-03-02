@@ -1,10 +1,11 @@
 import UIComponent from "../basic/UIComponent";
 import UIControl from "../basic/interfaces/UIControl";
 import App from "../core/App";
-import { WindowOptions, CSSStyleObject } from "../../types";
+import { WindowOptions, CSSStyleObject, WindowCoord } from "../../types";
 import { addStyles, addClasses, removeClasses } from "../utils/ElementHelper";
 import { WindowMode } from "../basic/enums/WindowMode";
 import { WindowAnimate } from "../basic/enums/WindowAnimate";
+import { numberCast, offsetCast } from "../utils/ValueHelper";
 
 
 export default class UIWindow extends UIComponent implements UIControl {
@@ -89,9 +90,16 @@ export default class UIWindow extends UIComponent implements UIControl {
 
     constructor(app: App, options: WindowOptions) {
         super(app);
+
+        if (!options.id) throw new Error("`id` is required.");
         this._id = options.id;
-        this._left = (innerWidth - this._width) / 2;
-        this._top = (innerHeight - this._height) / 2;
+
+        this._width = numberCast(options.width) || this._width;
+        this._height = numberCast(options.height) || this._height;
+
+        const coord: WindowCoord = offsetCast(options.offset, this._width, this._height) || [(innerWidth - this._width) / 2, (innerHeight - this._height) / 2];
+        this._left = coord[0];
+        this._top = coord[1];
     }
 
     present(): DocumentFragment {
