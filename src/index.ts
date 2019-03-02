@@ -12,6 +12,7 @@ export default (function layx(): Layx {
     layx.create = function (options: WindowOptions) {
         app.create(options);
     }
+    layx.windows = app.windows;
 
     return layx;
 })();

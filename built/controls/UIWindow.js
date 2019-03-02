@@ -193,6 +193,14 @@ var UIWindow = (function (_super) {
         fragment.appendChild(windowElement);
         return fragment;
     };
+    UIWindow.prototype.updateZIndex = function () {
+        if (this.app.getWindow(this.id)) {
+            var windowDom = document.getElementById(this.app.prefix + this.id);
+            windowDom && (ElementHelper_1.addStyles(windowDom, {
+                zIndex: "" + this.app.zIndex
+            }));
+        }
+    };
     return UIWindow;
 }(UIComponent_1.default));
 exports.default = UIWindow;

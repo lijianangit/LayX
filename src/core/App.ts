@@ -15,10 +15,48 @@ export default class App {
         return this._aboveZIndex++;
     }
 
+    private _windows: Array<UIWindow> = [];
+    get windows() {
+        return this._windows;
+    }
+
     create(options: WindowOptions): void {
         const uiWindow = new UIWindow(this, options);
-        const windowPresent = uiWindow.present();
+        if (this.addWindow(uiWindow)) {
+            const windowPresent = uiWindow.present();
+            document.body.appendChild(windowPresent);
+        }
+    }
 
-        document.body.appendChild(windowPresent);
+    getWindow(id: string): UIWindow | null {
+        for (const item of this.windows) {
+            if (item.id === id) {
+                if (document.getElementById(this.prefix + id)) {
+                    return item;
+                }
+                else {
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
+
+    private addWindow(window: UIWindow): boolean {
+        for (const item of this.windows) {
+            if (item.id === window.id) {
+                if (document.getElementById(this.prefix + window.id)) {
+                    window.updateZIndex();
+                }
+                else {
+                    const index = this.windows.indexOf(item);
+                    this.windows.splice(index, 1);
+                }
+                return false;
+            }
+        }
+
+        this.windows.push(window);
+        return true;
     }
 }

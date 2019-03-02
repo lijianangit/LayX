@@ -170,4 +170,13 @@ export default class UIWindow extends UIComponent implements UIControl {
         fragment.appendChild(windowElement);
         return fragment;
     }
+
+    updateZIndex(): void {
+        if (this.app.getWindow(this.id)) {
+            const windowDom = document.getElementById(this.app.prefix + this.id);
+            windowDom && (addStyles(windowDom, <CSSStyleObject>{
+                zIndex: `${this.app.zIndex}`
+            }));
+        }
+    }
 }

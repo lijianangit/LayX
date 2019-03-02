@@ -11,10 +11,17 @@
 
 <body>
     <button id="create">Create</button>
+    <button id="create2">Create2</button>
     <script type="text/javascript">
         document.getElementById("create").onclick = function () {
             layx.create({
                 id: "hello-world"
+            });
+        }
+        document.getElementById("create2").onclick = function () {
+            layx.create({
+                id: "hello-world2",
+                offset: [100, 50]
             });
         }
     </script>

@@ -9,5 +9,6 @@ exports.default = (function layx() {
     layx.create = function (options) {
         app.create(options);
     };
+    layx.windows = app.windows;
     return layx;
 })();
