@@ -2,14 +2,32 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindow_1 = require("../controls/UIWindow");
 var App = (function () {
-    function App() {
+    function App(layx) {
         this.version = "3.0.0";
         this.prefix = "layx-";
-        this.window = null;
+        this._window = null;
         this._zIndex = 10000000;
         this._aboveZIndex = 20000000;
         this._windows = [];
+        this._layx = layx;
     }
+    Object.defineProperty(App.prototype, "layx", {
+        get: function () {
+            return this._layx;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(App.prototype, "window", {
+        get: function () {
+            return this._window;
+        },
+        set: function (value) {
+            this.layx.window = this._window = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(App.prototype, "zIndex", {
         get: function () {
             return this._zIndex++;

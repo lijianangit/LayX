@@ -1,11 +1,23 @@
 import UIWindow from "../controls/UIWindow";
 import { WindowOptions } from "../../types";
+import Layx from "../basic/interfaces/Layx";
 
 export default class App {
     readonly version: string = "3.0.0";
     readonly prefix: string = "layx-";
 
-    window: UIWindow | null = null;
+    private _layx: Layx;
+    get layx() {
+        return this._layx;
+    }
+
+    private _window: UIWindow | null = null;
+    get window() {
+        return this._window;
+    }
+    set window(value: UIWindow | null) {
+        this.layx.window = this._window = value;
+    }
 
     private _zIndex: number = 10000000;
     get zIndex() {
@@ -20,6 +32,10 @@ export default class App {
     private _windows: Array<UIWindow> = [];
     get windows() {
         return this._windows;
+    }
+
+    constructor(layx: Layx) {
+        this._layx = layx;
     }
 
     create(options: WindowOptions): void {
