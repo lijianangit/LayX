@@ -10,5 +10,9 @@ exports.default = (function layx() {
         app.create(options);
     };
     layx.windows = app.windows;
+    layx.window = app.window;
+    layx.getWindow = function (id) {
+        return app.getWindow(id);
+    };
     return layx;
 })();

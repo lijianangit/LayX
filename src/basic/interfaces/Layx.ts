@@ -6,4 +6,6 @@ export default interface Layx {
     (options: ConfigOptions): void;
     create(options: WindowOptions): void;
     windows: Array<UIWindow>;
+    window: UIWindow | null;
+    getWindow(id: string): UIWindow | null;
 }

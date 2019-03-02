@@ -13,6 +13,10 @@ export default (function layx(): Layx {
         app.create(options);
     }
     layx.windows = app.windows;
+    layx.window = app.window;
+    layx.getWindow = function (id: string) {
+        return app.getWindow(id);
+    }
 
     return layx;
 })();
