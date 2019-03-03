@@ -21,6 +21,7 @@ var TypeHelper_1 = require("../utils/TypeHelper");
 var JsonHelper_1 = require("../utils/JsonHelper");
 var StringHelper_1 = require("../utils/StringHelper");
 var UIParclose_1 = require("./UIParclose");
+var ExceptionHelper_1 = require("../utils/ExceptionHelper");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
     function UIWindow(app, options) {
@@ -42,6 +43,7 @@ var UIWindow = (function (_super) {
         _this._minWidth = 100;
         _this._minHeight = 100;
         _this._parclose = false;
+        _this._contextMenu = false;
         if (!options.id)
             throw new Error("`id` is required.");
         _this._id = options.id;
@@ -74,6 +76,10 @@ var UIWindow = (function (_super) {
         _this._minWidth = Math.max(options.minWidth || _this._minWidth, _this._minWidth);
         _this._minHeight = Math.max(options.minHeight || _this._minHeight, _this._minHeight);
         _this._parclose = options.parclose === undefined ? _this._parclose : (options.parclose === true ? 0 : _this._parclose);
+        _this._contextMenu = options.contextMenu === undefined ? _this._contextMenu : options.contextMenu;
+        if (_this._contextMenu !== false && !TypeHelper_1.isContextMenus(_this._contextMenu)) {
+            ExceptionHelper_1.assertNever(_this._contextMenu);
+        }
         return _this;
     }
     Object.defineProperty(UIWindow.prototype, "id", {
@@ -252,6 +258,16 @@ var UIWindow = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(UIWindow.prototype, "contextMenu", {
+        get: function () {
+            return this._contextMenu;
+        },
+        set: function (value) {
+            this._contextMenu = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     UIWindow.prototype.present = function () {
         var _this = this;
         var fragment = document.createDocumentFragment();
@@ -284,13 +300,22 @@ var UIWindow = (function (_super) {
             _this.updateZIndex();
         }, false);
         fragment.appendChild(windowElement);
-        var parclose = new UIParclose_1.default(this.app, this, { opacity: this.parclose });
-        var parcloseElement = parclose.present();
-        if (parcloseElement.hasChildNodes) {
-            ElementHelper_1.addStyles((parcloseElement.firstElementChild), {
-                zIndex: "" + (zIndex - 1)
+        if (this.parclose !== false) {
+            var parclose = new UIParclose_1.default(this.app, this, { opacity: this.parclose });
+            var parcloseElement = parclose.present();
+            if (parcloseElement.hasChildNodes) {
+                ElementHelper_1.addStyles((parcloseElement.firstElementChild), {
+                    zIndex: "" + (zIndex - 1)
+                });
+                fragment.appendChild(parcloseElement);
+            }
+        }
+        if (this.contextMenu !== false) {
+            windowElement.addEventListener("contextmenu", function (ev) {
+                alert(ev.pageX + "," + ev.pageY);
+                ev.returnValue = false;
+                return false;
             });
-            fragment.appendChild(parcloseElement);
         }
         return fragment;
     };

@@ -27,3 +27,23 @@ function isJsonObject(obj) {
         && obj.constructor === Object;
 }
 exports.isJsonObject = isJsonObject;
+function isContextMenu(obj) {
+    return isJsonObject(obj)
+        && obj.id !== undefined
+        && obj.label !== undefined
+        && obj.handler !== undefined
+        && typeof obj.handler === "function";
+}
+exports.isContextMenu = isContextMenu;
+function isContextMenus(obj) {
+    var correct = true;
+    for (var _i = 0, obj_1 = obj; _i < obj_1.length; _i++) {
+        var item = obj_1[_i];
+        if (!isContextMenu(item)) {
+            correct = false;
+            break;
+        }
+    }
+    return correct;
+}
+exports.isContextMenus = isContextMenus;

@@ -1,4 +1,4 @@
-import { WindowCoord, JsonObject } from "../../types";
+import { WindowCoord, JsonObject, ContextMenuOptions } from "../../types";
 import { WindowMode } from "../basic/enums/WindowMode";
 import { assertNever } from "./ExceptionHelper";
 
@@ -26,4 +26,23 @@ export function isJsonObject(obj: any): obj is JsonObject {
     return typeof obj === "object"
         && obj.constructor !== undefined
         && obj.constructor === Object;
+}
+
+export function isContextMenu(obj: any): obj is ContextMenuOptions {
+    return isJsonObject(obj)
+        && obj.id !== undefined
+        && obj.label !== undefined
+        && obj.handler !== undefined
+        && typeof obj.handler === "function";
+}
+
+export function isContextMenus(obj: Array<any>): obj is Array<ContextMenuOptions> {
+    let correct: boolean = true;
+    for (const item of obj) {
+        if (!isContextMenu(item)) {
+            correct = false;
+            break;
+        }
+    }
+    return correct;
 }

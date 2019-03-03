@@ -1,6 +1,7 @@
 import { WindowMode } from "../src/basic/enums/WindowMode";
 import { WindowAnimate } from "../src/basic/enums/WindowAnimate";
 import { WindowOffset } from "../src/basic/enums/WindowOffset";
+import UIWindow from "../src/controls/UIWindow";
 
 export type JsonObject = {
     constructor: Object;
@@ -25,6 +26,12 @@ export type ParcloseOptions = {
     opacity?: number | false;
 };
 
+export type ContextMenuOptions = {
+    id: string;
+    label: string;
+    handler: (window: UIWindow) => void;
+};
+
 export type WindowOptions = {
     id: string;
     width?: number;
@@ -40,6 +47,7 @@ export type WindowOptions = {
     minWidth?: number;
     minHeight?: number;
     parclose?: number | boolean;
+    contextMenu?: Array<ContextMenuOptions> | false;
 }
 
 export type ConfigOptions = {};

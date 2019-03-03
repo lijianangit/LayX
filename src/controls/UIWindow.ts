@@ -1,15 +1,16 @@
 import UIComponent from "../basic/models/UIComponent";
 import UIControl from "../basic/interfaces/UIControl";
 import App from "../core/App";
-import { WindowOptions, CSSStyleObject, WindowCoord, BorderOptions } from "../../types";
+import { WindowOptions, CSSStyleObject, WindowCoord, BorderOptions, ContextMenuOptions } from "../../types";
 import { addStyles, addClasses, removeClasses, borderCast } from "../utils/ElementHelper";
 import { WindowMode } from "../basic/enums/WindowMode";
 import { WindowAnimate } from "../basic/enums/WindowAnimate";
 import { numberCast, offsetCast, animateCast } from "../utils/ValueHelper";
-import { isWindowMode, isJsonObject } from "../utils/TypeHelper";
+import { isWindowMode, isJsonObject, isContextMenus } from "../utils/TypeHelper";
 import { merge } from "../utils/JsonHelper";
 import { getKebabCase } from "../utils/StringHelper";
 import UIParclose from "./UIParclose";
+import { assertNever } from "../utils/ExceptionHelper";
 
 
 export default class UIWindow extends UIComponent implements UIControl {
@@ -156,6 +157,14 @@ export default class UIWindow extends UIComponent implements UIControl {
         this.parclose = value;
     }
 
+    private _contextMenu: Array<ContextMenuOptions> | false = false;
+    get contextMenu() {
+        return this._contextMenu;
+    }
+    set contextMenu(value: Array<ContextMenuOptions> | false) {
+        this._contextMenu = value;
+    }
+
     constructor(app: App, options: WindowOptions) {
         super(app);
 
@@ -200,6 +209,11 @@ export default class UIWindow extends UIComponent implements UIControl {
         this._minHeight = Math.max(options.minHeight || this._minHeight, this._minHeight);
 
         this._parclose = options.parclose === undefined ? this._parclose : (options.parclose === true ? 0 : this._parclose);
+
+        this._contextMenu = options.contextMenu === undefined ? this._contextMenu : options.contextMenu;
+        if (this._contextMenu !== false && !isContextMenus(this._contextMenu)) {
+            assertNever(this._contextMenu);
+        }
     }
 
     present(): DocumentFragment {
@@ -246,14 +260,28 @@ export default class UIWindow extends UIComponent implements UIControl {
 
         fragment.appendChild(windowElement);
 
-        const parclose = new UIParclose(this.app, this, { opacity: this.parclose });
-        const parcloseElement = parclose.present();
-        if (parcloseElement.hasChildNodes) {
-            addStyles(<HTMLElement>(parcloseElement.firstElementChild), <CSSStyleObject>{
-                zIndex: `${zIndex - 1}`
-            });
-            fragment.appendChild(parcloseElement);
+        // parclose element
+        if (this.parclose !== false) {
+            const parclose = new UIParclose(this.app, this, { opacity: this.parclose });
+            const parcloseElement = parclose.present();
+            if (parcloseElement.hasChildNodes) {
+                addStyles(<HTMLElement>(parcloseElement.firstElementChild), <CSSStyleObject>{
+                    zIndex: `${zIndex - 1}`
+                });
+                fragment.appendChild(parcloseElement);
+            }
         }
+
+        // contextMenu element
+        if (this.contextMenu !== false) {
+            windowElement.addEventListener("contextmenu", (ev: MouseEvent) => {
+                alert(`${ev.pageX},${ev.pageY}`);
+
+                ev.returnValue = false;
+                return false;
+            });
+        }
+
         return fragment;
     }
 
