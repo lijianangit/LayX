@@ -21,12 +21,12 @@ export default class App {
 
     private _zIndex: number = 10000000;
     get zIndex() {
-        return this._zIndex = this._zIndex + 3;
+        return this._zIndex = this._zIndex + 2;
     }
 
     private _aboveZIndex: number = 20000000;
     get aboveZIndex() {
-        return this._aboveZIndex++;
+        return this._aboveZIndex = this._aboveZIndex + 2;
     }
 
     private _windows: Array<UIWindow> = [];
