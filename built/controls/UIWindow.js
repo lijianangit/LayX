@@ -24,6 +24,8 @@ var UIWindow = (function (_super) {
     function UIWindow(app, options) {
         var _this = _super.call(this, app) || this;
         _this.kind = "window";
+        _this.flickering = false;
+        _this._element = null;
         _this._width = 800;
         _this._height = 600;
         _this._mode = "layer";
@@ -31,7 +33,12 @@ var UIWindow = (function (_super) {
         _this._border = null;
         _this._borderRadius = null;
         _this._shadow = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
+        _this._flickerShadow = null;
         _this._animate = WindowAnimate_1.WindowAnimate.ZOOM;
+        _this._maxWidth = innerWidth;
+        _this._maxHeight = innerHeight;
+        _this._minWidth = 100;
+        _this._minHeight = 100;
         if (!options.id)
             throw new Error("`id` is required.");
         _this._id = options.id;
@@ -58,11 +65,22 @@ var UIWindow = (function (_super) {
             null :
             typeof options.shadow === "string" ? options.shadow : _this._shadow;
         _this._animate = ValueHelper_1.animateCast(options.animate === undefined ? _this._animate : options.animate);
+        _this._maxWidth = Math.min(options.maxWidth || _this._maxWidth, _this._maxWidth);
+        _this._maxHeight = Math.min(options.maxHeight || _this._maxHeight, _this._maxHeight);
+        _this._minWidth = Math.max(options.minWidth || _this._minWidth, _this._minWidth);
+        _this._minHeight = Math.max(options.minHeight || _this._minHeight, _this._minHeight);
         return _this;
     }
     Object.defineProperty(UIWindow.prototype, "id", {
         get: function () {
             return this._id;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIWindow.prototype, "element", {
+        get: function () {
+            return document.getElementById(this.app.prefix + this.id);
         },
         enumerable: true,
         configurable: true
@@ -137,6 +155,18 @@ var UIWindow = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(UIWindow.prototype, "flickerShadow", {
+        get: function () {
+            if (this.shadow !== null) {
+                var shadowArray = this.shadow.split(" ");
+                shadowArray[shadowArray.length - 1] = Number(shadowArray[shadowArray.length - 1].replace("px", "")) / 2 + "px";
+                return shadowArray.join(" ");
+            }
+            return this._shadow;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(UIWindow.prototype, "left", {
         get: function () {
             return this._left;
@@ -167,6 +197,46 @@ var UIWindow = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(UIWindow.prototype, "maxWidth", {
+        get: function () {
+            return this._maxWidth;
+        },
+        set: function (value) {
+            this._maxWidth = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIWindow.prototype, "maxHeight", {
+        get: function () {
+            return this._maxHeight;
+        },
+        set: function (value) {
+            this._maxHeight = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIWindow.prototype, "minWidth", {
+        get: function () {
+            return this._minWidth;
+        },
+        set: function (value) {
+            this._minWidth = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIWindow.prototype, "minHeight", {
+        get: function () {
+            return this._minHeight;
+        },
+        set: function (value) {
+            this._minHeight = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     UIWindow.prototype.present = function () {
         var _this = this;
         var fragment = document.createDocumentFragment();
@@ -176,6 +246,10 @@ var UIWindow = (function (_super) {
         ElementHelper_1.addClasses(windowElement, this.app.prefix, this.kind, "window-" + this.mode, "flexbox", isNeedAnimation ? "animate" : "", isNeedAnimation ? "animate-" + this.animate + "In" : "");
         ElementHelper_1.addStyles(windowElement, {
             zIndex: this.mode === "layer" ? "" + this.app.zIndex : null,
+            maxWidth: this.maxWidth + "px",
+            maxHeight: this.maxHeight + "px",
+            minWidth: this.minWidth + "px",
+            minHeight: this.minHeight + "px",
             width: this.width + "px",
             height: this.height + "px",
             top: this.top + "px",
@@ -196,19 +270,53 @@ var UIWindow = (function (_super) {
         fragment.appendChild(windowElement);
         return fragment;
     };
+    UIWindow.prototype.flicker = function () {
+        var _this = this;
+        if (this.element && this.flickering === false) {
+            var flickerTimes_1 = 0;
+            var duration = 60;
+            var flickerTotals_1 = 12;
+            this.flickering = true;
+            for (var i = 0; i < flickerTotals_1; i++) {
+                if (i % 2 == 0) {
+                    setTimeout(function () {
+                        ElementHelper_1.addStyles(_this.element, {
+                            boxShadow: _this.flickerShadow,
+                            webkitBoxShadow: _this.flickerShadow
+                        });
+                        flickerTimes_1++;
+                    }, i * duration);
+                }
+                else {
+                    setTimeout(function () {
+                        ElementHelper_1.addStyles(_this.element, {
+                            boxShadow: _this.shadow,
+                            webkitBoxShadow: _this.shadow
+                        });
+                        flickerTimes_1++;
+                    }, i * duration);
+                }
+            }
+            var checkFlickering_1 = setInterval(function () {
+                if (flickerTimes_1 >= flickerTotals_1) {
+                    clearInterval(checkFlickering_1);
+                    _this.flickering = false;
+                }
+            }, duration);
+        }
+    };
     UIWindow.prototype.updateZIndex = function (disabled) {
         if (disabled === void 0) { disabled = false; }
         if (this === this.app.window)
             return;
         if (this.app.getWindow(this.id)) {
-            var windowDom = document.getElementById(this.app.prefix + this.id);
-            if (windowDom) {
+            if (this.element) {
                 var isNeedAnimation = this.animate !== WindowAnimate_1.WindowAnimate.NONE;
-                ElementHelper_1.addStyles(windowDom, {
+                ElementHelper_1.addStyles(this.element, {
                     zIndex: "" + this.app.zIndex
                 });
                 if (disabled === false) {
-                    ElementHelper_1.addClasses(windowDom, this.app.prefix, isNeedAnimation ? "animate-" + this.animate + "In" : "");
+                    ElementHelper_1.addClasses(this.element, this.app.prefix, isNeedAnimation ? "animate-" + this.animate + "In" : "");
                 }
                 this.app.window = this;
             }

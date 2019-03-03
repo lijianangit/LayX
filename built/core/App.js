@@ -52,6 +52,7 @@ var App = (function () {
     App.prototype.create = function (options) {
         var window = this.getWindow(options.id);
         if (window) {
+            window.flicker();
             window.updateZIndex();
         }
         else {

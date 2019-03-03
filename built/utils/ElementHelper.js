@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function addStyles(element, styles) {
+    if (element === null)
+        return element;
     for (var _i = 0, _a = Object.keys(styles); _i < _a.length; _i++) {
         var key = _a[_i];
         element.style[key] = styles[key];

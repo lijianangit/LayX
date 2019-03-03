@@ -31,6 +31,10 @@ export type WindowOptions = {
     border?: string | BorderOptions;
     shadow?: string | boolean;
     animate?: WindowAnimate | false;
+    maxWidth?: number;
+    maxHeight?: number;
+    minWidth?: number;
+    minHeight?: number;
 }
 
 export type ConfigOptions = {};

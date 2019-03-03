@@ -12,10 +12,16 @@ import { merge } from "../utils/JsonHelper";
 
 export default class UIWindow extends UIComponent implements UIControl {
     readonly kind: string = "window";
+    private flickering: boolean = false;
 
     private _id: string;
     get id() {
         return this._id;
+    }
+
+    private _element: HTMLElement | null = null;
+    get element() {
+        return document.getElementById(this.app.prefix + this.id);
     }
 
     private _width: number = 800;
@@ -73,6 +79,15 @@ export default class UIWindow extends UIComponent implements UIControl {
     set shadow(value: string | null) {
         this._shadow = value;
     }
+    private _flickerShadow: string | null = null;
+    get flickerShadow() {
+        if (this.shadow !== null) {
+            const shadowArray = this.shadow.split(" ");
+            shadowArray[shadowArray.length - 1] = Number(shadowArray[shadowArray.length - 1].replace("px", "")) / 2 + "px";
+            return shadowArray.join(" ");
+        }
+        return this._shadow;
+    }
 
     private _left: number;
     get left() {
@@ -96,6 +111,38 @@ export default class UIWindow extends UIComponent implements UIControl {
     }
     set animate(value: WindowAnimate) {
         this._animate = value;
+    }
+
+    private _maxWidth: number = innerWidth;
+    get maxWidth() {
+        return this._maxWidth;
+    }
+    set maxWidth(value: number) {
+        this._maxWidth = value;
+    }
+
+    private _maxHeight: number = innerHeight;
+    get maxHeight() {
+        return this._maxHeight;
+    }
+    set maxHeight(value: number) {
+        this._maxHeight = value;
+    }
+
+    private _minWidth: number = 100;
+    get minWidth() {
+        return this._minWidth;
+    }
+    set minWidth(value: number) {
+        this._minWidth = value;
+    }
+
+    private _minHeight: number = 100;
+    get minHeight() {
+        return this._minHeight;
+    }
+    set minHeight(value: number) {
+        this._minHeight = value;
     }
 
     constructor(app: App, options: WindowOptions) {
@@ -133,6 +180,12 @@ export default class UIWindow extends UIComponent implements UIControl {
             typeof options.shadow === "string" ? options.shadow : this._shadow;
 
         this._animate = animateCast(options.animate === undefined ? this._animate : options.animate);
+
+        this._maxWidth = Math.min(options.maxWidth || this._maxWidth, this._maxWidth);
+        this._maxHeight = Math.min(options.maxHeight || this._maxHeight, this._maxHeight);
+
+        this._minWidth = Math.max(options.minWidth || this._minWidth, this._minWidth);
+        this._minHeight = Math.max(options.minHeight || this._minHeight, this._minHeight);
     }
 
     present(): DocumentFragment {
@@ -149,8 +202,13 @@ export default class UIWindow extends UIComponent implements UIControl {
             isNeedAnimation ? "animate" : "",
             isNeedAnimation ? `animate-${this.animate}In` : ""
         );
+
         addStyles(windowElement, <CSSStyleObject>{
             zIndex: this.mode === WindowMode.LAYER ? `${this.app.zIndex}` : null,
+            maxWidth: `${this.maxWidth}px`,
+            maxHeight: `${this.maxHeight}px`,
+            minWidth: `${this.minWidth}px`,
+            minHeight: `${this.minHeight}px`,
             width: `${this.width}px`,
             height: `${this.height}px`,
             top: `${this.top}px`,
@@ -175,18 +233,53 @@ export default class UIWindow extends UIComponent implements UIControl {
         return fragment;
     }
 
+    flicker() {
+        if (this.element && this.flickering === false) {
+            let flickerTimes: number = 0;
+            const duration: number = 60;
+            const flickerTotals = 12;
+
+            this.flickering = true;
+            for (let i = 0; i < flickerTotals; i++) {
+                if (i % 2 == 0) {
+                    setTimeout(() => {
+                        addStyles(this.element, <CSSStyleObject>{
+                            boxShadow: this.flickerShadow,
+                            webkitBoxShadow: this.flickerShadow
+                        });
+                        flickerTimes++;
+                    }, i * duration);
+                }
+                else {
+                    setTimeout(() => {
+                        addStyles(this.element, <CSSStyleObject>{
+                            boxShadow: this.shadow,
+                            webkitBoxShadow: this.shadow
+                        });
+                        flickerTimes++;
+                    }, i * duration);
+                }
+            }
+            const checkFlickering = setInterval(() => {
+                if (flickerTimes >= flickerTotals) {
+                    clearInterval(checkFlickering);
+                    this.flickering = false;
+                }
+            }, duration);
+        }
+    }
+
     updateZIndex(disabled: boolean = false): void {
         if (this === this.app.window) return;
 
         if (this.app.getWindow(this.id)) {
-            const windowDom = document.getElementById(this.app.prefix + this.id);
-            if (windowDom) {
+            if (this.element) {
                 const isNeedAnimation = this.animate !== WindowAnimate.NONE;
-                addStyles(windowDom, <CSSStyleObject>{
+                addStyles(this.element, <CSSStyleObject>{
                     zIndex: `${this.app.zIndex}`
                 });
                 if (disabled === false) {
-                    addClasses(windowDom, this.app.prefix,
+                    addClasses(this.element, this.app.prefix,
                         isNeedAnimation ? `animate-${this.animate}In` : ""
                     );
                 }

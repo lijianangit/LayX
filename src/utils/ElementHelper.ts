@@ -1,6 +1,8 @@
 import { CSSStyleObject, BorderOptions } from "../../types";
 
-export function addStyles(element: HTMLElement, styles: CSSStyleObject): HTMLElement {
+export function addStyles(element: HTMLElement | null, styles: CSSStyleObject): HTMLElement | null {
+    if (element === null) return element;
+
     for (const key of Object.keys(styles)) {
         (<CSSStyleObject>element.style)[key] = styles[key];
     }
