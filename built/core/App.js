@@ -69,7 +69,7 @@ var App = (function () {
         for (var _i = 0, _a = this.windows; _i < _a.length; _i++) {
             var item = _a[_i];
             if (item.id === id) {
-                if (document.getElementById(this.prefix + id)) {
+                if (item.element) {
                     return item;
                 }
                 else {

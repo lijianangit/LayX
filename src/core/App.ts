@@ -58,7 +58,7 @@ export default class App {
         if (!id) throw new Error("`id` is required.");
         for (const item of this.windows) {
             if (item.id === id) {
-                if (document.getElementById(this.prefix + id)) {
+                if (item.element) {
                     return item;
                 }
                 else {

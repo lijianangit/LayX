@@ -19,6 +19,7 @@ var WindowAnimate_1 = require("../basic/enums/WindowAnimate");
 var ValueHelper_1 = require("../utils/ValueHelper");
 var TypeHelper_1 = require("../utils/TypeHelper");
 var JsonHelper_1 = require("../utils/JsonHelper");
+var StringHelper_1 = require("../utils/StringHelper");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
     function UIWindow(app, options) {
@@ -42,6 +43,7 @@ var UIWindow = (function (_super) {
         if (!options.id)
             throw new Error("`id` is required.");
         _this._id = options.id;
+        _this.elementId = _this.app.prefix + _this.id;
         _this._width = ValueHelper_1.numberCast(options.width) || _this._width;
         _this._height = ValueHelper_1.numberCast(options.height) || _this._height;
         var coord = ValueHelper_1.offsetCast(options.offset, _this._width, _this._height) || [(innerWidth - _this._width) / 2, (innerHeight - _this._height) / 2];
@@ -80,7 +82,7 @@ var UIWindow = (function (_super) {
     });
     Object.defineProperty(UIWindow.prototype, "element", {
         get: function () {
-            return document.getElementById(this.app.prefix + this.id);
+            return document.getElementById(this.elementId);
         },
         enumerable: true,
         configurable: true
@@ -241,9 +243,9 @@ var UIWindow = (function (_super) {
         var _this = this;
         var fragment = document.createDocumentFragment();
         var windowElement = document.createElement("div");
-        windowElement.id = this.app.prefix + this.id;
+        windowElement.id = this.elementId;
         var isNeedAnimation = this.animate !== WindowAnimate_1.WindowAnimate.NONE;
-        ElementHelper_1.addClasses(windowElement, this.app.prefix, this.kind, "window-" + this.mode, "flexbox", isNeedAnimation ? "animate" : "", isNeedAnimation ? "animate-" + this.animate + "In" : "");
+        ElementHelper_1.addClasses(windowElement, this.app.prefix, StringHelper_1.getKebabCase(this.kind), "window-" + this.mode, "flexbox", isNeedAnimation ? "animate" : "", isNeedAnimation ? "animate-" + this.animate + "In" : "");
         ElementHelper_1.addStyles(windowElement, {
             zIndex: this.mode === "layer" ? "" + this.app.zIndex : null,
             maxWidth: this.maxWidth + "px",
@@ -252,8 +254,8 @@ var UIWindow = (function (_super) {
             minHeight: this.minHeight + "px",
             width: this.width + "px",
             height: this.height + "px",
-            top: this.top + "px",
-            left: this.left + "px",
+            top: this.mode === "layer" ? this.top + "px" : null,
+            left: this.mode === "layer" ? this.left + "px" : null,
             background: this.background,
             border: this.border,
             borderRadius: this.borderRadius,
@@ -272,7 +274,7 @@ var UIWindow = (function (_super) {
     };
     UIWindow.prototype.flicker = function () {
         var _this = this;
-        if (this.element && this.flickering === false) {
+        if (this.element && this.mode === "layer" && this.flickering === false) {
             var flickerTimes_1 = 0;
             var duration = 60;
             var flickerTotals_1 = 12;
@@ -309,7 +311,8 @@ var UIWindow = (function (_super) {
         if (disabled === void 0) { disabled = false; }
         if (this === this.app.window)
             return;
-        if (this.app.getWindow(this.id)) {
+        var uiWindow = this.app.getWindow(this.id);
+        if (uiWindow && uiWindow.mode === "layer") {
             if (this.element) {
                 var isNeedAnimation = this.animate !== WindowAnimate_1.WindowAnimate.NONE;
                 ElementHelper_1.addStyles(this.element, {

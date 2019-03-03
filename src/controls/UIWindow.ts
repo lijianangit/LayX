@@ -8,6 +8,7 @@ import { WindowAnimate } from "../basic/enums/WindowAnimate";
 import { numberCast, offsetCast, animateCast } from "../utils/ValueHelper";
 import { isWindowMode, isJsonObject } from "../utils/TypeHelper";
 import { merge } from "../utils/JsonHelper";
+import { getKebabCase } from "../utils/StringHelper";
 
 
 export default class UIWindow extends UIComponent implements UIControl {
@@ -19,9 +20,10 @@ export default class UIWindow extends UIComponent implements UIControl {
         return this._id;
     }
 
+    readonly elementId: string;
     private _element: HTMLElement | null = null;
     get element() {
-        return document.getElementById(this.app.prefix + this.id);
+        return document.getElementById(this.elementId);
     }
 
     private _width: number = 800;
@@ -150,6 +152,7 @@ export default class UIWindow extends UIComponent implements UIControl {
 
         if (!options.id) throw new Error("`id` is required.");
         this._id = options.id;
+        this.elementId = this.app.prefix + this.id;
 
         this._width = numberCast(options.width) || this._width;
         this._height = numberCast(options.height) || this._height;
@@ -192,11 +195,11 @@ export default class UIWindow extends UIComponent implements UIControl {
         const fragment = document.createDocumentFragment();
 
         const windowElement = document.createElement("div");
-        windowElement.id = this.app.prefix + this.id;
+        windowElement.id = this.elementId;
 
         const isNeedAnimation = this.animate !== WindowAnimate.NONE;
         addClasses(windowElement, this.app.prefix,
-            this.kind,
+            getKebabCase(this.kind),
             `window-${this.mode}`,
             "flexbox",
             isNeedAnimation ? "animate" : "",
@@ -211,8 +214,8 @@ export default class UIWindow extends UIComponent implements UIControl {
             minHeight: `${this.minHeight}px`,
             width: `${this.width}px`,
             height: `${this.height}px`,
-            top: `${this.top}px`,
-            left: `${this.left}px`,
+            top: this.mode === WindowMode.LAYER ? `${this.top}px` : null,
+            left: this.mode === WindowMode.LAYER ? `${this.left}px` : null,
             background: this.background,
             border: this.border,
             borderRadius: this.borderRadius,
@@ -234,7 +237,7 @@ export default class UIWindow extends UIComponent implements UIControl {
     }
 
     flicker() {
-        if (this.element && this.flickering === false) {
+        if (this.element && this.mode === WindowMode.LAYER && this.flickering === false) {
             let flickerTimes: number = 0;
             const duration: number = 60;
             const flickerTotals = 12;
@@ -272,7 +275,8 @@ export default class UIWindow extends UIComponent implements UIControl {
     updateZIndex(disabled: boolean = false): void {
         if (this === this.app.window) return;
 
-        if (this.app.getWindow(this.id)) {
+        const uiWindow = this.app.getWindow(this.id);
+        if (uiWindow && uiWindow.mode === WindowMode.LAYER) {
             if (this.element) {
                 const isNeedAnimation = this.animate !== WindowAnimate.NONE;
                 addStyles(this.element, <CSSStyleObject>{
