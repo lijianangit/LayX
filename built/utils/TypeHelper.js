@@ -30,9 +30,7 @@ exports.isJsonObject = isJsonObject;
 function isContextMenu(obj) {
     return isJsonObject(obj)
         && obj.id !== undefined
-        && obj.label !== undefined
-        && obj.handler !== undefined
-        && typeof obj.handler === "function";
+        && obj.label !== undefined;
 }
 exports.isContextMenu = isContextMenu;
 function isContextMenus(obj) {

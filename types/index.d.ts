@@ -29,7 +29,7 @@ export type ParcloseOptions = {
 export type ContextMenuOptions = {
     id: string;
     label: string;
-    handler: (window: UIWindow) => void;
+    handler?: (window: UIWindow) => void;
 };
 
 export type WindowOptions = {

@@ -31,9 +31,7 @@ export function isJsonObject(obj: any): obj is JsonObject {
 export function isContextMenu(obj: any): obj is ContextMenuOptions {
     return isJsonObject(obj)
         && obj.id !== undefined
-        && obj.label !== undefined
-        && obj.handler !== undefined
-        && typeof obj.handler === "function";
+        && obj.label !== undefined;
 }
 
 export function isContextMenus(obj: Array<any>): obj is Array<ContextMenuOptions> {

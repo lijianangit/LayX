@@ -42,10 +42,13 @@ export default class UIParclose extends UIWindowRelative implements UIControl {
         });
 
         parcloseElement.addEventListener("click", (ev: MouseEvent) => {
+            this.window.hideContextMenu();
             this.window.flicker();
         }, false);
 
         parcloseElement.addEventListener("contextmenu", (ev: MouseEvent) => {
+            ev.preventDefault();
+            this.window.hideContextMenu();
             ev.returnValue = false;
             return false;
         });

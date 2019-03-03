@@ -22,6 +22,7 @@ var JsonHelper_1 = require("../utils/JsonHelper");
 var StringHelper_1 = require("../utils/StringHelper");
 var UIParclose_1 = require("./UIParclose");
 var ExceptionHelper_1 = require("../utils/ExceptionHelper");
+var UIContextMenu_1 = require("./UIContextMenu");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
     function UIWindow(app, options) {
@@ -48,6 +49,7 @@ var UIWindow = (function (_super) {
             throw new Error("`id` is required.");
         _this._id = options.id;
         _this.elementId = _this.app.prefix + _this.id;
+        _this.zIndex = _this.app.zIndex;
         _this._width = ValueHelper_1.numberCast(options.width) || _this._width;
         _this._height = ValueHelper_1.numberCast(options.height) || _this._height;
         var coord = ValueHelper_1.offsetCast(options.offset, _this._width, _this._height) || [(innerWidth - _this._width) / 2, (innerHeight - _this._height) / 2];
@@ -271,13 +273,12 @@ var UIWindow = (function (_super) {
     UIWindow.prototype.present = function () {
         var _this = this;
         var fragment = document.createDocumentFragment();
-        var zIndex = this.app.zIndex;
         var windowElement = document.createElement("div");
         windowElement.id = this.elementId;
         var isNeedAnimation = this.animate !== WindowAnimate_1.WindowAnimate.NONE;
         ElementHelper_1.addClasses(windowElement, this.app.prefix, StringHelper_1.getKebabCase(this.kind), "window-" + this.mode, "flexbox", isNeedAnimation ? "animate" : "", isNeedAnimation ? "animate-" + this.animate + "In" : "");
         ElementHelper_1.addStyles(windowElement, {
-            zIndex: this.mode === "layer" ? "" + zIndex : null,
+            zIndex: this.mode === "layer" ? "" + this.zIndex : null,
             maxWidth: this.maxWidth + "px",
             maxHeight: this.maxHeight + "px",
             minWidth: this.minWidth + "px",
@@ -297,6 +298,7 @@ var UIWindow = (function (_super) {
             ElementHelper_1.removeClasses(windowElement, _this.app.prefix, "animate-" + _this.animate + "In");
         }));
         windowElement.addEventListener("click", function (ev) {
+            _this.hideContextMenu();
             _this.updateZIndex();
         }, false);
         fragment.appendChild(windowElement);
@@ -305,19 +307,51 @@ var UIWindow = (function (_super) {
             var parcloseElement = parclose.present();
             if (parcloseElement.hasChildNodes) {
                 ElementHelper_1.addStyles((parcloseElement.firstElementChild), {
-                    zIndex: "" + (zIndex - 1)
+                    zIndex: "" + (this.zIndex - 1)
                 });
                 fragment.appendChild(parcloseElement);
             }
         }
         if (this.contextMenu !== false) {
+            var contextMenuElements_1 = document.getElementById(this.elementId + "-context-menu");
+            if (!contextMenuElements_1) {
+                contextMenuElements_1 = this.createContextMenu();
+                fragment.appendChild(contextMenuElements_1);
+            }
             windowElement.addEventListener("contextmenu", function (ev) {
-                alert(ev.pageX + "," + ev.pageY);
+                ev.preventDefault();
                 ev.returnValue = false;
+                _this.updateZIndex();
+                if (contextMenuElements_1 != null) {
+                    ElementHelper_1.addClasses(contextMenuElements_1, _this.app.prefix, "context-menu-active");
+                    ElementHelper_1.addStyles(contextMenuElements_1, {
+                        zIndex: "" + (_this.zIndex + 1),
+                        top: ev.pageY + "px",
+                        left: ev.pageX + "px",
+                    });
+                }
                 return false;
             });
         }
         return fragment;
+    };
+    UIWindow.prototype.createContextMenu = function () {
+        var contextMenuElements = document.createElement("div");
+        contextMenuElements.id = this.elementId + "-context-menu";
+        ElementHelper_1.addClasses(contextMenuElements, this.app.prefix, "context-menu");
+        contextMenuElements.addEventListener("contextmenu", function (ev) {
+            ev.preventDefault();
+            ev.returnValue = false;
+            return false;
+        });
+        if (this.contextMenu instanceof Array && TypeHelper_1.isContextMenus(this.contextMenu)) {
+            for (var _i = 0, _a = this.contextMenu; _i < _a.length; _i++) {
+                var item = _a[_i];
+                var contextMenu = new UIContextMenu_1.default(this.app, this, item);
+                contextMenuElements.appendChild(contextMenu.present());
+            }
+        }
+        return contextMenuElements;
     };
     UIWindow.prototype.flicker = function () {
         var _this = this;
@@ -362,14 +396,30 @@ var UIWindow = (function (_super) {
         if (uiWindow && uiWindow.mode === "layer") {
             if (this.element) {
                 var isNeedAnimation = this.animate !== WindowAnimate_1.WindowAnimate.NONE;
+                this.zIndex = this.app.zIndex;
                 ElementHelper_1.addStyles(this.element, {
-                    zIndex: "" + this.app.zIndex
+                    zIndex: "" + this.zIndex
                 });
                 if (disabled === false) {
                     ElementHelper_1.addClasses(this.element, this.app.prefix, isNeedAnimation ? "animate-" + this.animate + "In" : "");
                 }
+                this.updateParcloseZIndex();
                 this.app.window = this;
             }
+        }
+    };
+    UIWindow.prototype.updateParcloseZIndex = function () {
+        var parcloseElement = document.getElementById(this.elementId + "-parclose");
+        if (parcloseElement) {
+            ElementHelper_1.addStyles((parcloseElement), {
+                zIndex: "" + (this.zIndex - 1)
+            });
+        }
+    };
+    UIWindow.prototype.hideContextMenu = function () {
+        var contextMenuElements = document.getElementById(this.elementId + "-context-menu");
+        if (contextMenuElements) {
+            ElementHelper_1.removeClasses(contextMenuElements, this.app.prefix, "context-menu-active");
         }
     };
     return UIWindow;

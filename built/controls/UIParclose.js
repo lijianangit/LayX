@@ -51,9 +51,12 @@ var UIParclose = (function (_super) {
             backgroundColor: "rgba(0,0,0," + this.opacity + ")"
         });
         parcloseElement.addEventListener("click", function (ev) {
+            _this.window.hideContextMenu();
             _this.window.flicker();
         }, false);
         parcloseElement.addEventListener("contextmenu", function (ev) {
+            ev.preventDefault();
+            _this.window.hideContextMenu();
             ev.returnValue = false;
             return false;
         });

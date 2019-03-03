@@ -36,6 +36,18 @@ export default class App {
 
     constructor(layx: Layx) {
         this._layx = layx;
+
+        document.addEventListener("click", (ev: MouseEvent) => {
+            if (this.window) {
+                this.window.hideContextMenu();
+            }
+        });
+
+        document.addEventListener("contextmenu", (ev: MouseEvent) => {
+            if (this.window) {
+                this.window.hideContextMenu();
+            }
+        }, true);
     }
 
     create(options: WindowOptions): void {

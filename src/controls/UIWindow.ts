@@ -11,11 +11,13 @@ import { merge } from "../utils/JsonHelper";
 import { getKebabCase } from "../utils/StringHelper";
 import UIParclose from "./UIParclose";
 import { assertNever } from "../utils/ExceptionHelper";
+import UIContextMenu from "./UIContextMenu";
 
 
 export default class UIWindow extends UIComponent implements UIControl {
     readonly kind: string = "window";
     private flickering: boolean = false;
+    private zIndex: number;
 
     private _id: string;
     get id() {
@@ -172,6 +174,8 @@ export default class UIWindow extends UIComponent implements UIControl {
         this._id = options.id;
         this.elementId = this.app.prefix + this.id;
 
+        this.zIndex = this.app.zIndex;
+
         this._width = numberCast(options.width) || this._width;
         this._height = numberCast(options.height) || this._height;
 
@@ -218,7 +222,6 @@ export default class UIWindow extends UIComponent implements UIControl {
 
     present(): DocumentFragment {
         const fragment = document.createDocumentFragment();
-        const zIndex = this.app.zIndex;
 
         const windowElement = document.createElement("div");
         windowElement.id = this.elementId;
@@ -233,7 +236,7 @@ export default class UIWindow extends UIComponent implements UIControl {
         );
 
         addStyles(windowElement, <CSSStyleObject>{
-            zIndex: this.mode === WindowMode.LAYER ? `${zIndex}` : null,
+            zIndex: this.mode === WindowMode.LAYER ? `${this.zIndex}` : null,
             maxWidth: `${this.maxWidth}px`,
             maxHeight: `${this.maxHeight}px`,
             minWidth: `${this.minWidth}px`,
@@ -255,6 +258,7 @@ export default class UIWindow extends UIComponent implements UIControl {
         }));
 
         windowElement.addEventListener("click", (ev: MouseEvent) => {
+            this.hideContextMenu();
             this.updateZIndex();
         }, false);
 
@@ -266,7 +270,7 @@ export default class UIWindow extends UIComponent implements UIControl {
             const parcloseElement = parclose.present();
             if (parcloseElement.hasChildNodes) {
                 addStyles(<HTMLElement>(parcloseElement.firstElementChild), <CSSStyleObject>{
-                    zIndex: `${zIndex - 1}`
+                    zIndex: `${this.zIndex - 1}`
                 });
                 fragment.appendChild(parcloseElement);
             }
@@ -274,15 +278,58 @@ export default class UIWindow extends UIComponent implements UIControl {
 
         // contextMenu element
         if (this.contextMenu !== false) {
-            windowElement.addEventListener("contextmenu", (ev: MouseEvent) => {
-                alert(`${ev.pageX},${ev.pageY}`);
+            let contextMenuElements = document.getElementById(`${this.elementId}-context-menu`);
+            if (!contextMenuElements) {
+                contextMenuElements = this.createContextMenu();
+                fragment.appendChild(contextMenuElements);
+            }
 
+            windowElement.addEventListener("contextmenu", (ev: MouseEvent) => {
+                ev.preventDefault();
                 ev.returnValue = false;
+
+                this.updateZIndex();
+
+                if (contextMenuElements != null) {
+                    addClasses(contextMenuElements, this.app.prefix,
+                        `context-menu-active`
+                    );
+                    addStyles(contextMenuElements, <CSSStyleObject>{
+                        zIndex: `${this.zIndex + 1}`,
+                        top: `${ev.pageY}px`,
+                        left: `${ev.pageX}px`,
+                    });
+                }
+
                 return false;
             });
         }
 
         return fragment;
+    }
+
+
+    createContextMenu(): HTMLElement {
+        const contextMenuElements = document.createElement("div");
+        contextMenuElements.id = `${this.elementId}-context-menu`;
+
+        addClasses(contextMenuElements, this.app.prefix,
+            `context-menu`
+        );
+
+        contextMenuElements.addEventListener("contextmenu", (ev: MouseEvent) => {
+            ev.preventDefault();
+            ev.returnValue = false;
+            return false;
+        });
+
+        if (this.contextMenu instanceof Array && isContextMenus(this.contextMenu)) {
+            for (const item of this.contextMenu) {
+                const contextMenu = new UIContextMenu(this.app, this, item);
+                contextMenuElements.appendChild(contextMenu.present());
+            }
+        }
+        return contextMenuElements;
     }
 
     flicker() {
@@ -328,16 +375,37 @@ export default class UIWindow extends UIComponent implements UIControl {
         if (uiWindow && uiWindow.mode === WindowMode.LAYER) {
             if (this.element) {
                 const isNeedAnimation = this.animate !== WindowAnimate.NONE;
+
+                this.zIndex = this.app.zIndex;
                 addStyles(this.element, <CSSStyleObject>{
-                    zIndex: `${this.app.zIndex}`
+                    zIndex: `${this.zIndex}`
                 });
                 if (disabled === false) {
                     addClasses(this.element, this.app.prefix,
                         isNeedAnimation ? `animate-${this.animate}In` : ""
                     );
                 }
+                this.updateParcloseZIndex();
                 this.app.window = this;
             }
+        }
+    }
+
+    updateParcloseZIndex(): void {
+        const parcloseElement = document.getElementById(`${this.elementId}-parclose`);
+        if (parcloseElement) {
+            addStyles(<HTMLElement>(parcloseElement), <CSSStyleObject>{
+                zIndex: `${this.zIndex - 1}`
+            });
+        }
+    }
+
+    hideContextMenu(): void {
+        const contextMenuElements = document.getElementById(`${this.elementId}-context-menu`);
+        if (contextMenuElements) {
+            removeClasses(contextMenuElements, this.app.prefix,
+                `context-menu-active`
+            );
         }
     }
 }
