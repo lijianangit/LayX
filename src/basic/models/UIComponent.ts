@@ -1,4 +1,4 @@
-import App from "../core/App";
+import App from "../../core/App";
 
 export default abstract class UIComponent {
     private state: any;

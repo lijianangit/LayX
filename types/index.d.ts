@@ -21,6 +21,10 @@ export type BorderOptions = JsonObject & {
     radius?: number;
 };
 
+export type ParcloseOptions = {
+    opacity?: number | false;
+};
+
 export type WindowOptions = {
     id: string;
     width?: number;
@@ -35,6 +39,7 @@ export type WindowOptions = {
     maxHeight?: number;
     minWidth?: number;
     minHeight?: number;
+    parclose?: number | boolean;
 }
 
 export type ConfigOptions = {};

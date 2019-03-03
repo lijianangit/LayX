@@ -1,6 +1,9 @@
 [class^="layx-"] {
+    user-select: none;
     box-sizing: border-box;
     background-color: transparent;
+    margin: 0;
+    padding: 0;
 }
 
 .layx-flexbox {

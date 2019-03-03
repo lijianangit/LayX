@@ -13,13 +13,14 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var UIComponent_1 = require("../basic/UIComponent");
+var UIComponent_1 = require("../basic/models/UIComponent");
 var ElementHelper_1 = require("../utils/ElementHelper");
 var WindowAnimate_1 = require("../basic/enums/WindowAnimate");
 var ValueHelper_1 = require("../utils/ValueHelper");
 var TypeHelper_1 = require("../utils/TypeHelper");
 var JsonHelper_1 = require("../utils/JsonHelper");
 var StringHelper_1 = require("../utils/StringHelper");
+var UIParclose_1 = require("./UIParclose");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
     function UIWindow(app, options) {
@@ -40,6 +41,7 @@ var UIWindow = (function (_super) {
         _this._maxHeight = innerHeight;
         _this._minWidth = 100;
         _this._minHeight = 100;
+        _this._parclose = false;
         if (!options.id)
             throw new Error("`id` is required.");
         _this._id = options.id;
@@ -71,6 +73,7 @@ var UIWindow = (function (_super) {
         _this._maxHeight = Math.min(options.maxHeight || _this._maxHeight, _this._maxHeight);
         _this._minWidth = Math.max(options.minWidth || _this._minWidth, _this._minWidth);
         _this._minHeight = Math.max(options.minHeight || _this._minHeight, _this._minHeight);
+        _this._parclose = options.parclose === undefined ? _this._parclose : (options.parclose === true ? 0 : _this._parclose);
         return _this;
     }
     Object.defineProperty(UIWindow.prototype, "id", {
@@ -239,15 +242,26 @@ var UIWindow = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(UIWindow.prototype, "parclose", {
+        get: function () {
+            return this._parclose;
+        },
+        set: function (value) {
+            this.parclose = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     UIWindow.prototype.present = function () {
         var _this = this;
         var fragment = document.createDocumentFragment();
+        var zIndex = this.app.zIndex;
         var windowElement = document.createElement("div");
         windowElement.id = this.elementId;
         var isNeedAnimation = this.animate !== WindowAnimate_1.WindowAnimate.NONE;
         ElementHelper_1.addClasses(windowElement, this.app.prefix, StringHelper_1.getKebabCase(this.kind), "window-" + this.mode, "flexbox", isNeedAnimation ? "animate" : "", isNeedAnimation ? "animate-" + this.animate + "In" : "");
         ElementHelper_1.addStyles(windowElement, {
-            zIndex: this.mode === "layer" ? "" + this.app.zIndex : null,
+            zIndex: this.mode === "layer" ? "" + zIndex : null,
             maxWidth: this.maxWidth + "px",
             maxHeight: this.maxHeight + "px",
             minWidth: this.minWidth + "px",
@@ -270,6 +284,14 @@ var UIWindow = (function (_super) {
             _this.updateZIndex();
         }, false);
         fragment.appendChild(windowElement);
+        var parclose = new UIParclose_1.default(this.app, this, { opacity: this.parclose });
+        var parcloseElement = parclose.present();
+        if (parcloseElement.hasChildNodes) {
+            ElementHelper_1.addStyles((parcloseElement.firstElementChild), {
+                zIndex: "" + (zIndex - 1)
+            });
+            fragment.appendChild(parcloseElement);
+        }
         return fragment;
     };
     UIWindow.prototype.flicker = function () {

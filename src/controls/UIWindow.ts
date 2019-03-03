@@ -1,4 +1,4 @@
-import UIComponent from "../basic/UIComponent";
+import UIComponent from "../basic/models/UIComponent";
 import UIControl from "../basic/interfaces/UIControl";
 import App from "../core/App";
 import { WindowOptions, CSSStyleObject, WindowCoord, BorderOptions } from "../../types";
@@ -9,6 +9,8 @@ import { numberCast, offsetCast, animateCast } from "../utils/ValueHelper";
 import { isWindowMode, isJsonObject } from "../utils/TypeHelper";
 import { merge } from "../utils/JsonHelper";
 import { getKebabCase } from "../utils/StringHelper";
+import { assertNever } from "../utils/ExceptionHelper";
+import UIParclose from "./UIParclose";
 
 
 export default class UIWindow extends UIComponent implements UIControl {
@@ -147,6 +149,14 @@ export default class UIWindow extends UIComponent implements UIControl {
         this._minHeight = value;
     }
 
+    private _parclose: number | false = false;
+    get parclose() {
+        return this._parclose;
+    }
+    set parclose(value: number | false) {
+        this.parclose = value;
+    }
+
     constructor(app: App, options: WindowOptions) {
         super(app);
 
@@ -189,10 +199,13 @@ export default class UIWindow extends UIComponent implements UIControl {
 
         this._minWidth = Math.max(options.minWidth || this._minWidth, this._minWidth);
         this._minHeight = Math.max(options.minHeight || this._minHeight, this._minHeight);
+
+        this._parclose = options.parclose === undefined ? this._parclose : (options.parclose === true ? 0 : this._parclose);
     }
 
     present(): DocumentFragment {
         const fragment = document.createDocumentFragment();
+        const zIndex = this.app.zIndex;
 
         const windowElement = document.createElement("div");
         windowElement.id = this.elementId;
@@ -207,7 +220,7 @@ export default class UIWindow extends UIComponent implements UIControl {
         );
 
         addStyles(windowElement, <CSSStyleObject>{
-            zIndex: this.mode === WindowMode.LAYER ? `${this.app.zIndex}` : null,
+            zIndex: this.mode === WindowMode.LAYER ? `${zIndex}` : null,
             maxWidth: `${this.maxWidth}px`,
             maxHeight: `${this.maxHeight}px`,
             minWidth: `${this.minWidth}px`,
@@ -233,6 +246,15 @@ export default class UIWindow extends UIComponent implements UIControl {
         }, false);
 
         fragment.appendChild(windowElement);
+
+        const parclose = new UIParclose(this.app, this, { opacity: this.parclose });
+        const parcloseElement = parclose.present();
+        if (parcloseElement.hasChildNodes) {
+            addStyles(<HTMLElement>(parcloseElement.firstElementChild), <CSSStyleObject>{
+                zIndex: `${zIndex - 1}`
+            });
+            fragment.appendChild(parcloseElement);
+        }
         return fragment;
     }
 

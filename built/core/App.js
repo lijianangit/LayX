@@ -30,7 +30,7 @@ var App = (function () {
     });
     Object.defineProperty(App.prototype, "zIndex", {
         get: function () {
-            return this._zIndex++;
+            return this._zIndex = this._zIndex + 3;
         },
         enumerable: true,
         configurable: true

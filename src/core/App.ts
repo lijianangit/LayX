@@ -21,7 +21,7 @@ export default class App {
 
     private _zIndex: number = 10000000;
     get zIndex() {
-        return this._zIndex++;
+        return this._zIndex = this._zIndex + 3;
     }
 
     private _aboveZIndex: number = 20000000;
