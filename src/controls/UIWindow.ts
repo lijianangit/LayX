@@ -12,6 +12,7 @@ import { getKebabCase } from "../utils/StringHelper";
 import UIParclose from "./UIParclose";
 import { assertNever } from "../utils/ExceptionHelper";
 import UIContextMenu from "./UIContextMenu";
+import UIResizeBar from "./UIResizeBar";
 
 
 export default class UIWindow extends UIComponent implements UIControl {
@@ -231,6 +232,7 @@ export default class UIWindow extends UIComponent implements UIControl {
             getKebabCase(this.kind),
             `window-${this.mode}`,
             "flexbox",
+            "flex-column",
             isNeedAnimation ? "animate" : "",
             isNeedAnimation ? `animate-${this.animate}In` : ""
         );
@@ -304,6 +306,11 @@ export default class UIWindow extends UIComponent implements UIControl {
                 return false;
             });
         }
+
+        // resizeBar
+        const resizeBar = new UIResizeBar(this.app, this, {});
+        const resizeElement = resizeBar.present();
+        windowElement.appendChild(resizeElement);
 
         return fragment;
     }

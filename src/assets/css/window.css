@@ -4,7 +4,7 @@
 }
 
 .layx-window.layx-window-layer {
-    position: absolute;
+    position: fixed;
 }
 
 .layx-window.layx-animate-zoomIn {

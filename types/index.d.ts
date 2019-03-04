@@ -20,17 +20,17 @@ export type BorderOptions = JsonObject & {
     color?: string;
     style?: string;
     radius?: number;
-};
+} & JsonObject;
 
 export type ParcloseOptions = {
     opacity?: number | false;
-};
+} & JsonObject;
 
 export type ContextMenuOptions = {
     id: string;
     label: string;
     handler?: (window: UIWindow) => void;
-};
+} & JsonObject;
 
 export type WindowOptions = {
     id: string;
@@ -48,6 +48,17 @@ export type WindowOptions = {
     minHeight?: number;
     parclose?: number | boolean;
     contextMenu?: Array<ContextMenuOptions> | false;
-}
+} & JsonObject;
+
+export type ResizeOptions = {
+    left?: boolean;
+    right?: boolean;
+    top?: boolean;
+    bottom?: boolean;
+    leftTop?: boolean;
+    rightTop?: boolean;
+    leftBottom?: boolean;
+    rightBottom?: boolean;
+} & JsonObject;
 
 export type ConfigOptions = {};

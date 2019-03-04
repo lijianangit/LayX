@@ -15,7 +15,6 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIComponent_1 = require("../basic/models/UIComponent");
 var ElementHelper_1 = require("../utils/ElementHelper");
-var WindowAnimate_1 = require("../basic/enums/WindowAnimate");
 var ValueHelper_1 = require("../utils/ValueHelper");
 var TypeHelper_1 = require("../utils/TypeHelper");
 var JsonHelper_1 = require("../utils/JsonHelper");
@@ -23,6 +22,7 @@ var StringHelper_1 = require("../utils/StringHelper");
 var UIParclose_1 = require("./UIParclose");
 var ExceptionHelper_1 = require("../utils/ExceptionHelper");
 var UIContextMenu_1 = require("./UIContextMenu");
+var UIResizeBar_1 = require("./UIResizeBar");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
     function UIWindow(app, options) {
@@ -38,7 +38,7 @@ var UIWindow = (function (_super) {
         _this._borderRadius = null;
         _this._shadow = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
         _this._flickerShadow = null;
-        _this._animate = WindowAnimate_1.WindowAnimate.ZOOM;
+        _this._animate = "zoom";
         _this._maxWidth = innerWidth;
         _this._maxHeight = innerHeight;
         _this._minWidth = 100;
@@ -275,8 +275,8 @@ var UIWindow = (function (_super) {
         var fragment = document.createDocumentFragment();
         var windowElement = document.createElement("div");
         windowElement.id = this.elementId;
-        var isNeedAnimation = this.animate !== WindowAnimate_1.WindowAnimate.NONE;
-        ElementHelper_1.addClasses(windowElement, this.app.prefix, StringHelper_1.getKebabCase(this.kind), "window-" + this.mode, "flexbox", isNeedAnimation ? "animate" : "", isNeedAnimation ? "animate-" + this.animate + "In" : "");
+        var isNeedAnimation = this.animate !== "none";
+        ElementHelper_1.addClasses(windowElement, this.app.prefix, StringHelper_1.getKebabCase(this.kind), "window-" + this.mode, "flexbox", "flex-column", isNeedAnimation ? "animate" : "", isNeedAnimation ? "animate-" + this.animate + "In" : "");
         ElementHelper_1.addStyles(windowElement, {
             zIndex: this.mode === "layer" ? "" + this.zIndex : null,
             maxWidth: this.maxWidth + "px",
@@ -333,6 +333,9 @@ var UIWindow = (function (_super) {
                 return false;
             });
         }
+        var resizeBar = new UIResizeBar_1.default(this.app, this, {});
+        var resizeElement = resizeBar.present();
+        windowElement.appendChild(resizeElement);
         return fragment;
     };
     UIWindow.prototype.createContextMenu = function () {
@@ -395,7 +398,7 @@ var UIWindow = (function (_super) {
         var uiWindow = this.app.getWindow(this.id);
         if (uiWindow && uiWindow.mode === "layer") {
             if (this.element) {
-                var isNeedAnimation = this.animate !== WindowAnimate_1.WindowAnimate.NONE;
+                var isNeedAnimation = this.animate !== "none";
                 this.zIndex = this.app.zIndex;
                 ElementHelper_1.addStyles(this.element, {
                     zIndex: "" + this.zIndex

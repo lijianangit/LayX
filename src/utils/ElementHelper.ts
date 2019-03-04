@@ -17,7 +17,7 @@ export function updateClasses(element: HTMLElement, handler: (currentClasses: st
 
         handler(currentClasses, index, cls);
     });
-    element.className = currentClasses.join(" ");
+    element.className = currentClasses.join(" ").trim();
 
     return element;
 }

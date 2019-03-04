@@ -9,3 +9,7 @@
 .layx-flexbox {
     display: flex;
 }
+
+.layx-flex-column {
+    flex-flow: column;
+}

@@ -1,0 +1,66 @@
+.layx-resize-bar>div[class^="layx-resize"] {
+    position: absolute;
+    z-index: 3;
+    touch-action: none;
+}
+
+.layx-resize-top, .layx-resize-bottom {
+    height: 3px;
+    left: 3px;
+    right: 3px;
+}
+
+.layx-resize-top {
+    top: 0;
+    cursor: n-resize;
+}
+
+.layx-resize-bottom {
+    bottom: 0;
+    cursor: s-resize;
+}
+
+.layx-resize-left, .layx-resize-right {
+    width: 3px;
+    top: 3px;
+    bottom: 3px;
+}
+
+.layx-resize-left {
+    left: 0;
+    cursor: w-resize;
+}
+
+.layx-resize-right {
+    right: 0;
+    cursor: e-resize;
+}
+
+.layx-resize-left-top, .layx-resize-right-top, .layx-resize-left-bottom, .layx-resize-right-bottom {
+    width: 3px;
+    height: 3px;
+}
+
+.layx-resize-left-top {
+    left: 0;
+    top: 0;
+    cursor: nw-resize;
+}
+
+.layx-resize-right-top {
+    right: 0;
+    top: 0;
+    cursor: ne-resize;
+}
+
+.layx-resize-left-bottom {
+    left: 0;
+    bottom: 0;
+    cursor: sw-resize;
+}
+
+.layx-resize-right-bottom {
+    right: 0;
+    bottom: 0;
+    cursor: se-resize;
+}

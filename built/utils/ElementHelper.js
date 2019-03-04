@@ -21,7 +21,7 @@ function updateClasses(element, handler, prefix) {
         var cls = prefix + item, index = currentClasses.indexOf(cls);
         handler(currentClasses, index, cls);
     });
-    element.className = currentClasses.join(" ");
+    element.className = currentClasses.join(" ").trim();
     return element;
 }
 exports.updateClasses = updateClasses;
