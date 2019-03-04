@@ -15,7 +15,7 @@ var App = (function () {
             if (_this.window) {
                 _this.window.hideContextMenu();
             }
-        });
+        }, true);
         document.addEventListener("contextmenu", function (ev) {
             if (_this.window) {
                 _this.window.hideContextMenu();

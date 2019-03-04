@@ -41,7 +41,7 @@ export default class App {
             if (this.window) {
                 this.window.hideContextMenu();
             }
-        });
+        },true);
 
         document.addEventListener("contextmenu", (ev: MouseEvent) => {
             if (this.window) {
