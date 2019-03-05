@@ -264,6 +264,10 @@ export default class UIWindow extends UIComponent implements UIControl {
             this.updateZIndex();
         }, false);
 
+        windowElement.addEventListener("mousedown", (ev: MouseEvent) => {
+            this.updateZIndex(true);
+        }, false);
+
         fragment.appendChild(windowElement);
 
         // parclose element

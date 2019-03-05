@@ -5,7 +5,7 @@ export default abstract class DragHandler {
     private startY: number = 0;
 
     constructor(dragElement: HTMLElement) {
-        dragElement.addEventListener("mousedown", this.mousedown);
+        dragElement.addEventListener("mousedown", this.mousedown,true);
     }
 
     private readonly mousedown: (this: HTMLElement, ev: MouseEvent) => any = (ev: MouseEvent) => {

@@ -301,6 +301,9 @@ var UIWindow = (function (_super) {
             _this.hideContextMenu();
             _this.updateZIndex();
         }, false);
+        windowElement.addEventListener("mousedown", function (ev) {
+            _this.updateZIndex(true);
+        }, false);
         fragment.appendChild(windowElement);
         if (this.parclose !== false) {
             var parclose = new UIParclose_1.default(this.app, this, { opacity: this.parclose });

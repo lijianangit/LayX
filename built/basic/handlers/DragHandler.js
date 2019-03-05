@@ -32,7 +32,7 @@ var DragHandler = (function () {
             document.removeEventListener("mouseup", _this.mouseup);
             _this.dragEnd(ev, ev.pageX, ev.pageY);
         };
-        dragElement.addEventListener("mousedown", this.mousedown);
+        dragElement.addEventListener("mousedown", this.mousedown, true);
     }
     DragHandler.prototype.draggingFirst = function (ev) { };
     DragHandler.isDragging = false;
