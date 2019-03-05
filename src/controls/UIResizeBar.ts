@@ -6,6 +6,7 @@ import { ResizeOptions } from "../../types";
 import { addClasses } from "../utils/ElementHelper";
 import { getKebabCase } from "../utils/StringHelper";
 import { ResizeDirection } from "../basic/enums/ResizeDirection";
+import ResizeDragHandler from "../basic/handlers/ResizeDragHandler";
 
 export default class UIResizeBar extends UIWindowRelative implements UIControl {
     readonly kind: string = "resizeBar";
@@ -123,6 +124,8 @@ export default class UIResizeBar extends UIWindowRelative implements UIControl {
         addClasses(itemElement, this.app.prefix,
             `resize-${getKebabCase(key)}`
         );
+
+        new ResizeDragHandler(itemElement);
 
         return itemElement;
     }
