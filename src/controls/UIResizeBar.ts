@@ -6,7 +6,7 @@ import { ResizeOptions } from "../../types";
 import { addClasses } from "../utils/ElementHelper";
 import { getKebabCase } from "../utils/StringHelper";
 import { ResizeDirection } from "../basic/enums/ResizeDirection";
-import ResizeDragHandler from "../basic/handlers/ResizeDragHandler";
+import WindowResizeDragHandler from "../basic/handlers/WindowResizeDragHandler";
 
 export default class UIResizeBar extends UIWindowRelative implements UIControl {
     readonly kind: string = "resizeBar";
@@ -118,14 +118,14 @@ export default class UIResizeBar extends UIWindowRelative implements UIControl {
         return fragment;
     }
 
-    private presentItem(key: string): HTMLElement {
+    private presentItem(key: ResizeDirection): HTMLElement {
         const itemElement = document.createElement("div");
 
         addClasses(itemElement, this.app.prefix,
             `resize-${getKebabCase(key)}`
         );
 
-        new ResizeDragHandler(itemElement);
+        new WindowResizeDragHandler(itemElement, key, this.window);
 
         return itemElement;
     }
