@@ -1,7 +1,5 @@
-import { WindowMode } from "../src/basic/enums/WindowMode";
-import { WindowAnimate } from "../src/basic/enums/WindowAnimate";
-import { WindowOffset } from "../src/basic/enums/WindowOffset";
 import UIWindow from "../src/controls/UIWindow";
+import * as Enums from "../src/basic/enums";
 
 export type JsonObject = {
     constructor: Object;
@@ -36,12 +34,12 @@ export type WindowOptions = {
     id: string;
     width?: number;
     height?: number;
-    mode?: WindowMode;
-    offset?: WindowOffset | WindowCoord;
+    mode?: Enums.WindowMode;
+    offset?: Enums.WindowOffset | WindowCoord;
     background?: string;
     border?: string | BorderOptions;
     shadow?: string | boolean;
-    animate?: WindowAnimate | false;
+    animate?: Enums.WindowAnimate | false;
     maxWidth?: number;
     maxHeight?: number;
     minWidth?: number;

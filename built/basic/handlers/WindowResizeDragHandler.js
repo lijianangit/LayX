@@ -14,7 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var DragHandler_1 = require("./DragHandler");
-var ElementHelper_1 = require("../../utils/ElementHelper");
+var ElementHelper = require("../../utils/ElementHelper");
 var WindowResizeDragHandler = (function (_super) {
     __extends(WindowResizeDragHandler, _super);
     function WindowResizeDragHandler(dragElement, direction, window) {
@@ -92,20 +92,20 @@ var WindowResizeDragHandler = (function (_super) {
             height = Math.min(height, innerHeight - this.window.top);
         }
         height = Math.min(height, this.window.maxHeight);
-        if (lockY) {
-            this._width = width;
-            this._left = left;
-            ElementHelper_1.addStyles(this.window.element, {
-                width: width + "px",
-                left: left + "px"
-            });
-        }
         if (lockX) {
             this._top = top;
             this._height = height;
-            ElementHelper_1.addStyles(this.window.element, {
+            ElementHelper.addStyles(this.window.element, {
                 top: top + "px",
                 height: height + "px"
+            });
+        }
+        if (lockY) {
+            this._width = width;
+            this._left = left;
+            ElementHelper.addStyles(this.window.element, {
+                width: width + "px",
+                left: left + "px"
             });
         }
         if (lockY === false && lockX === false) {
@@ -113,7 +113,7 @@ var WindowResizeDragHandler = (function (_super) {
             this._left = left;
             this._width = width;
             this._height = height;
-            ElementHelper_1.addStyles(this.window.element, {
+            ElementHelper.addStyles(this.window.element, {
                 top: top + "px",
                 left: left + "px",
                 height: height + "px",

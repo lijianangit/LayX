@@ -1,235 +1,107 @@
-import UIComponent from "../basic/models/UIComponent";
-import UIControl from "../basic/interfaces/UIControl";
 import App from "../core/App";
-import { WindowOptions, CSSStyleObject, WindowCoord, BorderOptions, ContextMenuOptions } from "../../types";
-import { addStyles, addClasses, removeClasses, borderCast } from "../utils/ElementHelper";
-import { WindowMode } from "../basic/enums/WindowMode";
-import { WindowAnimate } from "../basic/enums/WindowAnimate";
-import { numberCast, offsetCast, animateCast } from "../utils/ValueHelper";
-import { isWindowMode, isJsonObject, isContextMenus } from "../utils/TypeHelper";
-import { merge } from "../utils/JsonHelper";
-import { getKebabCase } from "../utils/StringHelper";
+import UIControl from "../basic/interfaces/UIControl";
+import UIComponent from "../basic/models/UIComponent";
 import UIParclose from "./UIParclose";
-import { assertNever } from "../utils/ExceptionHelper";
-import UIContextMenu from "./UIContextMenu";
 import UIResizeBar from "./UIResizeBar";
+import UIContextMenu from "./UIContextMenu";
+import * as Types from "../../types";
+import * as Enums from "../basic/enums";
+import * as StringHelper from "../utils/StringHelper";
+import * as ElementHelper from "../utils/ElementHelper";
+import * as ValueHelper from "../utils/ValueHelper";
+import * as TypeHelper from "../utils/TypeHelper";
+import * as JsonHelper from "../utils/JsonHelper";
+import * as ExceptionHelper from "../utils/ExceptionHelper";
 
 
 export default class UIWindow extends UIComponent implements UIControl {
-    readonly kind: string = "window";
+    public readonly kind: string = "window";
     private flickering: boolean = false;
-    private zIndex: number;
+    private zIndex: number = this.app.zIndex;
+    readonly id: string;
+    public width: number = 800;
+    public height: number = 600;
+    public mode: Enums.WindowMode = Enums.WindowMode.LAYER;
+    public background: string = "#ffffff";
+    public border: string | null = null;
+    public borderRadius: string | null = null;
+    public shadow: string | null = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
+    public left: number;
+    public top: number;
+    public maxWidth: number = innerWidth;
+    public maxHeight: number = innerHeight;
+    public minWidth: number = 100;
+    public minHeight: number = 100;
+    public parclose: number | false = false;
+    public animate: Enums.WindowAnimate = Enums.WindowAnimate.ZOOM;
+    public contextMenu: Array<Types.ContextMenuOptions> | false = false;
+    public readonly elementId: string;
 
-    private _id: string;
-    get id() {
-        return this._id;
-    }
-
-    readonly elementId: string;
     private _element: HTMLElement | null = null;
     get element() {
         return document.getElementById(this.elementId);
     }
 
-    private _width: number = 800;
-    get width() {
-        return this._width;
-    }
-    set width(value: number) {
-        this._width = value;
-    }
-
-    private _height: number = 600;
-    get height() {
-        return this._height;
-    }
-    set height(value: number) {
-        this._height = value;
-    }
-
-    private _mode: WindowMode = WindowMode.LAYER;
-    get mode() {
-        return this._mode;
-    }
-    set mode(value: WindowMode) {
-        this._mode = value;
-    }
-
-    private _background: string = "#ffffff";
-    get background() {
-        return this._background;
-    }
-    set background(value: string) {
-        this._background = value;
-    }
-
-    private _border: string | null = null;
-    get border() {
-        return this._border;
-    }
-    set border(value: string | null) {
-        this._border = value;
-    }
-
-    private _borderRadius: string | null = null;
-    get borderRadius() {
-        return this._borderRadius;
-    }
-    set borderRadius(value: string | null) {
-        this._borderRadius = value;
-    }
-
-    private _shadow: string | null = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
-    get shadow() {
-        return this._shadow;
-    }
-    set shadow(value: string | null) {
-        this._shadow = value;
-    }
     private _flickerShadow: string | null = null;
     get flickerShadow() {
-        if (this.shadow !== null) {
-            const shadowArray = this.shadow.split(" ");
-            shadowArray[shadowArray.length - 1] = Number(shadowArray[shadowArray.length - 1].replace("px", "")) / 2 + "px";
-            return shadowArray.join(" ");
-        }
-        return this._shadow;
+        return this.getFlickerShadow();
     }
 
-    private _left: number;
-    get left() {
-        return this._left;
-    }
-    set left(value: number) {
-        this._left = value;
-    }
+    private readonly defaultBorder: Types.BorderOptions = {
+        width: 1,
+        style: "solid",
+        color: "#3baced",
+        radius: 4
+    };
 
-    private _top: number;
-    get top() {
-        return this._top;
-    }
-    set top(value: number) {
-        this._top = value;
-    }
-
-    private _animate: WindowAnimate = WindowAnimate.ZOOM;
-    get animate() {
-        return this._animate;
-    }
-    set animate(value: WindowAnimate) {
-        this._animate = value;
-    }
-
-    private _maxWidth: number = innerWidth;
-    get maxWidth() {
-        return this._maxWidth;
-    }
-    set maxWidth(value: number) {
-        this._maxWidth = value;
-    }
-
-    private _maxHeight: number = innerHeight;
-    get maxHeight() {
-        return this._maxHeight;
-    }
-    set maxHeight(value: number) {
-        this._maxHeight = value;
-    }
-
-    private _minWidth: number = 100;
-    get minWidth() {
-        return this._minWidth;
-    }
-    set minWidth(value: number) {
-        this._minWidth = value;
-    }
-
-    private _minHeight: number = 100;
-    get minHeight() {
-        return this._minHeight;
-    }
-    set minHeight(value: number) {
-        this._minHeight = value;
-    }
-
-    private _parclose: number | false = false;
-    get parclose() {
-        return this._parclose;
-    }
-    set parclose(value: number | false) {
-        this.parclose = value;
-    }
-
-    private _contextMenu: Array<ContextMenuOptions> | false = false;
-    get contextMenu() {
-        return this._contextMenu;
-    }
-    set contextMenu(value: Array<ContextMenuOptions> | false) {
-        this._contextMenu = value;
-    }
-
-    constructor(app: App, options: WindowOptions) {
+    constructor(app: App, options: Types.WindowOptions) {
         super(app);
 
         if (!options.id) throw new Error("`id` is required.");
-        this._id = options.id;
+        this.id = options.id;
         this.elementId = this.app.prefix + this.id;
 
-        this.zIndex = this.app.zIndex;
+        this.width = ValueHelper.numberCast(options.width) || this.width;
+        this.height = ValueHelper.numberCast(options.height) || this.height;
+        const coord: Types.WindowCoord = ValueHelper.offsetCast(options.offset, this.width, this.height) || [(innerWidth - this.width) / 2, (innerHeight - this.height) / 2];
+        this.left = coord[0];
+        this.top = coord[1];
+        this.maxWidth = Math.min(options.maxWidth || this.maxWidth, this.maxWidth);
+        this.maxHeight = Math.min(options.maxHeight || this.maxHeight, this.maxHeight);
+        this.minWidth = Math.max(options.minWidth || this.minWidth, this.minWidth);
+        this.minHeight = Math.max(options.minHeight || this.minHeight, this.minHeight);
 
-        this._width = numberCast(options.width) || this._width;
-        this._height = numberCast(options.height) || this._height;
+        const borderOption = options.border === undefined ? this.defaultBorder : (
+            TypeHelper.isJsonObject(options.border) ? JsonHelper.merge(this.defaultBorder, options.border) : options.border
+        );
+        const borderStyle = ElementHelper.borderCast(borderOption);
+        this.border = borderStyle[0];
+        this.borderRadius = borderStyle[1];
 
-        const coord: WindowCoord = offsetCast(options.offset, this._width, this._height) || [(innerWidth - this._width) / 2, (innerHeight - this._height) / 2];
-        this._left = coord[0];
-        this._top = coord[1];
+        this.background = options.background || this.background;
+        this.shadow = (options.shadow === undefined ? true : options.shadow) === false ? null : (
+            typeof options.shadow === "string" ? options.shadow : this.shadow
+        );
 
-        (this._mode = options.mode || this._mode) && isWindowMode(this._mode);
-
-        this._background = options.background || this._background;
-
-        const defaultBorder: BorderOptions = {
-            width: 1,
-            style: "solid",
-            color: "#3baced",
-            radius: 4
-        };
-        const borderOption = options.border === undefined ?
-            defaultBorder :
-            (isJsonObject(options.border) ? merge(defaultBorder, options.border) : options.border);
-        const borderStyle = borderCast(borderOption);
-        this._border = borderStyle[0];
-        this._borderRadius = borderStyle[1];
-
-        this._shadow = (options.shadow === undefined ? true : options.shadow) === false ?
-            null :
-            typeof options.shadow === "string" ? options.shadow : this._shadow;
-
-        this._animate = animateCast(options.animate === undefined ? this._animate : options.animate);
-
-        this._maxWidth = Math.min(options.maxWidth || this._maxWidth, this._maxWidth);
-        this._maxHeight = Math.min(options.maxHeight || this._maxHeight, this._maxHeight);
-
-        this._minWidth = Math.max(options.minWidth || this._minWidth, this._minWidth);
-        this._minHeight = Math.max(options.minHeight || this._minHeight, this._minHeight);
-
-        this._parclose = options.parclose === undefined ? this._parclose : (options.parclose === true ? 0 : this._parclose);
-
-        this._contextMenu = options.contextMenu === undefined ? this._contextMenu : options.contextMenu;
-        if (this._contextMenu !== false && !isContextMenus(this._contextMenu)) {
-            assertNever(this._contextMenu);
+        this.contextMenu = options.contextMenu === undefined ? this.contextMenu : options.contextMenu;
+        if (this.contextMenu !== false && !TypeHelper.isContextMenus(this.contextMenu)) {
+            ExceptionHelper.assertNever(this.contextMenu);
         }
+
+        TypeHelper.isWindowMode(this.mode = options.mode || this.mode);
+        this.animate = ValueHelper.animateCast(options.animate === undefined ? this.animate : options.animate);
+        this.parclose = options.parclose === undefined ? this.parclose : (options.parclose === true ? 0 : this.parclose);
     }
 
     present(): DocumentFragment {
         const fragment = document.createDocumentFragment();
-
+        const kebabCase = StringHelper.getKebabCase(this.kind);
         const windowElement = document.createElement("div");
         windowElement.id = this.elementId;
 
-        const isNeedAnimation = this.animate !== WindowAnimate.NONE;
-        addClasses(windowElement, this.app.prefix,
-            getKebabCase(this.kind),
+        const isNeedAnimation = this.animate !== Enums.WindowAnimate.NONE;
+        ElementHelper.addClasses(windowElement, this.app.prefix,
+            kebabCase,
             `window-${this.mode}`,
             "flexbox",
             "flex-column",
@@ -237,16 +109,16 @@ export default class UIWindow extends UIComponent implements UIControl {
             isNeedAnimation ? `animate-${this.animate}In` : ""
         );
 
-        addStyles(windowElement, <CSSStyleObject>{
-            zIndex: this.mode === WindowMode.LAYER ? `${this.zIndex}` : null,
+        ElementHelper.addStyles(windowElement, <Types.CSSStyleObject>{
+            zIndex: this.mode === Enums.WindowMode.LAYER ? `${this.zIndex}` : null,
             maxWidth: `${this.maxWidth}px`,
             maxHeight: `${this.maxHeight}px`,
             minWidth: `${this.minWidth}px`,
             minHeight: `${this.minHeight}px`,
             width: `${this.width}px`,
             height: `${this.height}px`,
-            top: this.mode === WindowMode.LAYER ? `${this.top}px` : null,
-            left: this.mode === WindowMode.LAYER ? `${this.left}px` : null,
+            top: this.mode === Enums.WindowMode.LAYER ? `${this.top}px` : null,
+            left: this.mode === Enums.WindowMode.LAYER ? `${this.left}px` : null,
             background: this.background,
             border: this.border,
             borderRadius: this.borderRadius,
@@ -256,33 +128,26 @@ export default class UIWindow extends UIComponent implements UIControl {
         });
 
         isNeedAnimation && (windowElement.addEventListener("animationend", (ev: AnimationEvent) => {
-            removeClasses(windowElement, this.app.prefix, `animate-${this.animate}In`);
+            ElementHelper.removeClasses(windowElement, this.app.prefix, `animate-${this.animate}In`);
         }));
-
-        windowElement.addEventListener("click", (ev: MouseEvent) => {
-            this.hideContextMenu();
-            this.updateZIndex();
-        }, false);
-
         windowElement.addEventListener("mousedown", (ev: MouseEvent) => {
             this.updateZIndex(true);
-        }, false);
+        }, true);
 
         fragment.appendChild(windowElement);
 
-        // parclose element
         if (this.parclose !== false) {
             const parclose = new UIParclose(this.app, this, { opacity: this.parclose });
             const parcloseElement = parclose.present();
-            if (parcloseElement.hasChildNodes) {
-                addStyles(<HTMLElement>(parcloseElement.firstElementChild), <CSSStyleObject>{
+
+            if (parcloseElement != null && parcloseElement.hasChildNodes) {
+                ElementHelper.addStyles(<HTMLElement>(parcloseElement.firstElementChild), <Types.CSSStyleObject>{
                     zIndex: `${this.zIndex - 1}`
                 });
                 fragment.appendChild(parcloseElement);
             }
         }
 
-        // contextMenu element
         if (this.contextMenu !== false) {
             let contextMenuElements = document.getElementById(`${this.elementId}-context-menu`);
             if (!contextMenuElements) {
@@ -294,13 +159,11 @@ export default class UIWindow extends UIComponent implements UIControl {
                 ev.preventDefault();
                 ev.returnValue = false;
 
-                this.updateZIndex();
-
                 if (contextMenuElements != null) {
-                    addClasses(contextMenuElements, this.app.prefix,
+                    ElementHelper.addClasses(contextMenuElements, this.app.prefix,
                         `context-menu-active`
                     );
-                    addStyles(contextMenuElements, <CSSStyleObject>{
+                    ElementHelper.addStyles(contextMenuElements, <Types.CSSStyleObject>{
                         zIndex: `${this.zIndex + 1}`,
                         top: `${ev.pageY}px`,
                         left: `${ev.pageX}px`,
@@ -311,20 +174,18 @@ export default class UIWindow extends UIComponent implements UIControl {
             });
         }
 
-        // resizeBar
         const resizeBar = new UIResizeBar(this.app, this, {});
         const resizeElement = resizeBar.present();
-        windowElement.appendChild(resizeElement);
+        resizeElement != null && windowElement.appendChild(resizeElement);
 
         return fragment;
     }
-
 
     createContextMenu(): HTMLElement {
         const contextMenuElements = document.createElement("div");
         contextMenuElements.id = `${this.elementId}-context-menu`;
 
-        addClasses(contextMenuElements, this.app.prefix,
+        ElementHelper.addClasses(contextMenuElements, this.app.prefix,
             `context-menu`
         );
 
@@ -332,19 +193,20 @@ export default class UIWindow extends UIComponent implements UIControl {
             ev.preventDefault();
             ev.returnValue = false;
             return false;
-        });
+        }, true);
 
-        if (this.contextMenu instanceof Array && isContextMenus(this.contextMenu)) {
+        if (this.contextMenu instanceof Array && TypeHelper.isContextMenus(this.contextMenu)) {
             for (const item of this.contextMenu) {
                 const contextMenu = new UIContextMenu(this.app, this, item);
-                contextMenuElements.appendChild(contextMenu.present());
+                const contextMenuElement = contextMenu.present();
+                contextMenuElement && contextMenuElements.appendChild(contextMenuElement);
             }
         }
         return contextMenuElements;
     }
 
     flicker() {
-        if (this.element && this.mode === WindowMode.LAYER && this.flickering === false) {
+        if (this.element && this.mode === Enums.WindowMode.LAYER && this.flickering === false) {
             let flickerTimes: number = 0;
             const duration: number = 60;
             const flickerTotals = 12;
@@ -353,7 +215,7 @@ export default class UIWindow extends UIComponent implements UIControl {
             for (let i = 0; i < flickerTotals; i++) {
                 if (i % 2 == 0) {
                     setTimeout(() => {
-                        addStyles(this.element, <CSSStyleObject>{
+                        ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
                             boxShadow: this.flickerShadow,
                             webkitBoxShadow: this.flickerShadow
                         });
@@ -362,7 +224,7 @@ export default class UIWindow extends UIComponent implements UIControl {
                 }
                 else {
                     setTimeout(() => {
-                        addStyles(this.element, <CSSStyleObject>{
+                        ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
                             boxShadow: this.shadow,
                             webkitBoxShadow: this.shadow
                         });
@@ -383,16 +245,16 @@ export default class UIWindow extends UIComponent implements UIControl {
         if (this === this.app.window) return;
 
         const uiWindow = this.app.getWindow(this.id);
-        if (uiWindow && uiWindow.mode === WindowMode.LAYER) {
+        if (uiWindow && uiWindow.mode === Enums.WindowMode.LAYER) {
             if (this.element) {
-                const isNeedAnimation = this.animate !== WindowAnimate.NONE;
+                const isNeedAnimation = this.animate !== Enums.WindowAnimate.NONE;
 
                 this.zIndex = this.app.zIndex;
-                addStyles(this.element, <CSSStyleObject>{
+                ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
                     zIndex: `${this.zIndex}`
                 });
                 if (disabled === false) {
-                    addClasses(this.element, this.app.prefix,
+                    ElementHelper.addClasses(this.element, this.app.prefix,
                         isNeedAnimation ? `animate-${this.animate}In` : ""
                     );
                 }
@@ -405,7 +267,7 @@ export default class UIWindow extends UIComponent implements UIControl {
     updateParcloseZIndex(): void {
         const parcloseElement = document.getElementById(`${this.elementId}-parclose`);
         if (parcloseElement) {
-            addStyles(<HTMLElement>(parcloseElement), <CSSStyleObject>{
+            ElementHelper.addStyles(<HTMLElement>(parcloseElement), <Types.CSSStyleObject>{
                 zIndex: `${this.zIndex - 1}`
             });
         }
@@ -414,9 +276,18 @@ export default class UIWindow extends UIComponent implements UIControl {
     hideContextMenu(): void {
         const contextMenuElements = document.getElementById(`${this.elementId}-context-menu`);
         if (contextMenuElements) {
-            removeClasses(contextMenuElements, this.app.prefix,
+            ElementHelper.removeClasses(contextMenuElements, this.app.prefix,
                 `context-menu-active`
             );
         }
+    }
+
+    private getFlickerShadow() {
+        if (this.shadow !== null) {
+            const shadowArray = this.shadow.split(" ");
+            shadowArray[shadowArray.length - 1] = Number(shadowArray[shadowArray.length - 1].replace("px", "")) / 2 + "px";
+            return shadowArray.join(" ");
+        }
+        return this.shadow;
     }
 }

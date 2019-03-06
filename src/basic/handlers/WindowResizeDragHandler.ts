@@ -1,8 +1,8 @@
-import DragHandler from "./DragHandler";
 import UIWindow from "../../controls/UIWindow";
-import { ResizeDirection } from "../enums/ResizeDirection";
-import { addStyles } from "../../utils/ElementHelper";
-import { CSSStyleObject } from "../../../types";
+import DragHandler from "./DragHandler";
+import * as Enums from "../enums";
+import * as ElementHelper from "../../utils/ElementHelper";
+import * as Types from "../../../types";
 
 export default class WindowResizeDragHandler extends DragHandler {
     private _top: number = this.window.top;
@@ -10,7 +10,7 @@ export default class WindowResizeDragHandler extends DragHandler {
     private _width: number = this.window.width;
     private _height: number = this.window.height;
 
-    constructor(dragElement: HTMLElement, public direction: ResizeDirection, public window: UIWindow) {
+    constructor(dragElement: HTMLElement, public direction: Enums.ResizeDirection, public window: UIWindow) {
         super(dragElement);
     }
 
@@ -19,28 +19,28 @@ export default class WindowResizeDragHandler extends DragHandler {
 
     dragging(ev: MouseEvent, x: number, y: number, distanceX: number, distanceY: number): void {
         switch (this.direction) {
-            case ResizeDirection.LEFT:
+            case Enums.ResizeDirection.LEFT:
                 this.resizeHandler(distanceX, distanceY, false, true, false, true);
                 break;
-            case ResizeDirection.RIGHT:
+            case Enums.ResizeDirection.RIGHT:
                 this.resizeHandler(distanceX, distanceY, false, false, false, true);
                 break;
-            case ResizeDirection.TOP:
+            case Enums.ResizeDirection.TOP:
                 this.resizeHandler(distanceX, distanceY, true, false, true, false);
                 break;
-            case ResizeDirection.BOTTOM:
+            case Enums.ResizeDirection.BOTTOM:
                 this.resizeHandler(distanceX, distanceY, false, false, true, false);
                 break;
-            case ResizeDirection.LEFT_TOP:
+            case Enums.ResizeDirection.LEFT_TOP:
                 this.resizeHandler(distanceX, distanceY, true, true, false, false);
                 break;
-            case ResizeDirection.RIGHT_TOP:
+            case Enums.ResizeDirection.RIGHT_TOP:
                 this.resizeHandler(distanceX, distanceY, true, false, false, false);
                 break;
-            case ResizeDirection.LEFT_BOTTOM:
+            case Enums.ResizeDirection.LEFT_BOTTOM:
                 this.resizeHandler(distanceX, distanceY, false, true, false, false);
                 break;
-            case ResizeDirection.RIGHT_BOTTOM:
+            case Enums.ResizeDirection.RIGHT_BOTTOM:
                 this.resizeHandler(distanceX, distanceY, false, false, false, false);
                 break;
         }
@@ -59,7 +59,6 @@ export default class WindowResizeDragHandler extends DragHandler {
         let width = isLeft ? this.window.width - distanceX : this.window.width + distanceX;
         let height = isTop ? this.window.height - distanceY : this.window.height + distanceY;
 
-        // handler min/max height
         width = Math.max(width, this.window.minWidth);
         if (isLeft) {
             left = Math.min(left, this.window.left + this.window.width - this.window.minWidth);
@@ -73,7 +72,6 @@ export default class WindowResizeDragHandler extends DragHandler {
         }
         width = Math.min(width, this.window.maxWidth);
 
-        // handler min/max height
         height = Math.max(height, this.window.minHeight);
         if (isTop) {
             top = Math.min(top, this.window.top + this.window.height - this.window.minHeight);
@@ -87,20 +85,20 @@ export default class WindowResizeDragHandler extends DragHandler {
         }
         height = Math.min(height, this.window.maxHeight);
 
-        if (lockY) {
-            this._width = width;
-            this._left = left;
-            addStyles(this.window.element, <CSSStyleObject>{
-                width: `${width}px`,
-                left: `${left}px`
-            });
-        }
         if (lockX) {
             this._top = top;
             this._height = height;
-            addStyles(this.window.element, <CSSStyleObject>{
+            ElementHelper.addStyles(this.window.element, <Types.CSSStyleObject>{
                 top: `${top}px`,
                 height: `${height}px`
+            });
+        }
+        if (lockY) {
+            this._width = width;
+            this._left = left;
+            ElementHelper.addStyles(this.window.element, <Types.CSSStyleObject>{
+                width: `${width}px`,
+                left: `${left}px`
             });
         }
         if (lockY === false && lockX === false) {
@@ -108,13 +106,12 @@ export default class WindowResizeDragHandler extends DragHandler {
             this._left = left;
             this._width = width;
             this._height = height;
-            addStyles(this.window.element, <CSSStyleObject>{
+            ElementHelper.addStyles(this.window.element, <Types.CSSStyleObject>{
                 top: `${top}px`,
                 left: `${left}px`,
                 height: `${height}px`,
                 width: `${width}px`
             });
         }
-
     }
 }

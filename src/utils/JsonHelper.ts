@@ -1,16 +1,16 @@
-import { JsonObject } from "../../types";
+import * as Types from "../../types";
 import { isJsonObject } from "./TypeHelper";
 
-export function clone(source: JsonObject): JsonObject {
-    const newObject: JsonObject = {};
+export function clone(source: Types.JsonObject): Types.JsonObject {
+    const newObject: Types.JsonObject = {};
     for (const key of Object.keys(source)) {
         newObject[key] = isJsonObject(source[key]) ? clone(source[key]) : source[key];
     }
     return newObject;
 }
 
-export function merge(source: JsonObject, dest: JsonObject): JsonObject {
-    const newObject: JsonObject = clone(source);
+export function merge(source: Types.JsonObject, dest: Types.JsonObject): Types.JsonObject {
+    const newObject: Types.JsonObject = clone(source);
     for (const key of Object.keys(dest)) {
         if (newObject[key] === undefined || !isJsonObject(dest[key])) {
             newObject[key] = dest[key];

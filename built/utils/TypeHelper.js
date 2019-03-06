@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ExceptionHelper_1 = require("./ExceptionHelper");
+var ExceptionHelper = require("./ExceptionHelper");
 function isWindowCoord(obj) {
     return obj.length !== undefined
         && obj.length >= 2
@@ -16,7 +16,7 @@ function isWindowMode(obj) {
         case "embed":
             return true;
         default:
-            return ExceptionHelper_1.assertNever(obj);
+            return ExceptionHelper.assertNever(obj);
     }
     return isSelf;
 }

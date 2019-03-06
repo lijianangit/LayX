@@ -1,10 +1,10 @@
-import UIWindow from "../controls/UIWindow";
-import { WindowOptions } from "../../types";
 import Layx from "../basic/interfaces/Layx";
+import UIWindow from "../controls/UIWindow";
+import * as Types from "../../types";
 
 export default class App {
-    readonly version: string = "3.0.0";
-    readonly prefix: string = "layx-";
+    public readonly version: string = "3.0.0";
+    public readonly prefix: string = "layx-";
 
     private _layx: Layx;
     get layx() {
@@ -36,21 +36,10 @@ export default class App {
 
     constructor(layx: Layx) {
         this._layx = layx;
-
-        document.addEventListener("click", (ev: MouseEvent) => {
-            if (this.window) {
-                this.window.hideContextMenu();
-            }
-        },true);
-
-        document.addEventListener("contextmenu", (ev: MouseEvent) => {
-            if (this.window) {
-                this.window.hideContextMenu();
-            }
-        }, true);
+        this.bindEvent();
     }
 
-    create(options: WindowOptions): void {
+    create(options: Types.WindowOptions): void {
         const window = this.getWindow(options.id);
         if (window) {
             window.flicker();
@@ -81,5 +70,13 @@ export default class App {
             }
         }
         return null;
+    }
+
+    private bindEvent(): void {
+        document.addEventListener("mousedown", (ev: MouseEvent) => {
+            if (this.window) {
+                this.window.hideContextMenu();
+            }
+        }, true);
     }
 }

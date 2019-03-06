@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindow_1 = require("../controls/UIWindow");
 var App = (function () {
     function App(layx) {
-        var _this = this;
         this.version = "3.0.0";
         this.prefix = "layx-";
         this._window = null;
@@ -11,16 +10,7 @@ var App = (function () {
         this._aboveZIndex = 20000000;
         this._windows = [];
         this._layx = layx;
-        document.addEventListener("click", function (ev) {
-            if (_this.window) {
-                _this.window.hideContextMenu();
-            }
-        }, true);
-        document.addEventListener("contextmenu", function (ev) {
-            if (_this.window) {
-                _this.window.hideContextMenu();
-            }
-        }, true);
+        this.bindEvent();
     }
     Object.defineProperty(App.prototype, "layx", {
         get: function () {
@@ -91,6 +81,14 @@ var App = (function () {
             }
         }
         return null;
+    };
+    App.prototype.bindEvent = function () {
+        var _this = this;
+        document.addEventListener("mousedown", function (ev) {
+            if (_this.window) {
+                _this.window.hideContextMenu();
+            }
+        }, true);
     };
     return App;
 }());

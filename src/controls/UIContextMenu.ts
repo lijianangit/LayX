@@ -1,75 +1,47 @@
-import UIWindowRelative from "../basic/models/UIWindowRelative";
-import UIControl from "../basic/interfaces/UIControl";
-import UIWindow from "./UIWindow";
 import App from "../core/App";
-import { ContextMenuOptions } from "../../types";
-import { getKebabCase } from "../utils/StringHelper";
-import { addClasses } from "../utils/ElementHelper";
+import UIControl from "../basic/interfaces/UIControl";
+import UIWindowRelative from "../basic/models/UIWindowRelative";
+import UIWindow from "./UIWindow";
+import * as Types from "../../types";
+import * as StringHelper from "../utils/StringHelper";
+import * as ElementHelper from "../utils/ElementHelper";
 
 export default class UIContextMenu extends UIWindowRelative implements UIControl {
-    readonly kind: string = "contextMenu";
+    public readonly kind: string = "contextMenu";
+    private id: string;
+    private label: string;
+    private handler?: (window: UIWindow) => void;
 
-    private _id: string;
-    get id() {
-        return this._id;
-    }
-    set id(value: string) {
-        this._id = value;
-    }
-
-    private _label: string;
-    get label() {
-        return this._label;
-    }
-    set label(value: string) {
-        this._label = value;
-    }
-
-    private _handler?: (window: UIWindow) => void;
-    get handler() {
-        return this._handler;
-    }
-    set handler(value: ((window: UIWindow) => void) | undefined) {
-        this._handler = value;
-    }
-
-    constructor(app: App, window: UIWindow, options: ContextMenuOptions) {
+    constructor(app: App, window: UIWindow, options: Types.ContextMenuOptions) {
         super(app, window);
-        this._id = options.id;
-        this._label = options.label;
-        this._handler = options.handler;
+        this.id = options.id;
+        this.label = options.label;
+        this.handler = options.handler;
     }
 
-    present(): DocumentFragment {
+    present(): DocumentFragment | null {
         const fragment = document.createDocumentFragment();
-
+        const kebabCase = StringHelper.getKebabCase(this.kind);
         const contextMenuElement = document.createElement("div");
-        contextMenuElement.id = `${this.window.elementId}-${getKebabCase(this.kind)}-${this.id}`;
 
-        addClasses(contextMenuElement, this.app.prefix,
-            `${getKebabCase(this.kind)}-item`
+        contextMenuElement.id = `${this.window.elementId}-${kebabCase}-${this.id}`;
+
+        ElementHelper.addClasses(contextMenuElement, this.app.prefix,
+            `${kebabCase}-item`
         );
 
         const labelElement = document.createElement("label");
-        addClasses(labelElement, this.app.prefix,
-            `${getKebabCase(this.kind)}-label`
+        ElementHelper.addClasses(labelElement, this.app.prefix,
+            `${kebabCase}-label`
         );
         labelElement.innerText = this.label;
         contextMenuElement.appendChild(labelElement);
 
-        contextMenuElement.addEventListener("contextmenu", (ev: MouseEvent) => {
-            ev.preventDefault();
-            ev.returnValue = false;
-            return false;
-        });
-
-        contextMenuElement.addEventListener("click", (ev: MouseEvent) => {
+        contextMenuElement.addEventListener("mousedown", (ev: MouseEvent) => {
             if (typeof this.handler === "function") {
                 this.handler(this.window);
             }
-
-            this.window.hideContextMenu();
-        }, false);
+        });
 
         fragment.appendChild(contextMenuElement);
         return fragment;

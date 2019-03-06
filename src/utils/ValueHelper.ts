@@ -1,8 +1,7 @@
-import { WindowOffset } from "../basic/enums/WindowOffset";
-import { WindowCoord } from "../../types";
-import { isWindowCoord } from "./TypeHelper";
-import { assertNever } from "./ExceptionHelper";
-import { WindowAnimate } from "../basic/enums/WindowAnimate";
+import * as Enums from "../basic/enums";
+import * as Types from "../../types";
+import * as TypeHelper from "./TypeHelper";
+import * as ExceptionHelper from "./ExceptionHelper";
 
 export function numberCast(value: string | number | undefined): number | undefined {
     if (value === undefined || typeof value === "number") return value;
@@ -14,65 +13,65 @@ export function numberCast(value: string | number | undefined): number | undefin
     throw new Error(`\`${value}\` isn't number.`);
 }
 
-export function offsetCast(value: WindowOffset | WindowCoord | undefined, width: number, height: number): WindowCoord | undefined {
+export function offsetCast(value: Enums.WindowOffset | Types.WindowCoord | undefined, width: number, height: number): Types.WindowCoord | undefined {
     if (value === undefined) return value;
 
-    if (isWindowCoord(value)) {
+    if (TypeHelper.isWindowCoord(value)) {
         const [left, top] = <number[]>value;
         return [left, top];
     };
 
-    const coord: WindowCoord = [0, 0];
+    const coord: Types.WindowCoord = [0, 0];
     switch (value) {
-        case WindowOffset.LEFT_TOP:
+        case Enums.WindowOffset.LEFT_TOP:
             break;
-        case WindowOffset.LEFT_CENTER:
+        case Enums.WindowOffset.LEFT_CENTER:
             coord[0] = 0;
             coord[1] = (innerHeight - height) / 2;
             break;
-        case WindowOffset.LEFT_BOTTOM:
+        case Enums.WindowOffset.LEFT_BOTTOM:
             coord[0] = 0;
             coord[1] = innerHeight - height;
             break;
-        case WindowOffset.TOP_CENTER:
+        case Enums.WindowOffset.TOP_CENTER:
             coord[0] = (innerWidth - width) / 2;
             coord[1] = 0;
-        case WindowOffset.CENTER:
+        case Enums.WindowOffset.CENTER:
             coord[0] = (innerWidth - width) / 2;
             coord[1] = (innerHeight - height) / 2;
             break;
-        case WindowOffset.BOTTOM_CENTER:
+        case Enums.WindowOffset.BOTTOM_CENTER:
             coord[0] = (innerWidth - width) / 2;
             coord[1] = innerHeight - height;
             break;
-        case WindowOffset.RIGHT_TOP:
+        case Enums.WindowOffset.RIGHT_TOP:
             coord[0] = innerWidth - width;
             coord[1] = 0;
             break;
-        case WindowOffset.RIGHT_CENTER:
+        case Enums.WindowOffset.RIGHT_CENTER:
             coord[0] = innerWidth - width;
             coord[1] = (innerHeight - height) / 2;
             break
-        case WindowOffset.RIGHT_BOTTOM:
+        case Enums.WindowOffset.RIGHT_BOTTOM:
             coord[0] = innerWidth - width;
             coord[1] = innerHeight - height;
             break;
         default:
-            return assertNever(value);
+            return ExceptionHelper.assertNever(value);
     }
 
     return coord;
 }
 
-export function animateCast(animate: WindowAnimate | false): WindowAnimate {
-    if (animate === false) return WindowAnimate.NONE;
+export function animateCast(animate: Enums.WindowAnimate | false): Enums.WindowAnimate {
+    if (animate === false) return Enums.WindowAnimate.NONE;
 
     switch (animate) {
-        case WindowAnimate.NONE:
-            return WindowAnimate.NONE;
-        case WindowAnimate.ZOOM:
-            return WindowAnimate.ZOOM;
+        case Enums.WindowAnimate.NONE:
+            return Enums.WindowAnimate.NONE;
+        case Enums.WindowAnimate.ZOOM:
+            return Enums.WindowAnimate.ZOOM;
         default:
-            return assertNever(animate);
+            return ExceptionHelper.assertNever(animate);
     }
 }

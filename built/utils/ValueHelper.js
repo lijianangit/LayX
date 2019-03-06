@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var TypeHelper_1 = require("./TypeHelper");
-var ExceptionHelper_1 = require("./ExceptionHelper");
+var TypeHelper = require("./TypeHelper");
+var ExceptionHelper = require("./ExceptionHelper");
 function numberCast(value) {
     if (value === undefined || typeof value === "number")
         return value;
@@ -14,7 +14,7 @@ exports.numberCast = numberCast;
 function offsetCast(value, width, height) {
     if (value === undefined)
         return value;
-    if (TypeHelper_1.isWindowCoord(value)) {
+    if (TypeHelper.isWindowCoord(value)) {
         var _a = value, left = _a[0], top_1 = _a[1];
         return [left, top_1];
     }
@@ -55,7 +55,7 @@ function offsetCast(value, width, height) {
             coord[1] = innerHeight - height;
             break;
         default:
-            return ExceptionHelper_1.assertNever(value);
+            return ExceptionHelper.assertNever(value);
     }
     return coord;
 }
@@ -69,7 +69,7 @@ function animateCast(animate) {
         case "zoom":
             return "zoom";
         default:
-            return ExceptionHelper_1.assertNever(animate);
+            return ExceptionHelper.assertNever(animate);
     }
 }
 exports.animateCast = animateCast;

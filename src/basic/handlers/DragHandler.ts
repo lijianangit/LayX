@@ -1,11 +1,11 @@
 export default abstract class DragHandler {
-    static isDragging: boolean = false;
-    static isFirstDragging: boolean = true;
+    public static isDragging: boolean = false;
+    public static isFirstDragging: boolean = true;
     private startX: number = 0;
     private startY: number = 0;
 
     constructor(dragElement: HTMLElement) {
-        dragElement.addEventListener("mousedown", this.mousedown,true);
+        dragElement.addEventListener("mousedown", this.mousedown);
     }
 
     private readonly mousedown: (this: HTMLElement, ev: MouseEvent) => any = (ev: MouseEvent) => {

@@ -14,54 +14,46 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindowRelative_1 = require("../basic/models/UIWindowRelative");
-var StringHelper_1 = require("../utils/StringHelper");
-var ElementHelper_1 = require("../utils/ElementHelper");
-var ExceptionHelper_1 = require("../utils/ExceptionHelper");
+var StringHelper = require("../utils/StringHelper");
+var ElementHelper = require("../utils/ElementHelper");
+var ExceptionHelper = require("../utils/ExceptionHelper");
 var UIParclose = (function (_super) {
     __extends(UIParclose, _super);
     function UIParclose(app, window, options) {
         var _this = _super.call(this, app, window) || this;
         _this.kind = "parclose";
-        _this._opacity = 0;
-        _this._opacity = options.opacity === undefined ? _this._opacity : options.opacity;
-        if (!(typeof _this._opacity === "number" || _this._opacity === false)) {
-            ExceptionHelper_1.assertNever(_this._opacity);
+        _this.opacity = 0;
+        _this.opacity = options.opacity === undefined ? _this.opacity : options.opacity;
+        if (!(typeof _this.opacity === "number" || _this.opacity === false)) {
+            ExceptionHelper.assertNever(_this.opacity);
         }
         return _this;
     }
-    Object.defineProperty(UIParclose.prototype, "opacity", {
-        get: function () {
-            return this._opacity;
-        },
-        set: function (value) {
-            this._opacity = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
     UIParclose.prototype.present = function () {
-        var _this = this;
-        var fragment = document.createDocumentFragment();
         if (this.opacity === false)
-            return fragment;
+            return null;
+        var fragment = document.createDocumentFragment();
+        var kebabCase = StringHelper.getKebabCase(this.kind);
         var parcloseElement = document.createElement("div");
-        parcloseElement.id = this.window.elementId + "-" + StringHelper_1.getKebabCase(this.kind);
-        ElementHelper_1.addClasses(parcloseElement, this.app.prefix, StringHelper_1.getKebabCase(this.kind));
-        ElementHelper_1.addStyles(parcloseElement, {
+        parcloseElement.id = this.window.elementId + "-" + kebabCase;
+        ElementHelper.addClasses(parcloseElement, this.app.prefix, kebabCase);
+        ElementHelper.addStyles(parcloseElement, {
             backgroundColor: "rgba(0,0,0," + this.opacity + ")"
         });
-        parcloseElement.addEventListener("click", function (ev) {
-            _this.window.hideContextMenu();
+        this.bindEvent(parcloseElement);
+        fragment.appendChild(parcloseElement);
+        return fragment;
+    };
+    UIParclose.prototype.bindEvent = function (element) {
+        var _this = this;
+        element.addEventListener("mousedown", function (ev) {
             _this.window.flicker();
-        }, false);
-        parcloseElement.addEventListener("contextmenu", function (ev) {
+        }, true);
+        element.addEventListener("contextmenu", function (ev) {
             ev.preventDefault();
-            _this.window.hideContextMenu();
             ev.returnValue = false;
             return false;
         });
-        fragment.appendChild(parcloseElement);
-        return fragment;
     };
     return UIParclose;
 }(UIWindowRelative_1.default));

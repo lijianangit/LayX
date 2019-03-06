@@ -1,10 +1,10 @@
-import { CSSStyleObject, BorderOptions } from "../../types";
+import * as Types from "../../types";
 
-export function addStyles(element: HTMLElement | null, styles: CSSStyleObject): HTMLElement | null {
+export function addStyles(element: HTMLElement | null, styles: Types.CSSStyleObject): HTMLElement | null {
     if (element === null) return element;
 
     for (const key of Object.keys(styles)) {
-        (<CSSStyleObject>element.style)[key] = styles[key];
+        (<Types.CSSStyleObject>element.style)[key] = styles[key];
     }
     return element;
 }
@@ -44,7 +44,7 @@ export function containClass(element: HTMLElement, prefix: string = "layx-", cls
     return !!~index;
 }
 
-export function borderCast(border: string | BorderOptions): [string | null, string | null] {
+export function borderCast(border: string | Types.BorderOptions): [string | null, string | null] {
     if (typeof border === "string") return [border, null];
 
     let borderStyle: [string | null, string | null] = [null, null];

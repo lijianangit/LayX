@@ -1,8 +1,8 @@
-import { WindowCoord, JsonObject, ContextMenuOptions } from "../../types";
-import { WindowMode } from "../basic/enums/WindowMode";
-import { assertNever } from "./ExceptionHelper";
+import * as Types from "../../types";
+import * as ExceptionHelper from "./ExceptionHelper";
+import * as Enums from "../basic/enums";
 
-export function isWindowCoord(obj: any): obj is WindowCoord {
+export function isWindowCoord(obj: any): obj is Types.WindowCoord {
     return obj.length !== undefined
         && obj.length >= 2
         && obj.constructor === Array
@@ -10,31 +10,31 @@ export function isWindowCoord(obj: any): obj is WindowCoord {
         && typeof obj[1] === "number";
 }
 
-export function isWindowMode(obj: any): obj is WindowMode {
+export function isWindowMode(obj: any): obj is Enums.WindowMode {
     let isSelf: boolean = false;
     switch (obj) {
-        case WindowMode.LAYER:
-        case WindowMode.EMBED:
+        case Enums.WindowMode.LAYER:
+        case Enums.WindowMode.EMBED:
             return true;
         default:
-            return assertNever(<never>obj);
+            return ExceptionHelper.assertNever(<never>obj);
     }
     return isSelf;
 }
 
-export function isJsonObject(obj: any): obj is JsonObject {
+export function isJsonObject(obj: any): obj is Types.JsonObject {
     return typeof obj === "object"
         && obj.constructor !== undefined
         && obj.constructor === Object;
 }
 
-export function isContextMenu(obj: any): obj is ContextMenuOptions {
+export function isContextMenu(obj: any): obj is Types.ContextMenuOptions {
     return isJsonObject(obj)
         && obj.id !== undefined
         && obj.label !== undefined;
 }
 
-export function isContextMenus(obj: Array<any>): obj is Array<ContextMenuOptions> {
+export function isContextMenus(obj: Array<any>): obj is Array<Types.ContextMenuOptions> {
     let correct: boolean = true;
     for (const item of obj) {
         if (!isContextMenu(item)) {
