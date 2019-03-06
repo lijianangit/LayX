@@ -9,8 +9,8 @@ export default (function layx(): Layx {
 
     const app = new App(layx);
     layx.v = app.version;
-    layx.create = function (options: WindowOptions) {
-        app.create(options);
+    layx.open = function (options: WindowOptions) {
+        app.open(options);
     }
     layx.windows = app.windows;
     layx.window = app.window;

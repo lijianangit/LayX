@@ -6,8 +6,8 @@ exports.default = (function layx() {
     var layx = function (options) { };
     var app = new App_1.default(layx);
     layx.v = app.version;
-    layx.create = function (options) {
-        app.create(options);
+    layx.open = function (options) {
+        app.open(options);
     };
     layx.windows = app.windows;
     layx.window = app.window;

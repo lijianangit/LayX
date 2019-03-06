@@ -6,11 +6,6 @@ export default class App {
     public readonly version: string = "3.0.0";
     public readonly prefix: string = "layx-";
 
-    private _layx: Layx;
-    get layx() {
-        return this._layx;
-    }
-
     private _window: UIWindow | null = null;
     get window() {
         return this._window;
@@ -34,12 +29,11 @@ export default class App {
         return this._windows;
     }
 
-    constructor(layx: Layx) {
-        this._layx = layx;
+    constructor(private readonly layx: Layx) {
         this.bindEvent();
     }
 
-    create(options: Types.WindowOptions): void {
+    open(options: Types.WindowOptions): void {
         const window = this.getWindow(options.id);
         if (window) {
             window.flicker();

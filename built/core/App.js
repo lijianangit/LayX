@@ -3,22 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindow_1 = require("../controls/UIWindow");
 var App = (function () {
     function App(layx) {
+        this.layx = layx;
         this.version = "3.0.0";
         this.prefix = "layx-";
         this._window = null;
         this._zIndex = 10000000;
         this._aboveZIndex = 20000000;
         this._windows = [];
-        this._layx = layx;
         this.bindEvent();
     }
-    Object.defineProperty(App.prototype, "layx", {
-        get: function () {
-            return this._layx;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(App.prototype, "window", {
         get: function () {
             return this._window;
@@ -50,7 +43,7 @@ var App = (function () {
         enumerable: true,
         configurable: true
     });
-    App.prototype.create = function (options) {
+    App.prototype.open = function (options) {
         var window = this.getWindow(options.id);
         if (window) {
             window.flicker();
