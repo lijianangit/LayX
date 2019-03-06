@@ -13,7 +13,6 @@ import * as TypeHelper from "../utils/TypeHelper";
 import * as JsonHelper from "../utils/JsonHelper";
 import * as ExceptionHelper from "../utils/ExceptionHelper";
 
-
 export default class UIWindow extends UIComponent implements UIControl {
     public readonly kind: string = "window";
     public readonly elementId: string;
