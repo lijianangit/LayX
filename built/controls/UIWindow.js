@@ -32,18 +32,19 @@ var UIWindow = (function (_super) {
         _this.zIndex = _this.app.zIndex;
         _this.width = 800;
         _this.height = 600;
+        _this.maxWidth = innerWidth;
+        _this.maxHeight = innerHeight;
+        _this.minWidth = 100;
+        _this.minHeight = 100;
         _this.mode = "layer";
         _this.background = "#ffffff";
         _this.border = null;
         _this.borderRadius = null;
         _this.shadow = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
-        _this.maxWidth = innerWidth;
-        _this.maxHeight = innerHeight;
-        _this.minWidth = 100;
-        _this.minHeight = 100;
         _this.parclose = false;
         _this.animate = "zoom";
         _this.contextMenu = false;
+        _this.resizeBar = true;
         _this._element = null;
         _this._flickerShadow = null;
         _this.defaultBorder = {
@@ -82,6 +83,10 @@ var UIWindow = (function (_super) {
         TypeHelper.isWindowMode(_this.mode = options.mode || _this.mode);
         _this.animate = ValueHelper.animateCast(options.animate === undefined ? _this.animate : options.animate);
         _this.parclose = options.parclose === undefined ? _this.parclose : (options.parclose === true ? 0 : _this.parclose);
+        _this.resizeBar = options.resizeBar === undefined ? _this.resizeBar : options.resizeBar;
+        if (!TypeHelper.isResizeOptions(_this.resizeBar)) {
+            ExceptionHelper.assertNever(_this.resizeBar);
+        }
         return _this;
     }
     Object.defineProperty(UIWindow.prototype, "element", {
@@ -129,6 +134,11 @@ var UIWindow = (function (_super) {
         windowElement.addEventListener("mousedown", function (ev) {
             _this.updateZIndex(true);
         }, true);
+        if (this.resizeBar !== false) {
+            var resizeBar = new UIResizeBar_1.default(this.app, this, this.resizeBar);
+            var resizeElement = resizeBar.present();
+            resizeElement != null && windowElement.appendChild(resizeElement);
+        }
         fragment.appendChild(windowElement);
         if (this.parclose !== false) {
             var parclose = new UIParclose_1.default(this.app, this, { opacity: this.parclose });
@@ -160,9 +170,6 @@ var UIWindow = (function (_super) {
                 return false;
             });
         }
-        var resizeBar = new UIResizeBar_1.default(this.app, this, {});
-        var resizeElement = resizeBar.present();
-        resizeElement != null && windowElement.appendChild(resizeElement);
         return fragment;
     };
     UIWindow.prototype.createContextMenu = function () {

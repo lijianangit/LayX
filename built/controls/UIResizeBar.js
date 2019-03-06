@@ -40,6 +40,12 @@ var UIResizeBar = (function (_super) {
             "leftBottom",
             "rightBottom"
         ];
+        if (options === true)
+            return _this;
+        if (options === false) {
+            _this.left = _this.right = _this.top = _this.bottom = _this.leftTop = _this.rightTop = _this.leftBottom = _this.rightBottom = false;
+            return _this;
+        }
         _this.left = options.left === undefined ? _this.left : options.left;
         _this.right = options.right === undefined ? _this.right : options.right;
         _this.top = options.top === undefined ? _this.top : options.top;

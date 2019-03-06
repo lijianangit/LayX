@@ -30,24 +30,6 @@ export type ContextMenuOptions = {
     handler?: (window: UIWindow) => void;
 } & JsonObject;
 
-export type WindowOptions = {
-    id: string;
-    width?: number;
-    height?: number;
-    mode?: Enums.WindowMode;
-    offset?: Enums.WindowOffset | WindowCoord;
-    background?: string;
-    border?: string | BorderOptions;
-    shadow?: string | boolean;
-    animate?: Enums.WindowAnimate | false;
-    maxWidth?: number;
-    maxHeight?: number;
-    minWidth?: number;
-    minHeight?: number;
-    parclose?: number | boolean;
-    contextMenu?: Array<ContextMenuOptions> | false;
-} & JsonObject;
-
 export type ResizeOptions = {
     left?: boolean;
     right?: boolean;
@@ -58,5 +40,25 @@ export type ResizeOptions = {
     leftBottom?: boolean;
     rightBottom?: boolean;
 } & JsonObject;
+
+export type WindowOptions = {
+    id: string;
+    width?: number;
+    height?: number;
+    maxWidth?: number;
+    maxHeight?: number;
+    minWidth?: number;
+    minHeight?: number;
+    offset?: Enums.WindowOffset | WindowCoord;
+    mode?: Enums.WindowMode;
+    background?: string;
+    border?: string | BorderOptions;
+    shadow?: string | boolean;
+    animate?: Enums.WindowAnimate | false;
+    parclose?: number | boolean;
+    contextMenu?: Array<ContextMenuOptions> | false;
+    resizeBar?: ResizeOptions | boolean;
+} & JsonObject;
+
 
 export type ConfigOptions = {};

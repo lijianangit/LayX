@@ -30,9 +30,13 @@ export default class UIResizeBar extends UIWindowRelative implements UIControl {
         Enums.ResizeDirection.RIGHT_BOTTOM
     ];
 
-    constructor(app: App, window: UIWindow, options: Types.ResizeOptions) {
+    constructor(app: App, window: UIWindow, options: Types.ResizeOptions | boolean) {
         super(app, window);
-
+        if (options === true) return;
+        if (options === false) {
+            this.left = this.right = this.top = this.bottom = this.leftTop = this.rightTop = this.leftBottom = this.rightBottom = false;
+            return;
+        }
         this.left = options.left === undefined ? this.left : options.left;
         this.right = options.right === undefined ? this.right : options.right;
         this.top = options.top === undefined ? this.top : options.top;

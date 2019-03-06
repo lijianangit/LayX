@@ -45,3 +45,17 @@ function isContextMenus(obj) {
     return correct;
 }
 exports.isContextMenus = isContextMenus;
+function isResizeOptions(obj) {
+    if (typeof obj === "boolean")
+        return true;
+    return isJsonObject(obj) &&
+        (obj.left !== undefined ||
+            obj.right !== undefined ||
+            obj.top !== undefined ||
+            obj.bottom !== undefined ||
+            obj.leftTop !== undefined ||
+            obj.rightTop !== undefined ||
+            obj.leftBottom !== undefined ||
+            obj.rightBottom !== undefined);
+}
+exports.isResizeOptions = isResizeOptions;

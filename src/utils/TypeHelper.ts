@@ -44,3 +44,19 @@ export function isContextMenus(obj: Array<any>): obj is Array<Types.ContextMenuO
     }
     return correct;
 }
+
+export function isResizeOptions(obj: any): obj is Types.ResizeOptions {
+    if (typeof obj === "boolean") return true;
+
+    return isJsonObject(obj) &&
+        (
+            obj.left !== undefined ||
+            obj.right !== undefined ||
+            obj.top !== undefined ||
+            obj.bottom !== undefined ||
+            obj.leftTop !== undefined ||
+            obj.rightTop !== undefined ||
+            obj.leftBottom !== undefined ||
+            obj.rightBottom !== undefined
+        );
+}

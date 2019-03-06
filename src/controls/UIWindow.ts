@@ -16,26 +16,27 @@ import * as ExceptionHelper from "../utils/ExceptionHelper";
 
 export default class UIWindow extends UIComponent implements UIControl {
     public readonly kind: string = "window";
+    public readonly elementId: string;
     private flickering: boolean = false;
     private zIndex: number = this.app.zIndex;
     readonly id: string;
     public width: number = 800;
     public height: number = 600;
+    public maxWidth: number = innerWidth;
+    public maxHeight: number = innerHeight;
+    public minWidth: number = 100;
+    public minHeight: number = 100;
+    public left: number;
+    public top: number;
     public mode: Enums.WindowMode = Enums.WindowMode.LAYER;
     public background: string = "#ffffff";
     public border: string | null = null;
     public borderRadius: string | null = null;
     public shadow: string | null = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
-    public left: number;
-    public top: number;
-    public maxWidth: number = innerWidth;
-    public maxHeight: number = innerHeight;
-    public minWidth: number = 100;
-    public minHeight: number = 100;
     public parclose: number | false = false;
     public animate: Enums.WindowAnimate = Enums.WindowAnimate.ZOOM;
     public contextMenu: Array<Types.ContextMenuOptions> | false = false;
-    public readonly elementId: string;
+    public resizeBar: Types.ResizeOptions | boolean = true;
 
     private _element: HTMLElement | null = null;
     get element() {
@@ -71,7 +72,7 @@ export default class UIWindow extends UIComponent implements UIControl {
         this.width = Math.min(this.maxWidth, this.width);
         this.height = Math.max(this.minHeight, this.height);
         this.height = Math.min(this.maxHeight, this.height);
-        
+
         const coord: Types.WindowCoord = ValueHelper.offsetCast(options.offset, this.width, this.height) || [(innerWidth - this.width) / 2, (innerHeight - this.height) / 2];
         this.left = coord[0];
         this.top = coord[1];
@@ -96,6 +97,11 @@ export default class UIWindow extends UIComponent implements UIControl {
         TypeHelper.isWindowMode(this.mode = options.mode || this.mode);
         this.animate = ValueHelper.animateCast(options.animate === undefined ? this.animate : options.animate);
         this.parclose = options.parclose === undefined ? this.parclose : (options.parclose === true ? 0 : this.parclose);
+
+        this.resizeBar = options.resizeBar === undefined ? this.resizeBar : options.resizeBar;
+        if (!TypeHelper.isResizeOptions(this.resizeBar)) {
+            ExceptionHelper.assertNever(<never>this.resizeBar);
+        }
     }
 
     present(): DocumentFragment {
@@ -139,6 +145,12 @@ export default class UIWindow extends UIComponent implements UIControl {
             this.updateZIndex(true);
         }, true);
 
+        if (this.resizeBar !== false) {
+            const resizeBar = new UIResizeBar(this.app, this, this.resizeBar);
+            const resizeElement = resizeBar.present();
+            resizeElement != null && windowElement.appendChild(resizeElement);
+        }
+
         fragment.appendChild(windowElement);
 
         if (this.parclose !== false) {
@@ -178,10 +190,6 @@ export default class UIWindow extends UIComponent implements UIControl {
                 return false;
             });
         }
-
-        const resizeBar = new UIResizeBar(this.app, this, {});
-        const resizeElement = resizeBar.present();
-        resizeElement != null && windowElement.appendChild(resizeElement);
 
         return fragment;
     }
