@@ -63,13 +63,18 @@ export default class UIWindow extends UIComponent implements UIControl {
 
         this.width = ValueHelper.numberCast(options.width) || this.width;
         this.height = ValueHelper.numberCast(options.height) || this.height;
-        const coord: Types.WindowCoord = ValueHelper.offsetCast(options.offset, this.width, this.height) || [(innerWidth - this.width) / 2, (innerHeight - this.height) / 2];
-        this.left = coord[0];
-        this.top = coord[1];
         this.maxWidth = Math.min(options.maxWidth || this.maxWidth, this.maxWidth);
         this.maxHeight = Math.min(options.maxHeight || this.maxHeight, this.maxHeight);
         this.minWidth = Math.max(options.minWidth || this.minWidth, this.minWidth);
         this.minHeight = Math.max(options.minHeight || this.minHeight, this.minHeight);
+        this.width = Math.max(this.minWidth, this.width);
+        this.width = Math.min(this.maxWidth, this.width);
+        this.height = Math.max(this.minHeight, this.height);
+        this.height = Math.min(this.maxHeight, this.height);
+        
+        const coord: Types.WindowCoord = ValueHelper.offsetCast(options.offset, this.width, this.height) || [(innerWidth - this.width) / 2, (innerHeight - this.height) / 2];
+        this.left = coord[0];
+        this.top = coord[1];
 
         const borderOption = options.border === undefined ? this.defaultBorder : (
             TypeHelper.isJsonObject(options.border) ? JsonHelper.merge(this.defaultBorder, options.border) : options.border
