@@ -15,7 +15,6 @@ export default class UIParclose extends UIWindowRelative implements UIControl {
         super(app, window);
         this.opacity = options.opacity === undefined ? this.opacity : options.opacity;
 
-        // throw error.
         if (!(typeof this.opacity === "number" || this.opacity === false)) {
             ExceptionHelper.assertNever(this.opacity);
         }
