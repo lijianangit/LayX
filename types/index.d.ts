@@ -60,5 +60,8 @@ export type WindowOptions = {
     resizeBar?: ResizeOptions | boolean;
 } & JsonObject;
 
+export type ToolBarOptions = {
+
+} & JsonObject;
 
 export type ConfigOptions = {};
