@@ -61,7 +61,6 @@ export default class WindowResizeDragHandler extends DragHandler {
 
         // handler min/max height
         width = Math.max(width, this.window.minWidth);
-        // width = Math.min(width, this.window.maxWidth);
         if (isLeft) {
             left = Math.min(left, this.window.left + this.window.width - this.window.minWidth);
             left = Math.max(0, left);
