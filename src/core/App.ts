@@ -36,7 +36,6 @@ export default class App {
     open(options: Types.WindowOptions): void {
         const window = this.getWindow(options.id);
         if (window) {
-            window.flicker();
             window.updateZIndex();
         }
         else {
