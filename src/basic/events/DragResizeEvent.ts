@@ -1,8 +1,8 @@
 import UIWindow from "../../controls/UIWindow";
 import DragEvent from "./DragEvent";
 import * as Enums from "../enums";
-import * as ElementHelper from "../../utils/ElementHelper";
 import * as Types from "../../../types";
+import * as ElementHelper from "../../utils/ElementHelper";
 
 export default class DragResizeEvent extends DragEvent {
     private _top: number = this.window.top;
