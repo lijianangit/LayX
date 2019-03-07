@@ -4,7 +4,7 @@ import * as Enums from "../enums";
 import * as Types from "../../../types";
 import * as ElementHelper from "../../utils/ElementHelper";
 
-export default class DragResizeEvent extends DragEvent {
+export default class WindowResizeDragEvent extends DragEvent {
     private _top: number = this.window.top;
     private _left: number = this.window.left;
     private _width: number = this.window.width;

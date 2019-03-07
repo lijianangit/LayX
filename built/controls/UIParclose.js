@@ -16,7 +16,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
-var ExceptionHelper = require("../utils/ExceptionHelper");
 var UIParclose = (function (_super) {
     __extends(UIParclose, _super);
     function UIParclose(app, window, options) {
@@ -24,14 +23,9 @@ var UIParclose = (function (_super) {
         _this.kind = "parclose";
         _this.opacity = 0;
         _this.opacity = options.opacity === undefined ? _this.opacity : options.opacity;
-        if (!(typeof _this.opacity === "number" || _this.opacity === false)) {
-            ExceptionHelper.assertNever(_this.opacity);
-        }
         return _this;
     }
     UIParclose.prototype.present = function () {
-        if (this.opacity === false)
-            return null;
         var fragment = document.createDocumentFragment();
         var kebabCase = StringHelper.getKebabCase(this.kind);
         var parcloseElement = document.createElement("div");

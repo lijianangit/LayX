@@ -2,7 +2,7 @@ import App from "../core/App";
 import UIControl from "../basic/interfaces/UIControl";
 import UIWindowComponent from "../basic/models/UIWindowComponent";
 import UIWindow from "./UIWindow";
-import DragResizeEvent from "../basic/events/DragResizeEvent";
+import WindowResizeDragEvent from "../basic/events/WindowResizeDragEvent";
 import * as Types from "../../types";
 import * as Enums from "../basic/enums";
 import * as StringHelper from "../utils/StringHelper";
@@ -30,13 +30,9 @@ export default class UIResizeBar extends UIWindowComponent implements UIControl 
         Enums.ResizeDirection.RIGHT_BOTTOM
     ];
 
-    constructor(app: App, window: UIWindow, options: Types.ResizeOptions | boolean) {
+    constructor(app: App, window: UIWindow, options: Types.ResizeOptions) {
         super(app, window);
-        if (options === true) return;
-        if (options === false) {
-            this.left = this.right = this.top = this.bottom = this.leftTop = this.rightTop = this.leftBottom = this.rightBottom = false;
-            return;
-        }
+
         this.left = options.left === undefined ? this.left : options.left;
         this.right = options.right === undefined ? this.right : options.right;
         this.top = options.top === undefined ? this.top : options.top;
@@ -76,7 +72,7 @@ export default class UIResizeBar extends UIWindowComponent implements UIControl 
             `resize-${kebabCase}`
         );
 
-        new DragResizeEvent(itemElement, key, this.window);
+        new WindowResizeDragEvent(itemElement, key, this.window);
 
         return itemElement;
     }

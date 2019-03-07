@@ -4,6 +4,7 @@ import UIComponent from "../basic/models/UIComponent";
 import UIParclose from "./UIParclose";
 import UIResizeBar from "./UIResizeBar";
 import UIContextMenu from "./UIContextMenu";
+import UIToolBar from "./UIToolBar";
 import * as Types from "../../types";
 import * as Enums from "../basic/enums";
 import * as StringHelper from "../utils/StringHelper";
@@ -36,6 +37,7 @@ export default class UIWindow extends UIComponent implements UIControl {
     public animate: Enums.WindowAnimate = Enums.WindowAnimate.ZOOM;
     public contextMenu: Array<Types.ContextMenuOptions> | false = false;
     public resizeBar: Types.ResizeOptions | boolean = true;
+    public toolBar: Types.ToolBarOptions | boolean = true;
 
     private _element: HTMLElement | null = null;
     get element() {
@@ -101,6 +103,8 @@ export default class UIWindow extends UIComponent implements UIControl {
         if (!TypeHelper.isResizeOptions(this.resizeBar)) {
             ExceptionHelper.assertNever(<never>this.resizeBar);
         }
+
+        this.toolBar = options.toolBar === undefined ? this.toolBar : options.toolBar;
     }
 
     present(): DocumentFragment {
@@ -144,8 +148,14 @@ export default class UIWindow extends UIComponent implements UIControl {
             this.updateZIndex(true);
         }, true);
 
+        if (this.toolBar !== false) {
+            const toolBar = new UIToolBar(this.app, this, this.toolBar === true ? {} : this.toolBar);
+            const toolBarElement = toolBar.present();
+            toolBarElement != null && windowElement.appendChild(toolBarElement);
+        }
+
         if (this.resizeBar !== false) {
-            const resizeBar = new UIResizeBar(this.app, this, this.resizeBar);
+            const resizeBar = new UIResizeBar(this.app, this, this.resizeBar === true ? {} : this.resizeBar);
             const resizeElement = resizeBar.present();
             resizeElement != null && windowElement.appendChild(resizeElement);
         }

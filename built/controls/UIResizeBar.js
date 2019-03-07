@@ -14,7 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
-var DragResizeEvent_1 = require("../basic/events/DragResizeEvent");
+var WindowResizeDragEvent_1 = require("../basic/events/WindowResizeDragEvent");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
 var UIResizeBar = (function (_super) {
@@ -40,12 +40,6 @@ var UIResizeBar = (function (_super) {
             "leftBottom",
             "rightBottom"
         ];
-        if (options === true)
-            return _this;
-        if (options === false) {
-            _this.left = _this.right = _this.top = _this.bottom = _this.leftTop = _this.rightTop = _this.leftBottom = _this.rightBottom = false;
-            return _this;
-        }
         _this.left = options.left === undefined ? _this.left : options.left;
         _this.right = options.right === undefined ? _this.right : options.right;
         _this.top = options.top === undefined ? _this.top : options.top;
@@ -76,7 +70,7 @@ var UIResizeBar = (function (_super) {
         var kebabCase = StringHelper.getKebabCase(key);
         var itemElement = document.createElement("div");
         ElementHelper.addClasses(itemElement, this.app.prefix, "resize-" + kebabCase);
-        new DragResizeEvent_1.default(itemElement, key, this.window);
+        new WindowResizeDragEvent_1.default(itemElement, key, this.window);
         return itemElement;
     };
     UIResizeBar.prototype.leastOneTrue = function () {

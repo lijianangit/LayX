@@ -21,7 +21,7 @@ export type BorderOptions = JsonObject & {
 } & JsonObject;
 
 export type ParcloseOptions = {
-    opacity?: number | false;
+    opacity?: number;
 } & JsonObject;
 
 export type ContextMenuOptions = {
@@ -41,6 +41,10 @@ export type ResizeOptions = {
     rightBottom?: boolean;
 } & JsonObject;
 
+export type ToolBarOptions = {
+    height?: number;
+} & JsonObject;
+
 export type WindowOptions = {
     id: string;
     width?: number;
@@ -52,16 +56,15 @@ export type WindowOptions = {
     offset?: Enums.WindowOffset | WindowCoord;
     mode?: Enums.WindowMode;
     background?: string;
-    border?: string | BorderOptions;
+    border?: BorderOptions | string;
     shadow?: string | boolean;
     animate?: Enums.WindowAnimate | false;
     parclose?: number | boolean;
     contextMenu?: Array<ContextMenuOptions> | false;
     resizeBar?: ResizeOptions | boolean;
+    toolBar?: ToolBarOptions | boolean;
 } & JsonObject;
 
-export type ToolBarOptions = {
 
-} & JsonObject;
 
 export type ConfigOptions = {};

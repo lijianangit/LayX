@@ -17,6 +17,7 @@ var UIComponent_1 = require("../basic/models/UIComponent");
 var UIParclose_1 = require("./UIParclose");
 var UIResizeBar_1 = require("./UIResizeBar");
 var UIContextMenu_1 = require("./UIContextMenu");
+var UIToolBar_1 = require("./UIToolBar");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
 var ValueHelper = require("../utils/ValueHelper");
@@ -45,6 +46,7 @@ var UIWindow = (function (_super) {
         _this.animate = "zoom";
         _this.contextMenu = false;
         _this.resizeBar = true;
+        _this.toolBar = true;
         _this._element = null;
         _this._flickerShadow = null;
         _this.defaultBorder = {
@@ -87,6 +89,7 @@ var UIWindow = (function (_super) {
         if (!TypeHelper.isResizeOptions(_this.resizeBar)) {
             ExceptionHelper.assertNever(_this.resizeBar);
         }
+        _this.toolBar = options.toolBar === undefined ? _this.toolBar : options.toolBar;
         return _this;
     }
     Object.defineProperty(UIWindow.prototype, "element", {
@@ -134,8 +137,13 @@ var UIWindow = (function (_super) {
         windowElement.addEventListener("mousedown", function (ev) {
             _this.updateZIndex(true);
         }, true);
+        if (this.toolBar !== false) {
+            var toolBar = new UIToolBar_1.default(this.app, this, this.toolBar === true ? {} : this.toolBar);
+            var toolBarElement = toolBar.present();
+            toolBarElement != null && windowElement.appendChild(toolBarElement);
+        }
         if (this.resizeBar !== false) {
-            var resizeBar = new UIResizeBar_1.default(this.app, this, this.resizeBar);
+            var resizeBar = new UIResizeBar_1.default(this.app, this, this.resizeBar === true ? {} : this.resizeBar);
             var resizeElement = resizeBar.present();
             resizeElement != null && windowElement.appendChild(resizeElement);
         }
