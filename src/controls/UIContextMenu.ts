@@ -1,12 +1,12 @@
 import App from "../core/App";
 import UIControl from "../basic/interfaces/UIControl";
-import UIWindowRelative from "../basic/models/UIWindowRelative";
+import UIWindowComponent from "../basic/models/UIWindowComponent";
 import UIWindow from "./UIWindow";
 import * as Types from "../../types";
 import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
 
-export default class UIContextMenu extends UIWindowRelative implements UIControl {
+export default class UIContextMenu extends UIWindowComponent implements UIControl {
     public readonly kind: string = "contextMenu";
     private id: string;
     private label: string;

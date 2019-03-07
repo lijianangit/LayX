@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var UIWindowRelative_1 = require("../basic/models/UIWindowRelative");
+var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var UIToolBar = (function (_super) {
     __extends(UIToolBar, _super);
     function UIToolBar(app, window, options) {
@@ -26,5 +26,5 @@ var UIToolBar = (function (_super) {
         return fragment;
     };
     return UIToolBar;
-}(UIWindowRelative_1.default));
+}(UIWindowComponent_1.default));
 exports.default = UIToolBar;

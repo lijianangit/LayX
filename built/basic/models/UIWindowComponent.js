@@ -14,13 +14,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIComponent_1 = require("./UIComponent");
-var UIWindowRelative = (function (_super) {
-    __extends(UIWindowRelative, _super);
-    function UIWindowRelative(app, window) {
+var UIWindowComponent = (function (_super) {
+    __extends(UIWindowComponent, _super);
+    function UIWindowComponent(app, window) {
         var _this = _super.call(this, app) || this;
         _this.window = window;
         return _this;
     }
-    return UIWindowRelative;
+    return UIWindowComponent;
 }(UIComponent_1.default));
-exports.default = UIWindowRelative;
+exports.default = UIWindowComponent;

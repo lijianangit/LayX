@@ -1,10 +1,10 @@
 import UIWindow from "../../controls/UIWindow";
-import DragHandler from "./DragHandler";
+import DragEvent from "./DragEvent";
 import * as Enums from "../enums";
 import * as ElementHelper from "../../utils/ElementHelper";
 import * as Types from "../../../types";
 
-export default class WindowResizeDragHandler extends DragHandler {
+export default class DragResizeEvent extends DragEvent {
     private _top: number = this.window.top;
     private _left: number = this.window.left;
     private _width: number = this.window.width;

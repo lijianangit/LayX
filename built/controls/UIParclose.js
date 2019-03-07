@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var UIWindowRelative_1 = require("../basic/models/UIWindowRelative");
+var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
 var ExceptionHelper = require("../utils/ExceptionHelper");
@@ -56,5 +56,5 @@ var UIParclose = (function (_super) {
         });
     };
     return UIParclose;
-}(UIWindowRelative_1.default));
+}(UIWindowComponent_1.default));
 exports.default = UIParclose;

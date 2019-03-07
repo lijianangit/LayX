@@ -1,14 +1,14 @@
 import App from "../core/App";
 import UIControl from "../basic/interfaces/UIControl";
-import UIWindowRelative from "../basic/models/UIWindowRelative";
+import UIWindowComponent from "../basic/models/UIWindowComponent";
 import UIWindow from "./UIWindow";
-import WindowResizeDragHandler from "../basic/handlers/WindowResizeDragHandler";
+import DragResizeEvent from "../basic/events/DragResizeEvent";
 import * as Types from "../../types";
 import * as Enums from "../basic/enums";
 import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
 
-export default class UIResizeBar extends UIWindowRelative implements UIControl {
+export default class UIResizeBar extends UIWindowComponent implements UIControl {
     public readonly kind: string = "resizeBar";
     private left: boolean = true;
     private right: boolean = true;
@@ -76,7 +76,7 @@ export default class UIResizeBar extends UIWindowRelative implements UIControl {
             `resize-${kebabCase}`
         );
 
-        new WindowResizeDragHandler(itemElement, key, this.window);
+        new DragResizeEvent(itemElement, key, this.window);
 
         return itemElement;
     }

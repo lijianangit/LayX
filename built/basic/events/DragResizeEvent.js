@@ -13,11 +13,11 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var DragHandler_1 = require("./DragHandler");
+var DragEvent_1 = require("./DragEvent");
 var ElementHelper = require("../../utils/ElementHelper");
-var WindowResizeDragHandler = (function (_super) {
-    __extends(WindowResizeDragHandler, _super);
-    function WindowResizeDragHandler(dragElement, direction, window) {
+var DragResizeEvent = (function (_super) {
+    __extends(DragResizeEvent, _super);
+    function DragResizeEvent(dragElement, direction, window) {
         var _this = _super.call(this, dragElement) || this;
         _this.direction = direction;
         _this.window = window;
@@ -27,9 +27,9 @@ var WindowResizeDragHandler = (function (_super) {
         _this._height = _this.window.height;
         return _this;
     }
-    WindowResizeDragHandler.prototype.dragStart = function (ev, x, y) {
+    DragResizeEvent.prototype.dragStart = function (ev, x, y) {
     };
-    WindowResizeDragHandler.prototype.dragging = function (ev, x, y, distanceX, distanceY) {
+    DragResizeEvent.prototype.dragging = function (ev, x, y, distanceX, distanceY) {
         switch (this.direction) {
             case "left":
                 this.resizeHandler(distanceX, distanceY, false, true, false, true);
@@ -57,13 +57,13 @@ var WindowResizeDragHandler = (function (_super) {
                 break;
         }
     };
-    WindowResizeDragHandler.prototype.dragEnd = function (ev, x, y) {
+    DragResizeEvent.prototype.dragEnd = function (ev, x, y) {
         this.window.top = this._top;
         this.window.left = this._left;
         this.window.width = this._width;
         this.window.height = this._height;
     };
-    WindowResizeDragHandler.prototype.resizeHandler = function (distanceX, distanceY, isTop, isLeft, lockX, lockY) {
+    DragResizeEvent.prototype.resizeHandler = function (distanceX, distanceY, isTop, isLeft, lockX, lockY) {
         var top = this.window.top + distanceY;
         var left = this.window.left + distanceX;
         var width = isLeft ? this.window.width - distanceX : this.window.width + distanceX;
@@ -121,6 +121,6 @@ var WindowResizeDragHandler = (function (_super) {
             });
         }
     };
-    return WindowResizeDragHandler;
-}(DragHandler_1.default));
-exports.default = WindowResizeDragHandler;
+    return DragResizeEvent;
+}(DragEvent_1.default));
+exports.default = DragResizeEvent;

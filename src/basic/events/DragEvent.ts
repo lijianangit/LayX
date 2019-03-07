@@ -1,4 +1,4 @@
-export default abstract class DragHandler {
+export default abstract class DragEvent {
     public static isDragging: boolean = false;
     public static isFirstDragging: boolean = true;
     private startX: number = 0;
@@ -24,10 +24,10 @@ export default abstract class DragHandler {
         const currentY = ev.pageY;
         const distanceX = currentX - this.startX;
         const distanceY = currentY - this.startY;
-        DragHandler.isDragging = true;
+        DragEvent.isDragging = true;
 
-        if (DragHandler.isFirstDragging === true) {
-            DragHandler.isFirstDragging = false;
+        if (DragEvent.isFirstDragging === true) {
+            DragEvent.isFirstDragging = false;
             this.draggingFirst(ev);
         }
 
@@ -35,8 +35,8 @@ export default abstract class DragHandler {
     };
 
     private readonly mouseup: (this: Document, ev: MouseEvent) => any = (ev: MouseEvent) => {
-        DragHandler.isDragging = false;
-        DragHandler.isFirstDragging = true;
+        DragEvent.isDragging = false;
+        DragEvent.isFirstDragging = true;
         document.removeEventListener("mousemove", this.mousemove);
         document.removeEventListener("mouseup", this.mouseup);
         this.dragEnd(ev, ev.pageX, ev.pageY);

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var DragHandler = (function () {
-    function DragHandler(dragElement) {
+var DragEvent = (function () {
+    function DragEvent(dragElement) {
         var _this = this;
         this.startX = 0;
         this.startY = 0;
@@ -18,25 +18,25 @@ var DragHandler = (function () {
             var currentY = ev.pageY;
             var distanceX = currentX - _this.startX;
             var distanceY = currentY - _this.startY;
-            DragHandler.isDragging = true;
-            if (DragHandler.isFirstDragging === true) {
-                DragHandler.isFirstDragging = false;
+            DragEvent.isDragging = true;
+            if (DragEvent.isFirstDragging === true) {
+                DragEvent.isFirstDragging = false;
                 _this.draggingFirst(ev);
             }
             _this.dragging(ev, currentX, currentY, distanceX, distanceY);
         };
         this.mouseup = function (ev) {
-            DragHandler.isDragging = false;
-            DragHandler.isFirstDragging = true;
+            DragEvent.isDragging = false;
+            DragEvent.isFirstDragging = true;
             document.removeEventListener("mousemove", _this.mousemove);
             document.removeEventListener("mouseup", _this.mouseup);
             _this.dragEnd(ev, ev.pageX, ev.pageY);
         };
         dragElement.addEventListener("mousedown", this.mousedown);
     }
-    DragHandler.prototype.draggingFirst = function (ev) { };
-    DragHandler.isDragging = false;
-    DragHandler.isFirstDragging = true;
-    return DragHandler;
+    DragEvent.prototype.draggingFirst = function (ev) { };
+    DragEvent.isDragging = false;
+    DragEvent.isFirstDragging = true;
+    return DragEvent;
 }());
-exports.default = DragHandler;
+exports.default = DragEvent;
