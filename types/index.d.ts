@@ -41,8 +41,18 @@ export type ResizeOptions = {
     rightBottom?: boolean;
 } & JsonObject;
 
+export type DragMoveOptions = {
+    vertical?: boolean;
+    horizontal?: boolean;
+    breakLeft?: boolean;
+    breakRight?: boolean;
+    breakTop?: boolean;
+    breakBottom?: boolean;
+} & JsonObject;
+
 export type ToolBarOptions = {
     height?: number;
+    drag?: DragMoveOptions;
 } & JsonObject;
 
 export type WindowOptions = {

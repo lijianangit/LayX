@@ -18,13 +18,23 @@ var WindowMoveDragEvent_1 = require("../basic/events/WindowMoveDragEvent");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
 var ValueHelper = require("../utils/ValueHelper");
+var JsonHelper = require("../utils/JsonHelper");
 var UIToolBar = (function (_super) {
     __extends(UIToolBar, _super);
     function UIToolBar(app, window, options) {
         var _this = _super.call(this, app, window) || this;
         _this.kind = "toolBar";
         _this.height = 30;
+        _this.drag = {
+            vertical: true,
+            horizontal: true,
+            breakLeft: true,
+            breakRight: true,
+            breakTop: true,
+            breakBottom: true
+        };
         _this.height = ValueHelper.numberCast(options.height) || _this.height;
+        _this.drag = options.drag === undefined ? _this.drag : JsonHelper.merge(_this.drag, options.drag);
         return _this;
     }
     UIToolBar.prototype.present = function () {
@@ -35,7 +45,9 @@ var UIToolBar = (function (_super) {
         ElementHelper.addStyles(toolBarElement, {
             height: this.height + "px"
         });
-        new WindowMoveDragEvent_1.default(toolBarElement, this.window);
+        if (this.drag.vertical === true || this.drag.horizontal === true) {
+            new WindowMoveDragEvent_1.default(toolBarElement, this.window, this.drag);
+        }
         fragment.appendChild(toolBarElement);
         return fragment;
     };

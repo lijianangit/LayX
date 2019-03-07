@@ -8,7 +8,7 @@ export default class WindowMoveDragEvent extends DragEvent {
     private _top: number = this.window.top;
     private _left: number = this.window.left;
 
-    constructor(dragElement: HTMLElement, public window: UIWindow) {
+    constructor(dragElement: HTMLElement, public window: UIWindow, private readonly dragMoveOptions: Types.DragMoveOptions) {
         super(dragElement);
     }
 
@@ -25,17 +25,22 @@ export default class WindowMoveDragEvent extends DragEvent {
     }
 
     private moveHandler(distanceX: number, distanceY: number) {
-        let top = this.window.top + distanceY;
-        let left = this.window.left + distanceX;
+        let top = this.window.top;
+        let left = this.window.left;
 
-        top = Math.max(0, top);
-        top = Math.min(innerHeight - this.emerge, top);
+        if (this.dragMoveOptions.vertical) {
+            top = top + distanceY;
+            top = Math.max(0, top);
+            top = this.dragMoveOptions.breakBottom ? Math.min(innerHeight - this.emerge, top) : Math.min(innerHeight - this.window.height, top);
+            this._top = top;
+        }
+        if (this.dragMoveOptions.horizontal) {
+            left = left + distanceX;
+            left = this.dragMoveOptions.breakLeft ? Math.max(this.emerge - this.window.width, left) : Math.max(0, left);
+            left = this.dragMoveOptions.breakRight ? Math.min(innerWidth - this.emerge, left) : Math.min(innerWidth - this.window.width, left);
+            this._left = left;
+        }
 
-        left = Math.max(this.emerge - this.window.width, left);
-        left = Math.min(innerWidth - this.emerge, left);
-
-        this._top = top;
-        this._left = left;
         ElementHelper.addStyles(this.window.element, <Types.CSSStyleObject>{
             top: `${top}px`,
             left: `${left}px`
