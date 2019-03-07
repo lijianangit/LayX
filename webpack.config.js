@@ -28,8 +28,10 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(eot|ttf|woff|svg)$/,
-                use: "file-loader"
+                test: /\.svg$/,
+                loader: 'svg-sprite-loader',
+                options: {
+                }
             },
             {
                 test: /\.ts?$/,

@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var App_1 = require("./core/App");
-require("./assets/app.css");
+require("./assets/styles");
+require("./assets/icons");
 exports.default = (function layx() {
     var layx = function (options) { };
     var app = new App_1.default(layx);
