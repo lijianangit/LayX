@@ -7,12 +7,19 @@ import * as Types from "../../types";
 import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as CastHelper from "../utils/CastHelper";
+import UIActionBar from "./UIActionBar";
 
 export default class UIToolBar extends UIWindowComponent implements UIControl {
     public readonly kind: string = "toolBar";
     public height: number = 30;
     public drag: Types.DragMoveOption | false = {};
-    public actionBar: Types.ActionBarOption | false = {};
+    public actionBar: Array<Types.ActionButtonOption> | false = [
+        {
+            id: "destroy",
+            handler: function (window: UIWindow) {
+            }
+        }
+    ];
 
     constructor(app: App, window: UIWindow, options: Types.ToolBarOption) {
         super(app, window);
@@ -26,12 +33,7 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
             breakTop: true,
             breakBottom: true
         });
-        this.actionBar = CastHelper.jsonOrBooleanCast(options.actionBar, {
-            destroy: true,
-            max: true,
-            min: true,
-            info: true
-        });
+        this.actionBar = CastHelper.actionButtonsCast(this.actionBar);
     }
 
     present(): DocumentFragment | null {
@@ -42,16 +44,23 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
         ElementHelper.addClasses(toolBarElement, this.app.prefix,
             kebabCase,
             "flexbox",
-            "flex-row",
+            "flex-row-reverse"
         );
 
         ElementHelper.addStyles(toolBarElement, <Types.CSSStyleObject>{
             height: `${this.height}px`
         });
 
+        if (this.actionBar !== false) {
+            const actionBar = new UIActionBar(this.app, this.window, this);
+            const actionBarElement = actionBar.present();
+            actionBarElement != null && toolBarElement.appendChild(actionBarElement);
+        }
+
         if (this.drag !== false && (this.drag.vertical === true || this.drag.horizontal === true)) {
             new WindowMoveDragEvent(toolBarElement, this.window, this.drag);
         }
+
         fragment.appendChild(toolBarElement);
         return fragment;
     }

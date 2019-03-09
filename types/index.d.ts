@@ -27,6 +27,11 @@ export type ContextMenuOption = {
     handler?: (window: UIWindow) => void;
 } & JsonObject;
 
+export type ActionButtonOption = {
+    id: string;
+    handler?: (window: UIWindow) => void;
+} & JsonObject;
+
 export type ResizeOption = {
     left?: boolean;
     right?: boolean;
@@ -47,17 +52,11 @@ export type DragMoveOption = {
     breakBottom?: boolean;
 } & JsonObject;
 
-export type ActionBarOption = {
-    destroy?: boolean;
-    max?: boolean;
-    min?: boolean;
-    info?: boolean;
-} & JsonObject;
 
 export type ToolBarOption = {
     height?: number;
     drag?: DragMoveOption | boolean;
-    actionBar?: ActionBarOption | boolean;
+    actionBar?: Array<ActionButtonOption> | false;
 } & JsonObject;
 
 export type WindowOption = {

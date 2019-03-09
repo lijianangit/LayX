@@ -6,12 +6,14 @@ var DragEvent = (function () {
         this.startX = 0;
         this.startY = 0;
         this.mousedown = function (ev) {
-            ev.preventDefault();
-            _this.startX = ev.pageX;
-            _this.startY = ev.pageY;
-            _this.dragStart(ev, _this.startX, _this.startY);
-            document.addEventListener("mousemove", _this.mousemove);
-            document.addEventListener("mouseup", _this.mouseup);
+            if (ev.button === 0) {
+                ev.preventDefault();
+                _this.startX = ev.pageX;
+                _this.startY = ev.pageY;
+                _this.dragStart(ev, _this.startX, _this.startY);
+                document.addEventListener("mousemove", _this.mousemove);
+                document.addEventListener("mouseup", _this.mouseup);
+            }
         };
         this.mousemove = function (ev) {
             var currentX = ev.pageX;

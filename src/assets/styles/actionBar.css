@@ -1,0 +1,13 @@
+.layx-action-button {
+    width: 45px;
+    text-align: center;
+}
+
+.layx-action-button:hover {
+    background-color: #e5e5e5;
+}
+
+.layx-action-button.layx-action-button-destroy:hover {
+    background-color: #e81123;
+    color: #fff;
+}

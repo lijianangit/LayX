@@ -18,6 +18,7 @@ var WindowMoveDragEvent_1 = require("../basic/events/WindowMoveDragEvent");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
+var UIActionBar_1 = require("./UIActionBar");
 var UIToolBar = (function (_super) {
     __extends(UIToolBar, _super);
     function UIToolBar(app, window, options) {
@@ -25,7 +26,13 @@ var UIToolBar = (function (_super) {
         _this.kind = "toolBar";
         _this.height = 30;
         _this.drag = {};
-        _this.actionBar = {};
+        _this.actionBar = [
+            {
+                id: "destroy",
+                handler: function (window) {
+                }
+            }
+        ];
         _this.height = CastHelper.numberCast(options.height, _this.height);
         _this.drag = CastHelper.jsonOrBooleanCast(options.drag, {
             vertical: true,
@@ -35,22 +42,22 @@ var UIToolBar = (function (_super) {
             breakTop: true,
             breakBottom: true
         });
-        _this.actionBar = CastHelper.jsonOrBooleanCast(options.actionBar, {
-            destroy: true,
-            max: true,
-            min: true,
-            info: true
-        });
+        _this.actionBar = CastHelper.actionButtonsCast(_this.actionBar);
         return _this;
     }
     UIToolBar.prototype.present = function () {
         var fragment = document.createDocumentFragment();
         var kebabCase = StringHelper.getKebabCase(this.kind);
         var toolBarElement = document.createElement("div");
-        ElementHelper.addClasses(toolBarElement, this.app.prefix, kebabCase, "flexbox", "flex-row");
+        ElementHelper.addClasses(toolBarElement, this.app.prefix, kebabCase, "flexbox", "flex-row-reverse");
         ElementHelper.addStyles(toolBarElement, {
             height: this.height + "px"
         });
+        if (this.actionBar !== false) {
+            var actionBar = new UIActionBar_1.default(this.app, this.window, this);
+            var actionBarElement = actionBar.present();
+            actionBarElement != null && toolBarElement.appendChild(actionBarElement);
+        }
         if (this.drag !== false && (this.drag.vertical === true || this.drag.horizontal === true)) {
             new WindowMoveDragEvent_1.default(toolBarElement, this.window, this.drag);
         }

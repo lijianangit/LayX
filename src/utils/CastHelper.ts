@@ -189,3 +189,9 @@ export function contextMenusCast(option: any): Array<Types.ContextMenuOption> | 
     TypeHelper.isContextMenus(option);
     return option;
 }
+
+export function actionButtonsCast(option: any): Array<Types.ActionButtonOption> | false {
+    if (option === undefined || option === false) return false;
+    TypeHelper.isActionButtons(option);
+    return option;
+}

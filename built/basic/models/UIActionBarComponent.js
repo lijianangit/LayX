@@ -13,14 +13,14 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var UIWindowComponent_1 = require("./UIWindowComponent");
-var UIToolBarComponent = (function (_super) {
-    __extends(UIToolBarComponent, _super);
-    function UIToolBarComponent(app, window, toolBar) {
-        var _this = _super.call(this, app, window) || this;
-        _this.toolBar = toolBar;
+var UIToolBarComponent_1 = require("./UIToolBarComponent");
+var UIActionBarComponent = (function (_super) {
+    __extends(UIActionBarComponent, _super);
+    function UIActionBarComponent(app, window, toolBar, actionBar) {
+        var _this = _super.call(this, app, window, toolBar) || this;
+        _this.actionBar = actionBar;
         return _this;
     }
-    return UIToolBarComponent;
-}(UIWindowComponent_1.default));
-exports.default = UIToolBarComponent;
+    return UIActionBarComponent;
+}(UIToolBarComponent_1.default));
+exports.default = UIActionBarComponent;

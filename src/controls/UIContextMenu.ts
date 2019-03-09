@@ -8,9 +8,9 @@ import * as ElementHelper from "../utils/ElementHelper";
 
 export default class UIContextMenu extends UIWindowComponent implements UIControl {
     public readonly kind: string = "contextMenu";
-    private id: string;
-    private label: string;
-    private handler?: (window: UIWindow) => void;
+    public id: string;
+    public label: string;
+    public handler?: (window: UIWindow) => void;
 
     constructor(app: App, window: UIWindow, options: Types.ContextMenuOption) {
         super(app, window);

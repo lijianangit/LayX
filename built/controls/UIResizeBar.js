@@ -58,6 +58,12 @@ var UIResizeBar = (function (_super) {
         var kebabCase = StringHelper.getKebabCase(this.kind);
         var resizeElement = document.createElement("div");
         ElementHelper.addClasses(resizeElement, this.app.prefix, kebabCase);
+        resizeElement.addEventListener("contextmenu", function (ev) {
+            ev.stopPropagation();
+            ev.preventDefault();
+            ev.returnValue = false;
+            return false;
+        });
         for (var _i = 0, _a = this.directions; _i < _a.length; _i++) {
             var key = _a[_i];
             if (this[key] === true) {

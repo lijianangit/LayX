@@ -71,3 +71,20 @@ function isResizeOptions(obj) {
             obj.rightBottom !== undefined);
 }
 exports.isResizeOptions = isResizeOptions;
+function isActionButton(obj) {
+    return isJsonObject(obj)
+        && obj.id !== undefined;
+}
+exports.isActionButton = isActionButton;
+function isActionButtons(obj) {
+    var correct = true;
+    for (var _i = 0, obj_2 = obj; _i < obj_2.length; _i++) {
+        var item = obj_2[_i];
+        if (!isActionButton(item)) {
+            correct = false;
+            break;
+        }
+    }
+    return correct;
+}
+exports.isActionButtons = isActionButtons;

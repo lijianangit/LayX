@@ -55,6 +55,13 @@ export default class UIResizeBar extends UIWindowComponent implements UIControl 
             kebabCase
         );
 
+        resizeElement.addEventListener("contextmenu", (ev: MouseEvent) => {
+            ev.stopPropagation();
+            ev.preventDefault();
+            ev.returnValue = false;
+            return false;
+        });
+
         for (const key of this.directions) {
             if (this[key] === true) {
                 resizeElement.appendChild(this.presentItem(key));

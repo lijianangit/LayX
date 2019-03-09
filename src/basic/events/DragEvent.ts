@@ -9,14 +9,16 @@ export default abstract class DragEvent {
     }
 
     private readonly mousedown: (this: HTMLElement, ev: MouseEvent) => any = (ev: MouseEvent) => {
-        ev.preventDefault();
+        if (ev.button === 0) {
+            ev.preventDefault();
 
-        this.startX = ev.pageX;
-        this.startY = ev.pageY;
-        this.dragStart(ev, this.startX, this.startY);
+            this.startX = ev.pageX;
+            this.startY = ev.pageY;
+            this.dragStart(ev, this.startX, this.startY);
 
-        document.addEventListener("mousemove", this.mousemove);
-        document.addEventListener("mouseup", this.mouseup);
+            document.addEventListener("mousemove", this.mousemove);
+            document.addEventListener("mouseup", this.mouseup);
+        }
     };
 
     private readonly mousemove: (this: Document, ev: MouseEvent) => any = (ev: MouseEvent) => {

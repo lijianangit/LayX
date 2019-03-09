@@ -72,3 +72,19 @@ export function isResizeOptions(obj: any): obj is Types.ResizeOption {
             obj.rightBottom !== undefined
         );
 }
+
+export function isActionButton(obj: any): obj is Types.ActionButtonOption {
+    return isJsonObject(obj)
+        && obj.id !== undefined;
+}
+
+export function isActionButtons(obj: Array<any>): obj is Array<Types.ActionButtonOption> {
+    let correct: boolean = true;
+    for (const item of obj) {
+        if (!isActionButton(item)) {
+            correct = false;
+            break;
+        }
+    }
+    return correct;
+}
