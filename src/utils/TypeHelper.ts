@@ -75,6 +75,7 @@ export function isResizeOptions(obj: any): obj is Types.ResizeOption {
 
 export function isActionButton(obj: any): obj is Types.ActionButtonOption {
     return isJsonObject(obj)
+        && obj.label !== undefined
         && obj.id !== undefined;
 }
 

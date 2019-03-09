@@ -31,7 +31,7 @@ export default class App {
     }
 
     constructor(private readonly layx: Layx) {
-        this.bindEvent();
+        this.init();
     }
 
     open(options: Types.WindowOption): void {
@@ -73,7 +73,17 @@ export default class App {
         return null;
     }
 
+    private init(): void {
+        this.bindEvent();
+    }
+
     private bindEvent(): void {
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!document.body.id) {
+                document.body.id = `${this.prefix}body`;
+            }
+        });
+
         document.addEventListener("mousedown", (ev: MouseEvent) => {
             if (this.window) {
                 this.window.hideContextMenu();

@@ -10,9 +10,11 @@ var DragEvent = (function () {
                 ev.preventDefault();
                 _this.startX = ev.pageX;
                 _this.startY = ev.pageY;
-                _this.dragStart(ev, _this.startX, _this.startY);
-                document.addEventListener("mousemove", _this.mousemove);
-                document.addEventListener("mouseup", _this.mouseup);
+                if (_this.dragStart(ev, _this.startX, _this.startY) !== false) {
+                    document.addEventListener("mousemove", _this.mousemove);
+                    document.addEventListener("mouseup", _this.mouseup);
+                }
+                ;
             }
         };
         this.mousemove = function (ev) {

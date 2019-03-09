@@ -1,6 +1,7 @@
 import UIWindow from "../../controls/UIWindow";
 import DragEvent from "./DragEvent";
 import * as Types from "../../../types";
+import * as Enums from "../enums";
 import * as ElementHelper from "../../utils/ElementHelper";
 
 export default class WindowMoveDragEvent extends DragEvent {
@@ -12,7 +13,10 @@ export default class WindowMoveDragEvent extends DragEvent {
         super(dragElement);
     }
 
-    dragStart(ev: MouseEvent, x: number, y: number): void {
+    dragStart(ev: MouseEvent, x: number, y: number): void | false {
+        if (this.window.status !== Enums.WindowStatus.NORMAL) {
+            return false;
+        }
     }
 
     dragging(ev: MouseEvent, x: number, y: number, distanceX: number, distanceY: number): void {

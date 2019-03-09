@@ -3,11 +3,12 @@ import UIControl from "../basic/interfaces/UIControl";
 import UIWindowComponent from "../basic/models/UIWindowComponent";
 import UIWindow from "./UIWindow";
 import WindowMoveDragEvent from "../basic/events/WindowMoveDragEvent";
+import UIActionBar from "./UIActionBar";
 import * as Types from "../../types";
 import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as CastHelper from "../utils/CastHelper";
-import UIActionBar from "./UIActionBar";
+import * as Enums from "../basic/enums";
 
 export default class UIToolBar extends UIWindowComponent implements UIControl {
     public readonly kind: string = "toolBar";
@@ -15,12 +16,27 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
     public drag: Types.DragMoveOption | false = {};
     public actionBar: Array<Types.ActionButtonOption> | false = [
         {
-            id: "min",
+            id: "info",
+            label: "关于",
             handler: function (window: UIWindow) {
             }
         },
         {
+            id: "min",
+            label: "最小化",
+            handler: function (window: UIWindow) {
+            }
+        },
+        {
+            id: "max",
+            label: "最大化",
+            handler: function (window: UIWindow) {
+                window.max();
+            }
+        },
+        {
             id: "destroy",
+            label: "关闭",
             handler: function (window: UIWindow) {
                 window.destroy();
             }
@@ -62,7 +78,6 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
             const actionBarElement = actionBar.present();
             actionBarElement != null && toolBarElement.appendChild(actionBarElement);
         }
-
         if (this.drag !== false && (this.drag.vertical === true || this.drag.horizontal === true)) {
             new WindowMoveDragEvent(toolBarElement, this.window, this.drag);
         }

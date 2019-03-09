@@ -23,6 +23,7 @@ var UIActionButton = (function (_super) {
         var _this = _super.call(this, app, window, toolBar, actionBar) || this;
         _this.kind = "actionButton";
         _this.id = options.id;
+        _this.label = options.label;
         _this.handler = options.handler;
         return _this;
     }
@@ -32,6 +33,7 @@ var UIActionButton = (function (_super) {
         var kebabCase = StringHelper.getKebabCase(this.kind);
         var actionButtonElement = document.createElement("div");
         actionButtonElement.id = this.window.elementId + "-" + kebabCase + "-" + this.id;
+        actionButtonElement.setAttribute("title", this.label);
         ElementHelper.addClasses(actionButtonElement, this.app.prefix, kebabCase, kebabCase + "-" + this.id, "flexbox", "flex-center");
         var svg = new UISvg_1.default(this.app, this.window, this.id);
         var svgElement = svg.present();

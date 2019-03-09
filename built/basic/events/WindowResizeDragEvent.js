@@ -28,6 +28,9 @@ var WindowResizeDragEvent = (function (_super) {
         return _this;
     }
     WindowResizeDragEvent.prototype.dragStart = function (ev, x, y) {
+        if (this.window.status !== "normal") {
+            return false;
+        }
     };
     WindowResizeDragEvent.prototype.dragging = function (ev, x, y, distanceX, distanceY) {
         switch (this.direction) {

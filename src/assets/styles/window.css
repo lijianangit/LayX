@@ -3,6 +3,10 @@
     overflow: hidden;
 }
 
+#layx-body.layx-noscroll {
+    overflow: hidden!important;
+}
+
 .layx-window.layx-window-layer {
     position: fixed;
 }

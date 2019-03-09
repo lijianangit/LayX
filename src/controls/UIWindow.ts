@@ -5,6 +5,7 @@ import UIParclose from "./UIParclose";
 import UIResizeBar from "./UIResizeBar";
 import UIContextMenu from "./UIContextMenu";
 import UIToolBar from "./UIToolBar";
+import UIActionButton from "./UIActionButton";
 import * as Types from "../../types";
 import * as Enums from "../basic/enums";
 import * as StringHelper from "../utils/StringHelper";
@@ -15,6 +16,7 @@ import * as ExceptionHelper from "../utils/ExceptionHelper";
 
 export default class UIWindow extends UIComponent implements UIControl {
     public readonly kind: string = "window";
+    public status: Enums.WindowStatus = Enums.WindowStatus.NORMAL;
     public readonly elementId: string;
     private flickering: boolean = false;
     private zIndex: number = this.app.zIndex;
@@ -85,15 +87,6 @@ export default class UIWindow extends UIComponent implements UIControl {
         this.resizeBar = CastHelper.jsonOrBooleanCast(options.resizeBar, this.resizeBar);
         this.toolBar = CastHelper.jsonOrBooleanCast(options.toolBar, this.toolBar);
         this.contextMenu = CastHelper.contextMenusCast(options.contextMenu);
-    }
-
-    destroy(): void {
-        if (this.element && this.element.parentElement) {
-            const index = this.app.windows.indexOf(this);
-            this.app.windows.splice(index, 1);
-
-            this.element.parentElement.removeChild(this.element);
-        }
     }
 
     present(): DocumentFragment {
@@ -190,6 +183,44 @@ export default class UIWindow extends UIComponent implements UIControl {
         }
 
         return fragment;
+    }
+
+    destroy(): void {
+        if (this.element && this.element.parentElement) {
+            if (this.status === Enums.WindowStatus.MAX) {
+                ElementHelper.removeClasses(document.body, this.app.prefix,
+                    "noscroll"
+                );
+            }
+            const index = this.app.windows.indexOf(this);
+            this.app.windows.splice(index, 1);
+
+            this.element.parentElement.removeChild(this.element);
+        }
+    }
+
+    max(): void {
+        if (this.element && this.element.parentElement) {
+            ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
+                top: `0px`,
+                left: `0px`,
+                width: `${innerWidth}px`,
+                height: `${innerHeight}px`,
+                borderRadius: `0px`
+            });
+
+            const resizeBarElement = this.element.querySelector(`.${this.app.prefix}resize-bar`);
+            if (resizeBarElement) {
+                ElementHelper.addClasses(<HTMLElement>resizeBarElement, this.app.prefix,
+                    "resize-disabled"
+                );
+            }
+
+            ElementHelper.addClasses(document.body, this.app.prefix,
+                "noscroll"
+            );
+            this.status = Enums.WindowStatus.MAX;;
+        }
     }
 
     createContextMenu(): HTMLElement {

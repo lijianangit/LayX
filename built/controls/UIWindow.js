@@ -29,6 +29,7 @@ var UIWindow = (function (_super) {
         var _a, _b;
         var _this = _super.call(this, app) || this;
         _this.kind = "window";
+        _this.status = "normal";
         _this.flickering = false;
         _this.zIndex = _this.app.zIndex;
         _this.width = 800;
@@ -94,13 +95,6 @@ var UIWindow = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    UIWindow.prototype.destroy = function () {
-        if (this.element && this.element.parentElement) {
-            var index = this.app.windows.indexOf(this);
-            this.app.windows.splice(index, 1);
-            this.element.parentElement.removeChild(this.element);
-        }
-    };
     UIWindow.prototype.present = function () {
         var _this = this;
         var fragment = document.createDocumentFragment();
@@ -174,6 +168,34 @@ var UIWindow = (function (_super) {
             });
         }
         return fragment;
+    };
+    UIWindow.prototype.destroy = function () {
+        if (this.element && this.element.parentElement) {
+            if (this.status === "max") {
+                ElementHelper.removeClasses(document.body, this.app.prefix, "noscroll");
+            }
+            var index = this.app.windows.indexOf(this);
+            this.app.windows.splice(index, 1);
+            this.element.parentElement.removeChild(this.element);
+        }
+    };
+    UIWindow.prototype.max = function () {
+        if (this.element && this.element.parentElement) {
+            ElementHelper.addStyles(this.element, {
+                top: "0px",
+                left: "0px",
+                width: innerWidth + "px",
+                height: innerHeight + "px",
+                borderRadius: "0px"
+            });
+            var resizeBarElement = this.element.querySelector("." + this.app.prefix + "resize-bar");
+            if (resizeBarElement) {
+                ElementHelper.addClasses(resizeBarElement, this.app.prefix, "resize-disabled");
+            }
+            ElementHelper.addClasses(document.body, this.app.prefix, "noscroll");
+            this.status = "max";
+            ;
+        }
     };
     UIWindow.prototype.createContextMenu = function () {
         var contextMenuElements = document.createElement("div");

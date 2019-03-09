@@ -29,6 +29,7 @@ export type ContextMenuOption = {
 
 export type ActionButtonOption = {
     id: string;
+    label: string;
     handler?: (window: UIWindow) => void;
 } & JsonObject;
 

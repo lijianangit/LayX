@@ -12,11 +12,13 @@ import * as ElementHelper from "../utils/ElementHelper";
 export default class UIActionButton extends UIActionBarComponent implements UIControl {
     public readonly kind: string = "actionButton";
     public id: string;
+    public label: string;
     public handler?: (window: UIWindow) => void;
 
     constructor(app: App, window: UIWindow, toolBar: UIToolBar, actionBar: UIActionBar, options: Types.ActionButtonOption) {
         super(app, window, toolBar, actionBar);
         this.id = options.id;
+        this.label = options.label;
         this.handler = options.handler;
     }
 
@@ -26,6 +28,7 @@ export default class UIActionButton extends UIActionBarComponent implements UICo
         const actionButtonElement = document.createElement("div");
 
         actionButtonElement.id = `${this.window.elementId}-${kebabCase}-${this.id}`;
+        actionButtonElement.setAttribute("title", this.label);
 
         ElementHelper.addClasses(actionButtonElement, this.app.prefix,
             kebabCase,

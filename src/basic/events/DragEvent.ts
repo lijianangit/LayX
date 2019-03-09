@@ -14,10 +14,10 @@ export default abstract class DragEvent {
 
             this.startX = ev.pageX;
             this.startY = ev.pageY;
-            this.dragStart(ev, this.startX, this.startY);
-
-            document.addEventListener("mousemove", this.mousemove);
-            document.addEventListener("mouseup", this.mouseup);
+            if (this.dragStart(ev, this.startX, this.startY) !== false) {
+                document.addEventListener("mousemove", this.mousemove);
+                document.addEventListener("mouseup", this.mouseup);
+            };
         }
     };
 
@@ -44,7 +44,7 @@ export default abstract class DragEvent {
         this.dragEnd(ev, ev.pageX, ev.pageY);
     };
 
-    abstract dragStart(ev: MouseEvent, x: number, y: number): void;
+    abstract dragStart(ev: MouseEvent, x: number, y: number): void | false;
 
     abstract dragging(ev: MouseEvent, x: number, y: number, distanceX: number, distanceY: number): void;
 

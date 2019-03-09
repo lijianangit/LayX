@@ -73,6 +73,7 @@ function isResizeOptions(obj) {
 exports.isResizeOptions = isResizeOptions;
 function isActionButton(obj) {
     return isJsonObject(obj)
+        && obj.label !== undefined
         && obj.id !== undefined;
 }
 exports.isActionButton = isActionButton;

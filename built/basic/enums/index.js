@@ -33,3 +33,9 @@ var WindowOffset;
     WindowOffset["RIGHT_CENTER"] = "rightCenter";
     WindowOffset["RIGHT_BOTTOM"] = "rightBottom";
 })(WindowOffset = exports.WindowOffset || (exports.WindowOffset = {}));
+var WindowStatus;
+(function (WindowStatus) {
+    WindowStatus["NORMAL"] = "normal";
+    WindowStatus["MAX"] = "max";
+    WindowStatus["MIN"] = "min";
+})(WindowStatus = exports.WindowStatus || (exports.WindowStatus = {}));

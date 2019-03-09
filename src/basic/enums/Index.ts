@@ -30,3 +30,9 @@ export const enum WindowOffset {
     RIGHT_CENTER = "rightCenter",
     RIGHT_BOTTOM = "rightBottom"
 }
+
+export const enum WindowStatus {
+    NORMAL = "normal",
+    MAX = "max",
+    MIN = "min"
+}

@@ -11,7 +11,7 @@ var App = (function () {
         this._zIndex = 10000000;
         this._aboveZIndex = 20000000;
         this._windows = [];
-        this.bindEvent();
+        this.init();
     }
     Object.defineProperty(App.prototype, "window", {
         get: function () {
@@ -81,8 +81,16 @@ var App = (function () {
         }
         return null;
     };
+    App.prototype.init = function () {
+        this.bindEvent();
+    };
     App.prototype.bindEvent = function () {
         var _this = this;
+        document.addEventListener("DOMContentLoaded", function () {
+            if (!document.body.id) {
+                document.body.id = _this.prefix + "body";
+            }
+        });
         document.addEventListener("mousedown", function (ev) {
             if (_this.window) {
                 _this.window.hideContextMenu();

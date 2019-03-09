@@ -27,6 +27,9 @@ var WindowMoveDragEvent = (function (_super) {
         return _this;
     }
     WindowMoveDragEvent.prototype.dragStart = function (ev, x, y) {
+        if (this.window.status !== "normal") {
+            return false;
+        }
     };
     WindowMoveDragEvent.prototype.dragging = function (ev, x, y, distanceX, distanceY) {
         this.moveHandler(distanceX, distanceY);
