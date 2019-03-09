@@ -1,4 +1,3 @@
-import UIToolBarComponent from "../basic/models/UIToolBarComponent";
 import UIControl from "../basic/interfaces/UIControl";
 import App from "../core/App";
 import UIWindow from "./UIWindow";

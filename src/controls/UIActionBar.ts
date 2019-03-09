@@ -3,7 +3,6 @@ import UIControl from "../basic/interfaces/UIControl";
 import App from "../core/App";
 import UIWindow from "./UIWindow";
 import UIToolBar from "./UIToolBar";
-import * as Types from "../../types";
 import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as TypeHelper from "../utils/TypeHelper";
