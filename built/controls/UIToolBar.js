@@ -28,8 +28,14 @@ var UIToolBar = (function (_super) {
         _this.drag = {};
         _this.actionBar = [
             {
+                id: "min",
+                handler: function (window) {
+                }
+            },
+            {
                 id: "destroy",
                 handler: function (window) {
+                    window.destroy();
                 }
             }
         ];

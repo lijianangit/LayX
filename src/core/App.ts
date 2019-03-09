@@ -1,6 +1,7 @@
 import Layx from "../basic/interfaces/Layx";
 import UIWindow from "../controls/UIWindow";
 import * as Types from "../../types";
+import * as ExceptionHelper from "../utils/ExceptionHelper";
 
 export default class App {
     public readonly version: string = "3.0.0";
@@ -48,8 +49,15 @@ export default class App {
         }
     }
 
+    destroy(id: string): void {
+        const window = this.getWindow(id);
+        if (window) {
+            window.destroy();
+        }
+    }
+
     getWindow(id: string): UIWindow | null {
-        if (!id) throw new Error("`id` is required.");
+        if (!id) ExceptionHelper.assertId();
         for (const item of this.windows) {
             if (item.id === id) {
                 if (item.element) {

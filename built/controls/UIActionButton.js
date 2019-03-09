@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIActionBarComponent_1 = require("../basic/models/UIActionBarComponent");
+var UISvg_1 = require("./UISvg");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
 var UIActionButton = (function (_super) {
@@ -32,12 +33,9 @@ var UIActionButton = (function (_super) {
         var actionButtonElement = document.createElement("div");
         actionButtonElement.id = this.window.elementId + "-" + kebabCase + "-" + this.id;
         ElementHelper.addClasses(actionButtonElement, this.app.prefix, kebabCase, kebabCase + "-" + this.id, "flexbox", "flex-center");
-        var svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        svgElement.setAttribute("class", this.app.prefix + "iconfont");
-        var useElement = document.createElementNS("http://www.w3.org/2000/svg", "use");
-        useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + this.id);
-        svgElement.appendChild(useElement);
-        actionButtonElement.appendChild(svgElement);
+        var svg = new UISvg_1.default(this.app, this.window, this.id);
+        var svgElement = svg.present();
+        svgElement && actionButtonElement.appendChild(svgElement);
         actionButtonElement.addEventListener("mousedown", function (ev) {
             if (typeof _this.handler === "function") {
                 _this.handler(_this.window);

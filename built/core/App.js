@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindow_1 = require("../controls/UIWindow");
+var ExceptionHelper = require("../utils/ExceptionHelper");
 var App = (function () {
     function App(layx) {
         this.layx = layx;
@@ -56,9 +57,15 @@ var App = (function () {
             this.windows.push(uiWindow);
         }
     };
+    App.prototype.destroy = function (id) {
+        var window = this.getWindow(id);
+        if (window) {
+            window.destroy();
+        }
+    };
     App.prototype.getWindow = function (id) {
         if (!id)
-            throw new Error("`id` is required.");
+            ExceptionHelper.assertId();
         for (var _i = 0, _a = this.windows; _i < _a.length; _i++) {
             var item = _a[_i];
             if (item.id === id) {

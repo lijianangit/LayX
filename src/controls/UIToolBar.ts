@@ -15,8 +15,14 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
     public drag: Types.DragMoveOption | false = {};
     public actionBar: Array<Types.ActionButtonOption> | false = [
         {
+            id: "min",
+            handler: function (window: UIWindow) {
+            }
+        },
+        {
             id: "destroy",
             handler: function (window: UIWindow) {
+                window.destroy();
             }
         }
     ];

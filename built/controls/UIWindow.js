@@ -22,6 +22,7 @@ var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
 var TypeHelper = require("../utils/TypeHelper");
+var ExceptionHelper = require("../utils/ExceptionHelper");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
     function UIWindow(app, options) {
@@ -49,7 +50,7 @@ var UIWindow = (function (_super) {
         _this._element = null;
         _this._flickerShadow = null;
         if (!options.id)
-            throw new Error("`id` is required.");
+            ExceptionHelper.assertId();
         _this.id = options.id;
         _this.elementId = _this.app.prefix + _this.id;
         _this.mode = CastHelper.windowModeCast(options.mode, _this.mode);
@@ -93,6 +94,13 @@ var UIWindow = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    UIWindow.prototype.destroy = function () {
+        if (this.element && this.element.parentElement) {
+            var index = this.app.windows.indexOf(this);
+            this.app.windows.splice(index, 1);
+            this.element.parentElement.removeChild(this.element);
+        }
+    };
     UIWindow.prototype.present = function () {
         var _this = this;
         var fragment = document.createDocumentFragment();

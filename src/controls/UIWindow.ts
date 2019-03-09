@@ -11,6 +11,7 @@ import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as CastHelper from "../utils/CastHelper";
 import * as TypeHelper from "../utils/TypeHelper";
+import * as ExceptionHelper from "../utils/ExceptionHelper";
 
 export default class UIWindow extends UIComponent implements UIControl {
     public readonly kind: string = "window";
@@ -50,7 +51,7 @@ export default class UIWindow extends UIComponent implements UIControl {
     constructor(app: App, options: Types.WindowOption) {
         super(app);
 
-        if (!options.id) throw new Error("`id` is required.");
+        if (!options.id) ExceptionHelper.assertId();
         this.id = options.id;
         this.elementId = this.app.prefix + this.id;
 
@@ -84,6 +85,15 @@ export default class UIWindow extends UIComponent implements UIControl {
         this.resizeBar = CastHelper.jsonOrBooleanCast(options.resizeBar, this.resizeBar);
         this.toolBar = CastHelper.jsonOrBooleanCast(options.toolBar, this.toolBar);
         this.contextMenu = CastHelper.contextMenusCast(options.contextMenu);
+    }
+
+    destroy(): void {
+        if (this.element && this.element.parentElement) {
+            const index = this.app.windows.indexOf(this);
+            this.app.windows.splice(index, 1);
+
+            this.element.parentElement.removeChild(this.element);
+        }
     }
 
     present(): DocumentFragment {

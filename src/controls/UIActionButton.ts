@@ -4,6 +4,7 @@ import UIWindow from "./UIWindow";
 import UIToolBar from "./UIToolBar";
 import UIActionBarComponent from "../basic/models/UIActionBarComponent";
 import UIActionBar from "./UIActionBar";
+import UISvg from "./UISvg";
 import * as Types from "../../types";
 import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
@@ -33,14 +34,9 @@ export default class UIActionButton extends UIActionBarComponent implements UICo
             "flex-center"
         );
 
-        const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        svgElement.setAttribute("class", `${this.app.prefix}iconfont`);
-
-        const useElement = document.createElementNS("http://www.w3.org/2000/svg", "use");
-        useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", `#${this.id}`);
-        svgElement.appendChild(useElement);
-
-        actionButtonElement.appendChild(svgElement);
+        const svg = new UISvg(this.app, this.window, this.id);
+        const svgElement = svg.present();
+        svgElement && actionButtonElement.appendChild(svgElement);
 
         actionButtonElement.addEventListener("mousedown", (ev: MouseEvent) => {
             if (typeof this.handler === "function") {

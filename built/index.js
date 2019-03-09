@@ -15,5 +15,8 @@ exports.default = (function layx() {
     layx.getWindow = function (id) {
         return app.getWindow(id);
     };
+    layx.destroy = function (id) {
+        app.destroy(id);
+    };
     return layx;
 })();
