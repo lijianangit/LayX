@@ -33,6 +33,7 @@ var WindowMoveDragEvent = (function (_super) {
     };
     WindowMoveDragEvent.prototype.dragEnd = function (ev, x, y) {
         if (this._top === 0) {
+            this._top = this.window.top;
             this.window.max();
             return;
         }
