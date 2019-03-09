@@ -27,9 +27,6 @@ var WindowMoveDragEvent = (function (_super) {
         return _this;
     }
     WindowMoveDragEvent.prototype.dragStart = function (ev, x, y) {
-        if (this.window.status !== "normal") {
-            return false;
-        }
     };
     WindowMoveDragEvent.prototype.dragging = function (ev, x, y, distanceX, distanceY) {
         this.moveHandler(distanceX, distanceY);
@@ -37,6 +34,9 @@ var WindowMoveDragEvent = (function (_super) {
     WindowMoveDragEvent.prototype.dragEnd = function (ev, x, y) {
         this.window.top = this._top;
         this.window.left = this._left;
+        if (this._top === 0) {
+            this.window.max();
+        }
     };
     WindowMoveDragEvent.prototype.moveHandler = function (distanceX, distanceY) {
         var top = this.window.top;
@@ -57,6 +57,25 @@ var WindowMoveDragEvent = (function (_super) {
             top: top + "px",
             left: left + "px"
         });
+    };
+    WindowMoveDragEvent.prototype.draggingFirst = function (ev, x, y, distanceX, distanceY) {
+        if (this.window.status === "max") {
+            if (x < this.window.width / 2) {
+                this._left = 0;
+            }
+            else if (x > this.window.width / 2 && x < innerWidth - this.window.width) {
+                this._left = x - this.window.width / 2;
+            }
+            else if (innerWidth - x < this.window.width / 2) {
+                this._left = innerWidth - this.window.width;
+            }
+            else if (innerWidth - x > this.window.width / 2 && x >= innerWidth - this.window.width) {
+                this._left = x - this.window.width / 2;
+            }
+            this.window.top = this._top = 0;
+            this.window.left = this._left;
+            this.window.normal();
+        }
     };
     return WindowMoveDragEvent;
 }(DragEvent_1.default));

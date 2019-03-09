@@ -16,6 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var WindowMoveDragEvent_1 = require("../basic/events/WindowMoveDragEvent");
 var UIActionBar_1 = require("./UIActionBar");
+var UIActionButton_1 = require("./UIActionButton");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
@@ -27,32 +28,10 @@ var UIToolBar = (function (_super) {
         _this.height = 30;
         _this.drag = {};
         _this.actionBar = [
-            {
-                id: "info",
-                label: "关于",
-                handler: function (window) {
-                }
-            },
-            {
-                id: "min",
-                label: "最小化",
-                handler: function (window) {
-                }
-            },
-            {
-                id: "max",
-                label: "最大化",
-                handler: function (window) {
-                    window.max();
-                }
-            },
-            {
-                id: "destroy",
-                label: "关闭",
-                handler: function (window) {
-                    window.destroy();
-                }
-            }
+            UIActionButton_1.default.infoActionButton,
+            UIActionButton_1.default.minActionButton,
+            UIActionButton_1.default.maxActionButton,
+            UIActionButton_1.default.destroyActionButton
         ];
         _this.height = CastHelper.numberCast(options.height, _this.height);
         _this.drag = CastHelper.jsonOrBooleanCast(options.drag, {
@@ -67,6 +46,7 @@ var UIToolBar = (function (_super) {
         return _this;
     }
     UIToolBar.prototype.present = function () {
+        var _this = this;
         var fragment = document.createDocumentFragment();
         var kebabCase = StringHelper.getKebabCase(this.kind);
         var toolBarElement = document.createElement("div");
@@ -74,6 +54,16 @@ var UIToolBar = (function (_super) {
         ElementHelper.addStyles(toolBarElement, {
             height: this.height + "px"
         });
+        toolBarElement.addEventListener("dblclick", function (ev) {
+            if (_this.window.status === "max") {
+                _this.window.normal();
+                return;
+            }
+            if (_this.window.status === "normal") {
+                _this.window.max();
+                return;
+            }
+        }, true);
         if (this.actionBar !== false) {
             var actionBar = new UIActionBar_1.default(this.app, this.window, this);
             var actionBarElement = actionBar.present();

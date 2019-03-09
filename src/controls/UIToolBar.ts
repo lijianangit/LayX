@@ -4,6 +4,7 @@ import UIWindowComponent from "../basic/models/UIWindowComponent";
 import UIWindow from "./UIWindow";
 import WindowMoveDragEvent from "../basic/events/WindowMoveDragEvent";
 import UIActionBar from "./UIActionBar";
+import UIActionButton from "./UIActionButton";
 import * as Types from "../../types";
 import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
@@ -15,32 +16,10 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
     public height: number = 30;
     public drag: Types.DragMoveOption | false = {};
     public actionBar: Array<Types.ActionButtonOption> | false = [
-        {
-            id: "info",
-            label: "关于",
-            handler: function (window: UIWindow) {
-            }
-        },
-        {
-            id: "min",
-            label: "最小化",
-            handler: function (window: UIWindow) {
-            }
-        },
-        {
-            id: "max",
-            label: "最大化",
-            handler: function (window: UIWindow) {
-                window.max();
-            }
-        },
-        {
-            id: "destroy",
-            label: "关闭",
-            handler: function (window: UIWindow) {
-                window.destroy();
-            }
-        }
+        UIActionButton.infoActionButton,
+        UIActionButton.minActionButton,
+        UIActionButton.maxActionButton,
+        UIActionButton.destroyActionButton
     ];
 
     constructor(app: App, window: UIWindow, options: Types.ToolBarOption) {
@@ -72,6 +51,17 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
         ElementHelper.addStyles(toolBarElement, <Types.CSSStyleObject>{
             height: `${this.height}px`
         });
+
+        toolBarElement.addEventListener("dblclick", (ev: MouseEvent) => {
+            if (this.window.status === Enums.WindowStatus.MAX) {
+                this.window.normal();
+                return;
+            }
+            if (this.window.status === Enums.WindowStatus.NORMAL) {
+                this.window.max();
+                return;
+            }
+        }, true);
 
         if (this.actionBar !== false) {
             const actionBar = new UIActionBar(this.app, this.window, this);

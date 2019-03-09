@@ -14,9 +14,6 @@ export default class WindowMoveDragEvent extends DragEvent {
     }
 
     dragStart(ev: MouseEvent, x: number, y: number): void | false {
-        if (this.window.status !== Enums.WindowStatus.NORMAL) {
-            return false;
-        }
     }
 
     dragging(ev: MouseEvent, x: number, y: number, distanceX: number, distanceY: number): void {
@@ -26,6 +23,10 @@ export default class WindowMoveDragEvent extends DragEvent {
     dragEnd(ev: MouseEvent, x: number, y: number): void {
         this.window.top = this._top;
         this.window.left = this._left;
+
+        if (this._top === 0) {
+            this.window.max();
+        }
     }
 
     private moveHandler(distanceX: number, distanceY: number) {
@@ -49,5 +50,23 @@ export default class WindowMoveDragEvent extends DragEvent {
             top: `${top}px`,
             left: `${left}px`
         });
+    }
+
+    draggingFirst(ev: MouseEvent, x: number, y: number, distanceX: number, distanceY: number): void {
+        if (this.window.status === Enums.WindowStatus.MAX) {
+            if (x < this.window.width / 2) {
+                this._left = 0;
+            }
+            else if (x > this.window.width / 2 && x < innerWidth - this.window.width) {
+                this._left = x - this.window.width / 2;
+            } else if (innerWidth - x < this.window.width / 2) {
+                this._left = innerWidth - this.window.width;
+            } else if (innerWidth - x > this.window.width / 2 && x >= innerWidth - this.window.width) {
+                this._left = x - this.window.width / 2;
+            }
+            this.window.top = this._top = 0;
+            this.window.left = this._left;
+            this.window.normal();
+        }
     }
 }

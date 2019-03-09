@@ -25,7 +25,7 @@ var DragEvent = (function () {
             DragEvent.isDragging = true;
             if (DragEvent.isFirstDragging === true) {
                 DragEvent.isFirstDragging = false;
-                _this.draggingFirst(ev);
+                _this.draggingFirst(ev, currentX, currentY, distanceX, distanceY);
             }
             _this.dragging(ev, currentX, currentY, distanceX, distanceY);
         };
@@ -38,7 +38,7 @@ var DragEvent = (function () {
         };
         dragElement.addEventListener("mousedown", this.mousedown);
     }
-    DragEvent.prototype.draggingFirst = function (ev) { };
+    DragEvent.prototype.draggingFirst = function (ev, x, y, distanceX, distanceY) { };
     DragEvent.isDragging = false;
     DragEvent.isFirstDragging = true;
     return DragEvent;

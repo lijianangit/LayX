@@ -46,6 +46,38 @@ var UIActionButton = (function (_super) {
         fragment.appendChild(actionButtonElement);
         return fragment;
     };
+    UIActionButton.destroyActionButton = {
+        id: "destroy",
+        label: "关闭",
+        handler: function (window) {
+            window.destroy();
+        }
+    };
+    UIActionButton.maxActionButton = {
+        id: "max",
+        label: "最大化",
+        handler: function (window) {
+            window.max();
+        }
+    };
+    UIActionButton.restoreActionButton = {
+        id: "restore",
+        label: "恢复",
+        handler: function (window) {
+        }
+    };
+    UIActionButton.minActionButton = {
+        id: "min",
+        label: "最小化",
+        handler: function (window) {
+        }
+    };
+    UIActionButton.infoActionButton = {
+        id: "info",
+        label: "关于",
+        handler: function (window) {
+        }
+    };
     return UIActionButton;
 }(UIActionBarComponent_1.default));
 exports.default = UIActionButton;

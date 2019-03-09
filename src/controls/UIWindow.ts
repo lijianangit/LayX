@@ -5,7 +5,6 @@ import UIParclose from "./UIParclose";
 import UIResizeBar from "./UIResizeBar";
 import UIContextMenu from "./UIContextMenu";
 import UIToolBar from "./UIToolBar";
-import UIActionButton from "./UIActionButton";
 import * as Types from "../../types";
 import * as Enums from "../basic/enums";
 import * as StringHelper from "../utils/StringHelper";
@@ -199,8 +198,32 @@ export default class UIWindow extends UIComponent implements UIControl {
         }
     }
 
+    normal(): void {
+        if (this.element && this.element.parentElement && this.status !== Enums.WindowStatus.NORMAL) {
+            ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
+                top: `${this.top}px`,
+                left: `${this.left}px`,
+                width: `${this.width}px`,
+                height: `${this.height}px`,
+                borderRadius: `${this.borderRadius}px`
+            });
+
+            const resizeBarElement = this.element.querySelector(`.${this.app.prefix}resize-bar`);
+            if (resizeBarElement) {
+                ElementHelper.removeClasses(<HTMLElement>resizeBarElement, this.app.prefix,
+                    "resize-disabled"
+                );
+            }
+
+            ElementHelper.removeClasses(document.body, this.app.prefix,
+                "noscroll"
+            );
+            this.status = Enums.WindowStatus.NORMAL;;
+        }
+    }
+
     max(): void {
-        if (this.element && this.element.parentElement) {
+        if (this.element && this.element.parentElement && this.status !== Enums.WindowStatus.MAX) {
             ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
                 top: `0px`,
                 left: `0px`,

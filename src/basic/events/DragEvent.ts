@@ -30,7 +30,7 @@ export default abstract class DragEvent {
 
         if (DragEvent.isFirstDragging === true) {
             DragEvent.isFirstDragging = false;
-            this.draggingFirst(ev);
+            this.draggingFirst(ev, currentX, currentY, distanceX, distanceY);
         }
 
         this.dragging(ev, currentX, currentY, distanceX, distanceY);
@@ -50,5 +50,5 @@ export default abstract class DragEvent {
 
     abstract dragEnd(ev: MouseEvent, x: number, y: number): void;
 
-    draggingFirst(ev: MouseEvent): void { }
+    draggingFirst(ev: MouseEvent, x: number, y: number, distanceX: number, distanceY: number): void { }
 }

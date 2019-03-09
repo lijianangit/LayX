@@ -179,8 +179,26 @@ var UIWindow = (function (_super) {
             this.element.parentElement.removeChild(this.element);
         }
     };
+    UIWindow.prototype.normal = function () {
+        if (this.element && this.element.parentElement && this.status !== "normal") {
+            ElementHelper.addStyles(this.element, {
+                top: this.top + "px",
+                left: this.left + "px",
+                width: this.width + "px",
+                height: this.height + "px",
+                borderRadius: this.borderRadius + "px"
+            });
+            var resizeBarElement = this.element.querySelector("." + this.app.prefix + "resize-bar");
+            if (resizeBarElement) {
+                ElementHelper.removeClasses(resizeBarElement, this.app.prefix, "resize-disabled");
+            }
+            ElementHelper.removeClasses(document.body, this.app.prefix, "noscroll");
+            this.status = "normal";
+            ;
+        }
+    };
     UIWindow.prototype.max = function () {
-        if (this.element && this.element.parentElement) {
+        if (this.element && this.element.parentElement && this.status !== "max") {
             ElementHelper.addStyles(this.element, {
                 top: "0px",
                 left: "0px",

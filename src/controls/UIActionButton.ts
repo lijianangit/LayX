@@ -15,6 +15,43 @@ export default class UIActionButton extends UIActionBarComponent implements UICo
     public label: string;
     public handler?: (window: UIWindow) => void;
 
+    public static readonly destroyActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
+        id: "destroy",
+        label: "关闭",
+        handler: function (window: UIWindow) {
+            window.destroy();
+        }
+    };
+
+    public static readonly maxActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
+        id: "max",
+        label: "最大化",
+        handler: function (window: UIWindow) {
+            window.max();
+        }
+    };
+
+    public static readonly restoreActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
+        id: "restore",
+        label: "恢复",
+        handler: function (window: UIWindow) {
+        }
+    };
+
+    public static readonly minActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
+        id: "min",
+        label: "最小化",
+        handler: function (window: UIWindow) {
+        }
+    };
+
+    public static readonly infoActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
+        id: "info",
+        label: "关于",
+        handler: function (window: UIWindow) {
+        }
+    };
+
     constructor(app: App, window: UIWindow, toolBar: UIToolBar, actionBar: UIActionBar, options: Types.ActionButtonOption) {
         super(app, window, toolBar, actionBar);
         this.id = options.id;
