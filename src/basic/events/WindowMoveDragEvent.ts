@@ -21,12 +21,13 @@ export default class WindowMoveDragEvent extends DragEvent {
     }
 
     dragEnd(ev: MouseEvent, x: number, y: number): void {
-        this.window.top = this._top;
-        this.window.left = this._left;
-
         if (this._top === 0) {
             this.window.max();
+            return;
         }
+
+        this.window.top = this._top;
+        this.window.left = this._left;
     }
 
     private moveHandler(distanceX: number, distanceY: number) {
@@ -65,7 +66,7 @@ export default class WindowMoveDragEvent extends DragEvent {
                 this._left = x - this.window.width / 2;
             }
             this.window.top = this._top = 0;
-            this.window.left = this._left;
+
             this.window.normal();
         }
     }

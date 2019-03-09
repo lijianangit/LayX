@@ -32,11 +32,12 @@ var WindowMoveDragEvent = (function (_super) {
         this.moveHandler(distanceX, distanceY);
     };
     WindowMoveDragEvent.prototype.dragEnd = function (ev, x, y) {
-        this.window.top = this._top;
-        this.window.left = this._left;
         if (this._top === 0) {
             this.window.max();
+            return;
         }
+        this.window.top = this._top;
+        this.window.left = this._left;
     };
     WindowMoveDragEvent.prototype.moveHandler = function (distanceX, distanceY) {
         var top = this.window.top;
@@ -73,7 +74,6 @@ var WindowMoveDragEvent = (function (_super) {
                 this._left = x - this.window.width / 2;
             }
             this.window.top = this._top = 0;
-            this.window.left = this._left;
             this.window.normal();
         }
     };
