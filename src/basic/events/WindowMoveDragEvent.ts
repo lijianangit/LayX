@@ -23,6 +23,7 @@ export default class WindowMoveDragEvent extends DragEvent {
     dragEnd(ev: MouseEvent, x: number, y: number): void {
         if (this._top === 0) {
             this._top = this.window.top;
+            this._left = this.window.left;
             this.window.max();
             return;
         }
