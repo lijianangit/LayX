@@ -16,13 +16,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
+var CastHelper = require("../utils/CastHelper");
 var UIParclose = (function (_super) {
     __extends(UIParclose, _super);
     function UIParclose(app, window, options) {
         var _this = _super.call(this, app, window) || this;
         _this.kind = "parclose";
         _this.opacity = 0;
-        _this.opacity = options.opacity === undefined ? _this.opacity : options.opacity;
+        _this.opacity = CastHelper.numberCast(options.opacity, _this.opacity);
         return _this;
     }
     UIParclose.prototype.present = function () {

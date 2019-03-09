@@ -21,6 +21,18 @@ function isWindowMode(obj) {
     return isSelf;
 }
 exports.isWindowMode = isWindowMode;
+function isWindowAnimate(obj) {
+    var isSelf = false;
+    switch (obj) {
+        case "none":
+        case "zoom":
+            return true;
+        default:
+            return ExceptionHelper.assertNever(obj);
+    }
+    return isSelf;
+}
+exports.isWindowAnimate = isWindowAnimate;
 function isJsonObject(obj) {
     return typeof obj === "object"
         && obj.constructor !== undefined

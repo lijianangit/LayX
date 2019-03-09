@@ -12,7 +12,7 @@ export default class UIContextMenu extends UIWindowComponent implements UIContro
     private label: string;
     private handler?: (window: UIWindow) => void;
 
-    constructor(app: App, window: UIWindow, options: Types.ContextMenuOptions) {
+    constructor(app: App, window: UIWindow, options: Types.ContextMenuOption) {
         super(app, window);
         this.id = options.id;
         this.label = options.label;

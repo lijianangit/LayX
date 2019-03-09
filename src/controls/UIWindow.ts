@@ -9,9 +9,8 @@ import * as Types from "../../types";
 import * as Enums from "../basic/enums";
 import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
-import * as ValueHelper from "../utils/ValueHelper";
+import * as CastHelper from "../utils/CastHelper";
 import * as TypeHelper from "../utils/TypeHelper";
-import * as JsonHelper from "../utils/JsonHelper";
 import * as ExceptionHelper from "../utils/ExceptionHelper";
 
 export default class UIWindow extends UIComponent implements UIControl {
@@ -28,16 +27,16 @@ export default class UIWindow extends UIComponent implements UIControl {
     public minHeight: number = 100;
     public left: number;
     public top: number;
-    public mode: Enums.WindowMode = Enums.WindowMode.LAYER;
-    public background: string = "#ffffff";
-    public border: string | null = null;
-    public borderRadius: string | null = null;
+    public background: string | null = "#ffffff";
     public shadow: string | null = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
     public parclose: number | false = false;
+    public mode: Enums.WindowMode = Enums.WindowMode.LAYER;
+    public border: string | null = null;
+    public borderRadius: string | null = null;
     public animate: Enums.WindowAnimate = Enums.WindowAnimate.ZOOM;
-    public contextMenu: Array<Types.ContextMenuOptions> | false = false;
-    public resizeBar: Types.ResizeOptions | boolean = true;
-    public toolBar: Types.ToolBarOptions | boolean = true;
+    public resizeBar: Types.ResizeOption | false = {};
+    public toolBar: Types.ToolBarOption | false = {};
+    public contextMenu: Array<Types.ContextMenuOption> | false = false;
 
     private _element: HTMLElement | null = null;
     get element() {
@@ -49,62 +48,43 @@ export default class UIWindow extends UIComponent implements UIControl {
         return this.getFlickerShadow();
     }
 
-    private readonly defaultBorder: Types.BorderOptions = {
-        width: 1,
-        style: "solid",
-        color: "#3baced",
-        radius: 4
-    };
-
-    constructor(app: App, options: Types.WindowOptions) {
+    constructor(app: App, options: Types.WindowOption) {
         super(app);
 
         if (!options.id) throw new Error("`id` is required.");
         this.id = options.id;
         this.elementId = this.app.prefix + this.id;
 
-        this.width = ValueHelper.numberCast(options.width) || this.width;
-        this.height = ValueHelper.numberCast(options.height) || this.height;
-        this.maxWidth = Math.min(options.maxWidth || this.maxWidth, this.maxWidth);
-        this.maxHeight = Math.min(options.maxHeight || this.maxHeight, this.maxHeight);
-        this.minWidth = Math.max(options.minWidth || this.minWidth, this.minWidth);
-        this.minHeight = Math.max(options.minHeight || this.minHeight, this.minHeight);
+        this.mode = CastHelper.windowModeCast(options.mode, this.mode);
+
+        this.width = CastHelper.numberCast(options.width, this.width);
+        this.height = CastHelper.numberCast(options.height, this.height);
+        this.maxWidth = Math.min(CastHelper.numberCast(options.maxWidth, this.maxWidth), this.maxWidth);
+        this.maxHeight = Math.min(CastHelper.numberCast(options.maxHeight, this.maxHeight), this.maxHeight);
+        this.minWidth = Math.max(CastHelper.numberCast(options.minWidth, this.minWidth), this.minWidth);
+        this.minHeight = Math.max(CastHelper.numberCast(options.minHeight, this.minHeight), this.minHeight);
         this.width = Math.max(this.minWidth, this.width);
         this.width = Math.min(this.maxWidth, this.width);
         this.height = Math.max(this.minHeight, this.height);
         this.height = Math.min(this.maxHeight, this.height);
+        [this.left, this.top] = CastHelper.offsetCast(options.offset, this.width, this.height);
 
-        const coord: Types.WindowCoord = ValueHelper.offsetCast(options.offset, this.width, this.height) || [(innerWidth - this.width) / 2, (innerHeight - this.height) / 2];
-        this.left = coord[0];
-        this.top = coord[1];
+        this.background = CastHelper.stringOrBooleanStyleCast(options.background, this.background);
+        this.shadow = CastHelper.stringOrBooleanStyleCast(options.shadow, this.shadow);
+        this.parclose = CastHelper.numberOrBooleanCast(options.parclose, this.parclose, 0);
 
-        const borderOption = options.border === undefined ? this.defaultBorder : (
-            TypeHelper.isJsonObject(options.border) ? JsonHelper.merge(this.defaultBorder, options.border) : options.border
-        );
-        const borderStyle = ElementHelper.borderCast(borderOption);
-        this.border = borderStyle[0];
-        this.borderRadius = borderStyle[1];
+        [this.border, this.borderRadius] = CastHelper.borderCast(options.border, {
+            width: 1,
+            style: "solid",
+            color: "#3baced",
+            radius: 4
+        });
 
-        this.background = options.background || this.background;
-        this.shadow = (options.shadow === undefined ? true : options.shadow) === false ? null : (
-            typeof options.shadow === "string" ? options.shadow : this.shadow
-        );
+        this.animate = CastHelper.windowAnimateCast(options.animate, this.animate);
 
-        this.contextMenu = options.contextMenu === undefined ? this.contextMenu : options.contextMenu;
-        if (this.contextMenu !== false && !TypeHelper.isContextMenus(this.contextMenu)) {
-            ExceptionHelper.assertNever(this.contextMenu);
-        }
-
-        TypeHelper.isWindowMode(this.mode = options.mode || this.mode);
-        this.animate = ValueHelper.animateCast(options.animate === undefined ? this.animate : options.animate);
-        this.parclose = options.parclose === undefined ? this.parclose : (options.parclose === true ? 0 : this.parclose);
-
-        this.resizeBar = options.resizeBar === undefined ? this.resizeBar : options.resizeBar;
-        if (!TypeHelper.isResizeOptions(this.resizeBar)) {
-            ExceptionHelper.assertNever(<never>this.resizeBar);
-        }
-
-        this.toolBar = options.toolBar === undefined ? this.toolBar : options.toolBar;
+        this.resizeBar = CastHelper.jsonOrBooleanCast(options.resizeBar, this.resizeBar);
+        this.toolBar = CastHelper.jsonOrBooleanCast(options.toolBar, this.toolBar);
+        this.contextMenu = CastHelper.contextMenusCast(options.contextMenu);
     }
 
     present(): DocumentFragment {
@@ -149,13 +129,13 @@ export default class UIWindow extends UIComponent implements UIControl {
         }, true);
 
         if (this.toolBar !== false) {
-            const toolBar = new UIToolBar(this.app, this, this.toolBar === true ? {} : this.toolBar);
+            const toolBar = new UIToolBar(this.app, this, this.toolBar);
             const toolBarElement = toolBar.present();
             toolBarElement != null && windowElement.appendChild(toolBarElement);
         }
 
         if (this.resizeBar !== false) {
-            const resizeBar = new UIResizeBar(this.app, this, this.resizeBar === true ? {} : this.resizeBar);
+            const resizeBar = new UIResizeBar(this.app, this, this.resizeBar);
             const resizeElement = resizeBar.present();
             resizeElement != null && windowElement.appendChild(resizeElement);
         }

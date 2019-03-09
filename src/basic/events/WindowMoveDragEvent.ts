@@ -8,7 +8,7 @@ export default class WindowMoveDragEvent extends DragEvent {
     private _top: number = this.window.top;
     private _left: number = this.window.left;
 
-    constructor(dragElement: HTMLElement, public window: UIWindow, private readonly dragMoveOptions: Types.DragMoveOptions) {
+    constructor(dragElement: HTMLElement, public window: UIWindow, private readonly dragMoveOptions: Types.DragMoveOption) {
         super(dragElement);
     }
 

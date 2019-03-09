@@ -5,15 +5,16 @@ import UIWindow from "./UIWindow";
 import * as Types from "../../types";
 import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
+import * as CastHelper from "../utils/CastHelper";
 
 export default class UIParclose extends UIWindowComponent implements UIControl {
     public readonly kind: string = "parclose";
-    private opacity: number = 0;
+    public opacity: number = 0;
 
-    constructor(app: App, window: UIWindow, options: Types.ParcloseOptions) {
+    constructor(app: App, window: UIWindow, options: Types.ParcloseOption) {
         super(app, window);
 
-        this.opacity = options.opacity === undefined ? this.opacity : options.opacity;
+        this.opacity = CastHelper.numberCast(options.opacity, this.opacity);
     }
 
     present(): DocumentFragment | null {

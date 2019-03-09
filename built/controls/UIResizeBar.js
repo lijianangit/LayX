@@ -17,6 +17,7 @@ var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var WindowResizeDragEvent_1 = require("../basic/events/WindowResizeDragEvent");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
+var CastHelper = require("../utils/CastHelper");
 var UIResizeBar = (function (_super) {
     __extends(UIResizeBar, _super);
     function UIResizeBar(app, window, options) {
@@ -40,14 +41,14 @@ var UIResizeBar = (function (_super) {
             "leftBottom",
             "rightBottom"
         ];
-        _this.left = options.left === undefined ? _this.left : options.left;
-        _this.right = options.right === undefined ? _this.right : options.right;
-        _this.top = options.top === undefined ? _this.top : options.top;
-        _this.bottom = options.bottom === undefined ? _this.bottom : options.bottom;
-        _this.leftTop = options.leftTop === undefined ? _this.leftTop : options.leftTop;
-        _this.rightTop = options.rightTop === undefined ? _this.rightTop : options.rightTop;
-        _this.leftBottom = options.leftBottom === undefined ? _this.leftBottom : options.leftBottom;
-        _this.rightBottom = options.rightBottom === undefined ? _this.rightBottom : options.rightBottom;
+        _this.left = CastHelper.booleanCast(options.left, _this.left);
+        _this.right = CastHelper.booleanCast(options.right, _this.right);
+        _this.top = CastHelper.booleanCast(options.top, _this.top);
+        _this.bottom = CastHelper.booleanCast(options.bottom, _this.bottom);
+        _this.leftTop = CastHelper.booleanCast(options.leftTop, _this.leftTop);
+        _this.rightTop = CastHelper.booleanCast(options.rightTop, _this.rightTop);
+        _this.leftBottom = CastHelper.booleanCast(options.leftBottom, _this.leftBottom);
+        _this.rightBottom = CastHelper.booleanCast(options.rightBottom, _this.rightBottom);
         return _this;
     }
     UIResizeBar.prototype.present = function () {

@@ -33,7 +33,7 @@ export default class App {
         this.bindEvent();
     }
 
-    open(options: Types.WindowOptions): void {
+    open(options: Types.WindowOption): void {
         const window = this.getWindow(options.id);
         if (window) {
             window.updateZIndex();

@@ -20,13 +20,13 @@ export const enum WindowMode {
 }
 
 export const enum WindowOffset {
-    LEFT_TOP = "left_top",
-    LEFT_CENTER = "left_center",
-    LEFT_BOTTOM = "left_bottom",
-    TOP_CENTER = "top_center",
+    LEFT_TOP = "leftTop",
+    LEFT_CENTER = "leftCenter",
+    LEFT_BOTTOM = "leftBottom",
+    TOP_CENTER = "topCenter",
     CENTER = "center",
-    BOTTOM_CENTER = "bottom_center",
-    RIGHT_TOP = "right_top",
-    RIGHT_CENTER = "right_center",
-    RIGHT_BOTTOM = "right_bottom"
+    BOTTOM_CENTER = "bottomCenter",
+    RIGHT_TOP = "rightTop",
+    RIGHT_CENTER = "rightCenter",
+    RIGHT_BOTTOM = "rightBottom"
 }

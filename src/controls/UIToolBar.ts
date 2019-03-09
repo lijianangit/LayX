@@ -6,27 +6,32 @@ import WindowMoveDragEvent from "../basic/events/WindowMoveDragEvent";
 import * as Types from "../../types";
 import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
-import * as ExceptionHelper from "../utils/ExceptionHelper";
-import * as ValueHelper from "../utils/ValueHelper";
-import * as JsonHelper from "../utils/JsonHelper";
+import * as CastHelper from "../utils/CastHelper";
 
 export default class UIToolBar extends UIWindowComponent implements UIControl {
     public readonly kind: string = "toolBar";
-    private height: number = 30;
-    private drag: Types.DragMoveOptions = {
-        vertical: true,
-        horizontal: true,
-        breakLeft: true,
-        breakRight: true,
-        breakTop: true,
-        breakBottom: true
-    };
+    public height: number = 30;
+    public drag: Types.DragMoveOption | false = {};
+    public actionBar: Types.ActionBarOption | false = {};
 
-    constructor(app: App, window: UIWindow, options: Types.ToolBarOptions) {
+    constructor(app: App, window: UIWindow, options: Types.ToolBarOption) {
         super(app, window);
 
-        this.height = ValueHelper.numberCast(options.height) || this.height;
-        this.drag = options.drag === undefined ? this.drag : JsonHelper.merge(this.drag, options.drag);
+        this.height = CastHelper.numberCast(options.height, this.height);
+        this.drag = CastHelper.jsonOrBooleanCast(options.drag, {
+            vertical: true,
+            horizontal: true,
+            breakLeft: true,
+            breakRight: true,
+            breakTop: true,
+            breakBottom: true
+        });
+        this.actionBar = CastHelper.jsonOrBooleanCast(options.actionBar, {
+            destroy: true,
+            max: true,
+            min: true,
+            info: true
+        });
     }
 
     present(): DocumentFragment | null {
@@ -44,10 +49,9 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
             height: `${this.height}px`
         });
 
-        if (this.drag.vertical === true || this.drag.horizontal === true) {
+        if (this.drag !== false && (this.drag.vertical === true || this.drag.horizontal === true)) {
             new WindowMoveDragEvent(toolBarElement, this.window, this.drag);
         }
-
         fragment.appendChild(toolBarElement);
         return fragment;
     }

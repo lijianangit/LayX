@@ -8,29 +8,26 @@ export type JsonObject = {
 
 export type CSSStyleObject = CSSStyleDeclaration & { [key: string]: string | null };
 
-export type WindowCoord = {
-    [index: number]: number;
-    length: number;
-};
+export type WindowCoord = number[];
 
-export type BorderOptions = JsonObject & {
+export type BorderOption = JsonObject & {
     width?: number;
     color?: string;
     style?: string;
     radius?: number;
 } & JsonObject;
 
-export type ParcloseOptions = {
+export type ParcloseOption = {
     opacity?: number;
 } & JsonObject;
 
-export type ContextMenuOptions = {
+export type ContextMenuOption = {
     id: string;
     label: string;
     handler?: (window: UIWindow) => void;
 } & JsonObject;
 
-export type ResizeOptions = {
+export type ResizeOption = {
     left?: boolean;
     right?: boolean;
     top?: boolean;
@@ -41,7 +38,7 @@ export type ResizeOptions = {
     rightBottom?: boolean;
 } & JsonObject;
 
-export type DragMoveOptions = {
+export type DragMoveOption = {
     vertical?: boolean;
     horizontal?: boolean;
     breakLeft?: boolean;
@@ -50,29 +47,37 @@ export type DragMoveOptions = {
     breakBottom?: boolean;
 } & JsonObject;
 
-export type ToolBarOptions = {
-    height?: number;
-    drag?: DragMoveOptions;
+export type ActionBarOption = {
+    destroy?: boolean;
+    max?: boolean;
+    min?: boolean;
+    info?: boolean;
 } & JsonObject;
 
-export type WindowOptions = {
+export type ToolBarOption = {
+    height?: number;
+    drag?: DragMoveOption | boolean;
+    actionBar?: ActionBarOption | boolean;
+} & JsonObject;
+
+export type WindowOption = {
     id: string;
+    mode?: Enums.WindowMode;
     width?: number;
     height?: number;
     maxWidth?: number;
     maxHeight?: number;
     minWidth?: number;
     minHeight?: number;
-    offset?: Enums.WindowOffset | WindowCoord;
-    mode?: Enums.WindowMode;
-    background?: string;
-    border?: BorderOptions | string;
+    background?: string | boolean;
     shadow?: string | boolean;
-    animate?: Enums.WindowAnimate | false;
     parclose?: number | boolean;
-    contextMenu?: Array<ContextMenuOptions> | false;
-    resizeBar?: ResizeOptions | boolean;
-    toolBar?: ToolBarOptions | boolean;
+    border?: BorderOption | string | boolean;
+    offset?: Enums.WindowOffset | WindowCoord;
+    animate?: Enums.WindowAnimate | boolean;
+    resizeBar?: ResizeOption | boolean;
+    toolBar?: ToolBarOption | boolean;
+    contextMenu?: Array<ContextMenuOption> | false;
 } & JsonObject;
 
 

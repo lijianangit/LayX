@@ -7,17 +7,18 @@ import * as Types from "../../types";
 import * as Enums from "../basic/enums";
 import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
+import * as CastHelper from "../utils/CastHelper";
 
 export default class UIResizeBar extends UIWindowComponent implements UIControl {
     public readonly kind: string = "resizeBar";
-    private left: boolean = true;
-    private right: boolean = true;
-    private top: boolean = true;
-    private bottom: boolean = true;
-    private leftTop: boolean = true;
-    private rightTop: boolean = true;
-    private leftBottom: boolean = true;
-    private rightBottom: boolean = true;
+    public left: boolean = true;
+    public right: boolean = true;
+    public top: boolean = true;
+    public bottom: boolean = true;
+    public leftTop: boolean = true;
+    public rightTop: boolean = true;
+    public leftBottom: boolean = true;
+    public rightBottom: boolean = true;
 
     private readonly directions = [
         Enums.ResizeDirection.LEFT,
@@ -30,17 +31,17 @@ export default class UIResizeBar extends UIWindowComponent implements UIControl 
         Enums.ResizeDirection.RIGHT_BOTTOM
     ];
 
-    constructor(app: App, window: UIWindow, options: Types.ResizeOptions) {
+    constructor(app: App, window: UIWindow, options: Types.ResizeOption) {
         super(app, window);
 
-        this.left = options.left === undefined ? this.left : options.left;
-        this.right = options.right === undefined ? this.right : options.right;
-        this.top = options.top === undefined ? this.top : options.top;
-        this.bottom = options.bottom === undefined ? this.bottom : options.bottom;
-        this.leftTop = options.leftTop === undefined ? this.leftTop : options.leftTop;
-        this.rightTop = options.rightTop === undefined ? this.rightTop : options.rightTop;
-        this.leftBottom = options.leftBottom === undefined ? this.leftBottom : options.leftBottom;
-        this.rightBottom = options.rightBottom === undefined ? this.rightBottom : options.rightBottom;
+        this.left = CastHelper.booleanCast(options.left, this.left);
+        this.right = CastHelper.booleanCast(options.right, this.right);
+        this.top = CastHelper.booleanCast(options.top, this.top);
+        this.bottom = CastHelper.booleanCast(options.bottom, this.bottom);
+        this.leftTop = CastHelper.booleanCast(options.leftTop, this.leftTop);
+        this.rightTop = CastHelper.booleanCast(options.rightTop, this.rightTop);
+        this.leftBottom = CastHelper.booleanCast(options.leftBottom, this.leftBottom);
+        this.rightBottom = CastHelper.booleanCast(options.rightBottom, this.rightBottom);
     }
 
     present(): DocumentFragment | null {

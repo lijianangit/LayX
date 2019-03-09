@@ -20,13 +20,12 @@ var UIContextMenu_1 = require("./UIContextMenu");
 var UIToolBar_1 = require("./UIToolBar");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
-var ValueHelper = require("../utils/ValueHelper");
+var CastHelper = require("../utils/CastHelper");
 var TypeHelper = require("../utils/TypeHelper");
-var JsonHelper = require("../utils/JsonHelper");
-var ExceptionHelper = require("../utils/ExceptionHelper");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
     function UIWindow(app, options) {
+        var _a, _b;
         var _this = _super.call(this, app) || this;
         _this.kind = "window";
         _this.flickering = false;
@@ -37,59 +36,47 @@ var UIWindow = (function (_super) {
         _this.maxHeight = innerHeight;
         _this.minWidth = 100;
         _this.minHeight = 100;
-        _this.mode = "layer";
         _this.background = "#ffffff";
-        _this.border = null;
-        _this.borderRadius = null;
         _this.shadow = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
         _this.parclose = false;
+        _this.mode = "layer";
+        _this.border = null;
+        _this.borderRadius = null;
         _this.animate = "zoom";
+        _this.resizeBar = {};
+        _this.toolBar = {};
         _this.contextMenu = false;
-        _this.resizeBar = true;
-        _this.toolBar = true;
         _this._element = null;
         _this._flickerShadow = null;
-        _this.defaultBorder = {
-            width: 1,
-            style: "solid",
-            color: "#3baced",
-            radius: 4
-        };
         if (!options.id)
             throw new Error("`id` is required.");
         _this.id = options.id;
         _this.elementId = _this.app.prefix + _this.id;
-        _this.width = ValueHelper.numberCast(options.width) || _this.width;
-        _this.height = ValueHelper.numberCast(options.height) || _this.height;
-        _this.maxWidth = Math.min(options.maxWidth || _this.maxWidth, _this.maxWidth);
-        _this.maxHeight = Math.min(options.maxHeight || _this.maxHeight, _this.maxHeight);
-        _this.minWidth = Math.max(options.minWidth || _this.minWidth, _this.minWidth);
-        _this.minHeight = Math.max(options.minHeight || _this.minHeight, _this.minHeight);
+        _this.mode = CastHelper.windowModeCast(options.mode, _this.mode);
+        _this.width = CastHelper.numberCast(options.width, _this.width);
+        _this.height = CastHelper.numberCast(options.height, _this.height);
+        _this.maxWidth = Math.min(CastHelper.numberCast(options.maxWidth, _this.maxWidth), _this.maxWidth);
+        _this.maxHeight = Math.min(CastHelper.numberCast(options.maxHeight, _this.maxHeight), _this.maxHeight);
+        _this.minWidth = Math.max(CastHelper.numberCast(options.minWidth, _this.minWidth), _this.minWidth);
+        _this.minHeight = Math.max(CastHelper.numberCast(options.minHeight, _this.minHeight), _this.minHeight);
         _this.width = Math.max(_this.minWidth, _this.width);
         _this.width = Math.min(_this.maxWidth, _this.width);
         _this.height = Math.max(_this.minHeight, _this.height);
         _this.height = Math.min(_this.maxHeight, _this.height);
-        var coord = ValueHelper.offsetCast(options.offset, _this.width, _this.height) || [(innerWidth - _this.width) / 2, (innerHeight - _this.height) / 2];
-        _this.left = coord[0];
-        _this.top = coord[1];
-        var borderOption = options.border === undefined ? _this.defaultBorder : (TypeHelper.isJsonObject(options.border) ? JsonHelper.merge(_this.defaultBorder, options.border) : options.border);
-        var borderStyle = ElementHelper.borderCast(borderOption);
-        _this.border = borderStyle[0];
-        _this.borderRadius = borderStyle[1];
-        _this.background = options.background || _this.background;
-        _this.shadow = (options.shadow === undefined ? true : options.shadow) === false ? null : (typeof options.shadow === "string" ? options.shadow : _this.shadow);
-        _this.contextMenu = options.contextMenu === undefined ? _this.contextMenu : options.contextMenu;
-        if (_this.contextMenu !== false && !TypeHelper.isContextMenus(_this.contextMenu)) {
-            ExceptionHelper.assertNever(_this.contextMenu);
-        }
-        TypeHelper.isWindowMode(_this.mode = options.mode || _this.mode);
-        _this.animate = ValueHelper.animateCast(options.animate === undefined ? _this.animate : options.animate);
-        _this.parclose = options.parclose === undefined ? _this.parclose : (options.parclose === true ? 0 : _this.parclose);
-        _this.resizeBar = options.resizeBar === undefined ? _this.resizeBar : options.resizeBar;
-        if (!TypeHelper.isResizeOptions(_this.resizeBar)) {
-            ExceptionHelper.assertNever(_this.resizeBar);
-        }
-        _this.toolBar = options.toolBar === undefined ? _this.toolBar : options.toolBar;
+        _a = CastHelper.offsetCast(options.offset, _this.width, _this.height), _this.left = _a[0], _this.top = _a[1];
+        _this.background = CastHelper.stringOrBooleanStyleCast(options.background, _this.background);
+        _this.shadow = CastHelper.stringOrBooleanStyleCast(options.shadow, _this.shadow);
+        _this.parclose = CastHelper.numberOrBooleanCast(options.parclose, _this.parclose, 0);
+        _b = CastHelper.borderCast(options.border, {
+            width: 1,
+            style: "solid",
+            color: "#3baced",
+            radius: 4
+        }), _this.border = _b[0], _this.borderRadius = _b[1];
+        _this.animate = CastHelper.windowAnimateCast(options.animate, _this.animate);
+        _this.resizeBar = CastHelper.jsonOrBooleanCast(options.resizeBar, _this.resizeBar);
+        _this.toolBar = CastHelper.jsonOrBooleanCast(options.toolBar, _this.toolBar);
+        _this.contextMenu = CastHelper.contextMenusCast(options.contextMenu);
         return _this;
     }
     Object.defineProperty(UIWindow.prototype, "element", {
@@ -138,12 +125,12 @@ var UIWindow = (function (_super) {
             _this.updateZIndex(true);
         }, true);
         if (this.toolBar !== false) {
-            var toolBar = new UIToolBar_1.default(this.app, this, this.toolBar === true ? {} : this.toolBar);
+            var toolBar = new UIToolBar_1.default(this.app, this, this.toolBar);
             var toolBarElement = toolBar.present();
             toolBarElement != null && windowElement.appendChild(toolBarElement);
         }
         if (this.resizeBar !== false) {
-            var resizeBar = new UIResizeBar_1.default(this.app, this, this.resizeBar === true ? {} : this.resizeBar);
+            var resizeBar = new UIResizeBar_1.default(this.app, this, this.resizeBar);
             var resizeElement = resizeBar.present();
             resizeElement != null && windowElement.appendChild(resizeElement);
         }
