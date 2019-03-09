@@ -198,21 +198,26 @@ var UIWindow = (function (_super) {
         }
     };
     UIWindow.prototype.max = function () {
-        if (this.element && this.element.parentElement && this.status !== "max") {
-            ElementHelper.addStyles(this.element, {
-                top: "0px",
-                left: "0px",
-                width: innerWidth + "px",
-                height: innerHeight + "px",
-                borderRadius: "0px"
-            });
-            var resizeBarElement = this.element.querySelector("." + this.app.prefix + "resize-bar");
-            if (resizeBarElement) {
-                ElementHelper.addClasses(resizeBarElement, this.app.prefix, "resize-disabled");
+        if (this.element && this.element.parentElement) {
+            if (this.status !== "max") {
+                ElementHelper.addStyles(this.element, {
+                    top: "0px",
+                    left: "0px",
+                    width: innerWidth + "px",
+                    height: innerHeight + "px",
+                    borderRadius: "0px"
+                });
+                var resizeBarElement = this.element.querySelector("." + this.app.prefix + "resize-bar");
+                if (resizeBarElement) {
+                    ElementHelper.addClasses(resizeBarElement, this.app.prefix, "resize-disabled");
+                }
+                ElementHelper.addClasses(document.body, this.app.prefix, "noscroll");
+                this.status = "max";
+                return;
             }
-            ElementHelper.addClasses(document.body, this.app.prefix, "noscroll");
-            this.status = "max";
-            ;
+            else {
+                this.normal();
+            }
         }
     };
     UIWindow.prototype.createContextMenu = function () {

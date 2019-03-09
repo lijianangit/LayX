@@ -223,26 +223,31 @@ export default class UIWindow extends UIComponent implements UIControl {
     }
 
     max(): void {
-        if (this.element && this.element.parentElement && this.status !== Enums.WindowStatus.MAX) {
-            ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
-                top: `0px`,
-                left: `0px`,
-                width: `${innerWidth}px`,
-                height: `${innerHeight}px`,
-                borderRadius: `0px`
-            });
+        if (this.element && this.element.parentElement) {
+            if (this.status !== Enums.WindowStatus.MAX) {
+                ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
+                    top: `0px`,
+                    left: `0px`,
+                    width: `${innerWidth}px`,
+                    height: `${innerHeight}px`,
+                    borderRadius: `0px`
+                });
 
-            const resizeBarElement = this.element.querySelector(`.${this.app.prefix}resize-bar`);
-            if (resizeBarElement) {
-                ElementHelper.addClasses(<HTMLElement>resizeBarElement, this.app.prefix,
-                    "resize-disabled"
+                const resizeBarElement = this.element.querySelector(`.${this.app.prefix}resize-bar`);
+                if (resizeBarElement) {
+                    ElementHelper.addClasses(<HTMLElement>resizeBarElement, this.app.prefix,
+                        "resize-disabled"
+                    );
+                }
+
+                ElementHelper.addClasses(document.body, this.app.prefix,
+                    "noscroll"
                 );
+                this.status = Enums.WindowStatus.MAX;
+                return;
+            } else {
+                this.normal();
             }
-
-            ElementHelper.addClasses(document.body, this.app.prefix,
-                "noscroll"
-            );
-            this.status = Enums.WindowStatus.MAX;;
         }
     }
 
