@@ -37,11 +37,11 @@ export default abstract class DragEvent {
     };
 
     private readonly mouseup: (this: Document, ev: MouseEvent) => any = (ev: MouseEvent) => {
-        DragEvent.isDragging = false;
-        DragEvent.isFirstDragging = true;
         document.removeEventListener("mousemove", this.mousemove);
         document.removeEventListener("mouseup", this.mouseup);
         this.dragEnd(ev, ev.pageX, ev.pageY);
+        DragEvent.isDragging = false;
+        DragEvent.isFirstDragging = true;
     };
 
     abstract dragStart(ev: MouseEvent, x: number, y: number): void | false;

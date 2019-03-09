@@ -30,11 +30,11 @@ var DragEvent = (function () {
             _this.dragging(ev, currentX, currentY, distanceX, distanceY);
         };
         this.mouseup = function (ev) {
-            DragEvent.isDragging = false;
-            DragEvent.isFirstDragging = true;
             document.removeEventListener("mousemove", _this.mousemove);
             document.removeEventListener("mouseup", _this.mouseup);
             _this.dragEnd(ev, ev.pageX, ev.pageY);
+            DragEvent.isDragging = false;
+            DragEvent.isFirstDragging = true;
         };
         dragElement.addEventListener("mousedown", this.mousedown);
     }
