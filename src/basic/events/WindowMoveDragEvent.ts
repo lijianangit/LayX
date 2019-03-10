@@ -70,7 +70,7 @@ export default class WindowMoveDragEvent extends DragEvent {
             this.window.top = this._top = 0;
 
             this.window.normal();
-            
+
             this.window.left = this._left;
         }
     }

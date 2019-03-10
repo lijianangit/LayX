@@ -22,19 +22,21 @@ var DragEvent = (function () {
             var currentY = ev.pageY;
             var distanceX = currentX - _this.startX;
             var distanceY = currentY - _this.startY;
-            DragEvent.isDragging = true;
-            if (DragEvent.isFirstDragging === true) {
-                DragEvent.isFirstDragging = false;
-                _this.draggingFirst(ev, currentX, currentY, distanceX, distanceY);
+            if (distanceX !== 0 || distanceY !== 0) {
+                DragEvent.isDragging = true;
+                if (DragEvent.isFirstDragging === true) {
+                    DragEvent.isFirstDragging = false;
+                    _this.draggingFirst(ev, currentX, currentY, distanceX, distanceY);
+                }
+                _this.dragging(ev, currentX, currentY, distanceX, distanceY);
             }
-            _this.dragging(ev, currentX, currentY, distanceX, distanceY);
         };
         this.mouseup = function (ev) {
             document.removeEventListener("mousemove", _this.mousemove);
             document.removeEventListener("mouseup", _this.mouseup);
             _this.dragEnd(ev, ev.pageX, ev.pageY);
-            DragEvent.isDragging = false;
             DragEvent.isFirstDragging = true;
+            DragEvent.isDragging = false;
         };
         dragElement.addEventListener("mousedown", this.mousedown);
     }
