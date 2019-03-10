@@ -5,10 +5,10 @@ import * as Types from "../../../types";
 import * as ElementHelper from "../../utils/ElementHelper";
 
 export default class WindowResizeDragEvent extends DragEvent {
-    private _top: number = this.window.top;
-    private _left: number = this.window.left;
-    private _width: number = this.window.width;
-    private _height: number = this.window.height;
+    private _top: number = 0;
+    private _left: number = 0;
+    private _width: number = 0;
+    private _height: number = 0;
 
     constructor(dragElement: HTMLElement, public direction: Enums.ResizeDirection, public window: UIWindow) {
         super(dragElement);
@@ -18,6 +18,10 @@ export default class WindowResizeDragEvent extends DragEvent {
         if (this.window.status !== Enums.WindowStatus.NORMAL) {
             return false;
         }
+        this._top = this.window.top;
+        this._left = this.window.left;
+        this._width = this.window.width;
+        this._height = this.window.height;
     }
 
     dragging(ev: MouseEvent, x: number, y: number, distanceX: number, distanceY: number): void {

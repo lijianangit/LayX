@@ -102,7 +102,7 @@ var UIWindow = (function (_super) {
         var windowElement = document.createElement("div");
         windowElement.id = this.elementId;
         var isNeedAnimation = this.animate !== "none";
-        ElementHelper.addClasses(windowElement, this.app.prefix, kebabCase, "window-" + this.mode, "flexbox", "flex-column", isNeedAnimation ? "animate" : "", isNeedAnimation ? "animate-" + this.animate + "In" : "");
+        ElementHelper.addClasses(windowElement, this.app.prefix, kebabCase, "window-" + this.mode, "flexbox", "flex-column", isNeedAnimation ? "animate" : "", isNeedAnimation ? "animate-" + this.animate + "-create" : "");
         ElementHelper.addStyles(windowElement, {
             zIndex: this.mode === "layer" ? "" + this.zIndex : null,
             maxWidth: this.maxWidth + "px",
@@ -120,9 +120,14 @@ var UIWindow = (function (_super) {
             boxShadow: this.shadow,
             webkitBoxShadow: this.shadow
         });
-        isNeedAnimation && (windowElement.addEventListener("animationend", function (ev) {
-            ElementHelper.removeClasses(windowElement, _this.app.prefix, "animate-" + _this.animate + "In");
-        }));
+        if (isNeedAnimation) {
+            windowElement.addEventListener("animationend", function (ev) {
+                ElementHelper.removeClasses(windowElement, _this.app.prefix, "animate-" + _this.animate + "-create", "animate-" + _this.animate + "-drag-to-normal");
+            });
+            windowElement.addEventListener("transitionend", function (ev) {
+                ElementHelper.removeClasses(windowElement, _this.app.prefix, "animate-" + _this.animate + "-to-max", "animate-" + _this.animate + "-to-normal");
+            });
+        }
         windowElement.addEventListener("mousedown", function (ev) {
             _this.updateZIndex(true);
         }, true);
@@ -179,8 +184,11 @@ var UIWindow = (function (_super) {
             this.element.parentElement.removeChild(this.element);
         }
     };
-    UIWindow.prototype.normal = function () {
+    UIWindow.prototype.normal = function (dragToNormal) {
+        if (dragToNormal === void 0) { dragToNormal = false; }
         if (this.element && this.element.parentElement && this.status !== "normal") {
+            var isNeedAnimation = this.animate !== "none";
+            ElementHelper.addClasses(this.element, this.app.prefix, isNeedAnimation ? (dragToNormal == false ? "animate-" + this.animate + "-to-normal" : "animate-" + this.animate + "-drag-to-normal") : "");
             ElementHelper.addStyles(this.element, {
                 top: this.top + "px",
                 left: this.left + "px",
@@ -192,7 +200,7 @@ var UIWindow = (function (_super) {
             if (resizeBarElement) {
                 ElementHelper.removeClasses(resizeBarElement, this.app.prefix, "resize-disabled");
             }
-            ElementHelper.removeClasses(document.body, this.app.prefix, "noscroll");
+            ElementHelper.removeClasses(document.body, "z" + this.app.prefix, "noscroll");
             this.status = "normal";
             ;
         }
@@ -200,6 +208,8 @@ var UIWindow = (function (_super) {
     UIWindow.prototype.max = function () {
         if (this.element && this.element.parentElement) {
             if (this.status !== "max") {
+                var isNeedAnimation = this.animate !== "none";
+                ElementHelper.addClasses(this.element, this.app.prefix, isNeedAnimation ? "animate-" + this.animate + "-to-max" : "");
                 ElementHelper.addStyles(this.element, {
                     top: "0px",
                     left: "0px",
@@ -211,7 +221,7 @@ var UIWindow = (function (_super) {
                 if (resizeBarElement) {
                     ElementHelper.addClasses(resizeBarElement, this.app.prefix, "resize-disabled");
                 }
-                ElementHelper.addClasses(document.body, this.app.prefix, "noscroll");
+                ElementHelper.addClasses(document.body, "z" + this.app.prefix, "noscroll");
                 this.status = "max";
                 return;
             }

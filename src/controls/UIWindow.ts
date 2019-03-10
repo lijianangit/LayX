@@ -101,7 +101,7 @@ export default class UIWindow extends UIComponent implements UIControl {
             "flexbox",
             "flex-column",
             isNeedAnimation ? "animate" : "",
-            isNeedAnimation ? `animate-${this.animate}In` : ""
+            isNeedAnimation ? `animate-${this.animate}-create` : ""
         );
 
         ElementHelper.addStyles(windowElement, <Types.CSSStyleObject>{
@@ -122,9 +122,21 @@ export default class UIWindow extends UIComponent implements UIControl {
             webkitBoxShadow: this.shadow
         });
 
-        isNeedAnimation && (windowElement.addEventListener("animationend", (ev: AnimationEvent) => {
-            ElementHelper.removeClasses(windowElement, this.app.prefix, `animate-${this.animate}In`);
-        }));
+        if (isNeedAnimation) {
+            windowElement.addEventListener("animationend", (ev: AnimationEvent) => {
+                ElementHelper.removeClasses(windowElement, this.app.prefix,
+                    `animate-${this.animate}-create`,
+                    `animate-${this.animate}-drag-to-normal`
+                );
+            });
+
+            windowElement.addEventListener("transitionend", (ev: TransitionEvent) => {
+                ElementHelper.removeClasses(windowElement, this.app.prefix,
+                    `animate-${this.animate}-to-max`,
+                    `animate-${this.animate}-to-normal`
+                );
+            });
+        }
         windowElement.addEventListener("mousedown", (ev: MouseEvent) => {
             this.updateZIndex(true);
         }, true);
@@ -198,8 +210,14 @@ export default class UIWindow extends UIComponent implements UIControl {
         }
     }
 
-    normal(): void {
+    normal(dragToNormal: boolean = false): void {
         if (this.element && this.element.parentElement && this.status !== Enums.WindowStatus.NORMAL) {
+            const isNeedAnimation = this.animate !== Enums.WindowAnimate.NONE;
+            ElementHelper.addClasses(this.element, this.app.prefix,
+                isNeedAnimation ? (
+                    dragToNormal == false ? `animate-${this.animate}-to-normal` : `animate-${this.animate}-drag-to-normal`
+                ) : ""
+            );
             ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
                 top: `${this.top}px`,
                 left: `${this.left}px`,
@@ -215,7 +233,7 @@ export default class UIWindow extends UIComponent implements UIControl {
                 );
             }
 
-            ElementHelper.removeClasses(document.body, this.app.prefix,
+            ElementHelper.removeClasses(document.body, `z${this.app.prefix}`,
                 "noscroll"
             );
             this.status = Enums.WindowStatus.NORMAL;;
@@ -225,6 +243,10 @@ export default class UIWindow extends UIComponent implements UIControl {
     max(): void {
         if (this.element && this.element.parentElement) {
             if (this.status !== Enums.WindowStatus.MAX) {
+                const isNeedAnimation = this.animate !== Enums.WindowAnimate.NONE;
+                ElementHelper.addClasses(this.element, this.app.prefix,
+                    isNeedAnimation ? `animate-${this.animate}-to-max` : ""
+                );
                 ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
                     top: `0px`,
                     left: `0px`,
@@ -240,7 +262,7 @@ export default class UIWindow extends UIComponent implements UIControl {
                     );
                 }
 
-                ElementHelper.addClasses(document.body, this.app.prefix,
+                ElementHelper.addClasses(document.body, `z${this.app.prefix}`,
                     "noscroll"
                 );
                 this.status = Enums.WindowStatus.MAX;

@@ -33,7 +33,7 @@ export default abstract class DragEvent {
                 DragEvent.isFirstDragging = false;
                 this.draggingFirst(ev, currentX, currentY, distanceX, distanceY);
             }
-    
+
             this.dragging(ev, currentX, currentY, distanceX, distanceY);
         }
     };

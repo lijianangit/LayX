@@ -6,6 +6,10 @@
     padding: 0;
 }
 
+#layx-body.zlayx-noscroll {
+    overflow: hidden!important;
+}
+
 .layx-flexbox {
     display: flex;
 }

@@ -1,27 +1,24 @@
 .layx-animate {
-    animation-duration: .1s;
+    animation-duration: 0.1s;
     animation-fill-mode: both;
 }
 
-@keyframes layx-animate-zoomIn {
+@keyframes layx-animate-zoom-create {
     from {
         opacity: 0;
-        transform: scale3d(0.3, 0.3, 0.3);
+        transform: scale3d(0.9, 0.9, 0.9);
     }
     50% {
         opacity: 1;
     }
 }
 
-@keyframes layx-animate-zoomOut {
+@keyframes layx-animate-zoom-drag-to-normal {
     from {
-        opacity: 1;
+        opacity: 0;
+        transform: scale3d(1.1, 1.1, 1.1);
     }
     50% {
-        opacity: 0;
-        transform: scale3d(0.3, 0.3, 0.3);
-    }
-    to {
-        opacity: 0;
+        opacity: 1;
     }
 }

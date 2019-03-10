@@ -6,14 +6,16 @@ import * as ElementHelper from "../../utils/ElementHelper";
 
 export default class WindowMoveDragEvent extends DragEvent {
     private readonly emerge: number = 10;
-    private _top: number = this.window.top;
-    private _left: number = this.window.left;
+    private _top: number = 0;
+    private _left: number = 0;
 
     constructor(dragElement: HTMLElement, public window: UIWindow, private readonly dragMoveOptions: Types.DragMoveOption) {
         super(dragElement);
     }
 
     dragStart(ev: MouseEvent, x: number, y: number): void | false {
+        this._top = this.window.top;
+        this._left = this.window.left;
     }
 
     dragging(ev: MouseEvent, x: number, y: number, distanceX: number, distanceY: number): void {
@@ -21,7 +23,7 @@ export default class WindowMoveDragEvent extends DragEvent {
     }
 
     dragEnd(ev: MouseEvent, x: number, y: number): void {
-        if (this._top === 0 && DragEvent.isDragging == true) {
+        if (DragEvent.isDragging == true && this._top === 0) {
             this.window.max();
             this._top = this.window.top;
             this._left = this.window.left;
@@ -69,7 +71,7 @@ export default class WindowMoveDragEvent extends DragEvent {
             }
             this.window.top = this._top = 0;
 
-            this.window.normal();
+            this.window.normal(true);
 
             this.window.left = this._left;
         }

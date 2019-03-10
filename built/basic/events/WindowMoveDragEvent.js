@@ -22,17 +22,19 @@ var WindowMoveDragEvent = (function (_super) {
         _this.window = window;
         _this.dragMoveOptions = dragMoveOptions;
         _this.emerge = 10;
-        _this._top = _this.window.top;
-        _this._left = _this.window.left;
+        _this._top = 0;
+        _this._left = 0;
         return _this;
     }
     WindowMoveDragEvent.prototype.dragStart = function (ev, x, y) {
+        this._top = this.window.top;
+        this._left = this.window.left;
     };
     WindowMoveDragEvent.prototype.dragging = function (ev, x, y, distanceX, distanceY) {
         this.moveHandler(distanceX, distanceY);
     };
     WindowMoveDragEvent.prototype.dragEnd = function (ev, x, y) {
-        if (this._top === 0 && DragEvent_1.default.isDragging == true) {
+        if (DragEvent_1.default.isDragging == true && this._top === 0) {
             this.window.max();
             this._top = this.window.top;
             this._left = this.window.left;
@@ -76,7 +78,7 @@ var WindowMoveDragEvent = (function (_super) {
                 this._left = x - this.window.width / 2;
             }
             this.window.top = this._top = 0;
-            this.window.normal();
+            this.window.normal(true);
             this.window.left = this._left;
         }
     };

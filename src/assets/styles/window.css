@@ -3,18 +3,18 @@
     overflow: hidden;
 }
 
-#layx-body.layx-noscroll {
-    overflow: hidden!important;
-}
-
 .layx-window.layx-window-layer {
     position: fixed;
 }
 
-.layx-window.layx-animate-zoomIn {
-    animation-name: layx-animate-zoomIn;
+.layx-window.layx-animate-zoom-create {
+    animation-name: layx-animate-zoom-create;
 }
 
-.layx-window.layx-animate-zoomOut {
-    animation-name: layx-animate-zoomOut;
+.layx-window.layx-animate-zoom-drag-to-normal {
+    animation-name: layx-animate-zoom-drag-to-normal;
+}
+
+.layx-window.layx-animate-zoom-to-max, .layx-window.layx-animate-zoom-to-normal {
+    transition: all 0.1s ease-in-out;
 }

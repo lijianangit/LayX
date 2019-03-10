@@ -21,16 +21,20 @@ var WindowResizeDragEvent = (function (_super) {
         var _this = _super.call(this, dragElement) || this;
         _this.direction = direction;
         _this.window = window;
-        _this._top = _this.window.top;
-        _this._left = _this.window.left;
-        _this._width = _this.window.width;
-        _this._height = _this.window.height;
+        _this._top = 0;
+        _this._left = 0;
+        _this._width = 0;
+        _this._height = 0;
         return _this;
     }
     WindowResizeDragEvent.prototype.dragStart = function (ev, x, y) {
         if (this.window.status !== "normal") {
             return false;
         }
+        this._top = this.window.top;
+        this._left = this.window.left;
+        this._width = this.window.width;
+        this._height = this.window.height;
     };
     WindowResizeDragEvent.prototype.dragging = function (ev, x, y, distanceX, distanceY) {
         switch (this.direction) {
