@@ -122,7 +122,18 @@ var UIWindow = (function (_super) {
         });
         if (isNeedAnimation) {
             windowElement.addEventListener("animationend", function (ev) {
-                ElementHelper.removeClasses(windowElement, _this.app.prefix, "animate-" + _this.animate + "-create", "animate-" + _this.animate + "-drag-to-normal");
+                if (_this.element && _this.element.parentElement) {
+                    ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-" + _this.animate + "-create", "animate-" + _this.animate + "-drag-to-normal");
+                    if (ElementHelper.containClass(_this.element, _this.app.prefix, "animate-" + _this.animate + "-destroy")) {
+                        ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-" + _this.animate + "-destroy");
+                        if (_this.status === "max") {
+                            ElementHelper.removeClasses(document.body, "z" + _this.app.prefix, "noscroll");
+                        }
+                        var index = _this.app.windows.indexOf(_this);
+                        _this.app.windows.splice(index, 1);
+                        _this.element.parentElement.removeChild(_this.element);
+                    }
+                }
             });
             windowElement.addEventListener("transitionend", function (ev) {
                 ElementHelper.removeClasses(windowElement, _this.app.prefix, "animate-" + _this.animate + "-to-max", "animate-" + _this.animate + "-to-normal");
@@ -176,12 +187,8 @@ var UIWindow = (function (_super) {
     };
     UIWindow.prototype.destroy = function () {
         if (this.element && this.element.parentElement) {
-            if (this.status === "max") {
-                ElementHelper.removeClasses(document.body, this.app.prefix, "noscroll");
-            }
-            var index = this.app.windows.indexOf(this);
-            this.app.windows.splice(index, 1);
-            this.element.parentElement.removeChild(this.element);
+            var isNeedAnimation = this.animate !== "none";
+            ElementHelper.addClasses(this.element, this.app.prefix, isNeedAnimation ? "animate-" + this.animate + "-destroy" : "");
         }
     };
     UIWindow.prototype.normal = function (dragToNormal) {

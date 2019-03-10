@@ -5,20 +5,27 @@
 
 @keyframes layx-animate-zoom-create {
     from {
-        opacity: 0;
         transform: scale3d(0.9, 0.9, 0.9);
     }
-    50% {
-        opacity: 1;
-    }
+    50% {}
 }
 
 @keyframes layx-animate-zoom-drag-to-normal {
     from {
-        opacity: 0;
         transform: scale3d(1.1, 1.1, 1.1);
     }
-    50% {
+    50% {}
+}
+
+@keyframes layx-animate-zoom-destroy {
+    from {
         opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    to {
+        opacity: 0;
+        transform: scale3d(0.9, 0.9, 0.9);
     }
 }

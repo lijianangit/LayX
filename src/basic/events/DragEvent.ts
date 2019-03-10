@@ -1,6 +1,6 @@
 export default abstract class DragEvent {
-    public static isDragging: boolean = false;
-    public static isFirstDragging: boolean = true;
+    public isDragging: boolean = false;
+    public isFirstDragging: boolean = true;
     private startX: number = 0;
     private startY: number = 0;
 
@@ -27,10 +27,10 @@ export default abstract class DragEvent {
         const distanceX = currentX - this.startX;
         const distanceY = currentY - this.startY;
         if (distanceX !== 0 || distanceY !== 0) {
-            DragEvent.isDragging = true;
+            this.isDragging = true;
 
-            if (DragEvent.isFirstDragging === true) {
-                DragEvent.isFirstDragging = false;
+            if (this.isFirstDragging === true) {
+                this.isFirstDragging = false;
                 this.draggingFirst(ev, currentX, currentY, distanceX, distanceY);
             }
 
@@ -42,8 +42,8 @@ export default abstract class DragEvent {
         document.removeEventListener("mousemove", this.mousemove);
         document.removeEventListener("mouseup", this.mouseup);
         this.dragEnd(ev, ev.pageX, ev.pageY);
-        DragEvent.isFirstDragging = true;
-        DragEvent.isDragging = false;
+        this.isFirstDragging = true;
+        this.isDragging = false;
     };
 
     abstract dragStart(ev: MouseEvent, x: number, y: number): void | false;

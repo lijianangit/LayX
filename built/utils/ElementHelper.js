@@ -54,7 +54,7 @@ exports.removeClasses = removeClasses;
 function containClass(element, prefix, cls) {
     if (prefix === void 0) { prefix = "layx-"; }
     var currentClasses = element.className.split(/\s+/g);
-    var index = currentClasses.indexOf(cls);
+    var index = currentClasses.indexOf(prefix + cls);
     return !!~index;
 }
 exports.containClass = containClass;

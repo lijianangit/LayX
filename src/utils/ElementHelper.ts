@@ -40,6 +40,6 @@ export function removeClasses(element: HTMLElement, prefix: string = "layx-", ..
 
 export function containClass(element: HTMLElement, prefix: string = "layx-", cls: string) {
     const currentClasses = element.className.split(/\s+/g);
-    const index = currentClasses.indexOf(cls);
+    const index = currentClasses.indexOf(prefix + cls);
     return !!~index;
 }

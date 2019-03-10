@@ -124,10 +124,27 @@ export default class UIWindow extends UIComponent implements UIControl {
 
         if (isNeedAnimation) {
             windowElement.addEventListener("animationend", (ev: AnimationEvent) => {
-                ElementHelper.removeClasses(windowElement, this.app.prefix,
-                    `animate-${this.animate}-create`,
-                    `animate-${this.animate}-drag-to-normal`
-                );
+                if (this.element && this.element.parentElement) {
+                    ElementHelper.removeClasses(this.element, this.app.prefix,
+                        `animate-${this.animate}-create`,
+                        `animate-${this.animate}-drag-to-normal`
+                    );
+
+                    if (ElementHelper.containClass(this.element, this.app.prefix, `animate-${this.animate}-destroy`)) {
+                        ElementHelper.removeClasses(this.element, this.app.prefix,
+                            `animate-${this.animate}-destroy`
+                        );
+
+                        if (this.status === Enums.WindowStatus.MAX) {
+                            ElementHelper.removeClasses(document.body, `z${this.app.prefix}`,
+                                "noscroll"
+                            );
+                        }
+                        const index = this.app.windows.indexOf(this);
+                        this.app.windows.splice(index, 1);
+                        this.element.parentElement.removeChild(this.element);
+                    }
+                }
             });
 
             windowElement.addEventListener("transitionend", (ev: TransitionEvent) => {
@@ -198,15 +215,10 @@ export default class UIWindow extends UIComponent implements UIControl {
 
     destroy(): void {
         if (this.element && this.element.parentElement) {
-            if (this.status === Enums.WindowStatus.MAX) {
-                ElementHelper.removeClasses(document.body, this.app.prefix,
-                    "noscroll"
-                );
-            }
-            const index = this.app.windows.indexOf(this);
-            this.app.windows.splice(index, 1);
-
-            this.element.parentElement.removeChild(this.element);
+            const isNeedAnimation = this.animate !== Enums.WindowAnimate.NONE;
+            ElementHelper.addClasses(this.element, this.app.prefix,
+                isNeedAnimation ? `animate-${this.animate}-destroy` : ""
+            );
         }
     }
 

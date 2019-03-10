@@ -34,7 +34,7 @@ var WindowMoveDragEvent = (function (_super) {
         this.moveHandler(distanceX, distanceY);
     };
     WindowMoveDragEvent.prototype.dragEnd = function (ev, x, y) {
-        if (DragEvent_1.default.isDragging == true && this._top === 0) {
+        if (this.isDragging == true && this._top === 0) {
             this.window.max();
             this._top = this.window.top;
             this._left = this.window.left;

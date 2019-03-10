@@ -11,6 +11,10 @@
     animation-name: layx-animate-zoom-create;
 }
 
+.layx-window.layx-animate-zoom-destroy {
+    animation-name: layx-animate-zoom-destroy;
+}
+
 .layx-window.layx-animate-zoom-drag-to-normal {
     animation-name: layx-animate-zoom-drag-to-normal;
 }
