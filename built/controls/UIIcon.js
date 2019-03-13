@@ -15,26 +15,28 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var ExceptionHelper = require("../utils/ExceptionHelper");
-var UISvg = (function (_super) {
-    __extends(UISvg, _super);
-    function UISvg(app, window, id) {
+var StringHelper = require("../utils/StringHelper");
+var UIIcon = (function (_super) {
+    __extends(UIIcon, _super);
+    function UIIcon(app, window, id) {
         var _this = _super.call(this, app, window) || this;
-        _this.kind = "svg";
+        _this.kind = "icon";
         if (!id)
             ExceptionHelper.assertId();
         _this.id = id;
         return _this;
     }
-    UISvg.prototype.present = function () {
+    UIIcon.prototype.present = function () {
         var fragment = document.createDocumentFragment();
-        var svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        svgElement.setAttribute("class", this.app.prefix + "iconfont");
+        var iconElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        var kebabCase = StringHelper.getKebabCase(this.kind);
+        iconElement.setAttribute("class", "" + (this.app.prefix + kebabCase));
         var useElement = document.createElementNS("http://www.w3.org/2000/svg", "use");
         useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + this.id);
-        svgElement.appendChild(useElement);
-        fragment.appendChild(svgElement);
+        iconElement.appendChild(useElement);
+        fragment.appendChild(iconElement);
         return fragment;
     };
-    return UISvg;
+    return UIIcon;
 }(UIWindowComponent_1.default));
-exports.default = UISvg;
+exports.default = UIIcon;

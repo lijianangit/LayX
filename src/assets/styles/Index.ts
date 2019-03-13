@@ -1,5 +1,5 @@
 import "./common.css";
-import "./iconfont.css";
+import "./icon.css";
 import "./window.css";
 import "./animate.css";
 import "./parclose.css";

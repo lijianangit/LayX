@@ -19,6 +19,7 @@ export default class UIWindow extends UIComponent implements UIControl {
     public readonly elementId: string;
     private flickering: boolean = false;
     private zIndex: number = this.app.zIndex;
+    private isNeedAnimation: boolean = false;
     readonly id: string;
     public width: number = 800;
     public height: number = 600;
@@ -82,6 +83,7 @@ export default class UIWindow extends UIComponent implements UIControl {
         });
 
         this.animate = CastHelper.windowAnimateCast(options.animate, this.animate);
+        this.isNeedAnimation = this.animate !== Enums.WindowAnimate.NONE;
 
         this.resizeBar = CastHelper.jsonOrBooleanCast(options.resizeBar, this.resizeBar);
         this.toolBar = CastHelper.jsonOrBooleanCast(options.toolBar, this.toolBar);
@@ -94,14 +96,13 @@ export default class UIWindow extends UIComponent implements UIControl {
         const windowElement = document.createElement("div");
         windowElement.id = this.elementId;
 
-        const isNeedAnimation = this.animate !== Enums.WindowAnimate.NONE;
         ElementHelper.addClasses(windowElement, this.app.prefix,
             kebabCase,
             `window-${this.mode}`,
             "flexbox",
             "flex-column",
-            isNeedAnimation ? "animate" : "",
-            isNeedAnimation ? `animate-${this.animate}-create` : ""
+            this.isNeedAnimation ? "animate" : "",
+            this.isNeedAnimation ? `animate-${this.animate}-create` : ""
         );
 
         ElementHelper.addStyles(windowElement, <Types.CSSStyleObject>{
@@ -122,7 +123,7 @@ export default class UIWindow extends UIComponent implements UIControl {
             webkitBoxShadow: this.shadow
         });
 
-        if (isNeedAnimation) {
+        if (this.isNeedAnimation) {
             windowElement.addEventListener("animationend", (ev: AnimationEvent) => {
                 if (this.element && this.element.parentElement) {
                     ElementHelper.removeClasses(this.element, this.app.prefix,
@@ -148,10 +149,12 @@ export default class UIWindow extends UIComponent implements UIControl {
             });
 
             windowElement.addEventListener("transitionend", (ev: TransitionEvent) => {
-                ElementHelper.removeClasses(windowElement, this.app.prefix,
-                    `animate-${this.animate}-to-max`,
-                    `animate-${this.animate}-to-normal`
-                );
+                if (this.element) {
+                    ElementHelper.removeClasses(this.element, this.app.prefix,
+                        `animate-${this.animate}-to-max`,
+                        `animate-${this.animate}-to-normal`
+                    );
+                }
             });
         }
         windowElement.addEventListener("mousedown", (ev: MouseEvent) => {
@@ -215,18 +218,16 @@ export default class UIWindow extends UIComponent implements UIControl {
 
     destroy(): void {
         if (this.element && this.element.parentElement) {
-            const isNeedAnimation = this.animate !== Enums.WindowAnimate.NONE;
             ElementHelper.addClasses(this.element, this.app.prefix,
-                isNeedAnimation ? `animate-${this.animate}-destroy` : ""
+                this.isNeedAnimation ? `animate-${this.animate}-destroy` : ""
             );
         }
     }
 
     normal(dragToNormal: boolean = false): void {
         if (this.element && this.element.parentElement && this.status !== Enums.WindowStatus.NORMAL) {
-            const isNeedAnimation = this.animate !== Enums.WindowAnimate.NONE;
             ElementHelper.addClasses(this.element, this.app.prefix,
-                isNeedAnimation ? (
+                this.isNeedAnimation ? (
                     dragToNormal == false ? `animate-${this.animate}-to-normal` : `animate-${this.animate}-drag-to-normal`
                 ) : ""
             );
@@ -248,16 +249,20 @@ export default class UIWindow extends UIComponent implements UIControl {
             ElementHelper.removeClasses(document.body, `z${this.app.prefix}`,
                 "noscroll"
             );
-            this.status = Enums.WindowStatus.NORMAL;;
+            this.status = Enums.WindowStatus.NORMAL;
+
+            const useElement = this.element.querySelector(`#${this.elementId}-action-button-${Enums.WindowStatus.MAX}>svg.${this.app.prefix}icon>use`);
+            if (useElement) {
+                useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", `#max`);
+            }
         }
     }
 
     max(): void {
         if (this.element && this.element.parentElement) {
             if (this.status !== Enums.WindowStatus.MAX) {
-                const isNeedAnimation = this.animate !== Enums.WindowAnimate.NONE;
                 ElementHelper.addClasses(this.element, this.app.prefix,
-                    isNeedAnimation ? `animate-${this.animate}-to-max` : ""
+                    this.isNeedAnimation ? `animate-${this.animate}-to-max` : ""
                 );
                 ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
                     top: `0px`,
@@ -278,6 +283,12 @@ export default class UIWindow extends UIComponent implements UIControl {
                     "noscroll"
                 );
                 this.status = Enums.WindowStatus.MAX;
+
+                const useElement = this.element.querySelector(`#${this.elementId}-action-button-${Enums.WindowStatus.MAX}>svg.${this.app.prefix}icon>use`);
+                if (useElement) {
+                    useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", `#restore`);
+                }
+
                 return;
             } else {
                 this.normal();
@@ -351,15 +362,13 @@ export default class UIWindow extends UIComponent implements UIControl {
         const uiWindow = this.app.getWindow(this.id);
         if (uiWindow && uiWindow.mode === Enums.WindowMode.LAYER) {
             if (this.element) {
-                const isNeedAnimation = this.animate !== Enums.WindowAnimate.NONE;
-
                 this.zIndex = this.app.zIndex;
                 ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
                     zIndex: `${this.zIndex}`
                 });
                 if (disabled === false) {
                     ElementHelper.addClasses(this.element, this.app.prefix,
-                        isNeedAnimation ? `animate-${this.animate}In` : ""
+                        this.isNeedAnimation ? `animate-${this.animate}In` : ""
                     );
                 }
                 this.updateParcloseZIndex();

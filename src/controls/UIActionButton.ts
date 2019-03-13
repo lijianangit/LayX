@@ -4,7 +4,7 @@ import UIWindow from "./UIWindow";
 import UIToolBar from "./UIToolBar";
 import UIActionBarComponent from "../basic/models/UIActionBarComponent";
 import UIActionBar from "./UIActionBar";
-import UISvg from "./UISvg";
+import UIIcon from "./UIIcon";
 import * as Types from "../../types";
 import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
@@ -13,12 +13,12 @@ export default class UIActionButton extends UIActionBarComponent implements UICo
     public readonly kind: string = "actionButton";
     public id: string;
     public label: string;
-    public handler?: (window: UIWindow) => void;
+    public handler?: (window: UIWindow, actionButton: UIActionButton) => void;
 
     public static readonly destroyActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "destroy",
         label: "关闭",
-        handler: function (window: UIWindow) {
+        handler: function (window: UIWindow, actionButton: UIActionButton) {
             window.destroy();
         }
     };
@@ -26,7 +26,7 @@ export default class UIActionButton extends UIActionBarComponent implements UICo
     public static readonly maxActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "max",
         label: "最大化",
-        handler: function (window: UIWindow) {
+        handler: function (window: UIWindow, actionButton: UIActionButton) {
             window.max();
         }
     };
@@ -34,21 +34,21 @@ export default class UIActionButton extends UIActionBarComponent implements UICo
     public static readonly restoreActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "restore",
         label: "恢复",
-        handler: function (window: UIWindow) {
+        handler: function (window: UIWindow, actionButton: UIActionButton) {
         }
     };
 
     public static readonly minActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "min",
         label: "最小化",
-        handler: function (window: UIWindow) {
+        handler: function (window: UIWindow, actionButton: UIActionButton) {
         }
     };
 
     public static readonly infoActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "info",
         label: "关于",
-        handler: function (window: UIWindow) {
+        handler: function (window: UIWindow, actionButton: UIActionButton) {
         }
     };
 
@@ -74,13 +74,13 @@ export default class UIActionButton extends UIActionBarComponent implements UICo
             "flex-center"
         );
 
-        const svg = new UISvg(this.app, this.window, this.id);
-        const svgElement = svg.present();
-        svgElement && actionButtonElement.appendChild(svgElement);
+        const icon = new UIIcon(this.app, this.window, this.id);
+        const iconElement = icon.present();
+        iconElement && actionButtonElement.appendChild(iconElement);
 
         actionButtonElement.addEventListener("mousedown", (ev: MouseEvent) => {
-            if (typeof this.handler === "function") {
-                this.handler(this.window);
+            if (ev.button === 0 && typeof this.handler === "function") {
+                this.handler(this.window, this);
             }
         }, true);
 

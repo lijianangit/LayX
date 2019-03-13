@@ -32,6 +32,7 @@ var UIWindow = (function (_super) {
         _this.status = "normal";
         _this.flickering = false;
         _this.zIndex = _this.app.zIndex;
+        _this.isNeedAnimation = false;
         _this.width = 800;
         _this.height = 600;
         _this.maxWidth = innerWidth;
@@ -76,6 +77,7 @@ var UIWindow = (function (_super) {
             radius: 4
         }), _this.border = _b[0], _this.borderRadius = _b[1];
         _this.animate = CastHelper.windowAnimateCast(options.animate, _this.animate);
+        _this.isNeedAnimation = _this.animate !== "none";
         _this.resizeBar = CastHelper.jsonOrBooleanCast(options.resizeBar, _this.resizeBar);
         _this.toolBar = CastHelper.jsonOrBooleanCast(options.toolBar, _this.toolBar);
         _this.contextMenu = CastHelper.contextMenusCast(options.contextMenu);
@@ -101,8 +103,7 @@ var UIWindow = (function (_super) {
         var kebabCase = StringHelper.getKebabCase(this.kind);
         var windowElement = document.createElement("div");
         windowElement.id = this.elementId;
-        var isNeedAnimation = this.animate !== "none";
-        ElementHelper.addClasses(windowElement, this.app.prefix, kebabCase, "window-" + this.mode, "flexbox", "flex-column", isNeedAnimation ? "animate" : "", isNeedAnimation ? "animate-" + this.animate + "-create" : "");
+        ElementHelper.addClasses(windowElement, this.app.prefix, kebabCase, "window-" + this.mode, "flexbox", "flex-column", this.isNeedAnimation ? "animate" : "", this.isNeedAnimation ? "animate-" + this.animate + "-create" : "");
         ElementHelper.addStyles(windowElement, {
             zIndex: this.mode === "layer" ? "" + this.zIndex : null,
             maxWidth: this.maxWidth + "px",
@@ -120,7 +121,7 @@ var UIWindow = (function (_super) {
             boxShadow: this.shadow,
             webkitBoxShadow: this.shadow
         });
-        if (isNeedAnimation) {
+        if (this.isNeedAnimation) {
             windowElement.addEventListener("animationend", function (ev) {
                 if (_this.element && _this.element.parentElement) {
                     ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-" + _this.animate + "-create", "animate-" + _this.animate + "-drag-to-normal");
@@ -136,7 +137,9 @@ var UIWindow = (function (_super) {
                 }
             });
             windowElement.addEventListener("transitionend", function (ev) {
-                ElementHelper.removeClasses(windowElement, _this.app.prefix, "animate-" + _this.animate + "-to-max", "animate-" + _this.animate + "-to-normal");
+                if (_this.element) {
+                    ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-" + _this.animate + "-to-max", "animate-" + _this.animate + "-to-normal");
+                }
             });
         }
         windowElement.addEventListener("mousedown", function (ev) {
@@ -187,15 +190,13 @@ var UIWindow = (function (_super) {
     };
     UIWindow.prototype.destroy = function () {
         if (this.element && this.element.parentElement) {
-            var isNeedAnimation = this.animate !== "none";
-            ElementHelper.addClasses(this.element, this.app.prefix, isNeedAnimation ? "animate-" + this.animate + "-destroy" : "");
+            ElementHelper.addClasses(this.element, this.app.prefix, this.isNeedAnimation ? "animate-" + this.animate + "-destroy" : "");
         }
     };
     UIWindow.prototype.normal = function (dragToNormal) {
         if (dragToNormal === void 0) { dragToNormal = false; }
         if (this.element && this.element.parentElement && this.status !== "normal") {
-            var isNeedAnimation = this.animate !== "none";
-            ElementHelper.addClasses(this.element, this.app.prefix, isNeedAnimation ? (dragToNormal == false ? "animate-" + this.animate + "-to-normal" : "animate-" + this.animate + "-drag-to-normal") : "");
+            ElementHelper.addClasses(this.element, this.app.prefix, this.isNeedAnimation ? (dragToNormal == false ? "animate-" + this.animate + "-to-normal" : "animate-" + this.animate + "-drag-to-normal") : "");
             ElementHelper.addStyles(this.element, {
                 top: this.top + "px",
                 left: this.left + "px",
@@ -209,14 +210,16 @@ var UIWindow = (function (_super) {
             }
             ElementHelper.removeClasses(document.body, "z" + this.app.prefix, "noscroll");
             this.status = "normal";
-            ;
+            var useElement = this.element.querySelector("#" + this.elementId + "-action-button-" + "max" + ">svg." + this.app.prefix + "icon>use");
+            if (useElement) {
+                useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#max");
+            }
         }
     };
     UIWindow.prototype.max = function () {
         if (this.element && this.element.parentElement) {
             if (this.status !== "max") {
-                var isNeedAnimation = this.animate !== "none";
-                ElementHelper.addClasses(this.element, this.app.prefix, isNeedAnimation ? "animate-" + this.animate + "-to-max" : "");
+                ElementHelper.addClasses(this.element, this.app.prefix, this.isNeedAnimation ? "animate-" + this.animate + "-to-max" : "");
                 ElementHelper.addStyles(this.element, {
                     top: "0px",
                     left: "0px",
@@ -230,6 +233,10 @@ var UIWindow = (function (_super) {
                 }
                 ElementHelper.addClasses(document.body, "z" + this.app.prefix, "noscroll");
                 this.status = "max";
+                var useElement = this.element.querySelector("#" + this.elementId + "-action-button-" + "max" + ">svg." + this.app.prefix + "icon>use");
+                if (useElement) {
+                    useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#restore");
+                }
                 return;
             }
             else {
@@ -298,13 +305,12 @@ var UIWindow = (function (_super) {
         var uiWindow = this.app.getWindow(this.id);
         if (uiWindow && uiWindow.mode === "layer") {
             if (this.element) {
-                var isNeedAnimation = this.animate !== "none";
                 this.zIndex = this.app.zIndex;
                 ElementHelper.addStyles(this.element, {
                     zIndex: "" + this.zIndex
                 });
                 if (disabled === false) {
-                    ElementHelper.addClasses(this.element, this.app.prefix, isNeedAnimation ? "animate-" + this.animate + "In" : "");
+                    ElementHelper.addClasses(this.element, this.app.prefix, this.isNeedAnimation ? "animate-" + this.animate + "In" : "");
                 }
                 this.updateParcloseZIndex();
                 this.app.window = this;

@@ -14,7 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIActionBarComponent_1 = require("../basic/models/UIActionBarComponent");
-var UISvg_1 = require("./UISvg");
+var UIIcon_1 = require("./UIIcon");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
 var UIActionButton = (function (_super) {
@@ -35,12 +35,12 @@ var UIActionButton = (function (_super) {
         actionButtonElement.id = this.window.elementId + "-" + kebabCase + "-" + this.id;
         actionButtonElement.setAttribute("title", this.label);
         ElementHelper.addClasses(actionButtonElement, this.app.prefix, kebabCase, kebabCase + "-" + this.id, "flexbox", "flex-center");
-        var svg = new UISvg_1.default(this.app, this.window, this.id);
-        var svgElement = svg.present();
-        svgElement && actionButtonElement.appendChild(svgElement);
+        var icon = new UIIcon_1.default(this.app, this.window, this.id);
+        var iconElement = icon.present();
+        iconElement && actionButtonElement.appendChild(iconElement);
         actionButtonElement.addEventListener("mousedown", function (ev) {
-            if (typeof _this.handler === "function") {
-                _this.handler(_this.window);
+            if (ev.button === 0 && typeof _this.handler === "function") {
+                _this.handler(_this.window, _this);
             }
         }, true);
         fragment.appendChild(actionButtonElement);
@@ -49,33 +49,33 @@ var UIActionButton = (function (_super) {
     UIActionButton.destroyActionButton = {
         id: "destroy",
         label: "关闭",
-        handler: function (window) {
+        handler: function (window, actionButton) {
             window.destroy();
         }
     };
     UIActionButton.maxActionButton = {
         id: "max",
         label: "最大化",
-        handler: function (window) {
+        handler: function (window, actionButton) {
             window.max();
         }
     };
     UIActionButton.restoreActionButton = {
         id: "restore",
         label: "恢复",
-        handler: function (window) {
+        handler: function (window, actionButton) {
         }
     };
     UIActionButton.minActionButton = {
         id: "min",
         label: "最小化",
-        handler: function (window) {
+        handler: function (window, actionButton) {
         }
     };
     UIActionButton.infoActionButton = {
         id: "info",
         label: "关于",
-        handler: function (window) {
+        handler: function (window, actionButton) {
         }
     };
     return UIActionButton;

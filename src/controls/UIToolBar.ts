@@ -66,6 +66,7 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
         if (this.actionBar !== false) {
             const actionBar = new UIActionBar(this.app, this.window, this);
             const actionBarElement = actionBar.present();
+            
             actionBarElement != null && toolBarElement.appendChild(actionBarElement);
         }
         if (this.drag !== false && (this.drag.vertical === true || this.drag.horizontal === true)) {
