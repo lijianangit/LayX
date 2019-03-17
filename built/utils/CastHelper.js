@@ -196,8 +196,10 @@ function contextMenusCast(option) {
     return option;
 }
 exports.contextMenusCast = contextMenusCast;
-function actionButtonsCast(option) {
-    if (option === undefined || option === false)
+function actionButtonsCast(option, defaultValue) {
+    if (option === undefined || option === true)
+        return defaultValue;
+    if (option === false)
         return false;
     TypeHelper.isActionButtons(option);
     return option;

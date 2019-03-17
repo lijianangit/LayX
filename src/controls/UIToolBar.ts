@@ -4,7 +4,6 @@ import UIWindowComponent from "../basic/models/UIWindowComponent";
 import UIWindow from "./UIWindow";
 import WindowMoveDragEvent from "../basic/events/WindowMoveDragEvent";
 import UIActionBar from "./UIActionBar";
-import UIActionButton from "./UIActionButton";
 import * as Types from "../../types";
 import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
@@ -13,28 +12,24 @@ import * as Enums from "../basic/enums";
 
 export default class UIToolBar extends UIWindowComponent implements UIControl {
     public readonly kind: string = "toolBar";
+
     public height: number = 30;
-    public drag: Types.DragMoveOption | false = {};
-    public actionBar: Array<Types.ActionButtonOption> | false = [
-        UIActionButton.infoActionButton,
-        UIActionButton.minActionButton,
-        UIActionButton.maxActionButton,
-        UIActionButton.destroyActionButton
-    ];
+    public drag: Types.DragMoveOption | false = {
+        vertical: true,
+        horizontal: true,
+        breakLeft: true,
+        breakRight: true,
+        breakTop: true,
+        breakBottom: true
+    };
+    public actionBar: Types.ActionBarOption | false = {};
 
     constructor(app: App, window: UIWindow, options: Types.ToolBarOption) {
         super(app, window);
 
         this.height = CastHelper.numberCast(options.height, this.height);
-        this.drag = CastHelper.jsonOrBooleanCast(options.drag, {
-            vertical: true,
-            horizontal: true,
-            breakLeft: true,
-            breakRight: true,
-            breakTop: true,
-            breakBottom: true
-        });
-        this.actionBar = CastHelper.actionButtonsCast(this.actionBar);
+        this.drag = CastHelper.jsonOrBooleanCast(options.drag, this.drag);
+        this.actionBar = CastHelper.jsonOrBooleanCast(options.actionBar, this.actionBar);
     }
 
     present(): DocumentFragment | null {
@@ -64,12 +59,13 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
         }, true);
 
         if (this.actionBar !== false) {
-            const actionBar = new UIActionBar(this.app, this.window, this);
+            const actionBar = new UIActionBar(this.app, this.window, this.actionBar);
             const actionBarElement = actionBar.present();
-            
-            actionBarElement != null && toolBarElement.appendChild(actionBarElement);
+
+            actionBarElement && toolBarElement.appendChild(actionBarElement);
         }
-        if (this.drag !== false && (this.drag.vertical === true || this.drag.horizontal === true)) {
+
+        if (this.drag && (this.drag.vertical === true || this.drag.horizontal === true)) {
             new WindowMoveDragEvent(toolBarElement, this.window, this.drag);
         }
 

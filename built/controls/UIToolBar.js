@@ -16,7 +16,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var WindowMoveDragEvent_1 = require("../basic/events/WindowMoveDragEvent");
 var UIActionBar_1 = require("./UIActionBar");
-var UIActionButton_1 = require("./UIActionButton");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
@@ -26,23 +25,18 @@ var UIToolBar = (function (_super) {
         var _this = _super.call(this, app, window) || this;
         _this.kind = "toolBar";
         _this.height = 30;
-        _this.drag = {};
-        _this.actionBar = [
-            UIActionButton_1.default.infoActionButton,
-            UIActionButton_1.default.minActionButton,
-            UIActionButton_1.default.maxActionButton,
-            UIActionButton_1.default.destroyActionButton
-        ];
-        _this.height = CastHelper.numberCast(options.height, _this.height);
-        _this.drag = CastHelper.jsonOrBooleanCast(options.drag, {
+        _this.drag = {
             vertical: true,
             horizontal: true,
             breakLeft: true,
             breakRight: true,
             breakTop: true,
             breakBottom: true
-        });
-        _this.actionBar = CastHelper.actionButtonsCast(_this.actionBar);
+        };
+        _this.actionBar = {};
+        _this.height = CastHelper.numberCast(options.height, _this.height);
+        _this.drag = CastHelper.jsonOrBooleanCast(options.drag, _this.drag);
+        _this.actionBar = CastHelper.jsonOrBooleanCast(options.actionBar, _this.actionBar);
         return _this;
     }
     UIToolBar.prototype.present = function () {
@@ -65,11 +59,11 @@ var UIToolBar = (function (_super) {
             }
         }, true);
         if (this.actionBar !== false) {
-            var actionBar = new UIActionBar_1.default(this.app, this.window, this);
+            var actionBar = new UIActionBar_1.default(this.app, this.window, this.actionBar);
             var actionBarElement = actionBar.present();
-            actionBarElement != null && toolBarElement.appendChild(actionBarElement);
+            actionBarElement && toolBarElement.appendChild(actionBarElement);
         }
-        if (this.drag !== false && (this.drag.vertical === true || this.drag.horizontal === true)) {
+        if (this.drag && (this.drag.vertical === true || this.drag.horizontal === true)) {
             new WindowMoveDragEvent_1.default(toolBarElement, this.window, this.drag);
         }
         fragment.appendChild(toolBarElement);

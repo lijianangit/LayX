@@ -8,3 +8,7 @@ function assertId() {
     throw new Error("`id` is required.");
 }
 exports.assertId = assertId;
+function assertName() {
+    throw new Error("`name` is required.");
+}
+exports.assertName = assertName;

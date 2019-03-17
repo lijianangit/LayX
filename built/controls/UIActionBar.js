@@ -13,19 +13,30 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var UIToolBarComponent_1 = require("../basic/models/UIToolBarComponent");
+var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
+var UIActionButton_1 = require("./UIActionButton");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
-var TypeHelper = require("../utils/TypeHelper");
-var UIActionButton_1 = require("./UIActionButton");
+var CastHelper = require("../utils/CastHelper");
 var UIActionBar = (function (_super) {
     __extends(UIActionBar, _super);
-    function UIActionBar(app, window, toolBar) {
-        var _this = _super.call(this, app, window, toolBar) || this;
+    function UIActionBar(app, window, options) {
+        var _this = _super.call(this, app, window) || this;
         _this.kind = "actionBar";
+        _this.enable = true;
+        _this.actionButtons = [
+            UIActionButton_1.default.infoActionButton,
+            UIActionButton_1.default.minActionButton,
+            UIActionButton_1.default.maxActionButton,
+            UIActionButton_1.default.destroyActionButton
+        ];
+        _this.enable = CastHelper.booleanCast(options.enable, _this.enable);
+        _this.actionButtons = CastHelper.actionButtonsCast(options.actionButtons, _this.actionButtons);
         return _this;
     }
     UIActionBar.prototype.present = function () {
+        if (this.enable === false)
+            return null;
         var fragment = document.createDocumentFragment();
         var kebabCase = StringHelper.getKebabCase(this.kind);
         var actionBarElement = document.createElement("div");
@@ -39,21 +50,21 @@ var UIActionBar = (function (_super) {
             ev.preventDefault();
             ev.returnValue = false;
             return false;
-        });
-        this.createActionButton(actionBarElement);
+        }, true);
+        this.createActionButtons(actionBarElement);
         fragment.appendChild(actionBarElement);
         return fragment;
     };
-    UIActionBar.prototype.createActionButton = function (actionBarElement) {
-        if (this.toolBar.actionBar instanceof Array && TypeHelper.isActionButtons(this.toolBar.actionBar)) {
-            for (var _i = 0, _a = this.toolBar.actionBar; _i < _a.length; _i++) {
+    UIActionBar.prototype.createActionButtons = function (actionBarElement) {
+        if (this.actionButtons !== false) {
+            for (var _i = 0, _a = this.actionButtons; _i < _a.length; _i++) {
                 var item = _a[_i];
-                var actionButton = new UIActionButton_1.default(this.app, this.window, this.toolBar, this, item);
+                var actionButton = new UIActionButton_1.default(this.app, this.window, item);
                 var actionButtonElement = actionButton.present();
                 actionButtonElement && actionBarElement.appendChild(actionButtonElement);
             }
         }
     };
     return UIActionBar;
-}(UIToolBarComponent_1.default));
+}(UIWindowComponent_1.default));
 exports.default = UIActionBar;

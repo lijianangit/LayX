@@ -18,12 +18,12 @@ var ExceptionHelper = require("../utils/ExceptionHelper");
 var StringHelper = require("../utils/StringHelper");
 var UIIcon = (function (_super) {
     __extends(UIIcon, _super);
-    function UIIcon(app, window, id) {
+    function UIIcon(app, window, name) {
         var _this = _super.call(this, app, window) || this;
         _this.kind = "icon";
-        if (!id)
-            ExceptionHelper.assertId();
-        _this.id = id;
+        if (!name)
+            ExceptionHelper.assertName();
+        _this.name = name;
         return _this;
     }
     UIIcon.prototype.present = function () {
@@ -32,7 +32,7 @@ var UIIcon = (function (_super) {
         var kebabCase = StringHelper.getKebabCase(this.kind);
         iconElement.setAttribute("class", "" + (this.app.prefix + kebabCase));
         var useElement = document.createElementNS("http://www.w3.org/2000/svg", "use");
-        useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + this.id);
+        useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + this.name);
         iconElement.appendChild(useElement);
         fragment.appendChild(iconElement);
         return fragment;

@@ -18,6 +18,7 @@ var UIParclose_1 = require("./UIParclose");
 var UIResizeBar_1 = require("./UIResizeBar");
 var UIContextMenu_1 = require("./UIContextMenu");
 var UIToolBar_1 = require("./UIToolBar");
+var UIActionButton_1 = require("./UIActionButton");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
@@ -209,11 +210,15 @@ var UIWindow = (function (_super) {
                 ElementHelper.removeClasses(resizeBarElement, this.app.prefix, "resize-disabled");
             }
             ElementHelper.removeClasses(document.body, "z" + this.app.prefix, "noscroll");
-            this.status = "normal";
-            var useElement = this.element.querySelector("#" + this.elementId + "-action-button-" + "max" + ">svg." + this.app.prefix + "icon>use");
-            if (useElement) {
-                useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#max");
+            var maxActionButton = new UIActionButton_1.default(this.app, this, UIActionButton_1.default.maxActionButton);
+            var maxElement = maxActionButton.present();
+            if (maxElement) {
+                var restoreElement = this.element.querySelector("#" + this.elementId + "-action-button-restore");
+                if (restoreElement && restoreElement.parentElement) {
+                    restoreElement.parentElement.replaceChild(maxElement, restoreElement);
+                }
             }
+            this.status = "normal";
         }
     };
     UIWindow.prototype.max = function () {
@@ -227,20 +232,22 @@ var UIWindow = (function (_super) {
                     height: innerHeight + "px",
                     borderRadius: "0px"
                 });
-                var resizeBarElement = this.element.querySelector("." + this.app.prefix + "resize-bar");
-                if (resizeBarElement) {
-                    ElementHelper.addClasses(resizeBarElement, this.app.prefix, "resize-disabled");
+                if (this.resizeBar !== false) {
+                    var resizeBarElement = this.element.querySelector("." + this.app.prefix + "resize-bar");
+                    if (resizeBarElement) {
+                        ElementHelper.addClasses(resizeBarElement, this.app.prefix, "resize-disabled");
+                    }
                 }
                 ElementHelper.addClasses(document.body, "z" + this.app.prefix, "noscroll");
-                this.status = "max";
-                var useElement = this.element.querySelector("#" + this.elementId + "-action-button-" + "max" + ">svg." + this.app.prefix + "icon>use");
-                if (useElement) {
-                    useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#restore");
+                var restoreActionButton = new UIActionButton_1.default(this.app, this, UIActionButton_1.default.restoreActionButton);
+                var restoreElement = restoreActionButton.present();
+                if (restoreElement) {
+                    var maxElement = this.element.querySelector("#" + this.elementId + "-action-button-max");
+                    if (maxElement && maxElement.parentElement) {
+                        maxElement.parentElement.replaceChild(restoreElement, maxElement);
+                    }
                 }
-                return;
-            }
-            else {
-                this.normal();
+                this.status = "max";
             }
         }
     };

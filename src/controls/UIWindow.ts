@@ -5,6 +5,7 @@ import UIParclose from "./UIParclose";
 import UIResizeBar from "./UIResizeBar";
 import UIContextMenu from "./UIContextMenu";
 import UIToolBar from "./UIToolBar";
+import UIActionButton from "./UIActionButton";
 import * as Types from "../../types";
 import * as Enums from "../basic/enums";
 import * as StringHelper from "../utils/StringHelper";
@@ -249,12 +250,17 @@ export default class UIWindow extends UIComponent implements UIControl {
             ElementHelper.removeClasses(document.body, `z${this.app.prefix}`,
                 "noscroll"
             );
-            this.status = Enums.WindowStatus.NORMAL;
 
-            const useElement = this.element.querySelector(`#${this.elementId}-action-button-${Enums.WindowStatus.MAX}>svg.${this.app.prefix}icon>use`);
-            if (useElement) {
-                useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", `#max`);
+            const maxActionButton = new UIActionButton(this.app, this, UIActionButton.maxActionButton);
+            const maxElement = maxActionButton.present();
+            if (maxElement) {
+                const restoreElement = this.element.querySelector(`#${this.elementId}-action-button-restore`);
+                if (restoreElement && restoreElement.parentElement) {
+                    restoreElement.parentElement.replaceChild(maxElement, restoreElement);
+                }
             }
+
+            this.status = Enums.WindowStatus.NORMAL;
         }
     }
 
@@ -264,6 +270,7 @@ export default class UIWindow extends UIComponent implements UIControl {
                 ElementHelper.addClasses(this.element, this.app.prefix,
                     this.isNeedAnimation ? `animate-${this.animate}-to-max` : ""
                 );
+
                 ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
                     top: `0px`,
                     left: `0px`,
@@ -272,26 +279,28 @@ export default class UIWindow extends UIComponent implements UIControl {
                     borderRadius: `0px`
                 });
 
-                const resizeBarElement = this.element.querySelector(`.${this.app.prefix}resize-bar`);
-                if (resizeBarElement) {
-                    ElementHelper.addClasses(<HTMLElement>resizeBarElement, this.app.prefix,
-                        "resize-disabled"
-                    );
+                if (this.resizeBar !== false) {
+                    const resizeBarElement = this.element.querySelector(`.${this.app.prefix}resize-bar`);
+                    if (resizeBarElement) {
+                        ElementHelper.addClasses(<HTMLElement>resizeBarElement, this.app.prefix,
+                            "resize-disabled"
+                        );
+                    }
                 }
 
                 ElementHelper.addClasses(document.body, `z${this.app.prefix}`,
                     "noscroll"
                 );
-                this.status = Enums.WindowStatus.MAX;
 
-                const useElement = this.element.querySelector(`#${this.elementId}-action-button-${Enums.WindowStatus.MAX}>svg.${this.app.prefix}icon>use`);
-                if (useElement) {
-                    useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", `#restore`);
+                const restoreActionButton = new UIActionButton(this.app, this, UIActionButton.restoreActionButton);
+                const restoreElement = restoreActionButton.present();
+                if (restoreElement) {
+                    const maxElement = this.element.querySelector(`#${this.elementId}-action-button-max`);
+                    if (maxElement && maxElement.parentElement) {
+                        maxElement.parentElement.replaceChild(restoreElement, maxElement);
+                    }
                 }
-
-                return;
-            } else {
-                this.normal();
+                this.status = Enums.WindowStatus.MAX;
             }
         }
     }

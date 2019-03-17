@@ -1,21 +1,33 @@
-import UIToolBarComponent from "../basic/models/UIToolBarComponent";
+import UIWindowComponent from "../basic/models/UIWindowComponent";
 import UIControl from "../basic/interfaces/UIControl";
 import App from "../core/App";
 import UIWindow from "./UIWindow";
-import UIToolBar from "./UIToolBar";
+import UIActionButton from "./UIActionButton";
 import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
-import * as TypeHelper from "../utils/TypeHelper";
-import UIActionButton from "./UIActionButton";
+import * as Types from "../../types";
+import * as CastHelper from "../utils/CastHelper";
 
-export default class UIActionBar extends UIToolBarComponent implements UIControl {
+export default class UIActionBar extends UIWindowComponent implements UIControl {
     readonly kind: string = "actionBar";
+    public enable: boolean = true;
+    public actionButtons: Array<Types.ActionButtonOption> | false = [
+        UIActionButton.infoActionButton,
+        UIActionButton.minActionButton,
+        UIActionButton.maxActionButton,
+        UIActionButton.destroyActionButton
+    ];
 
-    constructor(app: App, window: UIWindow, toolBar: UIToolBar) {
-        super(app, window, toolBar);
+    constructor(app: App, window: UIWindow, options: Types.ActionBarOption) {
+        super(app, window);
+
+        this.enable = CastHelper.booleanCast(options.enable, this.enable);
+        this.actionButtons = CastHelper.actionButtonsCast(options.actionButtons, this.actionButtons);
     }
 
     present(): DocumentFragment | null {
+        if (this.enable === false) return null;
+
         const fragment = document.createDocumentFragment();
         const kebabCase = StringHelper.getKebabCase(this.kind);
         const actionBarElement = document.createElement("div");
@@ -36,19 +48,20 @@ export default class UIActionBar extends UIToolBarComponent implements UIControl
             ev.preventDefault();
             ev.returnValue = false;
             return false;
-        });
+        }, true);
 
-        this.createActionButton(actionBarElement);
+        this.createActionButtons(actionBarElement);
 
         fragment.appendChild(actionBarElement);
         return fragment;
     }
 
-    private createActionButton(actionBarElement: HTMLElement) {
-        if (this.toolBar.actionBar instanceof Array && TypeHelper.isActionButtons(this.toolBar.actionBar)) {
-            for (const item of this.toolBar.actionBar) {
-                const actionButton = new UIActionButton(this.app, this.window, this.toolBar, this, item);
+    private createActionButtons(actionBarElement: HTMLElement) {
+        if (this.actionButtons !== false) {
+            for (const item of this.actionButtons) {
+                const actionButton = new UIActionButton(this.app, this.window, item);
                 const actionButtonElement = actionButton.present();
+
                 actionButtonElement && actionBarElement.appendChild(actionButtonElement);
             }
         }

@@ -190,8 +190,9 @@ export function contextMenusCast(option: any): Array<Types.ContextMenuOption> | 
     return option;
 }
 
-export function actionButtonsCast(option: any): Array<Types.ActionButtonOption> | false {
-    if (option === undefined || option === false) return false;
+export function actionButtonsCast(option: Array<Types.ActionButtonOption> | boolean | undefined, defaultValue: Array<Types.ActionButtonOption> | false): Array<Types.ActionButtonOption> | false {
+    if (option === undefined || option === true) return defaultValue;
+    if (option === false) return false;
     TypeHelper.isActionButtons(option);
     return option;
 }

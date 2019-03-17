@@ -53,11 +53,15 @@ export type DragMoveOption = {
     breakBottom?: boolean;
 } & JsonObject;
 
+export type ActionBarOption = {
+    enable?: boolean;
+    actionButtons?: Array<ActionButtonOption> | boolean;
+} & JsonObject;
 
 export type ToolBarOption = {
     height?: number;
     drag?: DragMoveOption | boolean;
-    actionBar?: Array<ActionButtonOption> | false;
+    actionBar?: ActionBarOption | boolean;
 } & JsonObject;
 
 export type WindowOption = {
@@ -79,7 +83,5 @@ export type WindowOption = {
     toolBar?: ToolBarOption | boolean;
     contextMenu?: Array<ContextMenuOption> | false;
 } & JsonObject;
-
-
 
 export type ConfigOptions = {};
