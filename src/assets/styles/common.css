@@ -26,7 +26,15 @@
     flex-flow: column;
 }
 
+.layx-flex-vertical-center {
+    align-items: center;
+}
+
 .layx-flex-center {
     justify-content: center;
-    align-items: Center;
+    align-items: center;
+}
+
+.layx-flex-item {
+    flex: 1;
 }

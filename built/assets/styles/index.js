@@ -8,3 +8,4 @@ require("./parclose.css");
 require("./contextMenu.css");
 require("./resizeBar.css");
 require("./actionBar.css");
+require("./titleBar.css");

@@ -4,6 +4,8 @@ import UIWindowComponent from "../basic/models/UIWindowComponent";
 import UIWindow from "./UIWindow";
 import WindowMoveDragEvent from "../basic/events/WindowMoveDragEvent";
 import UIActionBar from "./UIActionBar";
+import UITitleBar from "./UITitleBar";
+import UITabBar from "./UITabBar";
 import * as Types from "../../types";
 import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
@@ -22,6 +24,8 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
         breakTop: true,
         breakBottom: true
     };
+    public titleBar: Types.TitleBarOption | false = {};
+    public tabBar: Types.TabBarOption | false = {};
     public actionBar: Types.ActionBarOption | false = {};
 
     constructor(app: App, window: UIWindow, options: Types.ToolBarOption) {
@@ -29,6 +33,8 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
 
         this.height = CastHelper.numberCast(options.height, this.height);
         this.drag = CastHelper.jsonOrBooleanCast(options.drag, this.drag);
+        this.titleBar = CastHelper.jsonOrBooleanCast(options.titleBar, this.titleBar);
+        this.tabBar = CastHelper.jsonOrBooleanCast(options.tabBar, this.tabBar);
         this.actionBar = CastHelper.jsonOrBooleanCast(options.actionBar, this.actionBar);
     }
 
@@ -40,7 +46,7 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
         ElementHelper.addClasses(toolBarElement, this.app.prefix,
             kebabCase,
             "flexbox",
-            "flex-row-reverse"
+            "flex-row"
         );
 
         ElementHelper.addStyles(toolBarElement, <Types.CSSStyleObject>{
@@ -57,6 +63,20 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
                 return;
             }
         }, true);
+
+        if (this.titleBar !== false) {
+            const titleBar = new UITitleBar(this.app, this.window, this.titleBar);
+            const titleBarElement = titleBar.present();
+
+            titleBarElement && toolBarElement.appendChild(titleBarElement);
+        }
+
+        if (this.tabBar !== false) {
+            const tabBar = new UITabBar(this.app, this.window, this.tabBar);
+            const tabBarElement = tabBar.present();
+
+            tabBarElement && toolBarElement.appendChild(tabBarElement);
+        }
 
         if (this.actionBar !== false) {
             const actionBar = new UIActionBar(this.app, this.window, this.actionBar);

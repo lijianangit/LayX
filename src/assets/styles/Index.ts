@@ -6,3 +6,4 @@ import "./parclose.css";
 import "./contextMenu.css";
 import "./resizeBar.css";
 import "./actionBar.css";
+import "./titleBar.css";

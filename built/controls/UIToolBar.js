@@ -16,6 +16,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var WindowMoveDragEvent_1 = require("../basic/events/WindowMoveDragEvent");
 var UIActionBar_1 = require("./UIActionBar");
+var UITitleBar_1 = require("./UITitleBar");
+var UITabBar_1 = require("./UITabBar");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
@@ -33,9 +35,13 @@ var UIToolBar = (function (_super) {
             breakTop: true,
             breakBottom: true
         };
+        _this.titleBar = {};
+        _this.tabBar = {};
         _this.actionBar = {};
         _this.height = CastHelper.numberCast(options.height, _this.height);
         _this.drag = CastHelper.jsonOrBooleanCast(options.drag, _this.drag);
+        _this.titleBar = CastHelper.jsonOrBooleanCast(options.titleBar, _this.titleBar);
+        _this.tabBar = CastHelper.jsonOrBooleanCast(options.tabBar, _this.tabBar);
         _this.actionBar = CastHelper.jsonOrBooleanCast(options.actionBar, _this.actionBar);
         return _this;
     }
@@ -44,7 +50,7 @@ var UIToolBar = (function (_super) {
         var fragment = document.createDocumentFragment();
         var kebabCase = StringHelper.getKebabCase(this.kind);
         var toolBarElement = document.createElement("div");
-        ElementHelper.addClasses(toolBarElement, this.app.prefix, kebabCase, "flexbox", "flex-row-reverse");
+        ElementHelper.addClasses(toolBarElement, this.app.prefix, kebabCase, "flexbox", "flex-row");
         ElementHelper.addStyles(toolBarElement, {
             height: this.height + "px"
         });
@@ -58,6 +64,16 @@ var UIToolBar = (function (_super) {
                 return;
             }
         }, true);
+        if (this.titleBar !== false) {
+            var titleBar = new UITitleBar_1.default(this.app, this.window, this.titleBar);
+            var titleBarElement = titleBar.present();
+            titleBarElement && toolBarElement.appendChild(titleBarElement);
+        }
+        if (this.tabBar !== false) {
+            var tabBar = new UITabBar_1.default(this.app, this.window, this.tabBar);
+            var tabBarElement = tabBar.present();
+            tabBarElement && toolBarElement.appendChild(tabBarElement);
+        }
         if (this.actionBar !== false) {
             var actionBar = new UIActionBar_1.default(this.app, this.window, this.actionBar);
             var actionBarElement = actionBar.present();

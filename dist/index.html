@@ -7,7 +7,7 @@
         content="width=device-width, initial-scale=1.0, maximum-scale=1,minimum-scale=1,user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
     <title>A magical window. - Layx</title>
-<link href="layx.min.css?14320a8ac9a12506b642" rel="stylesheet"><script type="text/javascript" src="layx.min.js?14320a8ac9a12506b642"></script></head>
+<link href="layx.min.css?60807bed6afc65780eb9" rel="stylesheet"><script type="text/javascript" src="layx.min.js?60807bed6afc65780eb9"></script></head>
 
 <body>
     <button id="create">Create</button>
@@ -16,6 +16,11 @@
         document.getElementById("create").onclick = function () {
             layx.open({
                 id: "hello-world",
+                toolBar: {
+                    titleBar: {
+                        title: "Layx 一个神奇的窗口"
+                    }
+                },
                 contextMenu: [{
                     id: 'create',
                     label: '新增窗口',
@@ -49,6 +54,11 @@
         document.getElementById("create2").onclick = function () {
             layx.open({
                 id: "hello-world2",
+                toolBar: {
+                    titleBar: {
+                        title: "Layx 一个神奇的窗口"
+                    }
+                },
                 offset: [100, 50]
             });
         }

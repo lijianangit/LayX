@@ -58,9 +58,19 @@ export type ActionBarOption = {
     actionButtons?: Array<ActionButtonOption> | boolean;
 } & JsonObject;
 
+export type TabBarOption = {
+
+} & JsonObject;
+
+export type TitleBarOption = {
+    title?: string;
+} & JsonObject;
+
 export type ToolBarOption = {
     height?: number;
     drag?: DragMoveOption | boolean;
+    titleBar?: TitleBarOption | boolean;
+    tabBar?: TabBarOption | boolean;
     actionBar?: ActionBarOption | boolean;
 } & JsonObject;
 
