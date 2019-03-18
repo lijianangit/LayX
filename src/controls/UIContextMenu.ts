@@ -8,6 +8,8 @@ import * as ElementHelper from "../utils/ElementHelper";
 
 export default class UIContextMenu extends UIWindowComponent implements UIControl {
     public readonly kind: string = "contextMenu";
+    public static readonly height: number = 34;
+
     public id: string;
     public label: string;
     public handler?: (window: UIWindow) => void;
@@ -29,6 +31,11 @@ export default class UIContextMenu extends UIWindowComponent implements UIContro
         ElementHelper.addClasses(contextMenuElement, this.app.prefix,
             `${kebabCase}-item`
         );
+
+        ElementHelper.addStyles(contextMenuElement, <Types.CSSStyleObject>{
+            height: `${UIContextMenu.height}px`,
+            lineHeight: `${UIContextMenu.height - 10}px`
+        });
 
         const labelElement = document.createElement("label");
         ElementHelper.addClasses(labelElement, this.app.prefix,

@@ -199,16 +199,7 @@ export default class UIWindow extends UIComponent implements UIControl {
                 ev.preventDefault();
                 ev.returnValue = false;
 
-                if (contextMenuElements != null) {
-                    ElementHelper.addClasses(contextMenuElements, this.app.prefix,
-                        `context-menu-active`
-                    );
-                    ElementHelper.addStyles(contextMenuElements, <Types.CSSStyleObject>{
-                        zIndex: `${this.zIndex + 1}`,
-                        top: `${ev.pageY}px`,
-                        left: `${ev.pageX}px`,
-                    });
-                }
+                this.updateContextMenuOffset(contextMenuElements, ev);
 
                 return false;
             });
@@ -401,6 +392,33 @@ export default class UIWindow extends UIComponent implements UIControl {
             ElementHelper.removeClasses(contextMenuElements, this.app.prefix,
                 `context-menu-active`
             );
+        }
+    }
+
+    private updateContextMenuOffset(contextMenuElements: HTMLElement | null, ev: MouseEvent): void {
+        if (contextMenuElements != null) {
+            const styles = getComputedStyle(contextMenuElements);
+            const contextMenuWidth = Number(styles.width!.replace('px', '')),
+                contextMenuHeight = (<Types.ContextMenuOption[]>this.contextMenu).length * UIContextMenu.height,
+                x = ev.pageX,
+                y = ev.pageY;
+
+            let left = x, top = y;
+            if (contextMenuWidth + x > innerWidth) {
+                left = x - contextMenuWidth;
+            }
+            if (contextMenuHeight + y > innerHeight) {
+                top = y - contextMenuHeight;
+            }
+
+            ElementHelper.addClasses(contextMenuElements, this.app.prefix,
+                `context-menu-active`
+            );
+            ElementHelper.addStyles(contextMenuElements, <Types.CSSStyleObject>{
+                zIndex: `${this.zIndex + 1}`,
+                top: `${top}px`,
+                left: `${left}px`,
+            });
         }
     }
 
