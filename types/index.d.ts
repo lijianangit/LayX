@@ -1,4 +1,5 @@
 import UIWindow from "../src/controls/UIWindow";
+import UIComponent from "../src/basic/models/UIComponent";
 import * as Enums from "../src/basic/enums";
 
 export type JsonObject = {
@@ -94,5 +95,10 @@ export type WindowOption = {
     toolBar?: ToolBarOption | boolean;
     contextMenu?: Array<ContextMenuOption> | false;
 } & JsonObject;
+
+export type Component = {
+    constructor: UIComponent | Array<UIComponent>;
+    [key: string]: UIComponent | Array<UIComponent>;
+}
 
 export type ConfigOptions = {};

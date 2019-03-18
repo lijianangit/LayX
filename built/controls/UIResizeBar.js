@@ -23,6 +23,7 @@ var UIResizeBar = (function (_super) {
     function UIResizeBar(app, window, options) {
         var _this = _super.call(this, app, window) || this;
         _this.kind = "resizeBar";
+        _this.components = {};
         _this.left = true;
         _this.right = true;
         _this.top = true;
@@ -77,7 +78,7 @@ var UIResizeBar = (function (_super) {
         var kebabCase = StringHelper.getKebabCase(key);
         var itemElement = document.createElement("div");
         ElementHelper.addClasses(itemElement, this.app.prefix, "resize-" + kebabCase);
-        new WindowResizeDragEvent_1.default(itemElement, key, this.window);
+        new WindowResizeDragEvent_1.default(this.app, this.window, itemElement, key);
         return itemElement;
     };
     UIResizeBar.prototype.leastOneTrue = function () {

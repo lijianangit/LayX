@@ -21,6 +21,7 @@ var UITabBar = (function (_super) {
     function UITabBar(app, window, options) {
         var _this = _super.call(this, app, window) || this;
         _this.kind = "tabBar";
+        _this.components = {};
         return _this;
     }
     UITabBar.prototype.present = function () {

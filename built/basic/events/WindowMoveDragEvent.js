@@ -17,8 +17,9 @@ var DragEvent_1 = require("./DragEvent");
 var ElementHelper = require("../../utils/ElementHelper");
 var WindowMoveDragEvent = (function (_super) {
     __extends(WindowMoveDragEvent, _super);
-    function WindowMoveDragEvent(dragElement, window, dragMoveOptions) {
+    function WindowMoveDragEvent(app, window, dragElement, dragMoveOptions) {
         var _this = _super.call(this, dragElement) || this;
+        _this.app = app;
         _this.window = window;
         _this.dragMoveOptions = dragMoveOptions;
         _this.emerge = 10;

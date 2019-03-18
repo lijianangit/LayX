@@ -26,6 +26,7 @@ var UIToolBar = (function (_super) {
     function UIToolBar(app, window, options) {
         var _this = _super.call(this, app, window) || this;
         _this.kind = "toolBar";
+        _this.components = {};
         _this.height = 30;
         _this.drag = {
             vertical: true,
@@ -68,19 +69,22 @@ var UIToolBar = (function (_super) {
             var titleBar = new UITitleBar_1.default(this.app, this.window, this.titleBar);
             var titleBarElement = titleBar.present();
             titleBarElement && toolBarElement.appendChild(titleBarElement);
+            this.components[titleBar.kind] = titleBar;
         }
         if (this.tabBar !== false) {
             var tabBar = new UITabBar_1.default(this.app, this.window, this.tabBar);
             var tabBarElement = tabBar.present();
             tabBarElement && toolBarElement.appendChild(tabBarElement);
+            this.components[tabBar.kind] = tabBar;
         }
         if (this.actionBar !== false) {
             var actionBar = new UIActionBar_1.default(this.app, this.window, this.actionBar);
             var actionBarElement = actionBar.present();
             actionBarElement && toolBarElement.appendChild(actionBarElement);
+            this.components[actionBar.kind] = actionBar;
         }
         if (this.drag && (this.drag.vertical === true || this.drag.horizontal === true)) {
-            new WindowMoveDragEvent_1.default(toolBarElement, this.window, this.drag);
+            new WindowMoveDragEvent_1.default(this.app, this.window, toolBarElement, this.drag);
         }
         fragment.appendChild(toolBarElement);
         return fragment;

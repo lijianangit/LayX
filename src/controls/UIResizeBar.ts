@@ -11,6 +11,8 @@ import * as CastHelper from "../utils/CastHelper";
 
 export default class UIResizeBar extends UIWindowComponent implements UIControl {
     public readonly kind: string = "resizeBar";
+    public readonly components: Types.Component = <Types.Component>{};
+
     public left: boolean = true;
     public right: boolean = true;
     public top: boolean = true;
@@ -80,7 +82,7 @@ export default class UIResizeBar extends UIWindowComponent implements UIControl 
             `resize-${kebabCase}`
         );
 
-        new WindowResizeDragEvent(itemElement, key, this.window);
+        new WindowResizeDragEvent(this.app, this.window, itemElement, key);
 
         return itemElement;
     }

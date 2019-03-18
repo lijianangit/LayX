@@ -23,24 +23,34 @@ var UITitleBar = (function (_super) {
     function UITitleBar(app, window, options) {
         var _this = _super.call(this, app, window) || this;
         _this.kind = "titleBar";
+        _this.components = {};
         _this.icon = "icon";
-        _this.icon = CastHelper.TypeOrBooleanCast(options.icon, _this.icon);
+        _this.icon = CastHelper.typeOrBooleanCast(options.icon, _this.icon);
         _this.title = options.title;
         return _this;
     }
     UITitleBar.prototype.present = function () {
+        var _this = this;
         var fragment = document.createDocumentFragment();
         var kebabCase = StringHelper.getKebabCase(this.kind);
         var titleBarElement = document.createElement("div");
         ElementHelper.addClasses(titleBarElement, this.app.prefix, kebabCase, "flexbox", "flex-row", "flex-vertical-center");
         if (this.icon) {
+            var windowIconElement = document.createElement("div");
+            ElementHelper.addClasses(windowIconElement, this.app.prefix, "window-icon", "flexbox", "flex-center");
+            windowIconElement.addEventListener("dblclick", function (ev) {
+                ev.stopPropagation();
+                _this.window.destroy();
+            });
+            titleBarElement.appendChild(windowIconElement);
             var icon = new UIIcon_1.default(this.app, this.window, this.icon);
             var iconElement = icon.present();
-            iconElement && titleBarElement.appendChild(iconElement);
+            iconElement && windowIconElement.appendChild(iconElement);
+            this.components[icon.kind] = icon;
         }
         if (this.title) {
             var titleElement = document.createElement("div");
-            ElementHelper.addClasses(titleElement, this.app.prefix, "title");
+            ElementHelper.addClasses(titleElement, this.app.prefix, "window-title");
             var labelElement = document.createElement("label");
             ElementHelper.addClasses(labelElement, this.app.prefix, "label");
             labelElement.innerText = this.title;

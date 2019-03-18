@@ -9,6 +9,8 @@ import * as CastHelper from "../utils/CastHelper";
 
 export default class UIParclose extends UIWindowComponent implements UIControl {
     public readonly kind: string = "parclose";
+    public readonly components: Types.Component = <Types.Component>{};
+
     public opacity: number = 0;
 
     constructor(app: App, window: UIWindow, options: Types.ParcloseOption) {

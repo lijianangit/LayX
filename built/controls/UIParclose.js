@@ -22,6 +22,7 @@ var UIParclose = (function (_super) {
     function UIParclose(app, window, options) {
         var _this = _super.call(this, app, window) || this;
         _this.kind = "parclose";
+        _this.components = {};
         _this.opacity = 0;
         _this.opacity = CastHelper.numberCast(options.opacity, _this.opacity);
         return _this;

@@ -21,6 +21,7 @@ var UIIcon = (function (_super) {
     function UIIcon(app, window, name) {
         var _this = _super.call(this, app, window) || this;
         _this.kind = "icon";
+        _this.components = {};
         if (!name)
             ExceptionHelper.assertName();
         _this.name = name;

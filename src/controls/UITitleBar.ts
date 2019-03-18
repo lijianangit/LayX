@@ -11,6 +11,7 @@ import UIIcon from "./UIIcon";
 
 export default class UITitleBar extends UIWindowComponent implements UIControl {
     public readonly kind: string = "titleBar";
+    public readonly components: Types.Component = <Types.Component>{};
 
     public icon: string | false = "icon";
     public title?: string;
@@ -44,7 +45,7 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
 
             windowIconElement.addEventListener("dblclick", (ev: MouseEvent) => {
                 ev.stopPropagation();
-                
+
                 this.window.destroy();
             });
 
@@ -53,6 +54,7 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
             const icon = new UIIcon(this.app, this.window, this.icon);
             const iconElement = icon.present();
             iconElement && windowIconElement.appendChild(iconElement);
+            this.components[icon.kind] = icon;
         }
 
         if (this.title) {

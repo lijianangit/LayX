@@ -10,6 +10,8 @@ import * as CastHelper from "../utils/CastHelper";
 
 export default class UIActionBar extends UIWindowComponent implements UIControl {
     readonly kind: string = "actionBar";
+    public readonly components: Types.Component = <Types.Component>{};
+
     public enable: boolean = true;
     public actionButtons: Array<Types.ActionButtonOption> | false = [
         UIActionButton.infoActionButton,
@@ -58,12 +60,15 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
 
     private createActionButtons(actionBarElement: HTMLElement) {
         if (this.actionButtons !== false) {
+            const actionButtons = Array<UIActionButton>();
             for (const item of this.actionButtons) {
                 const actionButton = new UIActionButton(this.app, this.window, item);
                 const actionButtonElement = actionButton.present();
 
                 actionButtonElement && actionBarElement.appendChild(actionButtonElement);
+                actionButtons.push(actionButton);
             }
+            this.components["actionButtons"] = actionButtons;
         }
     }
 }

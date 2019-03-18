@@ -21,6 +21,7 @@ var UIContextMenu = (function (_super) {
     function UIContextMenu(app, window, options) {
         var _this = _super.call(this, app, window) || this;
         _this.kind = "contextMenu";
+        _this.components = {};
         _this.id = options.id;
         _this.label = options.label;
         _this.handler = options.handler;
@@ -33,18 +34,23 @@ var UIContextMenu = (function (_super) {
         var contextMenuElement = document.createElement("div");
         contextMenuElement.id = this.window.elementId + "-" + kebabCase + "-" + this.id;
         ElementHelper.addClasses(contextMenuElement, this.app.prefix, kebabCase + "-item");
+        ElementHelper.addStyles(contextMenuElement, {
+            height: UIContextMenu.height + "px",
+            lineHeight: UIContextMenu.height - 10 + "px"
+        });
         var labelElement = document.createElement("label");
         ElementHelper.addClasses(labelElement, this.app.prefix, kebabCase + "-label");
         labelElement.innerText = this.label;
         contextMenuElement.appendChild(labelElement);
         contextMenuElement.addEventListener("mousedown", function (ev) {
-            if (typeof _this.handler === "function") {
+            if (ev.button == 0 && typeof _this.handler === "function") {
                 _this.handler(_this.window);
             }
         });
         fragment.appendChild(contextMenuElement);
         return fragment;
     };
+    UIContextMenu.height = 34;
     return UIContextMenu;
 }(UIWindowComponent_1.default));
 exports.default = UIContextMenu;

@@ -14,6 +14,7 @@ import * as Enums from "../basic/enums";
 
 export default class UIToolBar extends UIWindowComponent implements UIControl {
     public readonly kind: string = "toolBar";
+    public readonly components: Types.Component = <Types.Component>{};
 
     public height: number = 30;
     public drag: Types.DragMoveOption | false = {
@@ -69,6 +70,7 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
             const titleBarElement = titleBar.present();
 
             titleBarElement && toolBarElement.appendChild(titleBarElement);
+            this.components[titleBar.kind] = titleBar;
         }
 
         if (this.tabBar !== false) {
@@ -76,6 +78,7 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
             const tabBarElement = tabBar.present();
 
             tabBarElement && toolBarElement.appendChild(tabBarElement);
+            this.components[tabBar.kind] = tabBar;
         }
 
         if (this.actionBar !== false) {
@@ -83,10 +86,11 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
             const actionBarElement = actionBar.present();
 
             actionBarElement && toolBarElement.appendChild(actionBarElement);
+            this.components[actionBar.kind] = actionBar;
         }
 
         if (this.drag && (this.drag.vertical === true || this.drag.horizontal === true)) {
-            new WindowMoveDragEvent(toolBarElement, this.window, this.drag);
+            new WindowMoveDragEvent(this.app, this.window, toolBarElement, this.drag);
         }
 
         fragment.appendChild(toolBarElement);

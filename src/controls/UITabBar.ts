@@ -10,6 +10,7 @@ import * as CastHelper from "../utils/CastHelper";
 
 export default class UITabBar extends UIWindowComponent implements UIControl {
     public readonly kind: string = "tabBar";
+    public readonly components: Types.Component = <Types.Component>{};
 
     constructor(app: App, window: UIWindow, options: Types.TabBarOption) {
         super(app, window);

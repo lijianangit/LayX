@@ -9,6 +9,10 @@ import * as ElementHelper from "../utils/ElementHelper";
 
 export default class UIActionButton extends UIWindowComponent implements UIControl {
     public readonly kind: string = "actionButton";
+    public readonly components: Types.Component = <Types.Component>{};
+
+    public static readonly width: number = 45;
+
     public id: string;
     public label: string;
     public handler?: (window: UIWindow) => void;
@@ -51,6 +55,13 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
         }
     };
 
+    public static readonly moreActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
+        id: "more",
+        label: "更多操作",
+        handler: function (window: UIWindow) {
+        }
+    };
+
     constructor(app: App, window: UIWindow, options: Types.ActionButtonOption) {
         super(app, window);
 
@@ -74,9 +85,14 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
             "flex-center"
         );
 
+        ElementHelper.addStyles(actionButtonElement, <Types.CSSStyleObject>{
+            width: `${UIActionButton.width}px`
+        });
+
         const icon = new UIIcon(this.app, this.window, this.id);
         const iconElement = icon.present();
         iconElement && actionButtonElement.appendChild(iconElement);
+        this.components[icon.kind] = icon;
 
         actionButtonElement.addEventListener("mousedown", (ev: MouseEvent) => {
             if (ev.button === 0 && typeof this.handler === "function") {

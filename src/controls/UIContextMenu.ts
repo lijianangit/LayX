@@ -8,6 +8,8 @@ import * as ElementHelper from "../utils/ElementHelper";
 
 export default class UIContextMenu extends UIWindowComponent implements UIControl {
     public readonly kind: string = "contextMenu";
+    public readonly components: Types.Component = <Types.Component>{};
+
     public static readonly height: number = 34;
 
     public id: string;

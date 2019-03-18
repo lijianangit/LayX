@@ -34,7 +34,7 @@ function stringOrBooleanStyleCast(option, defaultValue, trueValue) {
     return option;
 }
 exports.stringOrBooleanStyleCast = stringOrBooleanStyleCast;
-function numberOrBooleanCast(option, defaultValue, trueValue, falseValue) {
+function typeOrBooleanCast(option, defaultValue, trueValue, falseValue) {
     if (option === undefined)
         return defaultValue;
     if (option === true) {
@@ -55,7 +55,7 @@ function numberOrBooleanCast(option, defaultValue, trueValue, falseValue) {
     }
     return option;
 }
-exports.numberOrBooleanCast = numberOrBooleanCast;
+exports.typeOrBooleanCast = typeOrBooleanCast;
 function undefinedCast(option, defaultValue) {
     if (option === undefined)
         return defaultValue;

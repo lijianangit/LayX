@@ -22,6 +22,7 @@ var UIActionButton = (function (_super) {
     function UIActionButton(app, window, options) {
         var _this = _super.call(this, app, window) || this;
         _this.kind = "actionButton";
+        _this.components = {};
         _this.id = options.id;
         _this.label = options.label;
         _this.handler = options.handler;
@@ -35,9 +36,13 @@ var UIActionButton = (function (_super) {
         actionButtonElement.id = this.window.elementId + "-" + kebabCase + "-" + this.id;
         actionButtonElement.setAttribute("title", this.label);
         ElementHelper.addClasses(actionButtonElement, this.app.prefix, kebabCase, kebabCase + "-" + this.id, "flexbox", "flex-center");
+        ElementHelper.addStyles(actionButtonElement, {
+            width: UIActionButton.width + "px"
+        });
         var icon = new UIIcon_1.default(this.app, this.window, this.id);
         var iconElement = icon.present();
         iconElement && actionButtonElement.appendChild(iconElement);
+        this.components[icon.kind] = icon;
         actionButtonElement.addEventListener("mousedown", function (ev) {
             if (ev.button === 0 && typeof _this.handler === "function") {
                 _this.handler(_this.window);
@@ -46,6 +51,7 @@ var UIActionButton = (function (_super) {
         fragment.appendChild(actionButtonElement);
         return fragment;
     };
+    UIActionButton.width = 45;
     UIActionButton.destroyActionButton = {
         id: "destroy",
         label: "关闭",
@@ -76,6 +82,12 @@ var UIActionButton = (function (_super) {
     UIActionButton.infoActionButton = {
         id: "info",
         label: "关于",
+        handler: function (window) {
+        }
+    };
+    UIActionButton.moreActionButton = {
+        id: "more",
+        label: "更多操作",
         handler: function (window) {
         }
     };

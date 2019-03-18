@@ -2,11 +2,14 @@ import UIWindowComponent from "../basic/models/UIWindowComponent";
 import UIControl from "../basic/interfaces/UIControl";
 import UIWindow from "./UIWindow";
 import App from "../core/App";
+import * as Types from "../../types";
 import * as ExceptionHelper from "../utils/ExceptionHelper";
 import * as StringHelper from "../utils/StringHelper";
 
 export default class UIIcon extends UIWindowComponent implements UIControl {
     public readonly kind: string = "icon";
+    public readonly components: Types.Component = <Types.Component>{};
+
     public readonly name: string;
 
     constructor(app: App, window: UIWindow, name: string) {

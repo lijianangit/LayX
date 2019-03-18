@@ -23,6 +23,7 @@ var UIActionBar = (function (_super) {
     function UIActionBar(app, window, options) {
         var _this = _super.call(this, app, window) || this;
         _this.kind = "actionBar";
+        _this.components = {};
         _this.enable = true;
         _this.actionButtons = [
             UIActionButton_1.default.infoActionButton,
@@ -57,12 +58,15 @@ var UIActionBar = (function (_super) {
     };
     UIActionBar.prototype.createActionButtons = function (actionBarElement) {
         if (this.actionButtons !== false) {
+            var actionButtons = Array();
             for (var _i = 0, _a = this.actionButtons; _i < _a.length; _i++) {
                 var item = _a[_i];
                 var actionButton = new UIActionButton_1.default(this.app, this.window, item);
                 var actionButtonElement = actionButton.present();
                 actionButtonElement && actionBarElement.appendChild(actionButtonElement);
+                actionButtons.push(actionButton);
             }
+            this.components["actionButtons"] = actionButtons;
         }
     };
     return UIActionBar;

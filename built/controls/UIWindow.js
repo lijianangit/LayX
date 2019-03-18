@@ -30,6 +30,7 @@ var UIWindow = (function (_super) {
         var _a, _b;
         var _this = _super.call(this, app) || this;
         _this.kind = "window";
+        _this.components = {};
         _this.status = "normal";
         _this.flickering = false;
         _this.zIndex = _this.app.zIndex;
@@ -70,7 +71,7 @@ var UIWindow = (function (_super) {
         _a = CastHelper.offsetCast(options.offset, _this.width, _this.height), _this.left = _a[0], _this.top = _a[1];
         _this.background = CastHelper.stringOrBooleanStyleCast(options.background, _this.background);
         _this.shadow = CastHelper.stringOrBooleanStyleCast(options.shadow, _this.shadow);
-        _this.parclose = CastHelper.numberOrBooleanCast(options.parclose, _this.parclose, 0);
+        _this.parclose = CastHelper.typeOrBooleanCast(options.parclose, _this.parclose, 0);
         _b = CastHelper.borderCast(options.border, {
             width: 1,
             style: "solid",
@@ -150,11 +151,13 @@ var UIWindow = (function (_super) {
             var toolBar = new UIToolBar_1.default(this.app, this, this.toolBar);
             var toolBarElement = toolBar.present();
             toolBarElement != null && windowElement.appendChild(toolBarElement);
+            this.components[toolBar.kind] = toolBar;
         }
         if (this.resizeBar !== false) {
             var resizeBar = new UIResizeBar_1.default(this.app, this, this.resizeBar);
             var resizeElement = resizeBar.present();
             resizeElement != null && windowElement.appendChild(resizeElement);
+            this.components[resizeBar.kind] = resizeBar;
         }
         fragment.appendChild(windowElement);
         if (this.parclose !== false) {
@@ -166,6 +169,7 @@ var UIWindow = (function (_super) {
                 });
                 fragment.appendChild(parcloseElement);
             }
+            this.components[parclose.kind] = parclose;
         }
         if (this.contextMenu !== false) {
             var contextMenuElements_1 = document.getElementById(this.elementId + "-context-menu");
@@ -176,14 +180,7 @@ var UIWindow = (function (_super) {
             windowElement.addEventListener("contextmenu", function (ev) {
                 ev.preventDefault();
                 ev.returnValue = false;
-                if (contextMenuElements_1 != null) {
-                    ElementHelper.addClasses(contextMenuElements_1, _this.app.prefix, "context-menu-active");
-                    ElementHelper.addStyles(contextMenuElements_1, {
-                        zIndex: "" + (_this.zIndex + 1),
-                        top: ev.pageY + "px",
-                        left: ev.pageX + "px",
-                    });
-                }
+                _this.updateContextMenuOffset(contextMenuElements_1, ev);
                 return false;
             });
         }
@@ -261,12 +258,15 @@ var UIWindow = (function (_super) {
             return false;
         }, true);
         if (this.contextMenu instanceof Array && TypeHelper.isContextMenus(this.contextMenu)) {
+            var contextMenus = Array();
             for (var _i = 0, _a = this.contextMenu; _i < _a.length; _i++) {
                 var item = _a[_i];
                 var contextMenu = new UIContextMenu_1.default(this.app, this, item);
                 var contextMenuElement = contextMenu.present();
                 contextMenuElement && contextMenuElements.appendChild(contextMenuElement);
+                contextMenus.push(contextMenu);
             }
+            this.components["contextMenus"] = contextMenus;
         }
         return contextMenuElements;
     };
@@ -336,6 +336,25 @@ var UIWindow = (function (_super) {
         var contextMenuElements = document.getElementById(this.elementId + "-context-menu");
         if (contextMenuElements) {
             ElementHelper.removeClasses(contextMenuElements, this.app.prefix, "context-menu-active");
+        }
+    };
+    UIWindow.prototype.updateContextMenuOffset = function (contextMenuElements, ev) {
+        if (contextMenuElements != null) {
+            var styles = getComputedStyle(contextMenuElements);
+            var contextMenuWidth = Number(styles.width.replace('px', '')), contextMenuHeight = this.contextMenu.length * UIContextMenu_1.default.height, x = ev.pageX, y = ev.pageY;
+            var left = x, top_1 = y;
+            if (contextMenuWidth + x > innerWidth) {
+                left = x - contextMenuWidth;
+            }
+            if (contextMenuHeight + y > innerHeight) {
+                top_1 = y - contextMenuHeight;
+            }
+            ElementHelper.addClasses(contextMenuElements, this.app.prefix, "context-menu-active");
+            ElementHelper.addStyles(contextMenuElements, {
+                zIndex: "" + (this.zIndex + 1),
+                top: top_1 + "px",
+                left: left + "px",
+            });
         }
     };
     UIWindow.prototype.getFlickerShadow = function () {

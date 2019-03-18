@@ -16,6 +16,7 @@ import * as ExceptionHelper from "../utils/ExceptionHelper";
 
 export default class UIWindow extends UIComponent implements UIControl {
     public readonly kind: string = "window";
+    public readonly components: Types.Component = <Types.Component>{};
     public status: Enums.WindowStatus = Enums.WindowStatus.NORMAL;
     public readonly elementId: string;
     private flickering: boolean = false;
@@ -26,8 +27,8 @@ export default class UIWindow extends UIComponent implements UIControl {
     public height: number = 600;
     public maxWidth: number = innerWidth;
     public maxHeight: number = innerHeight;
-    public minWidth: number = 100;
-    public minHeight: number = 100;
+    public minWidth: number = 200;
+    public minHeight: number = 200;
     public left: number;
     public top: number;
     public background: string | null = "#ffffff";
@@ -166,12 +167,14 @@ export default class UIWindow extends UIComponent implements UIControl {
             const toolBar = new UIToolBar(this.app, this, this.toolBar);
             const toolBarElement = toolBar.present();
             toolBarElement != null && windowElement.appendChild(toolBarElement);
+            this.components[toolBar.kind] = toolBar;
         }
 
         if (this.resizeBar !== false) {
             const resizeBar = new UIResizeBar(this.app, this, this.resizeBar);
             const resizeElement = resizeBar.present();
             resizeElement != null && windowElement.appendChild(resizeElement);
+            this.components[resizeBar.kind] = resizeBar;
         }
 
         fragment.appendChild(windowElement);
@@ -186,6 +189,7 @@ export default class UIWindow extends UIComponent implements UIControl {
                 });
                 fragment.appendChild(parcloseElement);
             }
+            this.components[parclose.kind] = parclose;
         }
 
         if (this.contextMenu !== false) {
@@ -311,11 +315,14 @@ export default class UIWindow extends UIComponent implements UIControl {
         }, true);
 
         if (this.contextMenu instanceof Array && TypeHelper.isContextMenus(this.contextMenu)) {
+            const contextMenus = Array<UIContextMenu>();
             for (const item of this.contextMenu) {
                 const contextMenu = new UIContextMenu(this.app, this, item);
                 const contextMenuElement = contextMenu.present();
                 contextMenuElement && contextMenuElements.appendChild(contextMenuElement);
+                contextMenus.push(contextMenu);
             }
+            this.components["contextMenus"] = contextMenus;
         }
         return contextMenuElements;
     }

@@ -1,3 +1,4 @@
+import App from "../../core/App";
 import UIWindow from "../../controls/UIWindow";
 import DragEvent from "./DragEvent";
 import * as Types from "../../../types";
@@ -9,7 +10,7 @@ export default class WindowMoveDragEvent extends DragEvent {
     private _top: number = 0;
     private _left: number = 0;
 
-    constructor(dragElement: HTMLElement, public window: UIWindow, private readonly dragMoveOptions: Types.DragMoveOption) {
+    constructor(public app: App, public window: UIWindow, dragElement: HTMLElement, private readonly dragMoveOptions: Types.DragMoveOption) {
         super(dragElement);
     }
 
