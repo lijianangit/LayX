@@ -10,7 +10,7 @@ export type CSSStyleObject = CSSStyleDeclaration & { [key: string]: string | nul
 
 export type WindowCoord = number[];
 
-export type BorderOption = JsonObject & {
+export type BorderOption = {
     width?: number;
     color?: string;
     style?: string;
