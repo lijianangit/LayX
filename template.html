@@ -37,9 +37,9 @@
                 },
                 {
                     id: 'del',
-                    label: '删除窗口',
+                    label: '关闭窗口',
                     handler: function (win) {
-                        alert("点击了删除，窗口句柄为：" + win.id);
+                        layx.destroy(win.id);
                     }
                 },
                 {

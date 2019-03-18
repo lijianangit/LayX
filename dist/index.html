@@ -7,7 +7,7 @@
         content="width=device-width, initial-scale=1.0, maximum-scale=1,minimum-scale=1,user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
     <title>A magical window. - Layx</title>
-<link href="layx.min.css?0c68574c474c810bf47a" rel="stylesheet"><script type="text/javascript" src="layx.min.js?0c68574c474c810bf47a"></script></head>
+<link href="layx.min.css?907cdf7f7f32884ab040" rel="stylesheet"><script type="text/javascript" src="layx.min.js?907cdf7f7f32884ab040"></script></head>
 
 <body>
     <button id="create">Create</button>
@@ -37,9 +37,9 @@
                 },
                 {
                     id: 'del',
-                    label: '删除窗口',
+                    label: '关闭窗口',
                     handler: function (win) {
-                        alert("点击了删除，窗口句柄为：" + win.id);
+                        layx.destroy(win.id);
                     }
                 },
                 {

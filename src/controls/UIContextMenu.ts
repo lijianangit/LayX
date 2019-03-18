@@ -45,7 +45,7 @@ export default class UIContextMenu extends UIWindowComponent implements UIContro
         contextMenuElement.appendChild(labelElement);
 
         contextMenuElement.addEventListener("mousedown", (ev: MouseEvent) => {
-            if (typeof this.handler === "function") {
+            if (ev.button == 0 && typeof this.handler === "function") {
                 this.handler(this.window);
             }
         });
