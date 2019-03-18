@@ -32,7 +32,7 @@ export function stringOrBooleanStyleCast(option: string | boolean | undefined, d
     return option;
 }
 
-export function numberOrBooleanCast(option: number | boolean | undefined, defaultValue: number | false, trueValue?: number | false, falseValue?: number | false): number | false {
+export function typeOrBooleanCast<T>(option: T | boolean | undefined, defaultValue: T | false, trueValue?: T | false, falseValue?: T | false): T | false {
     if (option === undefined) return defaultValue;
     if (option === true) {
         if (trueValue === undefined) {

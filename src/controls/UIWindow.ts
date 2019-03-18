@@ -74,7 +74,7 @@ export default class UIWindow extends UIComponent implements UIControl {
 
         this.background = CastHelper.stringOrBooleanStyleCast(options.background, this.background);
         this.shadow = CastHelper.stringOrBooleanStyleCast(options.shadow, this.shadow);
-        this.parclose = CastHelper.numberOrBooleanCast(options.parclose, this.parclose, 0);
+        this.parclose = CastHelper.typeOrBooleanCast(options.parclose, this.parclose, 0);
 
         [this.border, this.borderRadius] = CastHelper.borderCast(options.border, {
             width: 1,

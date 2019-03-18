@@ -1,18 +1,22 @@
 .layx-title-bar {
     min-width: 0;
+    padding: 0 5px;
 }
 
-.layx-title {
+.layx-window-title {
     font-size: 14px;
-    padding: 0 5px;
     min-width: 0;
 }
 
-.layx-title .layx-label {
+.layx-window-title .layx-label {
     display: inline-block;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     max-width: 100%;
     word-wrap: break-word;
+}
+
+.layx-title-bar .layx-window-icon {
+    margin-right: 5px;
 }

@@ -7,15 +7,18 @@ import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as Types from "../../types";
 import * as CastHelper from "../utils/CastHelper";
+import UIIcon from "./UIIcon";
 
 export default class UITitleBar extends UIWindowComponent implements UIControl {
     public readonly kind: string = "titleBar";
 
+    public icon: string | false = "icon";
     public title?: string;
 
     constructor(app: App, window: UIWindow, options: Types.TitleBarOption) {
         super(app, window);
 
+        this.icon = CastHelper.typeOrBooleanCast(options.icon, this.icon);
         this.title = options.title;
     }
 
@@ -31,10 +34,31 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
             "flex-vertical-center"
         );
 
+        if (this.icon) {
+            const windowIconElement = document.createElement("div");
+            ElementHelper.addClasses(windowIconElement, this.app.prefix,
+                "window-icon",
+                "flexbox",
+                "flex-center"
+            );
+
+            windowIconElement.addEventListener("dblclick", (ev: MouseEvent) => {
+                ev.stopPropagation();
+                
+                this.window.destroy();
+            });
+
+            titleBarElement.appendChild(windowIconElement);
+
+            const icon = new UIIcon(this.app, this.window, this.icon);
+            const iconElement = icon.present();
+            iconElement && windowIconElement.appendChild(iconElement);
+        }
+
         if (this.title) {
             const titleElement = document.createElement("div");
             ElementHelper.addClasses(titleElement, this.app.prefix,
-                "title"
+                "window-title"
             );
 
             const labelElement = document.createElement("label");
@@ -42,7 +66,7 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
                 "label"
             );
             labelElement.innerText = this.title;
-            
+
             titleElement.appendChild(labelElement);
 
             titleBarElement.appendChild(titleElement);

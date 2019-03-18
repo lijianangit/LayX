@@ -16,11 +16,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
+var CastHelper = require("../utils/CastHelper");
+var UIIcon_1 = require("./UIIcon");
 var UITitleBar = (function (_super) {
     __extends(UITitleBar, _super);
     function UITitleBar(app, window, options) {
         var _this = _super.call(this, app, window) || this;
         _this.kind = "titleBar";
+        _this.icon = "icon";
+        _this.icon = CastHelper.TypeOrBooleanCast(options.icon, _this.icon);
         _this.title = options.title;
         return _this;
     }
@@ -29,10 +33,18 @@ var UITitleBar = (function (_super) {
         var kebabCase = StringHelper.getKebabCase(this.kind);
         var titleBarElement = document.createElement("div");
         ElementHelper.addClasses(titleBarElement, this.app.prefix, kebabCase, "flexbox", "flex-row", "flex-vertical-center");
+        if (this.icon) {
+            var icon = new UIIcon_1.default(this.app, this.window, this.icon);
+            var iconElement = icon.present();
+            iconElement && titleBarElement.appendChild(iconElement);
+        }
         if (this.title) {
             var titleElement = document.createElement("div");
             ElementHelper.addClasses(titleElement, this.app.prefix, "title");
-            titleElement.innerText = this.title;
+            var labelElement = document.createElement("label");
+            ElementHelper.addClasses(labelElement, this.app.prefix, "label");
+            labelElement.innerText = this.title;
+            titleElement.appendChild(labelElement);
             titleBarElement.appendChild(titleElement);
         }
         fragment.appendChild(titleBarElement);

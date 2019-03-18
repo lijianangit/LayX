@@ -63,6 +63,7 @@ export type TabBarOption = {
 } & JsonObject;
 
 export type TitleBarOption = {
+    icon?: string | boolean;
     title?: string;
 } & JsonObject;
 
