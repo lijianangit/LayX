@@ -37,7 +37,13 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
                 "title"
             );
 
-            titleElement.innerText = this.title;
+            const labelElement = document.createElement("label");
+            ElementHelper.addClasses(labelElement, this.app.prefix,
+                "label"
+            );
+            labelElement.innerText = this.title;
+            
+            titleElement.appendChild(labelElement);
 
             titleBarElement.appendChild(titleElement);
         }

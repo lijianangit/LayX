@@ -1,7 +1,18 @@
+.layx-title-bar {
+    min-width: 0;
+}
+
 .layx-title {
     font-size: 14px;
+    padding: 0 5px;
+    min-width: 0;
+}
+
+.layx-title .layx-label {
+    display: inline-block;
     white-space: nowrap;
     text-overflow: ellipsis;
-    min-width: 0;
-    padding: 0 5px;
+    overflow: hidden;
+    max-width: 100%;
+    word-wrap: break-word;
 }
