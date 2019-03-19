@@ -16,7 +16,7 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
 
     public id: string;
     public label: string;
-    public handler?: (window: UIWindow) => void;
+    public handler?: (ev: MouseEvent, window: UIWindow) => void;
 
     public readonly elementId: string;
     private _element: HTMLElement | null = null;
@@ -27,7 +27,7 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
     public static readonly destroyActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "destroy",
         label: "关闭",
-        handler: function (window: UIWindow) {
+        handler: function (ev: MouseEvent, window: UIWindow) {
             window.destroy();
         }
     };
@@ -35,7 +35,7 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
     public static readonly maxActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "max",
         label: "最大化",
-        handler: function (window: UIWindow) {
+        handler: function (ev: MouseEvent, window: UIWindow) {
             window.max();
         }
     };
@@ -43,7 +43,7 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
     public static readonly restoreActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "restore",
         label: "恢复",
-        handler: function (window: UIWindow) {
+        handler: function (ev: MouseEvent, window: UIWindow) {
             window.normal();
         }
     };
@@ -51,21 +51,21 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
     public static readonly minActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "min",
         label: "最小化",
-        handler: function (window: UIWindow) {
+        handler: function (ev: MouseEvent, window: UIWindow) {
         }
     };
 
     public static readonly infoActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "info",
         label: "关于",
-        handler: function (window: UIWindow) {
+        handler: function (ev: MouseEvent, window: UIWindow) {
         }
     };
 
     public static readonly moreActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "more",
         label: "更多操作",
-        handler: function (window: UIWindow) {
+        handler: function (ev: MouseEvent, window: UIWindow) {
         }
     };
 
@@ -104,7 +104,7 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
 
         actionButtonElement.addEventListener("mousedown", (ev: MouseEvent) => {
             if (ev.button === 0 && typeof this.handler === "function") {
-                this.handler(this.window);
+                this.handler(ev, this.window);
             }
         }, true);
 

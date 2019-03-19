@@ -54,7 +54,7 @@ var UIActionButton = (function (_super) {
         this.components[icon.kind] = icon;
         actionButtonElement.addEventListener("mousedown", function (ev) {
             if (ev.button === 0 && typeof _this.handler === "function") {
-                _this.handler(_this.window);
+                _this.handler(ev, _this.window);
             }
         }, true);
         fragment.appendChild(actionButtonElement);
@@ -64,40 +64,40 @@ var UIActionButton = (function (_super) {
     UIActionButton.destroyActionButton = {
         id: "destroy",
         label: "关闭",
-        handler: function (window) {
+        handler: function (ev, window) {
             window.destroy();
         }
     };
     UIActionButton.maxActionButton = {
         id: "max",
         label: "最大化",
-        handler: function (window) {
+        handler: function (ev, window) {
             window.max();
         }
     };
     UIActionButton.restoreActionButton = {
         id: "restore",
         label: "恢复",
-        handler: function (window) {
+        handler: function (ev, window) {
             window.normal();
         }
     };
     UIActionButton.minActionButton = {
         id: "min",
         label: "最小化",
-        handler: function (window) {
+        handler: function (ev, window) {
         }
     };
     UIActionButton.infoActionButton = {
         id: "info",
         label: "关于",
-        handler: function (window) {
+        handler: function (ev, window) {
         }
     };
     UIActionButton.moreActionButton = {
         id: "more",
         label: "更多操作",
-        handler: function (window) {
+        handler: function (ev, window) {
         }
     };
     return UIActionButton;

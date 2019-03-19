@@ -116,6 +116,7 @@ var WindowResizeDragEvent = (function (_super) {
                 width: width + "px",
                 left: left + "px"
             });
+            this.updateActionButton(width);
         }
         if (lockY === false && lockX === false) {
             this._top = top;
@@ -129,7 +130,7 @@ var WindowResizeDragEvent = (function (_super) {
                 width: width + "px"
             });
         }
-        this.updateActionButton(width);
+        this.updateActionButton(lockX ? this.window.width : width);
     };
     WindowResizeDragEvent.prototype.updateActionButton = function (width) {
         if (width <= 300) {

@@ -25,13 +25,13 @@ export type ParcloseOption = {
 export type ContextMenuOption = {
     id: string;
     label: string;
-    handler?: (window: UIWindow) => void;
+    handler?: (ev: MouseEvent, window: UIWindow) => void;
 } & JsonObject;
 
 export type ActionButtonOption = {
     id: string;
     label: string;
-    handler?: (window: UIWindow) => void;
+    handler?: (ev: MouseEvent, window: UIWindow) => void;
 } & JsonObject;
 
 export type ResizeOption = {

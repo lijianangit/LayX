@@ -91,6 +91,8 @@ export default class App {
                     const contextMenu = this.window.components["contextMenu"] as UIContextMenu;
                     contextMenu.hide();
                 }
+
+                this.window.hideMoreActionContextMenu();
             }
         }, true);
     }

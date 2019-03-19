@@ -14,7 +14,7 @@ export default class UIContextMenuItem extends UIWindowComponent implements UICo
 
     public id: string;
     public label: string;
-    public handler?: (window: UIWindow) => void;
+    public handler?: (ev: MouseEvent, window: UIWindow) => void;
 
     constructor(app: App, window: UIWindow, options: Types.ContextMenuOption) {
         super(app, window);
@@ -48,7 +48,7 @@ export default class UIContextMenuItem extends UIWindowComponent implements UICo
 
         contextMenuElement.addEventListener("mousedown", (ev: MouseEvent) => {
             if (ev.button == 0 && typeof this.handler === "function") {
-                this.handler(this.window);
+                this.handler(ev, this.window);
             }
         });
 

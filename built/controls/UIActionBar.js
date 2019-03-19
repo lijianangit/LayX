@@ -18,6 +18,7 @@ var UIActionButton_1 = require("./UIActionButton");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
+var UIContextMenu_1 = require("./UIContextMenu");
 var UIActionBar = (function (_super) {
     __extends(UIActionBar, _super);
     function UIActionBar(app, window, options) {
@@ -75,6 +76,7 @@ var UIActionBar = (function (_super) {
             return;
         var actionButtons = this.components["actionButtons"];
         var _a = actionButtons.slice().reverse(), last = _a[0], front = _a.slice(1);
+        var moreContextMenus = Array();
         for (var _i = 0, front_1 = front; _i < front_1.length; _i++) {
             var item = front_1[_i];
             if (item.element) {
@@ -82,17 +84,28 @@ var UIActionBar = (function (_super) {
                     ? ElementHelper.addClasses(item.element, this.app.prefix, "action-button-hidden")
                     : ElementHelper.removeClasses(item.element, this.app.prefix, "action-button-hidden");
             }
+            moreContextMenus.push(item);
         }
         var moreActionButton = new UIActionButton_1.default(this.app, this.window, UIActionButton_1.default.moreActionButton);
         if (isMerge) {
-            var moreActionButtonElement = moreActionButton.present();
-            moreActionButtonElement
-                && moreActionButtonElement.firstElementChild
-                && last.element.insertAdjacentElement('beforebegin', moreActionButtonElement.firstElementChild);
+            if (!moreActionButton.element) {
+                var moreContextMenu_1 = new UIContextMenu_1.default(this.app, this.window, this.window.id + "-more-action", moreContextMenus);
+                var moreContextMenuElement = moreContextMenu_1.present();
+                moreContextMenuElement && document.body.appendChild(moreContextMenuElement);
+                moreActionButton.handler = function (ev, window) {
+                    moreContextMenu_1.updateOffset(ev, this.window.zIndex + 1);
+                };
+                var moreActionButtonElement = moreActionButton.present();
+                moreActionButtonElement
+                    && moreActionButtonElement.firstElementChild
+                    && last.element.insertAdjacentElement('beforebegin', moreActionButtonElement.firstElementChild);
+            }
         }
         else {
-            moreActionButton.element
-                && moreActionButton.element.parentElement.removeChild(moreActionButton.element);
+            if (moreActionButton.element) {
+                moreActionButton.element
+                    && moreActionButton.element.parentElement.removeChild(moreActionButton.element);
+            }
         }
     };
     return UIActionBar;

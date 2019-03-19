@@ -44,7 +44,7 @@ var UIContextMenuItem = (function (_super) {
         contextMenuElement.appendChild(labelElement);
         contextMenuElement.addEventListener("mousedown", function (ev) {
             if (ev.button == 0 && typeof _this.handler === "function") {
-                _this.handler(_this.window);
+                _this.handler(ev, _this.window);
             }
         });
         fragment.appendChild(contextMenuElement);

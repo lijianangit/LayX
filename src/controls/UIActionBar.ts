@@ -7,6 +7,7 @@ import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as Types from "../../types";
 import * as CastHelper from "../utils/CastHelper";
+import UIContextMenu from "./UIContextMenu";
 
 export default class UIActionBar extends UIWindowComponent implements UIControl {
     readonly kind: string = "actionBar";
@@ -79,6 +80,8 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
         const actionButtons = this.components["actionButtons"] as Array<UIActionButton>;
 
         let [last, ...front] = [...actionButtons].reverse();
+        let moreContextMenus = Array<Types.ContextMenuOption>();
+
         for (const item of front) {
             if (item.element) {
                 isMerge
@@ -89,21 +92,31 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
                         "action-button-hidden"
                     );
             }
+
+            moreContextMenus.push(<Types.ContextMenuOption>item);
         }
 
         const moreActionButton = new UIActionButton(this.app, this.window, UIActionButton.moreActionButton);
 
         if (isMerge) {
             if (!moreActionButton.element) {
+                const moreContextMenu = new UIContextMenu(this.app, this.window, `${this.window.id}-more-action`, moreContextMenus);
+                const moreContextMenuElement = moreContextMenu.present();
+                moreContextMenuElement && document.body.appendChild(moreContextMenuElement);
+
+                moreActionButton.handler = function (ev: MouseEvent, window: UIWindow) {
+                    moreContextMenu.updateOffset(ev, this.window.zIndex + 1);
+                }
+
                 const moreActionButtonElement = moreActionButton.present();
                 moreActionButtonElement
                     && moreActionButtonElement.firstElementChild
                     && last.element!.insertAdjacentElement('beforebegin', moreActionButtonElement.firstElementChild);
             }
-
         }
         else {
             if (moreActionButton.element) {
+                this.window.removeMoreActionContextMenuElement();
                 moreActionButton.element
                     && moreActionButton.element.parentElement!.removeChild(moreActionButton.element);
             }

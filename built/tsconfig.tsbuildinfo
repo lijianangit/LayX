@@ -57,7 +57,13 @@
         "signature": "63e2bdfa78be7cbf3bd95011fa4930f3069cd6d0900937268845200820dc90d0"
       },
       "d:/.workplace/.gitee/layx/src/controls/uiactionbutton.ts": {
-        "signature": "0e47200ad33e439ab1fd843e54b986ce49d469752e355c41cff91d78d7a373a3"
+        "signature": "22fe48ba44d26d2439883609f72ea846f2f4ee759f6364cd6a5b224b71ea210a"
+      },
+      "d:/.workplace/.gitee/layx/src/controls/uicontextmenuitem.ts": {
+        "signature": "bf1cf5396362eb7015ae9ccf02db2d3dfe65ffa0045bc662282c04d0b930cccc"
+      },
+      "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts": {
+        "signature": "1ac6fd7fdfa3f62594053b32dbad89322efbf6406bcb5a2c1389f1866f8f5036"
       },
       "d:/.workplace/.gitee/layx/src/controls/uiactionbar.ts": {
         "signature": "a92887f91ae351e4f5b9f1e7819c71fa3282da41368b7c5a5dd2bb7a13e7d4d7"
@@ -76,12 +82,6 @@
       },
       "d:/.workplace/.gitee/layx/src/controls/uiresizebar.ts": {
         "signature": "c5f08c1037053a0a68b38e55a0d0dbbd390f0031b8bde89a2a26def10302ac7d"
-      },
-      "d:/.workplace/.gitee/layx/src/controls/uicontextmenuitem.ts": {
-        "signature": "5a6854f29c0896b21cd01bbca9163fedc0a53a3f56e8239590c6a2c8319da95b"
-      },
-      "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts": {
-        "signature": "1ac6fd7fdfa3f62594053b32dbad89322efbf6406bcb5a2c1389f1866f8f5036"
       },
       "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts": {
         "signature": "98955d68bfb17abf09bfaef881cc0e124cba702247ed6629b9cd569388c2ff29"
@@ -193,6 +193,26 @@
         "d:/.workplace/.gitee/layx/src/utils/stringhelper.ts",
         "d:/.workplace/.gitee/layx/src/utils/elementhelper.ts"
       ],
+      "d:/.workplace/.gitee/layx/src/controls/uicontextmenuitem.ts": [
+        "d:/.workplace/.gitee/layx/src/core/app.ts",
+        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts",
+        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
+        "d:/.workplace/.gitee/layx/types/index.d.ts",
+        "d:/.workplace/.gitee/layx/src/utils/stringhelper.ts",
+        "d:/.workplace/.gitee/layx/src/utils/elementhelper.ts"
+      ],
+      "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts": [
+        "d:/.workplace/.gitee/layx/src/core/app.ts",
+        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts",
+        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uicontextmenuitem.ts",
+        "d:/.workplace/.gitee/layx/types/index.d.ts",
+        "d:/.workplace/.gitee/layx/src/utils/stringhelper.ts",
+        "d:/.workplace/.gitee/layx/src/utils/elementhelper.ts",
+        "d:/.workplace/.gitee/layx/src/utils/casthelper.ts"
+      ],
       "d:/.workplace/.gitee/layx/src/controls/uiactionbar.ts": [
         "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
         "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts",
@@ -202,7 +222,8 @@
         "d:/.workplace/.gitee/layx/src/utils/stringhelper.ts",
         "d:/.workplace/.gitee/layx/src/utils/elementhelper.ts",
         "d:/.workplace/.gitee/layx/types/index.d.ts",
-        "d:/.workplace/.gitee/layx/src/utils/casthelper.ts"
+        "d:/.workplace/.gitee/layx/src/utils/casthelper.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts"
       ],
       "d:/.workplace/.gitee/layx/src/controls/uititlebar.ts": [
         "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
@@ -261,26 +282,6 @@
         "d:/.workplace/.gitee/layx/src/basic/events/windowresizedragevent.ts",
         "d:/.workplace/.gitee/layx/types/index.d.ts",
         "d:/.workplace/.gitee/layx/src/basic/enums/index.ts",
-        "d:/.workplace/.gitee/layx/src/utils/stringhelper.ts",
-        "d:/.workplace/.gitee/layx/src/utils/elementhelper.ts",
-        "d:/.workplace/.gitee/layx/src/utils/casthelper.ts"
-      ],
-      "d:/.workplace/.gitee/layx/src/controls/uicontextmenuitem.ts": [
-        "d:/.workplace/.gitee/layx/src/core/app.ts",
-        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts",
-        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
-        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
-        "d:/.workplace/.gitee/layx/types/index.d.ts",
-        "d:/.workplace/.gitee/layx/src/utils/stringhelper.ts",
-        "d:/.workplace/.gitee/layx/src/utils/elementhelper.ts"
-      ],
-      "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts": [
-        "d:/.workplace/.gitee/layx/src/core/app.ts",
-        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts",
-        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
-        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
-        "d:/.workplace/.gitee/layx/src/controls/uicontextmenuitem.ts",
-        "d:/.workplace/.gitee/layx/types/index.d.ts",
         "d:/.workplace/.gitee/layx/src/utils/stringhelper.ts",
         "d:/.workplace/.gitee/layx/src/utils/elementhelper.ts",
         "d:/.workplace/.gitee/layx/src/utils/casthelper.ts"
@@ -376,6 +377,20 @@
         "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
         "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
       ],
+      "d:/.workplace/.gitee/layx/src/controls/uicontextmenuitem.ts": [
+        "d:/.workplace/.gitee/layx/types/index.d.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
+        "d:/.workplace/.gitee/layx/src/core/app.ts",
+        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
+        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
+      ],
+      "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts": [
+        "d:/.workplace/.gitee/layx/types/index.d.ts",
+        "d:/.workplace/.gitee/layx/src/core/app.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
+        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
+        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
+      ],
       "d:/.workplace/.gitee/layx/src/controls/uiactionbar.ts": [
         "d:/.workplace/.gitee/layx/types/index.d.ts",
         "d:/.workplace/.gitee/layx/src/core/app.ts",
@@ -411,20 +426,6 @@
         "d:/.workplace/.gitee/layx/src/basic/events/dragevent.ts"
       ],
       "d:/.workplace/.gitee/layx/src/controls/uiresizebar.ts": [
-        "d:/.workplace/.gitee/layx/types/index.d.ts",
-        "d:/.workplace/.gitee/layx/src/core/app.ts",
-        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
-        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
-        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
-      ],
-      "d:/.workplace/.gitee/layx/src/controls/uicontextmenuitem.ts": [
-        "d:/.workplace/.gitee/layx/types/index.d.ts",
-        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
-        "d:/.workplace/.gitee/layx/src/core/app.ts",
-        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
-        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
-      ],
-      "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts": [
         "d:/.workplace/.gitee/layx/types/index.d.ts",
         "d:/.workplace/.gitee/layx/src/core/app.ts",
         "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
@@ -482,14 +483,14 @@
       "d:/.workplace/.gitee/layx/src/basic/events/windowmovedragevent.ts",
       "d:/.workplace/.gitee/layx/src/controls/uiicon.ts",
       "d:/.workplace/.gitee/layx/src/controls/uiactionbutton.ts",
+      "d:/.workplace/.gitee/layx/src/controls/uicontextmenuitem.ts",
+      "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts",
       "d:/.workplace/.gitee/layx/src/controls/uiactionbar.ts",
       "d:/.workplace/.gitee/layx/src/controls/uititlebar.ts",
       "d:/.workplace/.gitee/layx/src/controls/uitabbar.ts",
       "d:/.workplace/.gitee/layx/src/controls/uitoolbar.ts",
       "d:/.workplace/.gitee/layx/src/basic/events/windowresizedragevent.ts",
       "d:/.workplace/.gitee/layx/src/controls/uiresizebar.ts",
-      "d:/.workplace/.gitee/layx/src/controls/uicontextmenuitem.ts",
-      "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts",
       "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
       "d:/.workplace/.gitee/layx/src/basic/interfaces/layx.ts",
       "d:/.workplace/.gitee/layx/src/core/app.ts",

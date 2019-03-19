@@ -17,11 +17,12 @@ import * as ExceptionHelper from "../utils/ExceptionHelper";
 
 export default class UIWindow extends UIComponent implements UIControl {
     public readonly kind: string = "window";
+    public app: App = this.app;
     public readonly components: Types.Component = <Types.Component>{};
     public status: Enums.WindowStatus = Enums.WindowStatus.NORMAL;
     public readonly elementId: string;
     private flickering: boolean = false;
-    private zIndex: number = this.app.zIndex;
+    public zIndex: number = this.app.zIndex;
     private isNeedAnimation: boolean = false;
     readonly id: string;
     public width: number = 800;
@@ -361,6 +362,22 @@ export default class UIWindow extends UIComponent implements UIControl {
                 }
                 this.app.window = this;
             }
+        }
+    }
+
+    hideMoreActionContextMenu(): void {
+        const moreActionButtonElement = document.querySelector(`#${this.app.prefix}context-menu-${this.id}-more-action`);
+        if (moreActionButtonElement) {
+            ElementHelper.removeClasses(<HTMLElement>moreActionButtonElement, this.app.prefix,
+                "context-menu-active"
+            );
+        }
+    }
+
+    removeMoreActionContextMenuElement(): void {
+        const moreActionButtonElement = document.querySelector(`#${this.app.prefix}context-menu-${this.id}-more-action`);
+        if (moreActionButtonElement && moreActionButtonElement.parentElement) {
+            moreActionButtonElement.parentElement.removeChild(moreActionButtonElement);
         }
     }
 
