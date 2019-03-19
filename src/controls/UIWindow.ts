@@ -224,7 +224,7 @@ export default class UIWindow extends UIComponent implements UIControl {
         if (this.element && this.element.parentElement && this.status !== Enums.WindowStatus.NORMAL) {
             ElementHelper.addClasses(this.element, this.app.prefix,
                 this.isNeedAnimation ? (
-                    dragToNormal == false ? `animate-${this.animate}-to-normal` : `animate-${this.animate}-drag-to-normal`
+                    dragToNormal === false ? `animate-${this.animate}-to-normal` : `animate-${this.animate}-drag-to-normal`
                 ) : ""
             );
             ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{

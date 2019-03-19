@@ -456,11 +456,13 @@
       "d:/.workplace/.gitee/layx/src/utils/casthelper.ts",
       "d:/.workplace/.gitee/layx/src/controls/uiparclose.ts",
       "d:/.workplace/.gitee/layx/src/basic/events/dragevent.ts",
+      "d:/.workplace/.gitee/layx/src/basic/events/windowmovedragevent.ts",
       "d:/.workplace/.gitee/layx/src/controls/uiicon.ts",
       "d:/.workplace/.gitee/layx/src/controls/uiactionbutton.ts",
       "d:/.workplace/.gitee/layx/src/controls/uiactionbar.ts",
       "d:/.workplace/.gitee/layx/src/controls/uititlebar.ts",
       "d:/.workplace/.gitee/layx/src/controls/uitabbar.ts",
+      "d:/.workplace/.gitee/layx/src/controls/uitoolbar.ts",
       "d:/.workplace/.gitee/layx/src/basic/events/windowresizedragevent.ts",
       "d:/.workplace/.gitee/layx/src/controls/uiresizebar.ts",
       "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts",
@@ -470,9 +472,7 @@
       "d:/.workplace/.gitee/layx/src/assets/styles/index.ts",
       "d:/.workplace/.gitee/layx/src/assets/icons/index.ts",
       "d:/.workplace/.gitee/layx/src/index.ts",
-      "d:/.workplace/.gitee/layx/node_modules/@types/q/index.d.ts",
-      "d:/.workplace/.gitee/layx/src/basic/events/windowmovedragevent.ts",
-      "d:/.workplace/.gitee/layx/src/controls/uitoolbar.ts"
+      "d:/.workplace/.gitee/layx/node_modules/@types/q/index.d.ts"
     ]
   },
   "version": "3.4.0-rc"
