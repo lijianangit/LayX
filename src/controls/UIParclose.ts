@@ -51,4 +51,13 @@ export default class UIParclose extends UIWindowComponent implements UIControl {
             return false;
         });
     }
+
+    updateZIndex(zIndex: number): void {
+        const parcloseElement = document.getElementById(`${this.window.elementId}-parclose`);
+        if (parcloseElement) {
+            ElementHelper.addStyles(<HTMLElement>(parcloseElement), <Types.CSSStyleObject>{
+                zIndex: `${zIndex - 1}`
+            });
+        }
+    }
 }

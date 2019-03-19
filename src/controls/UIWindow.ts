@@ -202,8 +202,8 @@ export default class UIWindow extends UIComponent implements UIControl {
                 ev.preventDefault();
                 ev.returnValue = false;
 
-                contextMenu.updateContextMenuOffset(ev, this.zIndex + 1);
-                
+                contextMenu.updateOffset(ev, this.zIndex + 1);
+
                 return false;
             });
         }
@@ -350,18 +350,12 @@ export default class UIWindow extends UIComponent implements UIControl {
                         this.isNeedAnimation ? `animate-${this.animate}In` : ""
                     );
                 }
-                this.updateParcloseZIndex();
+                if (this.components["parclose"]) {
+                    const parclose = this.components["parclose"] as UIParclose;
+                    parclose.updateZIndex(this.zIndex);
+                }
                 this.app.window = this;
             }
-        }
-    }
-
-    updateParcloseZIndex(): void {
-        const parcloseElement = document.getElementById(`${this.elementId}-parclose`);
-        if (parcloseElement) {
-            ElementHelper.addStyles(<HTMLElement>(parcloseElement), <Types.CSSStyleObject>{
-                zIndex: `${this.zIndex - 1}`
-            });
         }
     }
 

@@ -89,7 +89,7 @@ export default class App {
             if (this.window) {
                 if (this.window.components["contextMenu"]) {
                     const contextMenu = this.window.components["contextMenu"] as UIContextMenu;
-                    contextMenu.hideContextMenu();
+                    contextMenu.hide();
                 }
             }
         }, true);

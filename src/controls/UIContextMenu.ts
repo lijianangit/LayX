@@ -55,7 +55,7 @@ export default class UIContextMenu extends UIWindowComponent implements UIContro
         this.components["contextMenuItems"] = contextMenuItems;
     }
 
-    hideContextMenu(): void {
+    hide(): void {
         const contextMenuElements = document.getElementById(`${this.app.prefix + this.kebabCase}-${this.type}`);
         if (contextMenuElements) {
             ElementHelper.removeClasses(contextMenuElements, this.app.prefix,
@@ -64,7 +64,7 @@ export default class UIContextMenu extends UIWindowComponent implements UIContro
         }
     }
 
-    updateContextMenuOffset(ev: MouseEvent, zIndex: number): void {
+    updateOffset(ev: MouseEvent, zIndex: number): void {
         let contextMenuElements = document.getElementById(`${this.app.prefix + this.kebabCase}-${this.type}`);
         if (contextMenuElements != null) {
             const styles = getComputedStyle(contextMenuElements);
