@@ -10,12 +10,19 @@ import * as ElementHelper from "../utils/ElementHelper";
 export default class UIActionButton extends UIWindowComponent implements UIControl {
     public readonly kind: string = "actionButton";
     public readonly components: Types.Component = <Types.Component>{};
+    private kebabCase: string = StringHelper.getKebabCase(this.kind);
 
     public static readonly width: number = 45;
 
     public id: string;
     public label: string;
     public handler?: (window: UIWindow) => void;
+
+    public readonly elementId: string;
+    private _element: HTMLElement | null = null;
+    get element() {
+        return document.getElementById(`${this.elementId}`);
+    }
 
     public static readonly destroyActionButton: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "destroy",
@@ -68,19 +75,20 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
         this.id = options.id;
         this.label = options.label;
         this.handler = options.handler;
+
+        this.elementId = `${this.window.elementId}-${this.kebabCase}-${this.id}`;
     }
 
     present(): DocumentFragment | null {
         const fragment = document.createDocumentFragment();
-        const kebabCase = StringHelper.getKebabCase(this.kind);
         const actionButtonElement = document.createElement("div");
 
-        actionButtonElement.id = `${this.window.elementId}-${kebabCase}-${this.id}`;
+        actionButtonElement.id = this.elementId;
         actionButtonElement.setAttribute("title", this.label);
 
         ElementHelper.addClasses(actionButtonElement, this.app.prefix,
-            kebabCase,
-            `${kebabCase}-${this.id}`,
+            this.kebabCase,
+            `${this.kebabCase}-${this.id}`,
             "flexbox",
             "flex-center"
         );

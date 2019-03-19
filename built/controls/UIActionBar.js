@@ -69,6 +69,32 @@ var UIActionBar = (function (_super) {
             this.components["actionButtons"] = actionButtons;
         }
     };
+    UIActionBar.prototype.reizeActionButtons = function (width) {
+        var isMerge = width <= 300 ? true : false;
+        if (this.actionButtons === false)
+            return;
+        var actionButtons = this.components["actionButtons"];
+        var _a = actionButtons.slice().reverse(), last = _a[0], front = _a.slice(1);
+        for (var _i = 0, front_1 = front; _i < front_1.length; _i++) {
+            var item = front_1[_i];
+            if (item.element) {
+                isMerge
+                    ? ElementHelper.addClasses(item.element, this.app.prefix, "action-button-hidden")
+                    : ElementHelper.removeClasses(item.element, this.app.prefix, "action-button-hidden");
+            }
+        }
+        var moreActionButton = new UIActionButton_1.default(this.app, this.window, UIActionButton_1.default.moreActionButton);
+        if (isMerge) {
+            var moreActionButtonElement = moreActionButton.present();
+            moreActionButtonElement
+                && moreActionButtonElement.firstElementChild
+                && last.element.insertAdjacentElement('beforebegin', moreActionButtonElement.firstElementChild);
+        }
+        else {
+            moreActionButton.element
+                && moreActionButton.element.parentElement.removeChild(moreActionButton.element);
+        }
+    };
     return UIActionBar;
 }(UIWindowComponent_1.default));
 exports.default = UIActionBar;

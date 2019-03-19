@@ -6,6 +6,7 @@ import UIResizeBar from "./UIResizeBar";
 import UIToolBar from "./UIToolBar";
 import UIActionButton from "./UIActionButton";
 import UIContextMenu from "./UIContextMenu";
+import UIActionBar from "./UIActionBar";
 import * as Types from "../../types";
 import * as Enums from "../basic/enums";
 import * as StringHelper from "../utils/StringHelper";
@@ -255,6 +256,8 @@ export default class UIWindow extends UIComponent implements UIControl {
             }
 
             this.status = Enums.WindowStatus.NORMAL;
+
+            this.reizeActionButtons(this.width);
         }
     }
 
@@ -295,6 +298,8 @@ export default class UIWindow extends UIComponent implements UIControl {
                     }
                 }
                 this.status = Enums.WindowStatus.MAX;
+
+                this.reizeActionButtons(innerWidth);
             }
         }
     }
@@ -366,5 +371,13 @@ export default class UIWindow extends UIComponent implements UIControl {
             return shadowArray.join(" ");
         }
         return this.shadow;
+    }
+
+    private reizeActionButtons(width: number): void {
+        if (!this.components["toolBar"]) return;
+        if (!(<UIToolBar>this.components["toolBar"]).components["actionBar"]) return;
+
+        const actionBar = (<UIToolBar>this.components["toolBar"]).components["actionBar"] as UIActionBar;
+        actionBar.reizeActionButtons(width);
     }
 }

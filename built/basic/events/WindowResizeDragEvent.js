@@ -13,7 +13,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var UIActionButton_1 = require("../../controls/UIActionButton");
 var DragEvent_1 = require("./DragEvent");
 var ElementHelper = require("../../utils/ElementHelper");
 var WindowResizeDragEvent = (function (_super) {
@@ -23,7 +22,7 @@ var WindowResizeDragEvent = (function (_super) {
         _this.app = app;
         _this.window = window;
         _this.direction = direction;
-        _this.moreButtonShow = false;
+        _this.isShowMoreActionButton = false;
         _this._top = 0;
         _this._left = 0;
         _this._width = 0;
@@ -134,60 +133,25 @@ var WindowResizeDragEvent = (function (_super) {
     };
     WindowResizeDragEvent.prototype.updateActionButton = function (width) {
         if (width <= 300) {
-            if (this.moreButtonShow !== false)
+            if (this.isShowMoreActionButton !== false)
                 return;
-            this.moreButtonShow = true;
-            if (this.window.components["toolBar"] && this.window.components["toolBar"].components["actionBar"]) {
-                var actionBar = this.window.components["toolBar"].components["actionBar"];
-                if (actionBar.actionButtons !== false) {
-                    var _a = actionBar.actionButtons.slice().reverse(), destroy = _a[0], front = _a.slice(1);
-                    front = front.reverse();
-                    if (this.window.element) {
-                        for (var _i = 0, front_1 = front; _i < front_1.length; _i++) {
-                            var item = front_1[_i];
-                            var itemElement = this.window.element.querySelector("#" + this.window.elementId + "-action-button-" + item.id);
-                            if (itemElement && itemElement.parentElement) {
-                                itemElement.parentElement.removeChild(itemElement);
-                            }
-                        }
-                        var destroyActionButtonElement = this.window.element.querySelector("#" + this.window.elementId + "-action-button-" + destroy.id);
-                        if (destroyActionButtonElement && destroyActionButtonElement.parentElement) {
-                            var moreActionButton = new UIActionButton_1.default(this.app, this.window, UIActionButton_1.default.moreActionButton);
-                            var moreActionButtonElement = moreActionButton.present();
-                            moreActionButtonElement && moreActionButtonElement.firstElementChild &&
-                                destroyActionButtonElement.insertAdjacentElement("beforebegin", moreActionButtonElement.firstElementChild);
-                        }
-                    }
-                }
-            }
+            this.isShowMoreActionButton = true;
+            this.reizeActionButtons(width);
         }
         else {
-            if (this.moreButtonShow !== true)
+            if (this.isShowMoreActionButton !== true)
                 return;
-            this.moreButtonShow = false;
-            if (this.window.components["toolBar"] && this.window.components["toolBar"].components["actionBar"]) {
-                var actionBar = this.window.components["toolBar"].components["actionBar"];
-                if (actionBar.actionButtons !== false) {
-                    var _b = actionBar.actionButtons.slice().reverse(), destroy = _b[0], front = _b.slice(1);
-                    front = front.reverse();
-                    if (this.window.element) {
-                        var actionBarElement = this.window.element.querySelector("." + this.app.prefix + "action-bar");
-                        if (actionBarElement) {
-                            var moreActionButtonElement = this.window.element.querySelector("#" + this.window.elementId + "-action-button-" + UIActionButton_1.default.moreActionButton.id);
-                            moreActionButtonElement && actionBarElement.removeChild(moreActionButtonElement);
-                            var destroyActionButtonElement = this.window.element.querySelector("#" + this.window.elementId + "-action-button-" + destroy.id);
-                            for (var _c = 0, front_2 = front; _c < front_2.length; _c++) {
-                                var item = front_2[_c];
-                                var actionButton = new UIActionButton_1.default(this.app, this.window, item);
-                                var actionButtonElement = actionButton.present();
-                                destroyActionButtonElement && actionButtonElement && actionButtonElement.firstElementChild &&
-                                    destroyActionButtonElement.insertAdjacentElement("beforebegin", actionButtonElement.firstElementChild);
-                            }
-                        }
-                    }
-                }
-            }
+            this.isShowMoreActionButton = false;
+            this.reizeActionButtons(width);
         }
+    };
+    WindowResizeDragEvent.prototype.reizeActionButtons = function (width) {
+        if (!this.window.components["toolBar"])
+            return;
+        if (!this.window.components["toolBar"].components["actionBar"])
+            return;
+        var actionBar = this.window.components["toolBar"].components["actionBar"];
+        actionBar.reizeActionButtons(width);
     };
     return WindowResizeDragEvent;
 }(DragEvent_1.default));

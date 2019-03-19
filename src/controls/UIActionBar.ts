@@ -71,4 +71,37 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
             this.components["actionButtons"] = actionButtons;
         }
     }
+
+    reizeActionButtons(width: number): void {
+        let isMerge: boolean = width <= 300 ? true : false;
+
+        if (this.actionButtons === false) return;
+        const actionButtons = this.components["actionButtons"] as Array<UIActionButton>;
+
+        let [last, ...front] = [...actionButtons].reverse();
+        for (const item of front) {
+            if (item.element) {
+                isMerge
+                    ? ElementHelper.addClasses(item.element, this.app.prefix,
+                        "action-button-hidden"
+                    )
+                    : ElementHelper.removeClasses(item.element, this.app.prefix,
+                        "action-button-hidden"
+                    );
+            }
+        }
+
+        const moreActionButton = new UIActionButton(this.app, this.window, UIActionButton.moreActionButton);
+
+        if (isMerge) {
+            const moreActionButtonElement = moreActionButton.present();
+            moreActionButtonElement
+                && moreActionButtonElement.firstElementChild
+                && last.element!.insertAdjacentElement('beforebegin', moreActionButtonElement.firstElementChild);
+        }
+        else {
+            moreActionButton.element
+                && moreActionButton.element.parentElement!.removeChild(moreActionButton.element);
+        }
+    }
 }

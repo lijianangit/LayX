@@ -23,19 +23,28 @@ var UIActionButton = (function (_super) {
         var _this = _super.call(this, app, window) || this;
         _this.kind = "actionButton";
         _this.components = {};
+        _this.kebabCase = StringHelper.getKebabCase(_this.kind);
+        _this._element = null;
         _this.id = options.id;
         _this.label = options.label;
         _this.handler = options.handler;
+        _this.elementId = _this.window.elementId + "-" + _this.kebabCase + "-" + _this.id;
         return _this;
     }
+    Object.defineProperty(UIActionButton.prototype, "element", {
+        get: function () {
+            return document.getElementById("" + this.elementId);
+        },
+        enumerable: true,
+        configurable: true
+    });
     UIActionButton.prototype.present = function () {
         var _this = this;
         var fragment = document.createDocumentFragment();
-        var kebabCase = StringHelper.getKebabCase(this.kind);
         var actionButtonElement = document.createElement("div");
-        actionButtonElement.id = this.window.elementId + "-" + kebabCase + "-" + this.id;
+        actionButtonElement.id = this.elementId;
         actionButtonElement.setAttribute("title", this.label);
-        ElementHelper.addClasses(actionButtonElement, this.app.prefix, kebabCase, kebabCase + "-" + this.id, "flexbox", "flex-center");
+        ElementHelper.addClasses(actionButtonElement, this.app.prefix, this.kebabCase, this.kebabCase + "-" + this.id, "flexbox", "flex-center");
         ElementHelper.addStyles(actionButtonElement, {
             width: UIActionButton.width + "px"
         });

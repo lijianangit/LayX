@@ -95,7 +95,7 @@ var App = (function () {
             if (_this.window) {
                 if (_this.window.components["contextMenu"]) {
                     var contextMenu = _this.window.components["contextMenu"];
-                    contextMenu.hideContextMenu();
+                    contextMenu.hide();
                 }
             }
         }, true);

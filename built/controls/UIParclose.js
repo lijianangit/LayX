@@ -51,6 +51,14 @@ var UIParclose = (function (_super) {
             return false;
         });
     };
+    UIParclose.prototype.updateZIndex = function (zIndex) {
+        var parcloseElement = document.getElementById(this.window.elementId + "-parclose");
+        if (parcloseElement) {
+            ElementHelper.addStyles((parcloseElement), {
+                zIndex: "" + (zIndex - 1)
+            });
+        }
+    };
     return UIParclose;
 }(UIWindowComponent_1.default));
 exports.default = UIParclose;

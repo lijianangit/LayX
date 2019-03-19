@@ -9,7 +9,7 @@ import * as Types from "../../../types";
 import * as ElementHelper from "../../utils/ElementHelper";
 
 export default class WindowResizeDragEvent extends DragEvent {
-    private moreButtonShow: boolean = false;
+    private isShowMoreActionButton: boolean = false;
     private _top: number = 0;
     private _left: number = 0;
     private _width: number = 0;
@@ -131,58 +131,22 @@ export default class WindowResizeDragEvent extends DragEvent {
 
     private updateActionButton(width: number): void {
         if (width <= 300) {
-            if (this.moreButtonShow !== false) return;
-            this.moreButtonShow = true;
-            if (this.window.components["toolBar"] && (<UIToolBar>this.window.components["toolBar"]).components["actionBar"]) {
-                const actionBar = (<UIToolBar>this.window.components["toolBar"]).components["actionBar"] as UIActionBar;
-                if (actionBar.actionButtons !== false) {
-                    let [destroy, ...front] = [...actionBar.actionButtons].reverse();
-                    front = front.reverse();
-                    if (this.window.element) {
-                        for (const item of front) {
-                            const itemElement = this.window.element.querySelector(`#${this.window.elementId}-action-button-${item.id}`);
-                            if (itemElement && itemElement.parentElement) {
-                                itemElement.parentElement.removeChild(itemElement);
-                            }
-                        }
-
-                        const destroyActionButtonElement = this.window.element.querySelector(`#${this.window.elementId}-action-button-${destroy.id}`);
-                        if (destroyActionButtonElement && destroyActionButtonElement.parentElement) {
-                            const moreActionButton = new UIActionButton(this.app, this.window, UIActionButton.moreActionButton);
-                            const moreActionButtonElement = moreActionButton.present();
-                            moreActionButtonElement && moreActionButtonElement.firstElementChild &&
-                                destroyActionButtonElement.insertAdjacentElement("beforebegin", moreActionButtonElement.firstElementChild);
-                        }
-                    }
-                }
-            }
+            if (this.isShowMoreActionButton !== false) return;
+            this.isShowMoreActionButton = true;
+            this.reizeActionButtons(width);
         }
         else {
-            if (this.moreButtonShow !== true) return;
-            this.moreButtonShow = false;
-            if (this.window.components["toolBar"] && (<UIToolBar>this.window.components["toolBar"]).components["actionBar"]) {
-                const actionBar = (<UIToolBar>this.window.components["toolBar"]).components["actionBar"] as UIActionBar;
-                if (actionBar.actionButtons !== false) {
-                    let [destroy, ...front] = [...actionBar.actionButtons].reverse();
-                    front = front.reverse();
-                    if (this.window.element) {
-                        const actionBarElement = this.window.element.querySelector(`.${this.app.prefix}action-bar`);
-                        if (actionBarElement) {
-                            const moreActionButtonElement = this.window.element.querySelector(`#${this.window.elementId}-action-button-${UIActionButton.moreActionButton.id}`);
-                            moreActionButtonElement && actionBarElement.removeChild(moreActionButtonElement);
-
-                            const destroyActionButtonElement = this.window.element.querySelector(`#${this.window.elementId}-action-button-${destroy.id}`);
-
-                            for (const item of front) {
-                                const actionButton = new UIActionButton(this.app, this.window, item);
-                                const actionButtonElement = actionButton.present();
-                                destroyActionButtonElement && actionButtonElement && actionButtonElement.firstElementChild &&
-                                    destroyActionButtonElement.insertAdjacentElement("beforebegin", actionButtonElement.firstElementChild);
-                            }
-                        }
-                    }
-                }
-            }
+            if (this.isShowMoreActionButton !== true) return;
+            this.isShowMoreActionButton = false;
+            this.reizeActionButtons(width);
         }
+    }
+
+    private reizeActionButtons(width: number): void {
+        if (!this.window.components["toolBar"]) return;
+        if (!(<UIToolBar>this.window.components["toolBar"]).components["actionBar"]) return;
+
+        const actionBar = (<UIToolBar>this.window.components["toolBar"]).components["actionBar"] as UIActionBar;
+        actionBar.reizeActionButtons(width);
     }
 }

@@ -45,7 +45,7 @@
         "signature": "de8d6457b253d53f853a5a0e7518f5fef582a5529151f88c298508512beb5714"
       },
       "d:/.workplace/.gitee/layx/src/controls/uiparclose.ts": {
-        "signature": "bf55678a73b38bf541dc1dc9102caa8176687bb32f1345352292b18dbfdbdcb7"
+        "signature": "6736b91da8093783ed5abb3e440efe9a72babbf7d9be2075ed9d75a6975500de"
       },
       "d:/.workplace/.gitee/layx/src/basic/events/dragevent.ts": {
         "signature": "8f811a69d3a963e493e360a3180ba25ef0dd110f9c3392dc14d994e32d9bb415"
@@ -57,10 +57,10 @@
         "signature": "63e2bdfa78be7cbf3bd95011fa4930f3069cd6d0900937268845200820dc90d0"
       },
       "d:/.workplace/.gitee/layx/src/controls/uiactionbutton.ts": {
-        "signature": "9ff4b2bc46e1f5c197c7cc6b326a4e9f28bdad1d5c154012a5a214011f2e4027"
+        "signature": "0e47200ad33e439ab1fd843e54b986ce49d469752e355c41cff91d78d7a373a3"
       },
       "d:/.workplace/.gitee/layx/src/controls/uiactionbar.ts": {
-        "signature": "6f21c0d022c44a35803c49518c8d1f49b76390d76d9d3ddc8055dcac26494e13"
+        "signature": "a92887f91ae351e4f5b9f1e7819c71fa3282da41368b7c5a5dd2bb7a13e7d4d7"
       },
       "d:/.workplace/.gitee/layx/src/controls/uititlebar.ts": {
         "signature": "f949593ba0ec098732ee4b4d8d9a2995134d83b0360ed5c8b85255f302193fab"
@@ -72,7 +72,7 @@
         "signature": "58a85b56a3a319e0bd514c92b62cf845646990a587525107e7b519c336fd027b"
       },
       "d:/.workplace/.gitee/layx/src/basic/events/windowresizedragevent.ts": {
-        "signature": "89b282736a5647292d21e7f91850259e9938a7cc70a0f48e796b0acda9e1eb8d"
+        "signature": "aa839b27256b04d63062b7b079e75fecac5008f8d8099e397ca7cd9b071695b1"
       },
       "d:/.workplace/.gitee/layx/src/controls/uiresizebar.ts": {
         "signature": "c5f08c1037053a0a68b38e55a0d0dbbd390f0031b8bde89a2a26def10302ac7d"
@@ -81,10 +81,10 @@
         "signature": "5a6854f29c0896b21cd01bbca9163fedc0a53a3f56e8239590c6a2c8319da95b"
       },
       "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts": {
-        "signature": "8808a5038652fe2950215b3ce5ff22cd0fcb3bcdb972c003c92c5f241e5afccf"
+        "signature": "1ac6fd7fdfa3f62594053b32dbad89322efbf6406bcb5a2c1389f1866f8f5036"
       },
       "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts": {
-        "signature": "7f35fc3439095090382a374ceb237f6bbf9d53d6bc14a522f0891f51672da4da"
+        "signature": "98955d68bfb17abf09bfaef881cc0e124cba702247ed6629b9cd569388c2ff29"
       },
       "d:/.workplace/.gitee/layx/src/basic/interfaces/layx.ts": {
         "signature": "b7af740ac8b5883f6ddceffb47f8e8004bb7b773a4ab33782b7867f431aa0547"
@@ -294,6 +294,7 @@
         "d:/.workplace/.gitee/layx/src/controls/uitoolbar.ts",
         "d:/.workplace/.gitee/layx/src/controls/uiactionbutton.ts",
         "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uiactionbar.ts",
         "d:/.workplace/.gitee/layx/types/index.d.ts",
         "d:/.workplace/.gitee/layx/src/basic/enums/index.ts",
         "d:/.workplace/.gitee/layx/src/utils/stringhelper.ts",

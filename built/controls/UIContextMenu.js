@@ -24,16 +24,16 @@ var UIContextMenu = (function (_super) {
         var _this = _super.call(this, app, window) || this;
         _this.kind = "contextMenu";
         _this.components = {};
+        _this.kebabCase = StringHelper.getKebabCase(_this.kind);
         _this.type = type;
         _this.contextMenuItems = CastHelper.contextMenusCast(contextMenuItems);
         return _this;
     }
     UIContextMenu.prototype.present = function () {
         var fragment = document.createDocumentFragment();
-        var kebabCase = StringHelper.getKebabCase(this.kind);
         var contextMenuBarElement = document.createElement("div");
-        contextMenuBarElement.id = this.app.prefix + kebabCase + "-" + this.type;
-        ElementHelper.addClasses(contextMenuBarElement, this.app.prefix, kebabCase);
+        contextMenuBarElement.id = this.app.prefix + this.kebabCase + "-" + this.type;
+        ElementHelper.addClasses(contextMenuBarElement, this.app.prefix, this.kebabCase);
         contextMenuBarElement.addEventListener("contextmenu", function (ev) {
             ev.preventDefault();
             ev.returnValue = false;
@@ -54,14 +54,14 @@ var UIContextMenu = (function (_super) {
         }
         this.components["contextMenuItems"] = contextMenuItems;
     };
-    UIContextMenu.prototype.hideContextMenu = function () {
-        var kebabCase = StringHelper.getKebabCase(this.kind);
-        var contextMenuElements = document.getElementById(this.app.prefix + kebabCase + "-" + this.type);
+    UIContextMenu.prototype.hide = function () {
+        var contextMenuElements = document.getElementById(this.app.prefix + this.kebabCase + "-" + this.type);
         if (contextMenuElements) {
             ElementHelper.removeClasses(contextMenuElements, this.app.prefix, "context-menu-active");
         }
     };
-    UIContextMenu.prototype.updateContextMenuOffset = function (contextMenuElements, ev, zIndex) {
+    UIContextMenu.prototype.updateOffset = function (ev, zIndex) {
+        var contextMenuElements = document.getElementById(this.app.prefix + this.kebabCase + "-" + this.type);
         if (contextMenuElements != null) {
             var styles = getComputedStyle(contextMenuElements);
             var contextMenuWidth = Number(styles.width.replace('px', '')), contextMenuHeight = this.contextMenuItems.length * UIContextMenuItem_1.default.height, x = ev.pageX, y = ev.pageY;

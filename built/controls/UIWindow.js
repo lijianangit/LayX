@@ -171,20 +171,14 @@ var UIWindow = (function (_super) {
             this.components[parclose.kind] = parclose;
         }
         if (this.contextMenu !== false) {
-            var contextMenuElements_1 = document.getElementById(this.app.prefix + "context-menu-bar-" + this.id);
-            if (!contextMenuElements_1) {
-                var contextMenu = new UIContextMenu_1.default(this.app, this, this.id, this.contextMenu);
-                var contextMenuElement = contextMenu.present();
-                contextMenuElement && fragment.appendChild(contextMenuElement);
-                this.components[contextMenu.kind] = contextMenu;
-            }
+            var contextMenu_1 = new UIContextMenu_1.default(this.app, this, this.id, this.contextMenu);
+            var contextMenuElement = contextMenu_1.present();
+            contextMenuElement && fragment.appendChild(contextMenuElement);
+            this.components[contextMenu_1.kind] = contextMenu_1;
             windowElement.addEventListener("contextmenu", function (ev) {
                 ev.preventDefault();
                 ev.returnValue = false;
-                if (_this.components["contextMenu"]) {
-                    var contextMenu = _this.components["contextMenu"];
-                    contextMenu.updateContextMenuOffset(contextMenuElements_1, ev, _this.zIndex + 1);
-                }
+                contextMenu_1.updateOffset(ev, _this.zIndex + 1);
                 return false;
             });
         }
@@ -220,6 +214,7 @@ var UIWindow = (function (_super) {
                 }
             }
             this.status = "normal";
+            this.reizeActionButtons(this.width);
         }
     };
     UIWindow.prototype.max = function () {
@@ -249,6 +244,7 @@ var UIWindow = (function (_super) {
                     }
                 }
                 this.status = "max";
+                this.reizeActionButtons(innerWidth);
             }
         }
     };
@@ -301,17 +297,12 @@ var UIWindow = (function (_super) {
                 if (disabled === false) {
                     ElementHelper.addClasses(this.element, this.app.prefix, this.isNeedAnimation ? "animate-" + this.animate + "In" : "");
                 }
-                this.updateParcloseZIndex();
+                if (this.components["parclose"]) {
+                    var parclose = this.components["parclose"];
+                    parclose.updateZIndex(this.zIndex);
+                }
                 this.app.window = this;
             }
-        }
-    };
-    UIWindow.prototype.updateParcloseZIndex = function () {
-        var parcloseElement = document.getElementById(this.elementId + "-parclose");
-        if (parcloseElement) {
-            ElementHelper.addStyles((parcloseElement), {
-                zIndex: "" + (this.zIndex - 1)
-            });
         }
     };
     UIWindow.prototype.getFlickerShadow = function () {
@@ -321,6 +312,14 @@ var UIWindow = (function (_super) {
             return shadowArray.join(" ");
         }
         return this.shadow;
+    };
+    UIWindow.prototype.reizeActionButtons = function (width) {
+        if (!this.components["toolBar"])
+            return;
+        if (!this.components["toolBar"].components["actionBar"])
+            return;
+        var actionBar = this.components["toolBar"].components["actionBar"];
+        actionBar.reizeActionButtons(width);
     };
     return UIWindow;
 }(UIComponent_1.default));
