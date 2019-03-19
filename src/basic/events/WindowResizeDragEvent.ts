@@ -112,6 +112,7 @@ export default class WindowResizeDragEvent extends DragEvent {
                 width: `${width}px`,
                 left: `${left}px`
             });
+            this.updateActionButton(width);
         }
         if (lockY === false && lockX === false) {
             this._top = top;
@@ -126,7 +127,7 @@ export default class WindowResizeDragEvent extends DragEvent {
             });
         }
 
-        this.updateActionButton(width);
+        this.updateActionButton(lockX ? this.window.width : width);
     }
 
     private updateActionButton(width: number): void {

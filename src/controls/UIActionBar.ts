@@ -94,14 +94,19 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
         const moreActionButton = new UIActionButton(this.app, this.window, UIActionButton.moreActionButton);
 
         if (isMerge) {
-            const moreActionButtonElement = moreActionButton.present();
-            moreActionButtonElement
-                && moreActionButtonElement.firstElementChild
-                && last.element!.insertAdjacentElement('beforebegin', moreActionButtonElement.firstElementChild);
+            if (!moreActionButton.element) {
+                const moreActionButtonElement = moreActionButton.present();
+                moreActionButtonElement
+                    && moreActionButtonElement.firstElementChild
+                    && last.element!.insertAdjacentElement('beforebegin', moreActionButtonElement.firstElementChild);
+            }
+
         }
         else {
-            moreActionButton.element
-                && moreActionButton.element.parentElement!.removeChild(moreActionButton.element);
+            if (moreActionButton.element) {
+                moreActionButton.element
+                    && moreActionButton.element.parentElement!.removeChild(moreActionButton.element);
+            }
         }
     }
 }
