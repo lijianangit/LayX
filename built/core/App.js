@@ -93,7 +93,10 @@ var App = (function () {
         });
         document.addEventListener("mousedown", function (ev) {
             if (_this.window) {
-                _this.window.hideContextMenu();
+                if (_this.window.components["contextMenu"]) {
+                    var contextMenu = _this.window.components["contextMenu"];
+                    contextMenu.hideContextMenu();
+                }
             }
         }, true);
     };

@@ -3,9 +3,9 @@ import UIControl from "../basic/interfaces/UIControl";
 import UIComponent from "../basic/models/UIComponent";
 import UIParclose from "./UIParclose";
 import UIResizeBar from "./UIResizeBar";
-import UIContextMenu from "./UIContextMenu";
 import UIToolBar from "./UIToolBar";
 import UIActionButton from "./UIActionButton";
+import UIContextMenu from "./UIContextMenu";
 import * as Types from "../../types";
 import * as Enums from "../basic/enums";
 import * as StringHelper from "../utils/StringHelper";
@@ -193,18 +193,17 @@ export default class UIWindow extends UIComponent implements UIControl {
         }
 
         if (this.contextMenu !== false) {
-            let contextMenuElements = document.getElementById(`${this.elementId}-context-menu`);
-            if (!contextMenuElements) {
-                contextMenuElements = this.createContextMenu();
-                fragment.appendChild(contextMenuElements);
-            }
+            const contextMenu = new UIContextMenu(this.app, this, this.id, this.contextMenu);
+            const contextMenuElement = contextMenu.present();
+            contextMenuElement && fragment.appendChild(contextMenuElement);
+            this.components[contextMenu.kind] = contextMenu;
 
             windowElement.addEventListener("contextmenu", (ev: MouseEvent) => {
                 ev.preventDefault();
                 ev.returnValue = false;
 
-                this.updateContextMenuOffset(contextMenuElements, ev);
-
+                contextMenu.updateContextMenuOffset(ev, this.zIndex + 1);
+                
                 return false;
             });
         }
@@ -300,33 +299,6 @@ export default class UIWindow extends UIComponent implements UIControl {
         }
     }
 
-    createContextMenu(): HTMLElement {
-        const contextMenuElements = document.createElement("div");
-        contextMenuElements.id = `${this.elementId}-context-menu`;
-
-        ElementHelper.addClasses(contextMenuElements, this.app.prefix,
-            `context-menu`
-        );
-
-        contextMenuElements.addEventListener("contextmenu", (ev: MouseEvent) => {
-            ev.preventDefault();
-            ev.returnValue = false;
-            return false;
-        }, true);
-
-        if (this.contextMenu instanceof Array && TypeHelper.isContextMenus(this.contextMenu)) {
-            const contextMenus = Array<UIContextMenu>();
-            for (const item of this.contextMenu) {
-                const contextMenu = new UIContextMenu(this.app, this, item);
-                const contextMenuElement = contextMenu.present();
-                contextMenuElement && contextMenuElements.appendChild(contextMenuElement);
-                contextMenus.push(contextMenu);
-            }
-            this.components["contextMenus"] = contextMenus;
-        }
-        return contextMenuElements;
-    }
-
     flicker() {
         if (this.element && this.mode === Enums.WindowMode.LAYER && this.flickering === false) {
             let flickerTimes: number = 0;
@@ -389,42 +361,6 @@ export default class UIWindow extends UIComponent implements UIControl {
         if (parcloseElement) {
             ElementHelper.addStyles(<HTMLElement>(parcloseElement), <Types.CSSStyleObject>{
                 zIndex: `${this.zIndex - 1}`
-            });
-        }
-    }
-
-    hideContextMenu(): void {
-        const contextMenuElements = document.getElementById(`${this.elementId}-context-menu`);
-        if (contextMenuElements) {
-            ElementHelper.removeClasses(contextMenuElements, this.app.prefix,
-                `context-menu-active`
-            );
-        }
-    }
-
-    private updateContextMenuOffset(contextMenuElements: HTMLElement | null, ev: MouseEvent): void {
-        if (contextMenuElements != null) {
-            const styles = getComputedStyle(contextMenuElements);
-            const contextMenuWidth = Number(styles.width!.replace('px', '')),
-                contextMenuHeight = (<Types.ContextMenuOption[]>this.contextMenu).length * UIContextMenu.height,
-                x = ev.pageX,
-                y = ev.pageY;
-
-            let left = x, top = y;
-            if (contextMenuWidth + x > innerWidth) {
-                left = x - contextMenuWidth;
-            }
-            if (contextMenuHeight + y > innerHeight) {
-                top = y - contextMenuHeight;
-            }
-
-            ElementHelper.addClasses(contextMenuElements, this.app.prefix,
-                `context-menu-active`
-            );
-            ElementHelper.addStyles(contextMenuElements, <Types.CSSStyleObject>{
-                zIndex: `${this.zIndex + 1}`,
-                top: `${top}px`,
-                left: `${left}px`,
             });
         }
     }

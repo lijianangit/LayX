@@ -2,57 +2,93 @@ import App from "../core/App";
 import UIControl from "../basic/interfaces/UIControl";
 import UIWindowComponent from "../basic/models/UIWindowComponent";
 import UIWindow from "./UIWindow";
+import UIContextMenuItem from "./UIContextMenuItem";
 import * as Types from "../../types";
 import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
+import * as CastHelper from "../utils/CastHelper";
 
 export default class UIContextMenu extends UIWindowComponent implements UIControl {
     public readonly kind: string = "contextMenu";
     public readonly components: Types.Component = <Types.Component>{};
+    private kebabCase: string = StringHelper.getKebabCase(this.kind);
 
-    public static readonly height: number = 34;
+    public type: string;
+    public readonly contextMenuItems: Array<Types.ContextMenuOption>;
 
-    public id: string;
-    public label: string;
-    public handler?: (window: UIWindow) => void;
-
-    constructor(app: App, window: UIWindow, options: Types.ContextMenuOption) {
+    constructor(app: App, window: UIWindow, type: string, contextMenuItems: Array<Types.ContextMenuOption>) {
         super(app, window);
-        this.id = options.id;
-        this.label = options.label;
-        this.handler = options.handler;
+        this.type = type;
+        this.contextMenuItems = CastHelper.contextMenusCast(contextMenuItems) as Array<Types.ContextMenuOption>;
     }
 
     present(): DocumentFragment | null {
         const fragment = document.createDocumentFragment();
-        const kebabCase = StringHelper.getKebabCase(this.kind);
-        const contextMenuElement = document.createElement("div");
+        const contextMenuBarElement = document.createElement("div");
 
-        contextMenuElement.id = `${this.window.elementId}-${kebabCase}-${this.id}`;
+        contextMenuBarElement.id = `${this.app.prefix + this.kebabCase}-${this.type}`;
 
-        ElementHelper.addClasses(contextMenuElement, this.app.prefix,
-            `${kebabCase}-item`
+        ElementHelper.addClasses(contextMenuBarElement, this.app.prefix,
+            this.kebabCase
         );
 
-        ElementHelper.addStyles(contextMenuElement, <Types.CSSStyleObject>{
-            height: `${UIContextMenu.height}px`,
-            lineHeight: `${UIContextMenu.height - 10}px`
-        });
+        contextMenuBarElement.addEventListener("contextmenu", (ev: MouseEvent) => {
+            ev.preventDefault();
+            ev.returnValue = false;
+            return false;
+        }, true);
 
-        const labelElement = document.createElement("label");
-        ElementHelper.addClasses(labelElement, this.app.prefix,
-            `${kebabCase}-label`
-        );
-        labelElement.innerText = this.label;
-        contextMenuElement.appendChild(labelElement);
+        this.createContextMenu(contextMenuBarElement);
 
-        contextMenuElement.addEventListener("mousedown", (ev: MouseEvent) => {
-            if (ev.button == 0 && typeof this.handler === "function") {
-                this.handler(this.window);
-            }
-        });
-
-        fragment.appendChild(contextMenuElement);
+        fragment.appendChild(contextMenuBarElement);
         return fragment;
+    }
+
+    createContextMenu(contextMenuBarElement: HTMLElement): void {
+        const contextMenuItems = Array<UIContextMenuItem>();
+        for (const item of this.contextMenuItems) {
+            const contextMenu = new UIContextMenuItem(this.app, this.window, item);
+            const contextMenuElement = contextMenu.present();
+            contextMenuElement && contextMenuBarElement.appendChild(contextMenuElement);
+            contextMenuItems.push(contextMenu);
+        }
+        this.components["contextMenuItems"] = contextMenuItems;
+    }
+
+    hideContextMenu(): void {
+        const contextMenuElements = document.getElementById(`${this.app.prefix + this.kebabCase}-${this.type}`);
+        if (contextMenuElements) {
+            ElementHelper.removeClasses(contextMenuElements, this.app.prefix,
+                `context-menu-active`
+            );
+        }
+    }
+
+    updateContextMenuOffset(ev: MouseEvent, zIndex: number): void {
+        let contextMenuElements = document.getElementById(`${this.app.prefix + this.kebabCase}-${this.type}`);
+        if (contextMenuElements != null) {
+            const styles = getComputedStyle(contextMenuElements);
+            const contextMenuWidth = Number(styles.width!.replace('px', '')),
+                contextMenuHeight = this.contextMenuItems.length * UIContextMenuItem.height,
+                x = ev.pageX,
+                y = ev.pageY;
+
+            let left = x, top = y;
+            if (contextMenuWidth + x > innerWidth) {
+                left = x - contextMenuWidth;
+            }
+            if (contextMenuHeight + y > innerHeight) {
+                top = y - contextMenuHeight;
+            }
+
+            ElementHelper.addClasses(contextMenuElements, this.app.prefix,
+                `context-menu-active`
+            );
+            ElementHelper.addStyles(contextMenuElements, <Types.CSSStyleObject>{
+                zIndex: `${zIndex + 1}`,
+                top: `${top}px`,
+                left: `${left}px`,
+            });
+        }
     }
 }

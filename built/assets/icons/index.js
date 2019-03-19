@@ -7,3 +7,4 @@ require("./info.svg");
 require("./restore.svg");
 require("./above.svg");
 require("./more.svg");
+require("./icon.svg");

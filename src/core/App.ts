@@ -1,5 +1,6 @@
 import Layx from "../basic/interfaces/Layx";
 import UIWindow from "../controls/UIWindow";
+import UIContextMenu from "../controls/UIContextMenu";
 import * as Types from "../../types";
 import * as ExceptionHelper from "../utils/ExceptionHelper";
 
@@ -86,7 +87,10 @@ export default class App {
 
         document.addEventListener("mousedown", (ev: MouseEvent) => {
             if (this.window) {
-                this.window.hideContextMenu();
+                if (this.window.components["contextMenu"]) {
+                    const contextMenu = this.window.components["contextMenu"] as UIContextMenu;
+                    contextMenu.hideContextMenu();
+                }
             }
         }, true);
     }

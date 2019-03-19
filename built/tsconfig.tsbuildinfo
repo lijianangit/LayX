@@ -51,7 +51,7 @@
         "signature": "8f811a69d3a963e493e360a3180ba25ef0dd110f9c3392dc14d994e32d9bb415"
       },
       "d:/.workplace/.gitee/layx/src/basic/events/windowmovedragevent.ts": {
-        "signature": "0d5e58df09d17ad4e7d6b0c2517328cb3a2d172966031409b0a3da1a4343e04b"
+        "signature": "1f3a98e31c601f8280e4fd4a05e0ae18a5c527ac32a72fecc839cf0c697f98e0"
       },
       "d:/.workplace/.gitee/layx/src/controls/uiicon.ts": {
         "signature": "63e2bdfa78be7cbf3bd95011fa4930f3069cd6d0900937268845200820dc90d0"
@@ -77,11 +77,14 @@
       "d:/.workplace/.gitee/layx/src/controls/uiresizebar.ts": {
         "signature": "c5f08c1037053a0a68b38e55a0d0dbbd390f0031b8bde89a2a26def10302ac7d"
       },
+      "d:/.workplace/.gitee/layx/src/controls/uicontextmenuitem.ts": {
+        "signature": "5a6854f29c0896b21cd01bbca9163fedc0a53a3f56e8239590c6a2c8319da95b"
+      },
       "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts": {
-        "signature": "8938cc9c021451780cba595019807dcb42faeaad99cbf2c42ba49785098028d6"
+        "signature": "8808a5038652fe2950215b3ce5ff22cd0fcb3bcdb972c003c92c5f241e5afccf"
       },
       "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts": {
-        "signature": "b8c7c82f53bc5c209b4ac114c702464455bb1e46796e9b5d713072e254aa7963"
+        "signature": "7f35fc3439095090382a374ceb237f6bbf9d53d6bc14a522f0891f51672da4da"
       },
       "d:/.workplace/.gitee/layx/src/basic/interfaces/layx.ts": {
         "signature": "b7af740ac8b5883f6ddceffb47f8e8004bb7b773a4ab33782b7867f431aa0547"
@@ -93,7 +96,7 @@
         "signature": "8139c2d93c5876a60130b011884b3b3b8b295026388308ebf31e3514270263fd"
       },
       "d:/.workplace/.gitee/layx/src/assets/icons/index.ts": {
-        "signature": "bc1a0829dfa1464381b898bd25fbdd2a4c08ba33e8cbc7e7e053de95f85f2f10"
+        "signature": "72b61aefb27d5da73ebf6cfe73fc5914523e1ea38364459508b59368f4324e3b"
       },
       "d:/.workplace/.gitee/layx/src/index.ts": {
         "signature": "f4c67dbd4dd413971a5d9e73b8f824b9ce5149475dfe8abeeae5d07b7d62a5bf"
@@ -262,7 +265,7 @@
         "d:/.workplace/.gitee/layx/src/utils/elementhelper.ts",
         "d:/.workplace/.gitee/layx/src/utils/casthelper.ts"
       ],
-      "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts": [
+      "d:/.workplace/.gitee/layx/src/controls/uicontextmenuitem.ts": [
         "d:/.workplace/.gitee/layx/src/core/app.ts",
         "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts",
         "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
@@ -271,15 +274,26 @@
         "d:/.workplace/.gitee/layx/src/utils/stringhelper.ts",
         "d:/.workplace/.gitee/layx/src/utils/elementhelper.ts"
       ],
+      "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts": [
+        "d:/.workplace/.gitee/layx/src/core/app.ts",
+        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts",
+        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uicontextmenuitem.ts",
+        "d:/.workplace/.gitee/layx/types/index.d.ts",
+        "d:/.workplace/.gitee/layx/src/utils/stringhelper.ts",
+        "d:/.workplace/.gitee/layx/src/utils/elementhelper.ts",
+        "d:/.workplace/.gitee/layx/src/utils/casthelper.ts"
+      ],
       "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts": [
         "d:/.workplace/.gitee/layx/src/core/app.ts",
         "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts",
         "d:/.workplace/.gitee/layx/src/basic/models/uicomponent.ts",
         "d:/.workplace/.gitee/layx/src/controls/uiparclose.ts",
         "d:/.workplace/.gitee/layx/src/controls/uiresizebar.ts",
-        "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts",
         "d:/.workplace/.gitee/layx/src/controls/uitoolbar.ts",
         "d:/.workplace/.gitee/layx/src/controls/uiactionbutton.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts",
         "d:/.workplace/.gitee/layx/types/index.d.ts",
         "d:/.workplace/.gitee/layx/src/basic/enums/index.ts",
         "d:/.workplace/.gitee/layx/src/utils/stringhelper.ts",
@@ -295,6 +309,7 @@
       "d:/.workplace/.gitee/layx/src/core/app.ts": [
         "d:/.workplace/.gitee/layx/src/basic/interfaces/layx.ts",
         "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts",
         "d:/.workplace/.gitee/layx/types/index.d.ts",
         "d:/.workplace/.gitee/layx/src/utils/exceptionhelper.ts"
       ],
@@ -401,10 +416,17 @@
         "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
         "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
       ],
-      "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts": [
+      "d:/.workplace/.gitee/layx/src/controls/uicontextmenuitem.ts": [
         "d:/.workplace/.gitee/layx/types/index.d.ts",
         "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
         "d:/.workplace/.gitee/layx/src/core/app.ts",
+        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
+        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
+      ],
+      "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts": [
+        "d:/.workplace/.gitee/layx/types/index.d.ts",
+        "d:/.workplace/.gitee/layx/src/core/app.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
         "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
         "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
       ],
@@ -465,6 +487,7 @@
       "d:/.workplace/.gitee/layx/src/controls/uitoolbar.ts",
       "d:/.workplace/.gitee/layx/src/basic/events/windowresizedragevent.ts",
       "d:/.workplace/.gitee/layx/src/controls/uiresizebar.ts",
+      "d:/.workplace/.gitee/layx/src/controls/uicontextmenuitem.ts",
       "d:/.workplace/.gitee/layx/src/controls/uicontextmenu.ts",
       "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
       "d:/.workplace/.gitee/layx/src/basic/interfaces/layx.ts",

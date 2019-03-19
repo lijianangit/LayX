@@ -16,13 +16,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var UIComponent_1 = require("../basic/models/UIComponent");
 var UIParclose_1 = require("./UIParclose");
 var UIResizeBar_1 = require("./UIResizeBar");
-var UIContextMenu_1 = require("./UIContextMenu");
 var UIToolBar_1 = require("./UIToolBar");
 var UIActionButton_1 = require("./UIActionButton");
+var UIContextMenu_1 = require("./UIContextMenu");
 var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
-var TypeHelper = require("../utils/TypeHelper");
 var ExceptionHelper = require("../utils/ExceptionHelper");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
@@ -39,8 +38,8 @@ var UIWindow = (function (_super) {
         _this.height = 600;
         _this.maxWidth = innerWidth;
         _this.maxHeight = innerHeight;
-        _this.minWidth = 100;
-        _this.minHeight = 100;
+        _this.minWidth = 200;
+        _this.minHeight = 200;
         _this.background = "#ffffff";
         _this.shadow = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
         _this.parclose = false;
@@ -172,15 +171,20 @@ var UIWindow = (function (_super) {
             this.components[parclose.kind] = parclose;
         }
         if (this.contextMenu !== false) {
-            var contextMenuElements_1 = document.getElementById(this.elementId + "-context-menu");
+            var contextMenuElements_1 = document.getElementById(this.app.prefix + "context-menu-bar-" + this.id);
             if (!contextMenuElements_1) {
-                contextMenuElements_1 = this.createContextMenu();
-                fragment.appendChild(contextMenuElements_1);
+                var contextMenu = new UIContextMenu_1.default(this.app, this, this.id, this.contextMenu);
+                var contextMenuElement = contextMenu.present();
+                contextMenuElement && fragment.appendChild(contextMenuElement);
+                this.components[contextMenu.kind] = contextMenu;
             }
             windowElement.addEventListener("contextmenu", function (ev) {
                 ev.preventDefault();
                 ev.returnValue = false;
-                _this.updateContextMenuOffset(contextMenuElements_1, ev);
+                if (_this.components["contextMenu"]) {
+                    var contextMenu = _this.components["contextMenu"];
+                    contextMenu.updateContextMenuOffset(contextMenuElements_1, ev, _this.zIndex + 1);
+                }
                 return false;
             });
         }
@@ -194,7 +198,7 @@ var UIWindow = (function (_super) {
     UIWindow.prototype.normal = function (dragToNormal) {
         if (dragToNormal === void 0) { dragToNormal = false; }
         if (this.element && this.element.parentElement && this.status !== "normal") {
-            ElementHelper.addClasses(this.element, this.app.prefix, this.isNeedAnimation ? (dragToNormal == false ? "animate-" + this.animate + "-to-normal" : "animate-" + this.animate + "-drag-to-normal") : "");
+            ElementHelper.addClasses(this.element, this.app.prefix, this.isNeedAnimation ? (dragToNormal === false ? "animate-" + this.animate + "-to-normal" : "animate-" + this.animate + "-drag-to-normal") : "");
             ElementHelper.addStyles(this.element, {
                 top: this.top + "px",
                 left: this.left + "px",
@@ -247,28 +251,6 @@ var UIWindow = (function (_super) {
                 this.status = "max";
             }
         }
-    };
-    UIWindow.prototype.createContextMenu = function () {
-        var contextMenuElements = document.createElement("div");
-        contextMenuElements.id = this.elementId + "-context-menu";
-        ElementHelper.addClasses(contextMenuElements, this.app.prefix, "context-menu");
-        contextMenuElements.addEventListener("contextmenu", function (ev) {
-            ev.preventDefault();
-            ev.returnValue = false;
-            return false;
-        }, true);
-        if (this.contextMenu instanceof Array && TypeHelper.isContextMenus(this.contextMenu)) {
-            var contextMenus = Array();
-            for (var _i = 0, _a = this.contextMenu; _i < _a.length; _i++) {
-                var item = _a[_i];
-                var contextMenu = new UIContextMenu_1.default(this.app, this, item);
-                var contextMenuElement = contextMenu.present();
-                contextMenuElement && contextMenuElements.appendChild(contextMenuElement);
-                contextMenus.push(contextMenu);
-            }
-            this.components["contextMenus"] = contextMenus;
-        }
-        return contextMenuElements;
     };
     UIWindow.prototype.flicker = function () {
         var _this = this;
@@ -329,31 +311,6 @@ var UIWindow = (function (_super) {
         if (parcloseElement) {
             ElementHelper.addStyles((parcloseElement), {
                 zIndex: "" + (this.zIndex - 1)
-            });
-        }
-    };
-    UIWindow.prototype.hideContextMenu = function () {
-        var contextMenuElements = document.getElementById(this.elementId + "-context-menu");
-        if (contextMenuElements) {
-            ElementHelper.removeClasses(contextMenuElements, this.app.prefix, "context-menu-active");
-        }
-    };
-    UIWindow.prototype.updateContextMenuOffset = function (contextMenuElements, ev) {
-        if (contextMenuElements != null) {
-            var styles = getComputedStyle(contextMenuElements);
-            var contextMenuWidth = Number(styles.width.replace('px', '')), contextMenuHeight = this.contextMenu.length * UIContextMenu_1.default.height, x = ev.pageX, y = ev.pageY;
-            var left = x, top_1 = y;
-            if (contextMenuWidth + x > innerWidth) {
-                left = x - contextMenuWidth;
-            }
-            if (contextMenuHeight + y > innerHeight) {
-                top_1 = y - contextMenuHeight;
-            }
-            ElementHelper.addClasses(contextMenuElements, this.app.prefix, "context-menu-active");
-            ElementHelper.addStyles(contextMenuElements, {
-                zIndex: "" + (this.zIndex + 1),
-                top: top_1 + "px",
-                left: left + "px",
             });
         }
     };
