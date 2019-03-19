@@ -9,8 +9,8 @@ export default class WindowMoveDragEvent extends DragEvent {
     private readonly emerge: number = 10;
     private _top: number = 0;
     private _left: number = 0;
-    private _maxFrontTop: number = 0;
-    private _maxFrontLeft: number = 0;
+    private _originTop: number = 0;
+    private _originLeft: number = 0;
 
     constructor(public app: App, public window: UIWindow, dragElement: HTMLElement, private readonly dragMoveOptions: Types.DragMoveOption) {
         super(dragElement);
@@ -28,8 +28,8 @@ export default class WindowMoveDragEvent extends DragEvent {
     dragEnd(ev: MouseEvent, x: number, y: number): void {
         if (this.isDragging == true && this._top === 0) {
             this.window.max();
-            this.window.top = this._maxFrontTop;
-            this.window.left = this._maxFrontLeft;
+            this.window.top = this._originTop;
+            this.window.left = this._originLeft;
             return;
         }
 
@@ -61,8 +61,9 @@ export default class WindowMoveDragEvent extends DragEvent {
     }
 
     draggingFirst(ev: MouseEvent, x: number, y: number, distanceX: number, distanceY: number): void {
-        this._maxFrontTop = this.window.top;
-        this._maxFrontLeft = this.window.left;
+        this._originTop = this.window.top;
+        this._originLeft = this.window.left;
+
         if (this.window.status === Enums.WindowStatus.MAX) {
             if (x < this.window.width / 2) {
                 this._left = 0;
