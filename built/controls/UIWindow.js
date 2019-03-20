@@ -29,6 +29,7 @@ var UIWindow = (function (_super) {
         var _a, _b;
         var _this = _super.call(this, app) || this;
         _this.kind = "window";
+        _this.app = _this.app;
         _this.components = {};
         _this.status = "normal";
         _this.flickering = false;
@@ -303,6 +304,18 @@ var UIWindow = (function (_super) {
                 }
                 this.app.window = this;
             }
+        }
+    };
+    UIWindow.prototype.hideMoreActionContextMenu = function () {
+        var moreActionButtonElement = document.querySelector("#" + this.app.prefix + "context-menu-" + this.id + "-more-action");
+        if (moreActionButtonElement) {
+            ElementHelper.removeClasses(moreActionButtonElement, this.app.prefix, "context-menu-active");
+        }
+    };
+    UIWindow.prototype.removeMoreActionContextMenuElement = function () {
+        var moreActionButtonElement = document.querySelector("#" + this.app.prefix + "context-menu-" + this.id + "-more-action");
+        if (moreActionButtonElement && moreActionButtonElement.parentElement) {
+            moreActionButtonElement.parentElement.removeChild(moreActionButtonElement);
         }
     };
     UIWindow.prototype.getFlickerShadow = function () {

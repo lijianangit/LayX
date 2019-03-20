@@ -38,13 +38,13 @@ export default class UIContextMenu extends UIWindowComponent implements UIContro
             return false;
         }, true);
 
-        this.createContextMenu(contextMenuBarElement);
+        this.createContextMenus(contextMenuBarElement);
 
         fragment.appendChild(contextMenuBarElement);
         return fragment;
     }
 
-    createContextMenu(contextMenuBarElement: HTMLElement): void {
+    createContextMenus(contextMenuBarElement: HTMLElement): void {
         const contextMenuItems = Array<UIContextMenuItem>();
         for (const item of this.contextMenuItems) {
             const contextMenu = new UIContextMenuItem(this.app, this.window, item);

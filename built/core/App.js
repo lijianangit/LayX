@@ -97,6 +97,7 @@ var App = (function () {
                     var contextMenu = _this.window.components["contextMenu"];
                     contextMenu.hide();
                 }
+                _this.window.hideMoreActionContextMenu();
             }
         }, true);
     };

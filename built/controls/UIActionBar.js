@@ -103,6 +103,7 @@ var UIActionBar = (function (_super) {
         }
         else {
             if (moreActionButton.element) {
+                this.window.removeMoreActionContextMenuElement();
                 moreActionButton.element
                     && moreActionButton.element.parentElement.removeChild(moreActionButton.element);
             }

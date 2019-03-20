@@ -39,11 +39,11 @@ var UIContextMenu = (function (_super) {
             ev.returnValue = false;
             return false;
         }, true);
-        this.createContextMenu(contextMenuBarElement);
+        this.createContextMenus(contextMenuBarElement);
         fragment.appendChild(contextMenuBarElement);
         return fragment;
     };
-    UIContextMenu.prototype.createContextMenu = function (contextMenuBarElement) {
+    UIContextMenu.prototype.createContextMenus = function (contextMenuBarElement) {
         var contextMenuItems = Array();
         for (var _i = 0, _a = this.contextMenuItems; _i < _a.length; _i++) {
             var item = _a[_i];
