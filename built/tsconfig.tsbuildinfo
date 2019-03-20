@@ -327,51 +327,64 @@
       "e:/projects/layx/src/basic/models/uicomponent.ts": [
         "e:/projects/layx/src/core/app.ts"
       ],
-      "e:/projects/layx/src/controls/uiwindow.ts": [
-        "e:/projects/layx/src/core/app.ts",
-        "e:/projects/layx/types/index.d.ts",
-        "e:/projects/layx/src/basic/enums/index.ts",
+      "e:/projects/layx/src/basic/interfaces/uicontrol.ts": [
         "e:/projects/layx/src/basic/models/uicomponent.ts",
-        "e:/projects/layx/src/basic/interfaces/uicontrol.ts"
-      ],
-      "e:/projects/layx/src/core/app.ts": [
-        "e:/projects/layx/src/controls/uiwindow.ts",
-        "e:/projects/layx/src/basic/interfaces/layx.ts",
         "e:/projects/layx/types/index.d.ts"
       ],
-      "e:/projects/layx/src/index.ts": [
-        "e:/projects/layx/src/assets/styles/index.ts",
-        "e:/projects/layx/src/assets/icons/index.ts",
-        "e:/projects/layx/src/basic/interfaces/layx.ts"
+      "e:/projects/layx/src/basic/models/uiwindowcomponent.ts": [
+        "e:/projects/layx/src/controls/uiwindow.ts",
+        "e:/projects/layx/src/core/app.ts",
+        "e:/projects/layx/src/basic/models/uicomponent.ts"
       ],
-      "e:/projects/layx/src/controls/uiresizebar.ts": [
+      "e:/projects/layx/src/utils/elementhelper.ts": [
+        "e:/projects/layx/types/index.d.ts"
+      ],
+      "e:/projects/layx/src/utils/typehelper.ts": [
+        "e:/projects/layx/types/index.d.ts",
+        "e:/projects/layx/src/basic/enums/index.ts"
+      ],
+      "e:/projects/layx/src/utils/jsonhelper.ts": [
+        "e:/projects/layx/types/index.d.ts"
+      ],
+      "e:/projects/layx/src/utils/casthelper.ts": [
+        "e:/projects/layx/src/basic/enums/index.ts",
+        "e:/projects/layx/types/index.d.ts"
+      ],
+      "e:/projects/layx/src/controls/uiparclose.ts": [
         "e:/projects/layx/types/index.d.ts",
         "e:/projects/layx/src/core/app.ts",
         "e:/projects/layx/src/controls/uiwindow.ts",
         "e:/projects/layx/src/basic/models/uiwindowcomponent.ts",
         "e:/projects/layx/src/basic/interfaces/uicontrol.ts"
       ],
-      "e:/projects/layx/src/basic/events/windowresizedragevent.ts": [
+      "e:/projects/layx/src/basic/events/windowmovedragevent.ts": [
         "e:/projects/layx/src/core/app.ts",
         "e:/projects/layx/src/controls/uiwindow.ts",
-        "e:/projects/layx/src/basic/enums/index.ts",
+        "e:/projects/layx/types/index.d.ts",
         "e:/projects/layx/src/basic/events/dragevent.ts"
       ],
-      "e:/projects/layx/src/controls/uitoolbar.ts": [
+      "e:/projects/layx/src/controls/uiicon.ts": [
         "e:/projects/layx/types/index.d.ts",
         "e:/projects/layx/src/core/app.ts",
         "e:/projects/layx/src/controls/uiwindow.ts",
         "e:/projects/layx/src/basic/models/uiwindowcomponent.ts",
         "e:/projects/layx/src/basic/interfaces/uicontrol.ts"
       ],
-      "e:/projects/layx/src/controls/uitabbar.ts": [
+      "e:/projects/layx/src/controls/uiactionbutton.ts": [
         "e:/projects/layx/types/index.d.ts",
-        "e:/projects/layx/src/core/app.ts",
         "e:/projects/layx/src/controls/uiwindow.ts",
+        "e:/projects/layx/src/core/app.ts",
         "e:/projects/layx/src/basic/models/uiwindowcomponent.ts",
         "e:/projects/layx/src/basic/interfaces/uicontrol.ts"
       ],
-      "e:/projects/layx/src/controls/uititlebar.ts": [
+      "e:/projects/layx/src/controls/uicontextmenuitem.ts": [
+        "e:/projects/layx/types/index.d.ts",
+        "e:/projects/layx/src/controls/uiwindow.ts",
+        "e:/projects/layx/src/core/app.ts",
+        "e:/projects/layx/src/basic/models/uiwindowcomponent.ts",
+        "e:/projects/layx/src/basic/interfaces/uicontrol.ts"
+      ],
+      "e:/projects/layx/src/controls/uicontextmenu.ts": [
         "e:/projects/layx/types/index.d.ts",
         "e:/projects/layx/src/core/app.ts",
         "e:/projects/layx/src/controls/uiwindow.ts",
@@ -385,73 +398,60 @@
         "e:/projects/layx/src/basic/models/uiwindowcomponent.ts",
         "e:/projects/layx/src/basic/interfaces/uicontrol.ts"
       ],
-      "e:/projects/layx/src/controls/uicontextmenu.ts": [
+      "e:/projects/layx/src/controls/uititlebar.ts": [
         "e:/projects/layx/types/index.d.ts",
         "e:/projects/layx/src/core/app.ts",
         "e:/projects/layx/src/controls/uiwindow.ts",
         "e:/projects/layx/src/basic/models/uiwindowcomponent.ts",
         "e:/projects/layx/src/basic/interfaces/uicontrol.ts"
       ],
-      "e:/projects/layx/src/controls/uicontextmenuitem.ts": [
-        "e:/projects/layx/types/index.d.ts",
-        "e:/projects/layx/src/controls/uiwindow.ts",
-        "e:/projects/layx/src/core/app.ts",
-        "e:/projects/layx/src/basic/models/uiwindowcomponent.ts",
-        "e:/projects/layx/src/basic/interfaces/uicontrol.ts"
-      ],
-      "e:/projects/layx/src/controls/uiactionbutton.ts": [
-        "e:/projects/layx/types/index.d.ts",
-        "e:/projects/layx/src/controls/uiwindow.ts",
-        "e:/projects/layx/src/core/app.ts",
-        "e:/projects/layx/src/basic/models/uiwindowcomponent.ts",
-        "e:/projects/layx/src/basic/interfaces/uicontrol.ts"
-      ],
-      "e:/projects/layx/src/controls/uiicon.ts": [
+      "e:/projects/layx/src/controls/uitabbar.ts": [
         "e:/projects/layx/types/index.d.ts",
         "e:/projects/layx/src/core/app.ts",
         "e:/projects/layx/src/controls/uiwindow.ts",
         "e:/projects/layx/src/basic/models/uiwindowcomponent.ts",
         "e:/projects/layx/src/basic/interfaces/uicontrol.ts"
       ],
-      "e:/projects/layx/src/basic/events/windowmovedragevent.ts": [
+      "e:/projects/layx/src/controls/uitoolbar.ts": [
+        "e:/projects/layx/types/index.d.ts",
         "e:/projects/layx/src/core/app.ts",
         "e:/projects/layx/src/controls/uiwindow.ts",
-        "e:/projects/layx/types/index.d.ts",
+        "e:/projects/layx/src/basic/models/uiwindowcomponent.ts",
+        "e:/projects/layx/src/basic/interfaces/uicontrol.ts"
+      ],
+      "e:/projects/layx/src/basic/events/windowresizedragevent.ts": [
+        "e:/projects/layx/src/core/app.ts",
+        "e:/projects/layx/src/controls/uiwindow.ts",
+        "e:/projects/layx/src/basic/enums/index.ts",
         "e:/projects/layx/src/basic/events/dragevent.ts"
       ],
-      "e:/projects/layx/src/controls/uiparclose.ts": [
+      "e:/projects/layx/src/controls/uiresizebar.ts": [
         "e:/projects/layx/types/index.d.ts",
         "e:/projects/layx/src/core/app.ts",
         "e:/projects/layx/src/controls/uiwindow.ts",
         "e:/projects/layx/src/basic/models/uiwindowcomponent.ts",
         "e:/projects/layx/src/basic/interfaces/uicontrol.ts"
       ],
-      "e:/projects/layx/src/basic/models/uiwindowcomponent.ts": [
-        "e:/projects/layx/src/controls/uiwindow.ts",
+      "e:/projects/layx/src/controls/uiwindow.ts": [
         "e:/projects/layx/src/core/app.ts",
-        "e:/projects/layx/src/basic/models/uicomponent.ts"
+        "e:/projects/layx/types/index.d.ts",
+        "e:/projects/layx/src/basic/enums/index.ts",
+        "e:/projects/layx/src/basic/models/uicomponent.ts",
+        "e:/projects/layx/src/basic/interfaces/uicontrol.ts"
       ],
       "e:/projects/layx/src/basic/interfaces/layx.ts": [
         "e:/projects/layx/types/index.d.ts",
         "e:/projects/layx/src/controls/uiwindow.ts"
       ],
-      "e:/projects/layx/src/utils/casthelper.ts": [
-        "e:/projects/layx/src/basic/enums/index.ts",
+      "e:/projects/layx/src/core/app.ts": [
+        "e:/projects/layx/src/controls/uiwindow.ts",
+        "e:/projects/layx/src/basic/interfaces/layx.ts",
         "e:/projects/layx/types/index.d.ts"
       ],
-      "e:/projects/layx/src/utils/jsonhelper.ts": [
-        "e:/projects/layx/types/index.d.ts"
-      ],
-      "e:/projects/layx/src/utils/typehelper.ts": [
-        "e:/projects/layx/types/index.d.ts",
-        "e:/projects/layx/src/basic/enums/index.ts"
-      ],
-      "e:/projects/layx/src/utils/elementhelper.ts": [
-        "e:/projects/layx/types/index.d.ts"
-      ],
-      "e:/projects/layx/src/basic/interfaces/uicontrol.ts": [
-        "e:/projects/layx/src/basic/models/uicomponent.ts",
-        "e:/projects/layx/types/index.d.ts"
+      "e:/projects/layx/src/index.ts": [
+        "e:/projects/layx/src/assets/styles/index.ts",
+        "e:/projects/layx/src/assets/icons/index.ts",
+        "e:/projects/layx/src/basic/interfaces/layx.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
