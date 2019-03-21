@@ -3,15 +3,19 @@ import UIControl from "../basic/interfaces/UIControl";
 import UIWindowComponent from "../basic/models/UIWindowComponent";
 import UIWindow from "./UIWindow";
 import * as Types from "../../types";
-import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as CastHelper from "../utils/CastHelper";
+import * as Enums from "../basic/enums";
 
 export default class UIParclose extends UIWindowComponent implements UIControl {
-    public readonly kind: string = "parclose";
-    public readonly components: Types.Component = <Types.Component>{};
+    public readonly elementId: string = `${this.window.elementId}-${Enums.ComponentType.PARCLOSE}`;
 
     public opacity: number = 0;
+
+    private _element: HTMLElement | null = null;
+    get element() {
+        return document.getElementById(`${this.elementId}`);
+    }
 
     constructor(app: App, window: UIWindow, options: Types.ParcloseOption) {
         super(app, window);
@@ -19,15 +23,14 @@ export default class UIParclose extends UIWindowComponent implements UIControl {
         this.opacity = CastHelper.numberCast(options.opacity, this.opacity);
     }
 
-    present(): DocumentFragment | null {
-        const fragment = document.createDocumentFragment();
-        const kebabCase = StringHelper.getKebabCase(this.kind);
-        const parcloseElement = document.createElement("div");
+    present(): DocumentFragment {
+        const fragment = ElementHelper.createFragment();
 
-        parcloseElement.id = `${this.window.elementId}-${kebabCase}`;
+        const parcloseElement = ElementHelper.createElement("div");
+        parcloseElement.id = this.elementId;
 
         ElementHelper.addClasses(parcloseElement, this.app.prefix,
-            kebabCase
+            Enums.ComponentType.PARCLOSE
         );
 
         ElementHelper.addStyles(parcloseElement, <Types.CSSStyleObject>{
@@ -40,6 +43,12 @@ export default class UIParclose extends UIWindowComponent implements UIControl {
         return fragment;
     }
 
+    updateZIndex(zIndex: number): void {
+        ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
+            zIndex: `${zIndex}`
+        });
+    }
+
     private bindEvent(element: HTMLElement): void {
         element.addEventListener("mousedown", (ev: MouseEvent) => {
             this.window.flicker();
@@ -50,14 +59,5 @@ export default class UIParclose extends UIWindowComponent implements UIControl {
             ev.returnValue = false;
             return false;
         });
-    }
-
-    updateZIndex(zIndex: number): void {
-        const parcloseElement = document.getElementById(`${this.window.elementId}-parclose`);
-        if (parcloseElement) {
-            ElementHelper.addStyles(<HTMLElement>(parcloseElement), <Types.CSSStyleObject>{
-                zIndex: `${zIndex - 1}`
-            });
-        }
     }
 }

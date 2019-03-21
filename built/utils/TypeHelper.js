@@ -39,24 +39,24 @@ function isJsonObject(obj) {
         && obj.constructor === Object;
 }
 exports.isJsonObject = isJsonObject;
-function isContextMenu(obj) {
+function isContextMenuButton(obj) {
     return isJsonObject(obj)
         && obj.id !== undefined
         && obj.label !== undefined;
 }
-exports.isContextMenu = isContextMenu;
-function isContextMenus(obj) {
+exports.isContextMenuButton = isContextMenuButton;
+function isContextMenuButtons(obj) {
     var correct = true;
     for (var _i = 0, obj_1 = obj; _i < obj_1.length; _i++) {
         var item = obj_1[_i];
-        if (!isContextMenu(item)) {
+        if (!isContextMenuButton(item)) {
             correct = false;
             break;
         }
     }
     return correct;
 }
-exports.isContextMenus = isContextMenus;
+exports.isContextMenuButtons = isContextMenuButtons;
 function isResizeOptions(obj) {
     if (typeof obj === "boolean")
         return true;
@@ -89,3 +89,8 @@ function isActionButtons(obj) {
     return correct;
 }
 exports.isActionButtons = isActionButtons;
+function isStringWithNotEmpty(obj) {
+    return typeof obj === "string"
+        && obj.trim().length > 0;
+}
+exports.isStringWithNotEmpty = isStringWithNotEmpty;

@@ -11,7 +11,12 @@ export function numberCast(option: number | string | undefined, defaultValue: nu
         return Number(option);
     }
 
-    return ExceptionHelper.assertNever(option);
+    return ExceptionHelper.assertNumber(option);
+}
+
+export function stringCast(option: any): string {
+    if (!TypeHelper.isStringWithNotEmpty(option)) return ExceptionHelper.assertString(option);
+    return option;
 }
 
 export function booleanCast(option: boolean | undefined, defaultValue: boolean): boolean {
@@ -184,9 +189,9 @@ export function jsonOrBooleanCast<T extends Types.JsonObject>(option: T | boolea
     return JsonHelper.merge(defaultValue, option);
 }
 
-export function contextMenusCast(option: any): Array<Types.ContextMenuOption> | false {
+export function contextMenuButtonsCast(option: any): Array<Types.ContextMenuButtonOption> | false {
     if (option === undefined || option === false) return false;
-    TypeHelper.isContextMenus(option);
+    TypeHelper.isContextMenuButtons(option);
     return option;
 }
 

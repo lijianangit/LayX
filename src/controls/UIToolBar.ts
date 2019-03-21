@@ -7,14 +7,12 @@ import UIActionBar from "./UIActionBar";
 import UITitleBar from "./UITitleBar";
 import UITabBar from "./UITabBar";
 import * as Types from "../../types";
-import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as CastHelper from "../utils/CastHelper";
 import * as Enums from "../basic/enums";
 
 export default class UIToolBar extends UIWindowComponent implements UIControl {
-    public readonly kind: string = "toolBar";
-    public readonly components: Types.Component = <Types.Component>{};
+    public readonly elementId: string = `${this.window.elementId}-${Enums.ComponentType.TOOL_BAR}`;
 
     public height: number = 30;
     public drag: Types.DragMoveOption | false = {
@@ -29,6 +27,11 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
     public tabBar: Types.TabBarOption | false = {};
     public actionBar: Types.ActionBarOption | false = {};
 
+    private _element: HTMLElement | null = null;
+    get element() {
+        return document.getElementById(`${this.elementId}`);
+    }
+
     constructor(app: App, window: UIWindow, options: Types.ToolBarOption) {
         super(app, window);
 
@@ -39,13 +42,14 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
         this.actionBar = CastHelper.jsonOrBooleanCast(options.actionBar, this.actionBar);
     }
 
-    present(): DocumentFragment | null {
-        const fragment = document.createDocumentFragment();
-        const kebabCase = StringHelper.getKebabCase(this.kind);
-        const toolBarElement = document.createElement("div");
+    present(): DocumentFragment {
+        const fragment = ElementHelper.createFragment();
+
+        const toolBarElement = ElementHelper.createElement("div");
+        toolBarElement.id = this.elementId;
 
         ElementHelper.addClasses(toolBarElement, this.app.prefix,
-            kebabCase,
+            Enums.ComponentType.TOOL_BAR,
             "flexbox",
             "flex-row"
         );
@@ -69,16 +73,16 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
             const titleBar = new UITitleBar(this.app, this.window, this.titleBar);
             const titleBarElement = titleBar.present();
 
-            titleBarElement && toolBarElement.appendChild(titleBarElement);
-            this.components[titleBar.kind] = titleBar;
+            toolBarElement.appendChild(titleBarElement);
+            this.setComponent(Enums.ComponentType.TITLE_BAR, titleBar);
         }
 
         if (this.tabBar !== false) {
             const tabBar = new UITabBar(this.app, this.window, this.tabBar);
             const tabBarElement = tabBar.present();
 
-            tabBarElement && toolBarElement.appendChild(tabBarElement);
-            this.components[tabBar.kind] = tabBar;
+            toolBarElement.appendChild(tabBarElement);
+            this.setComponent(Enums.ComponentType.TAB_BAR, tabBar);
         }
 
         if (this.actionBar !== false) {
@@ -86,7 +90,7 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
             const actionBarElement = actionBar.present();
 
             actionBarElement && toolBarElement.appendChild(actionBarElement);
-            this.components[actionBar.kind] = actionBar;
+            this.setComponent(Enums.ComponentType.ACTION_BAR, actionBar);
         }
 
         if (this.drag && (this.drag.vertical === true || this.drag.horizontal === true)) {

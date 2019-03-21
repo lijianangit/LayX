@@ -14,25 +14,21 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
-var ExceptionHelper = require("../utils/ExceptionHelper");
-var StringHelper = require("../utils/StringHelper");
+var ElementHelper = require("../utils/ElementHelper");
+var CastHelper = require("../utils/CastHelper");
 var UIIcon = (function (_super) {
     __extends(UIIcon, _super);
     function UIIcon(app, window, name) {
         var _this = _super.call(this, app, window) || this;
-        _this.kind = "icon";
-        _this.components = {};
-        if (!name)
-            ExceptionHelper.assertName();
-        _this.name = name;
+        _this.className = "" + (_this.app.prefix + "icon");
+        _this.name = CastHelper.stringCast(name);
         return _this;
     }
     UIIcon.prototype.present = function () {
-        var fragment = document.createDocumentFragment();
-        var iconElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        var kebabCase = StringHelper.getKebabCase(this.kind);
-        iconElement.setAttribute("class", "" + (this.app.prefix + kebabCase));
-        var useElement = document.createElementNS("http://www.w3.org/2000/svg", "use");
+        var fragment = ElementHelper.createFragment();
+        var iconElement = ElementHelper.createElementNS("svg");
+        iconElement.setAttribute("class", this.className);
+        var useElement = ElementHelper.createElementNS("use");
         useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + this.name);
         iconElement.appendChild(useElement);
         fragment.appendChild(iconElement);

@@ -1,12 +1,12 @@
-export const enum ResizeDirection {
+export const enum Direction {
     LEFT = "left",
     RIGHT = "right",
     TOP = "top",
     BOTTOM = "bottom",
-    LEFT_TOP = "leftTop",
-    RIGHT_TOP = "rightTop",
-    LEFT_BOTTOM = "leftBottom",
-    RIGHT_BOTTOM = "rightBottom"
+    LEFT_TOP = "left-top",
+    RIGHT_TOP = "right-top",
+    LEFT_BOTTOM = "left-bottom",
+    RIGHT_BOTTOM = "right-bottom"
 }
 
 export const enum WindowAnimate {
@@ -35,4 +35,21 @@ export const enum WindowStatus {
     NORMAL = "normal",
     MAX = "max",
     MIN = "min"
+}
+
+export const enum ComponentType {
+    ICON = "icon",
+    ACTION_BUTTON = "action-button",
+    PARCLOSE = "parclose",
+    RESIZE_BAR = "resize-bar",
+    ACTION_BAR = "action-bar",
+    ACTION_BUTTONS = "action-buttons",
+    CONTEXT_MENU_BUTTON = "context-menu-button",
+    CONTEXT_MENU_BAR = "context-menu-bar",
+    CONTEXT_MENU_BUTTONS = "context-menu-buttons",
+    TITLE_BAR = "title-bar",
+    TAB_BAR = "tab-bar",
+    TOOL_BAR = "tool-bar",
+    WINDOW = "window",
+    MORE_ACTION_CONTEXT_MENU_BAR = "more-action-context-menu-bar"
 }

@@ -2,19 +2,22 @@ import UIWindowComponent from "../basic/models/UIWindowComponent";
 import UIControl from "../basic/interfaces/UIControl";
 import App from "../core/App";
 import UIWindow from "./UIWindow";
-import UIActionButton from "./UIActionButton";
-import * as StringHelper from "../utils/StringHelper";
+import UIIcon from "./UIIcon";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as Types from "../../types";
 import * as CastHelper from "../utils/CastHelper";
-import UIIcon from "./UIIcon";
+import * as Enums from "../basic/enums";
 
 export default class UITitleBar extends UIWindowComponent implements UIControl {
-    public readonly kind: string = "titleBar";
-    public readonly components: Types.Component = <Types.Component>{};
+    public readonly elementId: string = `${this.window.elementId}-${Enums.ComponentType.TITLE_BAR}`;
 
     public icon: string | false = "icon";
     public title?: string;
+
+    private _element: HTMLElement | null = null;
+    get element() {
+        return document.getElementById(`${this.elementId}`);
+    }
 
     constructor(app: App, window: UIWindow, options: Types.TitleBarOption) {
         super(app, window);
@@ -23,20 +26,21 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
         this.title = options.title;
     }
 
-    present(): DocumentFragment | null {
-        const fragment = document.createDocumentFragment();
-        const kebabCase = StringHelper.getKebabCase(this.kind);
-        const titleBarElement = document.createElement("div");
+    present(): DocumentFragment {
+        const fragment = ElementHelper.createFragment();
+
+        const titleBarElement = ElementHelper.createElement("div");
+        titleBarElement.id = this.elementId;
 
         ElementHelper.addClasses(titleBarElement, this.app.prefix,
-            kebabCase,
+            Enums.ComponentType.TITLE_BAR,
             "flexbox",
             "flex-row",
             "flex-vertical-center"
         );
 
         if (this.icon) {
-            const windowIconElement = document.createElement("div");
+            const windowIconElement = ElementHelper.createElement("div");
             ElementHelper.addClasses(windowIconElement, this.app.prefix,
                 "window-icon",
                 "flexbox",
@@ -53,29 +57,26 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
 
             const icon = new UIIcon(this.app, this.window, this.icon);
             const iconElement = icon.present();
-            iconElement && windowIconElement.appendChild(iconElement);
-            this.components[icon.kind] = icon;
+            windowIconElement.appendChild(iconElement);
         }
 
         if (this.title) {
-            const titleElement = document.createElement("div");
+            const titleElement = ElementHelper.createElement("div");
             ElementHelper.addClasses(titleElement, this.app.prefix,
                 "window-title"
             );
 
             const labelElement = document.createElement("label");
             ElementHelper.addClasses(labelElement, this.app.prefix,
-                "label"
+                "window-title-label"
             );
             labelElement.innerText = this.title;
 
             titleElement.appendChild(labelElement);
-
             titleBarElement.appendChild(titleElement);
         }
 
         fragment.appendChild(titleBarElement);
-
         return fragment;
     }
 }

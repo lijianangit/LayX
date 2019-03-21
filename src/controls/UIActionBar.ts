@@ -2,24 +2,30 @@ import UIWindowComponent from "../basic/models/UIWindowComponent";
 import UIControl from "../basic/interfaces/UIControl";
 import App from "../core/App";
 import UIWindow from "./UIWindow";
+import UIContextMenuBar from "./UIContextMenuBar";
 import UIActionButton from "./UIActionButton";
-import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as Types from "../../types";
 import * as CastHelper from "../utils/CastHelper";
-import UIContextMenu from "./UIContextMenu";
+import * as Enums from "../basic/enums";
 
 export default class UIActionBar extends UIWindowComponent implements UIControl {
-    readonly kind: string = "actionBar";
-    public readonly components: Types.Component = <Types.Component>{};
+    public static actionButtonZoomWidth: number = 300;
+
+    public readonly elementId: string = `${this.window.elementId}-${Enums.ComponentType.ACTION_BAR}`;
 
     public enable: boolean = true;
     public actionButtons: Array<Types.ActionButtonOption> | false = [
-        UIActionButton.infoActionButton,
-        UIActionButton.minActionButton,
-        UIActionButton.maxActionButton,
-        UIActionButton.destroyActionButton
+        UIActionButton.info,
+        UIActionButton.min,
+        UIActionButton.max,
+        UIActionButton.destroy
     ];
+
+    private _element: HTMLElement | null = null;
+    get element() {
+        return document.getElementById(`${this.elementId}`);
+    }
 
     constructor(app: App, window: UIWindow, options: Types.ActionBarOption) {
         super(app, window);
@@ -28,98 +34,103 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
         this.actionButtons = CastHelper.actionButtonsCast(options.actionButtons, this.actionButtons);
     }
 
-    present(): DocumentFragment | null {
-        if (this.enable === false) return null;
+    present(): DocumentFragment {
+        const fragment = ElementHelper.createFragment();
 
-        const fragment = document.createDocumentFragment();
-        const kebabCase = StringHelper.getKebabCase(this.kind);
-        const actionBarElement = document.createElement("div");
+        if (this.enable === true) {
+            const actionBarElement = ElementHelper.createElement("div");
+            actionBarElement.id = this.elementId;
 
-        ElementHelper.addClasses(actionBarElement, this.app.prefix,
-            kebabCase,
-            "flexbox",
-            "flex-row"
-        );
+            ElementHelper.addClasses(actionBarElement, this.app.prefix,
+                Enums.ComponentType.ACTION_BAR,
+                "flexbox",
+                "flex-row"
+            );
 
-        actionBarElement.addEventListener("mousedown", (ev: MouseEvent) => {
-            ev.stopPropagation();
-            ev.preventDefault();
-        });
+            actionBarElement.addEventListener("mousedown", (ev: MouseEvent) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+            });
 
-        actionBarElement.addEventListener("contextmenu", (ev: MouseEvent) => {
-            ev.stopPropagation();
-            ev.preventDefault();
-            ev.returnValue = false;
-            return false;
-        }, true);
+            actionBarElement.addEventListener("contextmenu", (ev: MouseEvent) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                ev.returnValue = false;
+                return false;
+            }, true);
 
-        this.createActionButtons(actionBarElement);
+            this.createActionButtons(actionBarElement);
 
-        fragment.appendChild(actionBarElement);
+            fragment.appendChild(actionBarElement);
+        }
+
         return fragment;
     }
 
-    private createActionButtons(actionBarElement: HTMLElement) {
-        if (this.actionButtons !== false) {
-            const actionButtons = Array<UIActionButton>();
-            for (const item of this.actionButtons) {
-                const actionButton = new UIActionButton(this.app, this.window, item);
-                const actionButtonElement = actionButton.present();
-
-                actionButtonElement && actionBarElement.appendChild(actionButtonElement);
-                actionButtons.push(actionButton);
-            }
-            this.components["actionButtons"] = actionButtons;
-        }
-    }
-
-    reizeActionButtons(width: number): void {
-        let isMerge: boolean = width <= 300 ? true : false;
-
+    zoomActionButtons(windowWidth: number): void {
         if (this.actionButtons === false) return;
-        const actionButtons = this.components["actionButtons"] as Array<UIActionButton>;
 
-        let [last, ...front] = [...actionButtons].reverse();
-        let moreContextMenus = Array<Types.ContextMenuOption>();
+        let isMerge = windowWidth <= UIActionBar.actionButtonZoomWidth ? true : false;
+        const actionButtons = this.getComponent<Array<UIActionButton>>(Enums.ComponentType.ACTION_BUTTONS);
+        if (!actionButtons) return;
 
-        for (const item of front) {
-            if (item.element) {
-                isMerge
-                    ? ElementHelper.addClasses(item.element, this.app.prefix,
-                        "action-button-hidden"
-                    )
-                    : ElementHelper.removeClasses(item.element, this.app.prefix,
-                        "action-button-hidden"
-                    );
-            }
+        let [lastActionButton, ...frontActionButtons] = [...actionButtons].reverse();
+        let moreContextMenuButtons = Array<Types.ContextMenuButtonOption>();
 
-            moreContextMenus.push(<Types.ContextMenuOption>item);
+        frontActionButtons = frontActionButtons.reverse();
+        for (const item of frontActionButtons) {
+            isMerge
+                ? ElementHelper.addClasses(item.element, this.app.prefix,
+                    "action-button-hidden"
+                )
+                : ElementHelper.removeClasses(item.element, this.app.prefix,
+                    "action-button-hidden"
+                );
+
+            moreContextMenuButtons.push(<Types.ContextMenuButtonOption>item);
         }
 
-        const moreActionButton = new UIActionButton(this.app, this.window, UIActionButton.moreActionButton);
+        const moreActionButton = new UIActionButton(this.app, this.window, UIActionButton.more);
 
         if (isMerge) {
             if (!moreActionButton.element) {
-                const moreContextMenu = new UIContextMenu(this.app, this.window, `${this.window.id}-more-action`, moreContextMenus);
-                const moreContextMenuElement = moreContextMenu.present();
-                moreContextMenuElement && document.body.appendChild(moreContextMenuElement);
+                const moreContextMenuBar = new UIContextMenuBar(this.app, this.window, `more-action`, moreContextMenuButtons);
+                const moreContextMenuBarElement = moreContextMenuBar.present();
+                document.body.appendChild(moreContextMenuBarElement);
 
                 moreActionButton.handler = function (ev: MouseEvent, window: UIWindow) {
-                    moreContextMenu.updateOffset(ev, this.window.zIndex + 1);
+                    moreContextMenuBar.updateOffset(ev, this.window.zIndex);
                 }
 
                 const moreActionButtonElement = moreActionButton.present();
-                moreActionButtonElement
-                    && moreActionButtonElement.firstElementChild
-                    && last.element!.insertAdjacentElement('beforebegin', moreActionButtonElement.firstElementChild);
+                moreActionButtonElement.firstElementChild
+                    && lastActionButton.element!.insertAdjacentElement('beforebegin', moreActionButtonElement.firstElementChild);
+
+                this.window.setComponent(Enums.ComponentType.MORE_ACTION_CONTEXT_MENU_BAR, moreContextMenuBar);
             }
         }
         else {
             if (moreActionButton.element) {
-                this.window.removeMoreActionContextMenuElement();
+                this.window.removeMoreActionContextMenu();
                 moreActionButton.element
                     && moreActionButton.element.parentElement!.removeChild(moreActionButton.element);
+
+                this.window.removeComponent(Enums.ComponentType.MORE_ACTION_CONTEXT_MENU_BAR);
             }
         }
+    }
+
+    private createActionButtons(parentActionBarElemnt: HTMLElement) {
+        if (this.actionButtons === false) return;
+
+        const actionButtons = Array<UIActionButton>();
+        for (const item of this.actionButtons) {
+            const actionButton = new UIActionButton(this.app, this.window, item);
+            const actionButtonElement = actionButton.present();
+
+            parentActionBarElemnt.appendChild(actionButtonElement);
+            actionButtons.push(actionButton);
+        }
+        this.setComponent(Enums.ComponentType.ACTION_BUTTONS, actionButtons);
     }
 }

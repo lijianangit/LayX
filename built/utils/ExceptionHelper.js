@@ -1,14 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function assertNever(x) {
-    throw new Error("Unexpected object: " + x);
-}
-exports.assertNever = assertNever;
 function assertId() {
     throw new Error("`id` is required.");
 }
 exports.assertId = assertId;
-function assertName() {
-    throw new Error("`name` is required.");
+function assertString(x) {
+    throw new Error("Unexpected string: " + x);
 }
-exports.assertName = assertName;
+exports.assertString = assertString;
+function assertNumber(x) {
+    throw new Error("Unexpected number: " + x);
+}
+exports.assertNumber = assertNumber;
+function assertNever(x) {
+    throw new Error("Unexpected object: " + x);
+}
+exports.assertNever = assertNever;

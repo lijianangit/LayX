@@ -7,7 +7,7 @@
         content="width=device-width, initial-scale=1.0, maximum-scale=1,minimum-scale=1,user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
     <title>A magical window. - Layx</title>
-<link href="layx.min.css?4fb71595f313cb9ebd86" rel="stylesheet"><script type="text/javascript" src="layx.min.js?4fb71595f313cb9ebd86"></script></head>
+<link href="layx.min.css?2e204d8e863946451219" rel="stylesheet"><script type="text/javascript" src="layx.min.js?2e204d8e863946451219"></script></head>
 
 <body>
     <button id="create">Create</button>
@@ -24,28 +24,28 @@
                 contextMenu: [{
                     id: 'create',
                     label: '新增窗口',
-                    handler: function (win) {
+                    handler: function (ev, win) {
                         alert("点击了新增，窗口句柄为：" + win.id);
                     }
                 },
                 {
                     id: 'edit',
                     label: '编辑窗口',
-                    handler: function (win) {
+                    handler: function (ev, win) {
                         alert("点击了编辑，窗口句柄为：" + win.id);
                     }
                 },
                 {
                     id: 'del',
                     label: '关闭窗口',
-                    handler: function (win) {
+                    handler: function (ev, win) {
                         layx.destroy(win.id);
                     }
                 },
                 {
                     id: 'about',
                     label: '关于...',
-                    handler: function (win) {
+                    handler: function (ev, win) {
                         alert("点击了关于，窗口句柄为：" + win.id);
                     }
                 }]

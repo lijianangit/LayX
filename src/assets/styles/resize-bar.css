@@ -1,70 +1,70 @@
-.layx-resize-bar>div[class^="layx-resize"] {
+.layx-resize-bar>[class^="layx-resize-item-"] {
     position: absolute;
     z-index: 3;
     touch-action: none;
 }
 
-.layx-resize-top, .layx-resize-bottom {
+.layx-resize-item-top, .layx-resize-item-bottom {
     height: 3px;
     left: 3px;
     right: 3px;
 }
 
-.layx-resize-top {
+.layx-resize-item-top {
     top: 0;
     cursor: n-resize;
 }
 
-.layx-resize-bottom {
+.layx-resize-item-bottom {
     bottom: 0;
     cursor: s-resize;
 }
 
-.layx-resize-left, .layx-resize-right {
+.layx-resize-item-left, .layx-resize-item-right {
     width: 3px;
     top: 3px;
     bottom: 3px;
 }
 
-.layx-resize-left {
+.layx-resize-item-left {
     left: 0;
     cursor: w-resize;
 }
 
-.layx-resize-right {
+.layx-resize-item-right {
     right: 0;
     cursor: e-resize;
 }
 
-.layx-resize-left-top, .layx-resize-right-top, .layx-resize-left-bottom, .layx-resize-right-bottom {
+.layx-resize-item-left-top, .layx-resize-item-right-top, .layx-resize-item-left-bottom, .layx-resize-item-right-bottom {
     width: 3px;
     height: 3px;
 }
 
-.layx-resize-left-top {
+.layx-resize-item-left-top {
     left: 0;
     top: 0;
     cursor: nw-resize;
 }
 
-.layx-resize-right-top {
+.layx-resize-item-right-top {
     right: 0;
     top: 0;
     cursor: ne-resize;
 }
 
-.layx-resize-left-bottom {
+.layx-resize-item-left-bottom {
     left: 0;
     bottom: 0;
     cursor: sw-resize;
 }
 
-.layx-resize-right-bottom {
+.layx-resize-item-right-bottom {
     right: 0;
     bottom: 0;
     cursor: se-resize;
 }
 
-.layx-resize-bar.layx-resize-disabled>div {
+.layx-resize-bar.layx-resize-bar-disabled>[class^="layx-resize-item-"] {
     cursor: default!important;
 }

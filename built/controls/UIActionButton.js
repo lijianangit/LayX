@@ -15,20 +15,17 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var UIIcon_1 = require("./UIIcon");
-var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
+var CastHelper = require("../utils/CastHelper");
 var UIActionButton = (function (_super) {
     __extends(UIActionButton, _super);
     function UIActionButton(app, window, options) {
         var _this = _super.call(this, app, window) || this;
-        _this.kind = "actionButton";
-        _this.components = {};
-        _this.kebabCase = StringHelper.getKebabCase(_this.kind);
         _this._element = null;
-        _this.id = options.id;
-        _this.label = options.label;
+        _this.id = CastHelper.stringCast(options.id);
+        _this.label = CastHelper.stringCast(options.label);
         _this.handler = options.handler;
-        _this.elementId = _this.window.elementId + "-" + _this.kebabCase + "-" + _this.id;
+        _this.elementId = _this.window.elementId + "-" + "action-button" + "-" + _this.id;
         return _this;
     }
     Object.defineProperty(UIActionButton.prototype, "element", {
@@ -40,61 +37,61 @@ var UIActionButton = (function (_super) {
     });
     UIActionButton.prototype.present = function () {
         var _this = this;
-        var fragment = document.createDocumentFragment();
-        var actionButtonElement = document.createElement("div");
+        var fragment = ElementHelper.createFragment();
+        var actionButtonElement = ElementHelper.createElement("div");
         actionButtonElement.id = this.elementId;
         actionButtonElement.setAttribute("title", this.label);
-        ElementHelper.addClasses(actionButtonElement, this.app.prefix, this.kebabCase, this.kebabCase + "-" + this.id, "flexbox", "flex-center");
+        ElementHelper.addClasses(actionButtonElement, this.app.prefix, "action-button", "flexbox", "flex-center");
         ElementHelper.addStyles(actionButtonElement, {
             width: UIActionButton.width + "px"
         });
-        var icon = new UIIcon_1.default(this.app, this.window, this.id);
-        var iconElement = icon.present();
-        iconElement && actionButtonElement.appendChild(iconElement);
-        this.components[icon.kind] = icon;
         actionButtonElement.addEventListener("mousedown", function (ev) {
             if (ev.button === 0 && typeof _this.handler === "function") {
                 _this.handler(ev, _this.window);
             }
         }, true);
+        var icon = new UIIcon_1.default(this.app, this.window, this.id);
+        var iconElement = icon.present();
+        actionButtonElement.appendChild(iconElement);
+        this.setComponent("action-button", icon);
         fragment.appendChild(actionButtonElement);
         return fragment;
     };
     UIActionButton.width = 45;
-    UIActionButton.destroyActionButton = {
+    UIActionButton.destroy = {
         id: "destroy",
         label: "关闭",
         handler: function (ev, window) {
             window.destroy();
         }
     };
-    UIActionButton.maxActionButton = {
+    UIActionButton.max = {
         id: "max",
         label: "最大化",
         handler: function (ev, window) {
             window.max();
         }
     };
-    UIActionButton.restoreActionButton = {
+    UIActionButton.restore = {
         id: "restore",
         label: "恢复",
         handler: function (ev, window) {
             window.normal();
         }
     };
-    UIActionButton.minActionButton = {
+    UIActionButton.min = {
         id: "min",
         label: "最小化",
         handler: function (ev, window) {
         }
     };
-    UIActionButton.infoActionButton = {
+    UIActionButton.info = {
         id: "info",
         label: "关于",
         handler: function (ev, window) {
         }
     };
-    UIActionButton.moreActionButton = {
+    UIActionButton.more = {
         id: "more",
         label: "更多操作",
         handler: function (ev, window) {

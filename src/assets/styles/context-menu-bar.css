@@ -1,4 +1,4 @@
-.layx-context-menu {
+.layx-context-menu-bar {
     position: fixed;
     background-color: #ffffff;
     box-shadow: rgba(0, 0, 0, 0.3) 0 2px 5px;
@@ -8,19 +8,19 @@
     display: none;
 }
 
-.layx-context-menu.layx-context-menu-active {
+.layx-context-menu-bar.layx-context-menu-bar-active {
     display: block;
 }
 
-.layx-context-menu-item {
+.layx-context-menu-button {
     padding: 5px;
 }
 
-.layx-context-menu-item:hover {
+.layx-context-menu-button:hover {
     background-color: #e9e9e9;
 }
 
-.layx-context-menu-item-label {
+.layx-context-menu-button-label {
     padding-left: 10px;
     display: inline-block;
     font-size: 14px;

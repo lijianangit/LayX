@@ -18,19 +18,17 @@ var UIParclose_1 = require("./UIParclose");
 var UIResizeBar_1 = require("./UIResizeBar");
 var UIToolBar_1 = require("./UIToolBar");
 var UIActionButton_1 = require("./UIActionButton");
-var UIContextMenu_1 = require("./UIContextMenu");
-var StringHelper = require("../utils/StringHelper");
+var UIContextMenuBar_1 = require("./UIContextMenuBar");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
+var TypeHelper = require("../utils/TypeHelper");
 var ExceptionHelper = require("../utils/ExceptionHelper");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
     function UIWindow(app, options) {
         var _a, _b;
         var _this = _super.call(this, app) || this;
-        _this.kind = "window";
         _this.app = _this.app;
-        _this.components = {};
         _this.status = "normal";
         _this.flickering = false;
         _this.zIndex = _this.app.zIndex;
@@ -53,7 +51,7 @@ var UIWindow = (function (_super) {
         _this.contextMenu = false;
         _this._element = null;
         _this._flickerShadow = null;
-        if (!options.id)
+        if (!TypeHelper.isStringWithNotEmpty(options.id))
             ExceptionHelper.assertId();
         _this.id = options.id;
         _this.elementId = _this.app.prefix + _this.id;
@@ -82,7 +80,7 @@ var UIWindow = (function (_super) {
         _this.isNeedAnimation = _this.animate !== "none";
         _this.resizeBar = CastHelper.jsonOrBooleanCast(options.resizeBar, _this.resizeBar);
         _this.toolBar = CastHelper.jsonOrBooleanCast(options.toolBar, _this.toolBar);
-        _this.contextMenu = CastHelper.contextMenusCast(options.contextMenu);
+        _this.contextMenu = CastHelper.contextMenuButtonsCast(options.contextMenu);
         return _this;
     }
     Object.defineProperty(UIWindow.prototype, "element", {
@@ -101,11 +99,10 @@ var UIWindow = (function (_super) {
     });
     UIWindow.prototype.present = function () {
         var _this = this;
-        var fragment = document.createDocumentFragment();
-        var kebabCase = StringHelper.getKebabCase(this.kind);
-        var windowElement = document.createElement("div");
+        var fragment = ElementHelper.createFragment();
+        var windowElement = ElementHelper.createElement("div");
         windowElement.id = this.elementId;
-        ElementHelper.addClasses(windowElement, this.app.prefix, kebabCase, "window-" + this.mode, "flexbox", "flex-column", this.isNeedAnimation ? "animate" : "", this.isNeedAnimation ? "animate-" + this.animate + "-create" : "");
+        ElementHelper.addClasses(windowElement, this.app.prefix, "window", "window-" + this.mode, "flexbox", "flex-column", this.isNeedAnimation ? "animate" : "", this.isNeedAnimation ? "animate-" + this.animate + "-create" : "");
         ElementHelper.addStyles(windowElement, {
             zIndex: this.mode === "layer" ? "" + this.zIndex : null,
             maxWidth: this.maxWidth + "px",
@@ -125,23 +122,21 @@ var UIWindow = (function (_super) {
         });
         if (this.isNeedAnimation) {
             windowElement.addEventListener("animationend", function (ev) {
-                if (_this.element && _this.element.parentElement) {
-                    ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-" + _this.animate + "-create", "animate-" + _this.animate + "-drag-to-normal");
-                    if (ElementHelper.containClass(_this.element, _this.app.prefix, "animate-" + _this.animate + "-destroy")) {
-                        ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-" + _this.animate + "-destroy");
-                        if (_this.status === "max") {
-                            ElementHelper.removeClasses(document.body, "z" + _this.app.prefix, "noscroll");
-                        }
-                        var index = _this.app.windows.indexOf(_this);
-                        _this.app.windows.splice(index, 1);
-                        _this.element.parentElement.removeChild(_this.element);
+                ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-" + _this.animate + "-create", "animate-" + _this.animate + "-drag-to-normal");
+                if (ElementHelper.containClass(_this.element, _this.app.prefix, "animate-" + _this.animate + "-destroy")) {
+                    ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-" + _this.animate + "-destroy");
+                    if (_this.status === "max") {
+                        ElementHelper.removeClasses(document.body, "z" + _this.app.prefix, "body-noscroll");
                     }
+                    var index = _this.app.windows.indexOf(_this);
+                    _this.app.windows.splice(index, 1);
+                    _this.element
+                        && _this.element.parentElement
+                        && _this.element.parentElement.removeChild(_this.element);
                 }
             });
             windowElement.addEventListener("transitionend", function (ev) {
-                if (_this.element) {
-                    ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-" + _this.animate + "-to-max", "animate-" + _this.animate + "-to-normal");
-                }
+                ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-" + _this.animate + "-to-max", "animate-" + _this.animate + "-to-normal");
             });
         }
         windowElement.addEventListener("mousedown", function (ev) {
@@ -150,50 +145,52 @@ var UIWindow = (function (_super) {
         if (this.toolBar !== false) {
             var toolBar = new UIToolBar_1.default(this.app, this, this.toolBar);
             var toolBarElement = toolBar.present();
-            toolBarElement != null && windowElement.appendChild(toolBarElement);
-            this.components[toolBar.kind] = toolBar;
+            windowElement.appendChild(toolBarElement);
+            this.setComponent("tool-bar", toolBar);
         }
         if (this.resizeBar !== false) {
             var resizeBar = new UIResizeBar_1.default(this.app, this, this.resizeBar);
             var resizeElement = resizeBar.present();
-            resizeElement != null && windowElement.appendChild(resizeElement);
-            this.components[resizeBar.kind] = resizeBar;
+            windowElement.appendChild(resizeElement);
+            this.setComponent("resize-bar", resizeBar);
         }
         fragment.appendChild(windowElement);
         if (this.parclose !== false) {
             var parclose = new UIParclose_1.default(this.app, this, { opacity: this.parclose });
             var parcloseElement = parclose.present();
-            if (parcloseElement != null && parcloseElement.hasChildNodes) {
+            if (parcloseElement.hasChildNodes) {
                 ElementHelper.addStyles((parcloseElement.firstElementChild), {
                     zIndex: "" + (this.zIndex - 1)
                 });
                 fragment.appendChild(parcloseElement);
             }
-            this.components[parclose.kind] = parclose;
+            this.setComponent("parclose", parclose);
         }
         if (this.contextMenu !== false) {
-            var contextMenu_1 = new UIContextMenu_1.default(this.app, this, this.id, this.contextMenu);
-            var contextMenuElement = contextMenu_1.present();
-            contextMenuElement && fragment.appendChild(contextMenuElement);
-            this.components[contextMenu_1.kind] = contextMenu_1;
+            var contextMenuBar_1 = new UIContextMenuBar_1.default(this.app, this, "window", this.contextMenu);
+            var contextMenuBarElement = contextMenuBar_1.present();
+            fragment.appendChild(contextMenuBarElement);
             windowElement.addEventListener("contextmenu", function (ev) {
                 ev.preventDefault();
                 ev.returnValue = false;
-                contextMenu_1.updateOffset(ev, _this.zIndex + 1);
+                contextMenuBar_1.updateOffset(ev, _this.zIndex + 1);
                 return false;
             });
+            this.setComponent("context-menu-bar", contextMenuBar_1);
         }
         return fragment;
     };
     UIWindow.prototype.destroy = function () {
-        if (this.element && this.element.parentElement) {
-            ElementHelper.addClasses(this.element, this.app.prefix, this.isNeedAnimation ? "animate-" + this.animate + "-destroy" : "");
-        }
+        ElementHelper.addClasses(this.element, this.app.prefix, this.isNeedAnimation ? "animate-" + this.animate + "-destroy" : "");
     };
     UIWindow.prototype.normal = function (dragToNormal) {
         if (dragToNormal === void 0) { dragToNormal = false; }
         if (this.element && this.element.parentElement && this.status !== "normal") {
-            ElementHelper.addClasses(this.element, this.app.prefix, this.isNeedAnimation ? (dragToNormal === false ? "animate-" + this.animate + "-to-normal" : "animate-" + this.animate + "-drag-to-normal") : "");
+            ElementHelper.addClasses(this.element, this.app.prefix, this.isNeedAnimation
+                ? (dragToNormal === false
+                    ? "animate-" + this.animate + "-to-normal"
+                    : "animate-" + this.animate + "-drag-to-normal")
+                : "");
             ElementHelper.addStyles(this.element, {
                 top: this.top + "px",
                 left: this.left + "px",
@@ -201,52 +198,63 @@ var UIWindow = (function (_super) {
                 height: this.height + "px",
                 borderRadius: this.borderRadius + "px"
             });
-            var resizeBarElement = this.element.querySelector("." + this.app.prefix + "resize-bar");
-            if (resizeBarElement) {
-                ElementHelper.removeClasses(resizeBarElement, this.app.prefix, "resize-disabled");
+            var resizeBar = this.getComponent("resize-bar");
+            if (resizeBar) {
+                ElementHelper.removeClasses(resizeBar.element, this.app.prefix, "resize-bar-disabled");
             }
-            ElementHelper.removeClasses(document.body, "z" + this.app.prefix, "noscroll");
-            var maxActionButton = new UIActionButton_1.default(this.app, this, UIActionButton_1.default.maxActionButton);
-            var maxElement = maxActionButton.present();
-            if (maxElement) {
-                var restoreElement = this.element.querySelector("#" + this.elementId + "-action-button-restore");
-                if (restoreElement && restoreElement.parentElement) {
-                    restoreElement.parentElement.replaceChild(maxElement, restoreElement);
+            ElementHelper.removeClasses(document.body, "z" + this.app.prefix, "body-noscroll");
+            var actionButtons = this.getComponent("tool-bar" + "->" + "action-bar" + "->" + "action-buttons");
+            if (actionButtons && actionButtons.length > 0) {
+                for (var _i = 0, actionButtons_1 = actionButtons; _i < actionButtons_1.length; _i++) {
+                    var item = actionButtons_1[_i];
+                    if (item.id === "max") {
+                        var restoreActionButton = new UIActionButton_1.default(this.app, this, UIActionButton_1.default.restore);
+                        var restoreActionButtonElement = restoreActionButton.element;
+                        if (!(restoreActionButtonElement && restoreActionButtonElement.parentElement))
+                            return;
+                        var maxActionButton = new UIActionButton_1.default(this.app, this, item);
+                        var maxActionButtonElement = maxActionButton.present();
+                        restoreActionButtonElement.parentElement.replaceChild(maxActionButtonElement, restoreActionButtonElement);
+                        break;
+                    }
                 }
             }
             this.status = "normal";
-            this.reizeActionButtons(this.width);
+            this.zoomActionButtons(this.width);
         }
     };
     UIWindow.prototype.max = function () {
-        if (this.element && this.element.parentElement) {
-            if (this.status !== "max") {
-                ElementHelper.addClasses(this.element, this.app.prefix, this.isNeedAnimation ? "animate-" + this.animate + "-to-max" : "");
-                ElementHelper.addStyles(this.element, {
-                    top: "0px",
-                    left: "0px",
-                    width: innerWidth + "px",
-                    height: innerHeight + "px",
-                    borderRadius: "0px"
-                });
-                if (this.resizeBar !== false) {
-                    var resizeBarElement = this.element.querySelector("." + this.app.prefix + "resize-bar");
-                    if (resizeBarElement) {
-                        ElementHelper.addClasses(resizeBarElement, this.app.prefix, "resize-disabled");
-                    }
-                }
-                ElementHelper.addClasses(document.body, "z" + this.app.prefix, "noscroll");
-                var restoreActionButton = new UIActionButton_1.default(this.app, this, UIActionButton_1.default.restoreActionButton);
-                var restoreElement = restoreActionButton.present();
-                if (restoreElement) {
-                    var maxElement = this.element.querySelector("#" + this.elementId + "-action-button-max");
-                    if (maxElement && maxElement.parentElement) {
-                        maxElement.parentElement.replaceChild(restoreElement, maxElement);
-                    }
-                }
-                this.status = "max";
-                this.reizeActionButtons(innerWidth);
+        if (this.element && this.element.parentElement && this.status !== "max") {
+            ElementHelper.addClasses(this.element, this.app.prefix, this.isNeedAnimation ? "animate-" + this.animate + "-to-max" : "");
+            ElementHelper.addStyles(this.element, {
+                top: "0",
+                left: "0",
+                width: innerWidth + "px",
+                height: innerHeight + "px",
+                borderRadius: "0"
+            });
+            var resizeBar = this.getComponent("resize-bar");
+            if (resizeBar) {
+                ElementHelper.addClasses(resizeBar.element, this.app.prefix, "resize-bar-disabled");
             }
+            ElementHelper.addClasses(document.body, "z" + this.app.prefix, "body-noscroll");
+            var actionButtons = this.getComponent("tool-bar" + "->" + "action-bar" + "->" + "action-buttons");
+            if (actionButtons && actionButtons.length > 0) {
+                for (var _i = 0, actionButtons_2 = actionButtons; _i < actionButtons_2.length; _i++) {
+                    var item = actionButtons_2[_i];
+                    if (item.id === "max") {
+                        var maxActionButtonElement = item.element;
+                        if (!(maxActionButtonElement && maxActionButtonElement.parentElement))
+                            return;
+                        var restoreActionButton = new UIActionButton_1.default(this.app, this, UIActionButton_1.default.restore);
+                        var restoreActionButtonElement = restoreActionButton.present();
+                        maxActionButtonElement.parentElement.replaceChild(restoreActionButtonElement, maxActionButtonElement);
+                        break;
+                    }
+                }
+            }
+            this.status = "max";
+            this.zoomActionButtons(innerWidth);
         }
     };
     UIWindow.prototype.flicker = function () {
@@ -290,30 +298,27 @@ var UIWindow = (function (_super) {
             return;
         var uiWindow = this.app.getWindow(this.id);
         if (uiWindow && uiWindow.mode === "layer") {
-            if (this.element) {
-                this.zIndex = this.app.zIndex;
-                ElementHelper.addStyles(this.element, {
-                    zIndex: "" + this.zIndex
-                });
-                if (disabled === false) {
-                    ElementHelper.addClasses(this.element, this.app.prefix, this.isNeedAnimation ? "animate-" + this.animate + "In" : "");
-                }
-                if (this.components["parclose"]) {
-                    var parclose = this.components["parclose"];
-                    parclose.updateZIndex(this.zIndex);
-                }
-                this.app.window = this;
+            this.zIndex = this.app.zIndex;
+            ElementHelper.addStyles(this.element, {
+                zIndex: "" + this.zIndex
+            });
+            if (disabled === false) {
+                ElementHelper.addClasses(this.element, this.app.prefix, this.isNeedAnimation ? "animate-" + this.animate + "In" : "");
             }
+            var parclose = this.getComponent("parclose");
+            parclose && parclose.updateZIndex(this.zIndex - 1);
+            this.app.window = this;
         }
     };
     UIWindow.prototype.hideMoreActionContextMenu = function () {
-        var moreActionButtonElement = document.querySelector("#" + this.app.prefix + "context-menu-" + this.id + "-more-action");
-        if (moreActionButtonElement) {
-            ElementHelper.removeClasses(moreActionButtonElement, this.app.prefix, "context-menu-active");
+        var moreActionContextMenuBar = this.getComponent("more-action-context-menu-bar");
+        if (moreActionContextMenuBar) {
+            ElementHelper.removeClasses(moreActionContextMenuBar.element, this.app.prefix, "context-menu-bar-active");
         }
     };
-    UIWindow.prototype.removeMoreActionContextMenuElement = function () {
-        var moreActionButtonElement = document.querySelector("#" + this.app.prefix + "context-menu-" + this.id + "-more-action");
+    UIWindow.prototype.removeMoreActionContextMenu = function () {
+        var moreActionButton = new UIActionButton_1.default(this.app, this, UIActionButton_1.default.more);
+        var moreActionButtonElement = moreActionButton.element;
         if (moreActionButtonElement && moreActionButtonElement.parentElement) {
             moreActionButtonElement.parentElement.removeChild(moreActionButtonElement);
         }
@@ -326,13 +331,9 @@ var UIWindow = (function (_super) {
         }
         return this.shadow;
     };
-    UIWindow.prototype.reizeActionButtons = function (width) {
-        if (!this.components["toolBar"])
-            return;
-        if (!this.components["toolBar"].components["actionBar"])
-            return;
-        var actionBar = this.components["toolBar"].components["actionBar"];
-        actionBar.reizeActionButtons(width);
+    UIWindow.prototype.zoomActionButtons = function (windowWidth) {
+        var actionBar = this.getComponent("tool-bar" + "->" + "action-bar");
+        actionBar && actionBar.zoomActionButtons(windowWidth);
     };
     return UIWindow;
 }(UIComponent_1.default));

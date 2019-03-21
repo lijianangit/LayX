@@ -22,8 +22,7 @@ var UIResizeBar = (function (_super) {
     __extends(UIResizeBar, _super);
     function UIResizeBar(app, window, options) {
         var _this = _super.call(this, app, window) || this;
-        _this.kind = "resizeBar";
-        _this.components = {};
+        _this.elementId = _this.window.elementId + "-" + "resize-bar";
         _this.left = true;
         _this.right = true;
         _this.top = true;
@@ -32,15 +31,16 @@ var UIResizeBar = (function (_super) {
         _this.rightTop = true;
         _this.leftBottom = true;
         _this.rightBottom = true;
+        _this._element = null;
         _this.directions = [
             "left",
             "right",
             "top",
             "bottom",
-            "leftTop",
-            "rightTop",
-            "leftBottom",
-            "rightBottom"
+            "left-top",
+            "right-top",
+            "left-bottom",
+            "right-bottom"
         ];
         _this.left = CastHelper.booleanCast(options.left, _this.left);
         _this.right = CastHelper.booleanCast(options.right, _this.right);
@@ -52,32 +52,38 @@ var UIResizeBar = (function (_super) {
         _this.rightBottom = CastHelper.booleanCast(options.rightBottom, _this.rightBottom);
         return _this;
     }
+    Object.defineProperty(UIResizeBar.prototype, "element", {
+        get: function () {
+            return document.getElementById("" + this.elementId);
+        },
+        enumerable: true,
+        configurable: true
+    });
     UIResizeBar.prototype.present = function () {
-        if (!this.leastOneTrue())
-            return null;
-        var fragment = document.createDocumentFragment();
-        var kebabCase = StringHelper.getKebabCase(this.kind);
-        var resizeElement = document.createElement("div");
-        ElementHelper.addClasses(resizeElement, this.app.prefix, kebabCase);
-        resizeElement.addEventListener("contextmenu", function (ev) {
-            ev.stopPropagation();
-            ev.preventDefault();
-            ev.returnValue = false;
-            return false;
-        });
-        for (var _i = 0, _a = this.directions; _i < _a.length; _i++) {
-            var key = _a[_i];
-            if (this[key] === true) {
-                resizeElement.appendChild(this.presentItem(key));
+        var fragment = ElementHelper.createFragment();
+        if (this.leastOneTrue()) {
+            var resizeElement = ElementHelper.createElement("div");
+            resizeElement.id = this.elementId;
+            ElementHelper.addClasses(resizeElement, this.app.prefix, "resize-bar");
+            resizeElement.addEventListener("contextmenu", function (ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                ev.returnValue = false;
+                return false;
+            });
+            for (var _i = 0, _a = this.directions; _i < _a.length; _i++) {
+                var key = _a[_i];
+                if (this[StringHelper.getCamelCase(key)] === true) {
+                    resizeElement.appendChild(this.presentItem(key));
+                }
             }
+            fragment.appendChild(resizeElement);
         }
-        fragment.appendChild(resizeElement);
         return fragment;
     };
     UIResizeBar.prototype.presentItem = function (key) {
-        var kebabCase = StringHelper.getKebabCase(key);
         var itemElement = document.createElement("div");
-        ElementHelper.addClasses(itemElement, this.app.prefix, "resize-" + kebabCase);
+        ElementHelper.addClasses(itemElement, this.app.prefix, "resize-item-" + key);
         new WindowResizeDragEvent_1.default(this.app, this.window, itemElement, key);
         return itemElement;
     };
@@ -85,7 +91,7 @@ var UIResizeBar = (function (_super) {
         var isExist = false;
         for (var _i = 0, _a = this.directions; _i < _a.length; _i++) {
             var key = _a[_i];
-            if (this[key] === true) {
+            if (this[StringHelper.getCamelCase(key)] === true) {
                 isExist = true;
                 break;
             }

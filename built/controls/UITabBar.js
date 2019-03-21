@@ -14,21 +14,27 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
-var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
 var UITabBar = (function (_super) {
     __extends(UITabBar, _super);
     function UITabBar(app, window, options) {
         var _this = _super.call(this, app, window) || this;
-        _this.kind = "tabBar";
-        _this.components = {};
+        _this.elementId = _this.window.elementId + "-" + "tab-bar";
+        _this._element = null;
         return _this;
     }
+    Object.defineProperty(UITabBar.prototype, "element", {
+        get: function () {
+            return document.getElementById("" + this.elementId);
+        },
+        enumerable: true,
+        configurable: true
+    });
     UITabBar.prototype.present = function () {
-        var fragment = document.createDocumentFragment();
-        var kebabCase = StringHelper.getKebabCase(this.kind);
-        var tabBarElement = document.createElement("div");
-        ElementHelper.addClasses(tabBarElement, this.app.prefix, kebabCase, "flexbox", "flex-item", "flex-row");
+        var fragment = ElementHelper.createFragment();
+        var tabBarElement = ElementHelper.createElement("div");
+        tabBarElement.id = this.elementId;
+        ElementHelper.addClasses(tabBarElement, this.app.prefix, "tab-bar", "flexbox", "flex-item", "flex-row");
         fragment.appendChild(tabBarElement);
         return fragment;
     };

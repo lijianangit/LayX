@@ -8,7 +8,7 @@
     min-width: 0;
 }
 
-.layx-window-title .layx-label {
+.layx-window-title .layx-window-title-label {
     display: inline-block;
     white-space: nowrap;
     text-overflow: ellipsis;

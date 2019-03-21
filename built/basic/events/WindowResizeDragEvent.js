@@ -52,16 +52,16 @@ var WindowResizeDragEvent = (function (_super) {
             case "bottom":
                 this.resizeHandler(distanceX, distanceY, false, false, true, false);
                 break;
-            case "leftTop":
+            case "left-top":
                 this.resizeHandler(distanceX, distanceY, true, true, false, false);
                 break;
-            case "rightTop":
+            case "right-top":
                 this.resizeHandler(distanceX, distanceY, true, false, false, false);
                 break;
-            case "leftBottom":
+            case "left-bottom":
                 this.resizeHandler(distanceX, distanceY, false, true, false, false);
                 break;
-            case "rightBottom":
+            case "right-bottom":
                 this.resizeHandler(distanceX, distanceY, false, false, false, false);
                 break;
         }
@@ -137,22 +137,14 @@ var WindowResizeDragEvent = (function (_super) {
             if (this.isShowMoreActionButton !== false)
                 return;
             this.isShowMoreActionButton = true;
-            this.reizeActionButtons(width);
+            this.window.zoomActionButtons(width);
         }
         else {
             if (this.isShowMoreActionButton !== true)
                 return;
             this.isShowMoreActionButton = false;
-            this.reizeActionButtons(width);
+            this.window.zoomActionButtons(width);
         }
-    };
-    WindowResizeDragEvent.prototype.reizeActionButtons = function (width) {
-        if (!this.window.components["toolBar"])
-            return;
-        if (!this.window.components["toolBar"].components["actionBar"])
-            return;
-        var actionBar = this.window.components["toolBar"].components["actionBar"];
-        actionBar.reizeActionButtons(width);
     };
     return WindowResizeDragEvent;
 }(DragEvent_1.default));

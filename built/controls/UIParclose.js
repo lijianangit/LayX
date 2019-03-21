@@ -14,31 +14,41 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
-var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
 var UIParclose = (function (_super) {
     __extends(UIParclose, _super);
     function UIParclose(app, window, options) {
         var _this = _super.call(this, app, window) || this;
-        _this.kind = "parclose";
-        _this.components = {};
+        _this.elementId = _this.window.elementId + "-" + "parclose";
         _this.opacity = 0;
+        _this._element = null;
         _this.opacity = CastHelper.numberCast(options.opacity, _this.opacity);
         return _this;
     }
+    Object.defineProperty(UIParclose.prototype, "element", {
+        get: function () {
+            return document.getElementById("" + this.elementId);
+        },
+        enumerable: true,
+        configurable: true
+    });
     UIParclose.prototype.present = function () {
-        var fragment = document.createDocumentFragment();
-        var kebabCase = StringHelper.getKebabCase(this.kind);
-        var parcloseElement = document.createElement("div");
-        parcloseElement.id = this.window.elementId + "-" + kebabCase;
-        ElementHelper.addClasses(parcloseElement, this.app.prefix, kebabCase);
+        var fragment = ElementHelper.createFragment();
+        var parcloseElement = ElementHelper.createElement("div");
+        parcloseElement.id = this.elementId;
+        ElementHelper.addClasses(parcloseElement, this.app.prefix, "parclose");
         ElementHelper.addStyles(parcloseElement, {
             backgroundColor: "rgba(0,0,0," + this.opacity + ")"
         });
         this.bindEvent(parcloseElement);
         fragment.appendChild(parcloseElement);
         return fragment;
+    };
+    UIParclose.prototype.updateZIndex = function (zIndex) {
+        ElementHelper.addStyles(this.element, {
+            zIndex: "" + zIndex
+        });
     };
     UIParclose.prototype.bindEvent = function (element) {
         var _this = this;
@@ -50,14 +60,6 @@ var UIParclose = (function (_super) {
             ev.returnValue = false;
             return false;
         });
-    };
-    UIParclose.prototype.updateZIndex = function (zIndex) {
-        var parcloseElement = document.getElementById(this.window.elementId + "-parclose");
-        if (parcloseElement) {
-            ElementHelper.addStyles((parcloseElement), {
-                zIndex: "" + (zIndex - 1)
-            });
-        }
     };
     return UIParclose;
 }(UIWindowComponent_1.default));

@@ -11,9 +11,15 @@ function numberCast(option, defaultValue) {
     if (/^(([1-9][0-9]*(\.\d{1,2})?)|(0\.\d{1,2}))$/.test(option)) {
         return Number(option);
     }
-    return ExceptionHelper.assertNever(option);
+    return ExceptionHelper.assertNumber(option);
 }
 exports.numberCast = numberCast;
+function stringCast(option) {
+    if (!TypeHelper.isStringWithNotEmpty(option))
+        return ExceptionHelper.assertString(option);
+    return option;
+}
+exports.stringCast = stringCast;
 function booleanCast(option, defaultValue) {
     return option === undefined ? defaultValue : option;
 }
@@ -189,13 +195,13 @@ function jsonOrBooleanCast(option, defaultValue, trueValue, falseValue) {
     return JsonHelper.merge(defaultValue, option);
 }
 exports.jsonOrBooleanCast = jsonOrBooleanCast;
-function contextMenusCast(option) {
+function contextMenuButtonsCast(option) {
     if (option === undefined || option === false)
         return false;
-    TypeHelper.isContextMenus(option);
+    TypeHelper.isContextMenuButtons(option);
     return option;
 }
-exports.contextMenusCast = contextMenusCast;
+exports.contextMenuButtonsCast = contextMenuButtonsCast;
 function actionButtonsCast(option, defaultValue) {
     if (option === undefined || option === true)
         return defaultValue;

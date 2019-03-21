@@ -40,16 +40,16 @@ export function isJsonObject(obj: any): obj is Types.JsonObject {
         && obj.constructor === Object;
 }
 
-export function isContextMenu(obj: any): obj is Types.ContextMenuOption {
+export function isContextMenuButton(obj: any): obj is Types.ContextMenuButtonOption {
     return isJsonObject(obj)
         && obj.id !== undefined
         && obj.label !== undefined;
 }
 
-export function isContextMenus(obj: Array<any>): obj is Array<Types.ContextMenuOption> {
+export function isContextMenuButtons(obj: Array<any>): obj is Array<Types.ContextMenuButtonOption> {
     let correct: boolean = true;
     for (const item of obj) {
-        if (!isContextMenu(item)) {
+        if (!isContextMenuButton(item)) {
             correct = false;
             break;
         }
@@ -88,4 +88,9 @@ export function isActionButtons(obj: Array<any>): obj is Array<Types.ActionButto
         }
     }
     return correct;
+}
+
+export function isStringWithNotEmpty(obj: any): obj is string {
+    return typeof obj === "string"
+        && obj.trim().length > 0;
 }

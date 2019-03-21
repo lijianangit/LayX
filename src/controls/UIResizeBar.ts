@@ -10,8 +10,7 @@ import * as ElementHelper from "../utils/ElementHelper";
 import * as CastHelper from "../utils/CastHelper";
 
 export default class UIResizeBar extends UIWindowComponent implements UIControl {
-    public readonly kind: string = "resizeBar";
-    public readonly components: Types.Component = <Types.Component>{};
+    public readonly elementId: string = `${this.window.elementId}-${Enums.ComponentType.RESIZE_BAR}`;
 
     public left: boolean = true;
     public right: boolean = true;
@@ -22,16 +21,10 @@ export default class UIResizeBar extends UIWindowComponent implements UIControl 
     public leftBottom: boolean = true;
     public rightBottom: boolean = true;
 
-    private readonly directions = [
-        Enums.ResizeDirection.LEFT,
-        Enums.ResizeDirection.RIGHT,
-        Enums.ResizeDirection.TOP,
-        Enums.ResizeDirection.BOTTOM,
-        Enums.ResizeDirection.LEFT_TOP,
-        Enums.ResizeDirection.RIGHT_TOP,
-        Enums.ResizeDirection.LEFT_BOTTOM,
-        Enums.ResizeDirection.RIGHT_BOTTOM
-    ];
+    private _element: HTMLElement | null = null;
+    get element() {
+        return document.getElementById(`${this.elementId}`);
+    }
 
     constructor(app: App, window: UIWindow, options: Types.ResizeOption) {
         super(app, window);
@@ -46,40 +39,41 @@ export default class UIResizeBar extends UIWindowComponent implements UIControl 
         this.rightBottom = CastHelper.booleanCast(options.rightBottom, this.rightBottom);
     }
 
-    present(): DocumentFragment | null {
-        if (!this.leastOneTrue()) return null;
+    present(): DocumentFragment {
+        const fragment = ElementHelper.createFragment();
 
-        const fragment = document.createDocumentFragment();
-        const kebabCase = StringHelper.getKebabCase(this.kind);
-        const resizeElement = document.createElement("div");
+        if (this.leastOneTrue()) {
+            const resizeElement = ElementHelper.createElement("div");
+            resizeElement.id = this.elementId;
 
-        ElementHelper.addClasses(resizeElement, this.app.prefix,
-            kebabCase
-        );
+            ElementHelper.addClasses(resizeElement, this.app.prefix,
+                Enums.ComponentType.RESIZE_BAR
+            );
 
-        resizeElement.addEventListener("contextmenu", (ev: MouseEvent) => {
-            ev.stopPropagation();
-            ev.preventDefault();
-            ev.returnValue = false;
-            return false;
-        });
+            resizeElement.addEventListener("contextmenu", (ev: MouseEvent) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                ev.returnValue = false;
+                return false;
+            });
 
-        for (const key of this.directions) {
-            if (this[key] === true) {
-                resizeElement.appendChild(this.presentItem(key));
+            for (const key of this.directions) {
+                if ((<any>this)[StringHelper.getCamelCase(key)] === true) {
+                    resizeElement.appendChild(this.presentItem(key));
+                }
             }
+
+            fragment.appendChild(resizeElement);
         }
 
-        fragment.appendChild(resizeElement);
         return fragment;
     }
 
-    private presentItem(key: Enums.ResizeDirection): HTMLElement {
-        const kebabCase = StringHelper.getKebabCase(key);
+    private presentItem(key: Enums.Direction): HTMLElement {
         const itemElement = document.createElement("div");
 
         ElementHelper.addClasses(itemElement, this.app.prefix,
-            `resize-${kebabCase}`
+            `resize-item-${key}`
         );
 
         new WindowResizeDragEvent(this.app, this.window, itemElement, key);
@@ -87,10 +81,21 @@ export default class UIResizeBar extends UIWindowComponent implements UIControl 
         return itemElement;
     }
 
+    private readonly directions = [
+        Enums.Direction.LEFT,
+        Enums.Direction.RIGHT,
+        Enums.Direction.TOP,
+        Enums.Direction.BOTTOM,
+        Enums.Direction.LEFT_TOP,
+        Enums.Direction.RIGHT_TOP,
+        Enums.Direction.LEFT_BOTTOM,
+        Enums.Direction.RIGHT_BOTTOM
+    ];
+
     private leastOneTrue(): boolean {
-        let isExist = false;
+        let isExist: boolean = false;
         for (const key of this.directions) {
-            if (this[key] === true) {
+            if ((<any>this)[StringHelper.getCamelCase(key)] === true) {
                 isExist = true;
                 break;
             }

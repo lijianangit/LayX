@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindow_1 = require("../controls/UIWindow");
 var ExceptionHelper = require("../utils/ExceptionHelper");
+var TypeHelper = require("../utils/TypeHelper");
 var App = (function () {
     function App(layx) {
         this.layx = layx;
@@ -58,13 +59,15 @@ var App = (function () {
         }
     };
     App.prototype.destroy = function (id) {
+        if (!TypeHelper.isStringWithNotEmpty(id))
+            ExceptionHelper.assertId();
         var window = this.getWindow(id);
         if (window) {
             window.destroy();
         }
     };
     App.prototype.getWindow = function (id) {
-        if (!id)
+        if (!TypeHelper.isStringWithNotEmpty(id))
             ExceptionHelper.assertId();
         for (var _i = 0, _a = this.windows; _i < _a.length; _i++) {
             var item = _a[_i];
@@ -93,10 +96,8 @@ var App = (function () {
         });
         document.addEventListener("mousedown", function (ev) {
             if (_this.window) {
-                if (_this.window.components["contextMenu"]) {
-                    var contextMenu = _this.window.components["contextMenu"];
-                    contextMenu.hide();
-                }
+                var contextMenuBar = _this.window.getComponent("context-menu-bar");
+                contextMenuBar && contextMenuBar.hide();
                 _this.window.hideMoreActionContextMenu();
             }
         }, true);

@@ -1,8 +1,5 @@
 import App from "../../core/App";
 import UIWindow from "../../controls/UIWindow";
-import UIToolBar from "../../controls/UIToolBar";
-import UIActionBar from "../../controls/UIActionBar";
-import UIActionButton from "../../controls/UIActionButton";
 import DragEvent from "./DragEvent";
 import * as Enums from "../enums";
 import * as Types from "../../../types";
@@ -15,7 +12,7 @@ export default class WindowResizeDragEvent extends DragEvent {
     private _width: number = 0;
     private _height: number = 0;
 
-    constructor(public app: App, public window: UIWindow, dragElement: HTMLElement, public direction: Enums.ResizeDirection) {
+    constructor(public app: App, public window: UIWindow, dragElement: HTMLElement, public direction: Enums.Direction) {
         super(dragElement);
     }
 
@@ -31,28 +28,28 @@ export default class WindowResizeDragEvent extends DragEvent {
 
     dragging(ev: MouseEvent, x: number, y: number, distanceX: number, distanceY: number): void {
         switch (this.direction) {
-            case Enums.ResizeDirection.LEFT:
+            case Enums.Direction.LEFT:
                 this.resizeHandler(distanceX, distanceY, false, true, false, true);
                 break;
-            case Enums.ResizeDirection.RIGHT:
+            case Enums.Direction.RIGHT:
                 this.resizeHandler(distanceX, distanceY, false, false, false, true);
                 break;
-            case Enums.ResizeDirection.TOP:
+            case Enums.Direction.TOP:
                 this.resizeHandler(distanceX, distanceY, true, false, true, false);
                 break;
-            case Enums.ResizeDirection.BOTTOM:
+            case Enums.Direction.BOTTOM:
                 this.resizeHandler(distanceX, distanceY, false, false, true, false);
                 break;
-            case Enums.ResizeDirection.LEFT_TOP:
+            case Enums.Direction.LEFT_TOP:
                 this.resizeHandler(distanceX, distanceY, true, true, false, false);
                 break;
-            case Enums.ResizeDirection.RIGHT_TOP:
+            case Enums.Direction.RIGHT_TOP:
                 this.resizeHandler(distanceX, distanceY, true, false, false, false);
                 break;
-            case Enums.ResizeDirection.LEFT_BOTTOM:
+            case Enums.Direction.LEFT_BOTTOM:
                 this.resizeHandler(distanceX, distanceY, false, true, false, false);
                 break;
-            case Enums.ResizeDirection.RIGHT_BOTTOM:
+            case Enums.Direction.RIGHT_BOTTOM:
                 this.resizeHandler(distanceX, distanceY, false, false, false, false);
                 break;
         }
@@ -134,20 +131,12 @@ export default class WindowResizeDragEvent extends DragEvent {
         if (width <= 300) {
             if (this.isShowMoreActionButton !== false) return;
             this.isShowMoreActionButton = true;
-            this.reizeActionButtons(width);
+            this.window.zoomActionButtons(width);
         }
         else {
             if (this.isShowMoreActionButton !== true) return;
             this.isShowMoreActionButton = false;
-            this.reizeActionButtons(width);
+            this.window.zoomActionButtons(width);
         }
-    }
-
-    private reizeActionButtons(width: number): void {
-        if (!this.window.components["toolBar"]) return;
-        if (!(<UIToolBar>this.window.components["toolBar"]).components["actionBar"]) return;
-
-        const actionBar = (<UIToolBar>this.window.components["toolBar"]).components["actionBar"] as UIActionBar;
-        actionBar.reizeActionButtons(width);
     }
 }

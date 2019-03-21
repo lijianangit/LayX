@@ -1,8 +1,10 @@
 import Layx from "../basic/interfaces/Layx";
 import UIWindow from "../controls/UIWindow";
-import UIContextMenu from "../controls/UIContextMenu";
+import UIContextMenuBar from "../controls/UIContextMenuBar";
 import * as Types from "../../types";
 import * as ExceptionHelper from "../utils/ExceptionHelper";
+import * as Enums from "../basic/enums";
+import * as TypeHelper from "../utils/TypeHelper";
 
 export default class App {
     public readonly version: string = "3.0.0";
@@ -51,6 +53,8 @@ export default class App {
     }
 
     destroy(id: string): void {
+        if (!TypeHelper.isStringWithNotEmpty(id)) ExceptionHelper.assertId();
+
         const window = this.getWindow(id);
         if (window) {
             window.destroy();
@@ -58,7 +62,8 @@ export default class App {
     }
 
     getWindow(id: string): UIWindow | null {
-        if (!id) ExceptionHelper.assertId();
+        if (!TypeHelper.isStringWithNotEmpty(id)) ExceptionHelper.assertId();
+
         for (const item of this.windows) {
             if (item.id === id) {
                 if (item.element) {
@@ -87,10 +92,8 @@ export default class App {
 
         document.addEventListener("mousedown", (ev: MouseEvent) => {
             if (this.window) {
-                if (this.window.components["contextMenu"]) {
-                    const contextMenu = this.window.components["contextMenu"] as UIContextMenu;
-                    contextMenu.hide();
-                }
+                const contextMenuBar = this.window.getComponent<UIContextMenuBar>(Enums.ComponentType.CONTEXT_MENU_BAR)
+                contextMenuBar && contextMenuBar.hide();
 
                 this.window.hideMoreActionContextMenu();
             }

@@ -18,15 +18,13 @@ var WindowMoveDragEvent_1 = require("../basic/events/WindowMoveDragEvent");
 var UIActionBar_1 = require("./UIActionBar");
 var UITitleBar_1 = require("./UITitleBar");
 var UITabBar_1 = require("./UITabBar");
-var StringHelper = require("../utils/StringHelper");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
 var UIToolBar = (function (_super) {
     __extends(UIToolBar, _super);
     function UIToolBar(app, window, options) {
         var _this = _super.call(this, app, window) || this;
-        _this.kind = "toolBar";
-        _this.components = {};
+        _this.elementId = _this.window.elementId + "-" + "tool-bar";
         _this.height = 30;
         _this.drag = {
             vertical: true,
@@ -39,6 +37,7 @@ var UIToolBar = (function (_super) {
         _this.titleBar = {};
         _this.tabBar = {};
         _this.actionBar = {};
+        _this._element = null;
         _this.height = CastHelper.numberCast(options.height, _this.height);
         _this.drag = CastHelper.jsonOrBooleanCast(options.drag, _this.drag);
         _this.titleBar = CastHelper.jsonOrBooleanCast(options.titleBar, _this.titleBar);
@@ -46,12 +45,19 @@ var UIToolBar = (function (_super) {
         _this.actionBar = CastHelper.jsonOrBooleanCast(options.actionBar, _this.actionBar);
         return _this;
     }
+    Object.defineProperty(UIToolBar.prototype, "element", {
+        get: function () {
+            return document.getElementById("" + this.elementId);
+        },
+        enumerable: true,
+        configurable: true
+    });
     UIToolBar.prototype.present = function () {
         var _this = this;
-        var fragment = document.createDocumentFragment();
-        var kebabCase = StringHelper.getKebabCase(this.kind);
-        var toolBarElement = document.createElement("div");
-        ElementHelper.addClasses(toolBarElement, this.app.prefix, kebabCase, "flexbox", "flex-row");
+        var fragment = ElementHelper.createFragment();
+        var toolBarElement = ElementHelper.createElement("div");
+        toolBarElement.id = this.elementId;
+        ElementHelper.addClasses(toolBarElement, this.app.prefix, "tool-bar", "flexbox", "flex-row");
         ElementHelper.addStyles(toolBarElement, {
             height: this.height + "px"
         });
@@ -68,20 +74,20 @@ var UIToolBar = (function (_super) {
         if (this.titleBar !== false) {
             var titleBar = new UITitleBar_1.default(this.app, this.window, this.titleBar);
             var titleBarElement = titleBar.present();
-            titleBarElement && toolBarElement.appendChild(titleBarElement);
-            this.components[titleBar.kind] = titleBar;
+            toolBarElement.appendChild(titleBarElement);
+            this.setComponent("title-bar", titleBar);
         }
         if (this.tabBar !== false) {
             var tabBar = new UITabBar_1.default(this.app, this.window, this.tabBar);
             var tabBarElement = tabBar.present();
-            tabBarElement && toolBarElement.appendChild(tabBarElement);
-            this.components[tabBar.kind] = tabBar;
+            toolBarElement.appendChild(tabBarElement);
+            this.setComponent("tab-bar", tabBar);
         }
         if (this.actionBar !== false) {
             var actionBar = new UIActionBar_1.default(this.app, this.window, this.actionBar);
             var actionBarElement = actionBar.present();
             actionBarElement && toolBarElement.appendChild(actionBarElement);
-            this.components[actionBar.kind] = actionBar;
+            this.setComponent("action-bar", actionBar);
         }
         if (this.drag && (this.drag.vertical === true || this.drag.horizontal === true)) {
             new WindowMoveDragEvent_1.default(this.app, this.window, toolBarElement, this.drag);

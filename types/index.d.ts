@@ -7,6 +7,8 @@ export type JsonObject = {
     [key: string]: any;
 };
 
+export type TouchEvent = MouseEvent;
+
 export type CSSStyleObject = CSSStyleDeclaration & { [key: string]: string | null };
 
 export type WindowCoord = number[];
@@ -22,7 +24,7 @@ export type ParcloseOption = {
     opacity?: number;
 } & JsonObject;
 
-export type ContextMenuOption = {
+export type ContextMenuButtonOption = {
     id: string;
     label: string;
     handler?: (ev: MouseEvent, window: UIWindow) => void;
@@ -93,7 +95,7 @@ export type WindowOption = {
     animate?: Enums.WindowAnimate | boolean;
     resizeBar?: ResizeOption | boolean;
     toolBar?: ToolBarOption | boolean;
-    contextMenu?: Array<ContextMenuOption> | false;
+    contextMenu?: Array<ContextMenuButtonOption> | false;
 } & JsonObject;
 
 export type Component = {

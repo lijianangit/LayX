@@ -5,26 +5,24 @@ import UIParclose from "./UIParclose";
 import UIResizeBar from "./UIResizeBar";
 import UIToolBar from "./UIToolBar";
 import UIActionButton from "./UIActionButton";
-import UIContextMenu from "./UIContextMenu";
+import UIContextMenuBar from "./UIContextMenuBar";
 import UIActionBar from "./UIActionBar";
 import * as Types from "../../types";
 import * as Enums from "../basic/enums";
-import * as StringHelper from "../utils/StringHelper";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as CastHelper from "../utils/CastHelper";
 import * as TypeHelper from "../utils/TypeHelper";
 import * as ExceptionHelper from "../utils/ExceptionHelper";
 
 export default class UIWindow extends UIComponent implements UIControl {
-    public readonly kind: string = "window";
     public app: App = this.app;
-    public readonly components: Types.Component = <Types.Component>{};
     public status: Enums.WindowStatus = Enums.WindowStatus.NORMAL;
     public readonly elementId: string;
     private flickering: boolean = false;
     public zIndex: number = this.app.zIndex;
     private isNeedAnimation: boolean = false;
-    readonly id: string;
+
+    public readonly id: string;
     public width: number = 800;
     public height: number = 600;
     public maxWidth: number = innerWidth;
@@ -42,7 +40,7 @@ export default class UIWindow extends UIComponent implements UIControl {
     public animate: Enums.WindowAnimate = Enums.WindowAnimate.ZOOM;
     public resizeBar: Types.ResizeOption | false = {};
     public toolBar: Types.ToolBarOption | false = {};
-    public contextMenu: Array<Types.ContextMenuOption> | false = false;
+    public contextMenu: Array<Types.ContextMenuButtonOption> | false = false;
 
     private _element: HTMLElement | null = null;
     get element() {
@@ -57,7 +55,7 @@ export default class UIWindow extends UIComponent implements UIControl {
     constructor(app: App, options: Types.WindowOption) {
         super(app);
 
-        if (!options.id) ExceptionHelper.assertId();
+        if (!TypeHelper.isStringWithNotEmpty(options.id)) ExceptionHelper.assertId();
         this.id = options.id;
         this.elementId = this.app.prefix + this.id;
 
@@ -91,17 +89,17 @@ export default class UIWindow extends UIComponent implements UIControl {
 
         this.resizeBar = CastHelper.jsonOrBooleanCast(options.resizeBar, this.resizeBar);
         this.toolBar = CastHelper.jsonOrBooleanCast(options.toolBar, this.toolBar);
-        this.contextMenu = CastHelper.contextMenusCast(options.contextMenu);
+        this.contextMenu = CastHelper.contextMenuButtonsCast(options.contextMenu);
     }
 
     present(): DocumentFragment {
-        const fragment = document.createDocumentFragment();
-        const kebabCase = StringHelper.getKebabCase(this.kind);
-        const windowElement = document.createElement("div");
+        const fragment = ElementHelper.createFragment();
+
+        const windowElement = ElementHelper.createElement("div");
         windowElement.id = this.elementId;
 
         ElementHelper.addClasses(windowElement, this.app.prefix,
-            kebabCase,
+            Enums.ComponentType.WINDOW,
             `window-${this.mode}`,
             "flexbox",
             "flex-column",
@@ -129,38 +127,38 @@ export default class UIWindow extends UIComponent implements UIControl {
 
         if (this.isNeedAnimation) {
             windowElement.addEventListener("animationend", (ev: AnimationEvent) => {
-                if (this.element && this.element.parentElement) {
+                ElementHelper.removeClasses(this.element, this.app.prefix,
+                    `animate-${this.animate}-create`,
+                    `animate-${this.animate}-drag-to-normal`
+                );
+
+                if (ElementHelper.containClass(this.element, this.app.prefix, `animate-${this.animate}-destroy`)) {
                     ElementHelper.removeClasses(this.element, this.app.prefix,
-                        `animate-${this.animate}-create`,
-                        `animate-${this.animate}-drag-to-normal`
+                        `animate-${this.animate}-destroy`
                     );
 
-                    if (ElementHelper.containClass(this.element, this.app.prefix, `animate-${this.animate}-destroy`)) {
-                        ElementHelper.removeClasses(this.element, this.app.prefix,
-                            `animate-${this.animate}-destroy`
+                    if (this.status === Enums.WindowStatus.MAX) {
+                        ElementHelper.removeClasses(document.body, `z${this.app.prefix}`,
+                            "body-noscroll"
                         );
-
-                        if (this.status === Enums.WindowStatus.MAX) {
-                            ElementHelper.removeClasses(document.body, `z${this.app.prefix}`,
-                                "noscroll"
-                            );
-                        }
-                        const index = this.app.windows.indexOf(this);
-                        this.app.windows.splice(index, 1);
-                        this.element.parentElement.removeChild(this.element);
                     }
+                    const index = this.app.windows.indexOf(this);
+                    this.app.windows.splice(index, 1);
+
+                    this.element
+                        && this.element.parentElement
+                        && this.element.parentElement.removeChild(this.element);
                 }
             });
 
             windowElement.addEventListener("transitionend", (ev: TransitionEvent) => {
-                if (this.element) {
-                    ElementHelper.removeClasses(this.element, this.app.prefix,
-                        `animate-${this.animate}-to-max`,
-                        `animate-${this.animate}-to-normal`
-                    );
-                }
+                ElementHelper.removeClasses(this.element, this.app.prefix,
+                    `animate-${this.animate}-to-max`,
+                    `animate-${this.animate}-to-normal`
+                );
             });
         }
+
         windowElement.addEventListener("mousedown", (ev: MouseEvent) => {
             this.updateZIndex(true);
         }, true);
@@ -168,15 +166,15 @@ export default class UIWindow extends UIComponent implements UIControl {
         if (this.toolBar !== false) {
             const toolBar = new UIToolBar(this.app, this, this.toolBar);
             const toolBarElement = toolBar.present();
-            toolBarElement != null && windowElement.appendChild(toolBarElement);
-            this.components[toolBar.kind] = toolBar;
+            windowElement.appendChild(toolBarElement);
+            this.setComponent(Enums.ComponentType.TOOL_BAR, toolBar);
         }
 
         if (this.resizeBar !== false) {
             const resizeBar = new UIResizeBar(this.app, this, this.resizeBar);
             const resizeElement = resizeBar.present();
-            resizeElement != null && windowElement.appendChild(resizeElement);
-            this.components[resizeBar.kind] = resizeBar;
+            windowElement.appendChild(resizeElement);
+            this.setComponent(Enums.ComponentType.RESIZE_BAR, resizeBar);
         }
 
         fragment.appendChild(windowElement);
@@ -185,49 +183,53 @@ export default class UIWindow extends UIComponent implements UIControl {
             const parclose = new UIParclose(this.app, this, { opacity: this.parclose });
             const parcloseElement = parclose.present();
 
-            if (parcloseElement != null && parcloseElement.hasChildNodes) {
+            if (parcloseElement.hasChildNodes) {
                 ElementHelper.addStyles(<HTMLElement>(parcloseElement.firstElementChild), <Types.CSSStyleObject>{
                     zIndex: `${this.zIndex - 1}`
                 });
                 fragment.appendChild(parcloseElement);
             }
-            this.components[parclose.kind] = parclose;
+            this.setComponent(Enums.ComponentType.PARCLOSE, parclose);
         }
 
         if (this.contextMenu !== false) {
-            const contextMenu = new UIContextMenu(this.app, this, this.id, this.contextMenu);
-            const contextMenuElement = contextMenu.present();
-            contextMenuElement && fragment.appendChild(contextMenuElement);
-            this.components[contextMenu.kind] = contextMenu;
+            const contextMenuBar = new UIContextMenuBar(this.app, this, "window", this.contextMenu);
+            const contextMenuBarElement = contextMenuBar.present();
+            fragment.appendChild(contextMenuBarElement);
 
             windowElement.addEventListener("contextmenu", (ev: MouseEvent) => {
                 ev.preventDefault();
                 ev.returnValue = false;
 
-                contextMenu.updateOffset(ev, this.zIndex + 1);
+                contextMenuBar.updateOffset(ev, this.zIndex + 1);
 
                 return false;
             });
+
+            this.setComponent(Enums.ComponentType.CONTEXT_MENU_BAR, contextMenuBar);
         }
 
         return fragment;
     }
 
     destroy(): void {
-        if (this.element && this.element.parentElement) {
-            ElementHelper.addClasses(this.element, this.app.prefix,
-                this.isNeedAnimation ? `animate-${this.animate}-destroy` : ""
-            );
-        }
+        ElementHelper.addClasses(this.element, this.app.prefix,
+            this.isNeedAnimation ? `animate-${this.animate}-destroy` : ""
+        );
     }
 
     normal(dragToNormal: boolean = false): void {
         if (this.element && this.element.parentElement && this.status !== Enums.WindowStatus.NORMAL) {
             ElementHelper.addClasses(this.element, this.app.prefix,
-                this.isNeedAnimation ? (
-                    dragToNormal === false ? `animate-${this.animate}-to-normal` : `animate-${this.animate}-drag-to-normal`
-                ) : ""
+                this.isNeedAnimation
+                    ? (
+                        dragToNormal === false
+                            ? `animate-${this.animate}-to-normal`
+                            : `animate-${this.animate}-drag-to-normal`
+                    )
+                    : ""
             );
+
             ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
                 top: `${this.top}px`,
                 left: `${this.left}px`,
@@ -236,72 +238,84 @@ export default class UIWindow extends UIComponent implements UIControl {
                 borderRadius: `${this.borderRadius}px`
             });
 
-            const resizeBarElement = this.element.querySelector(`.${this.app.prefix}resize-bar`);
-            if (resizeBarElement) {
-                ElementHelper.removeClasses(<HTMLElement>resizeBarElement, this.app.prefix,
-                    "resize-disabled"
+            const resizeBar = this.getComponent<UIResizeBar>(Enums.ComponentType.RESIZE_BAR);
+            if (resizeBar) {
+                ElementHelper.removeClasses(resizeBar.element, this.app.prefix,
+                    "resize-bar-disabled"
                 );
             }
 
             ElementHelper.removeClasses(document.body, `z${this.app.prefix}`,
-                "noscroll"
+                "body-noscroll"
             );
 
-            const maxActionButton = new UIActionButton(this.app, this, UIActionButton.maxActionButton);
-            const maxElement = maxActionButton.present();
-            if (maxElement) {
-                const restoreElement = this.element.querySelector(`#${this.elementId}-action-button-restore`);
-                if (restoreElement && restoreElement.parentElement) {
-                    restoreElement.parentElement.replaceChild(maxElement, restoreElement);
+            const actionButtons = this.getComponent<Array<UIActionButton>>(`${Enums.ComponentType.TOOL_BAR}->${Enums.ComponentType.ACTION_BAR}->${Enums.ComponentType.ACTION_BUTTONS}`);
+            if (actionButtons && actionButtons.length > 0) {
+                for (const item of actionButtons) {
+                    if (item.id === "max") {
+                        const restoreActionButton = new UIActionButton(this.app, this, UIActionButton.restore);
+                        const restoreActionButtonElement = restoreActionButton.element;
+                        if (!(restoreActionButtonElement && restoreActionButtonElement.parentElement)) return;
+
+                        const maxActionButton = new UIActionButton(this.app, this, item);
+                        const maxActionButtonElement = maxActionButton.present();
+                        restoreActionButtonElement.parentElement.replaceChild(maxActionButtonElement, restoreActionButtonElement);
+
+                        break;
+                    }
                 }
             }
 
             this.status = Enums.WindowStatus.NORMAL;
 
-            this.reizeActionButtons(this.width);
+            this.zoomActionButtons(this.width);
         }
     }
 
     max(): void {
-        if (this.element && this.element.parentElement) {
-            if (this.status !== Enums.WindowStatus.MAX) {
-                ElementHelper.addClasses(this.element, this.app.prefix,
-                    this.isNeedAnimation ? `animate-${this.animate}-to-max` : ""
+        if (this.element && this.element.parentElement && this.status !== Enums.WindowStatus.MAX) {
+            ElementHelper.addClasses(this.element, this.app.prefix,
+                this.isNeedAnimation ? `animate-${this.animate}-to-max` : ""
+            );
+
+            ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
+                top: `0`,
+                left: `0`,
+                width: `${innerWidth}px`,
+                height: `${innerHeight}px`,
+                borderRadius: `0`
+            });
+
+            const resizeBar = this.getComponent<UIResizeBar>(Enums.ComponentType.RESIZE_BAR);
+            if (resizeBar) {
+                ElementHelper.addClasses(resizeBar.element, this.app.prefix,
+                    "resize-bar-disabled"
                 );
-
-                ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
-                    top: `0px`,
-                    left: `0px`,
-                    width: `${innerWidth}px`,
-                    height: `${innerHeight}px`,
-                    borderRadius: `0px`
-                });
-
-                if (this.resizeBar !== false) {
-                    const resizeBarElement = this.element.querySelector(`.${this.app.prefix}resize-bar`);
-                    if (resizeBarElement) {
-                        ElementHelper.addClasses(<HTMLElement>resizeBarElement, this.app.prefix,
-                            "resize-disabled"
-                        );
-                    }
-                }
-
-                ElementHelper.addClasses(document.body, `z${this.app.prefix}`,
-                    "noscroll"
-                );
-
-                const restoreActionButton = new UIActionButton(this.app, this, UIActionButton.restoreActionButton);
-                const restoreElement = restoreActionButton.present();
-                if (restoreElement) {
-                    const maxElement = this.element.querySelector(`#${this.elementId}-action-button-max`);
-                    if (maxElement && maxElement.parentElement) {
-                        maxElement.parentElement.replaceChild(restoreElement, maxElement);
-                    }
-                }
-                this.status = Enums.WindowStatus.MAX;
-
-                this.reizeActionButtons(innerWidth);
             }
+
+            ElementHelper.addClasses(document.body, `z${this.app.prefix}`,
+                "body-noscroll"
+            );
+
+            const actionButtons = this.getComponent<Array<UIActionButton>>(`${Enums.ComponentType.TOOL_BAR}->${Enums.ComponentType.ACTION_BAR}->${Enums.ComponentType.ACTION_BUTTONS}`);
+            if (actionButtons && actionButtons.length > 0) {
+                for (const item of actionButtons) {
+                    if (item.id === "max") {
+                        const maxActionButtonElement = item.element;
+                        if (!(maxActionButtonElement && maxActionButtonElement.parentElement)) return;
+
+                        const restoreActionButton = new UIActionButton(this.app, this, UIActionButton.restore);
+                        const restoreActionButtonElement = restoreActionButton.present();
+                        maxActionButtonElement.parentElement.replaceChild(restoreActionButtonElement, maxActionButtonElement);
+
+                        break;
+                    }
+                }
+            }
+
+            this.status = Enums.WindowStatus.MAX;
+
+            this.zoomActionButtons(innerWidth);
         }
     }
 
@@ -346,36 +360,36 @@ export default class UIWindow extends UIComponent implements UIControl {
 
         const uiWindow = this.app.getWindow(this.id);
         if (uiWindow && uiWindow.mode === Enums.WindowMode.LAYER) {
-            if (this.element) {
-                this.zIndex = this.app.zIndex;
-                ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
-                    zIndex: `${this.zIndex}`
-                });
-                if (disabled === false) {
-                    ElementHelper.addClasses(this.element, this.app.prefix,
-                        this.isNeedAnimation ? `animate-${this.animate}In` : ""
-                    );
-                }
-                if (this.components["parclose"]) {
-                    const parclose = this.components["parclose"] as UIParclose;
-                    parclose.updateZIndex(this.zIndex);
-                }
-                this.app.window = this;
+            this.zIndex = this.app.zIndex;
+            ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
+                zIndex: `${this.zIndex}`
+            });
+            if (disabled === false) {
+                ElementHelper.addClasses(this.element, this.app.prefix,
+                    this.isNeedAnimation ? `animate-${this.animate}In` : ""
+                );
             }
+
+            const parclose = this.getComponent<UIParclose>(Enums.ComponentType.PARCLOSE);
+            parclose && parclose.updateZIndex(this.zIndex - 1);
+
+            this.app.window = this;
         }
     }
 
     hideMoreActionContextMenu(): void {
-        const moreActionButtonElement = document.querySelector(`#${this.app.prefix}context-menu-${this.id}-more-action`);
-        if (moreActionButtonElement) {
-            ElementHelper.removeClasses(<HTMLElement>moreActionButtonElement, this.app.prefix,
-                "context-menu-active"
+        const moreActionContextMenuBar = this.getComponent<UIContextMenuBar>(Enums.ComponentType.MORE_ACTION_CONTEXT_MENU_BAR);
+        if (moreActionContextMenuBar) {
+            ElementHelper.removeClasses(moreActionContextMenuBar.element, this.app.prefix,
+                "context-menu-bar-active"
             );
         }
     }
 
-    removeMoreActionContextMenuElement(): void {
-        const moreActionButtonElement = document.querySelector(`#${this.app.prefix}context-menu-${this.id}-more-action`);
+    removeMoreActionContextMenu(): void {
+        const moreActionButton = new UIActionButton(this.app, this, UIActionButton.more);
+        const moreActionButtonElement = moreActionButton.element;
+
         if (moreActionButtonElement && moreActionButtonElement.parentElement) {
             moreActionButtonElement.parentElement.removeChild(moreActionButtonElement);
         }
@@ -390,11 +404,8 @@ export default class UIWindow extends UIComponent implements UIControl {
         return this.shadow;
     }
 
-    private reizeActionButtons(width: number): void {
-        if (!this.components["toolBar"]) return;
-        if (!(<UIToolBar>this.components["toolBar"]).components["actionBar"]) return;
-
-        const actionBar = (<UIToolBar>this.components["toolBar"]).components["actionBar"] as UIActionBar;
-        actionBar.reizeActionButtons(width);
+    zoomActionButtons(windowWidth: number): void {
+        const actionBar = this.getComponent<UIActionBar>(`${Enums.ComponentType.TOOL_BAR}->${Enums.ComponentType.ACTION_BAR}`);
+        actionBar && actionBar.zoomActionButtons(windowWidth);
     }
 }

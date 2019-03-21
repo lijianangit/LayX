@@ -1,5 +1,17 @@
 import * as Types from "../../types";
 
+export function createFragment(): DocumentFragment {
+    return document.createDocumentFragment();
+}
+
+export function createElement<K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTagNameMap[K] {
+    return document.createElement(tagName);
+}
+
+export function createElementNS<K extends keyof SVGElementTagNameMap>(tagName: K): SVGElementTagNameMap[K] {
+    return document.createElementNS("http://www.w3.org/2000/svg", tagName);
+}
+
 export function addStyles(element: HTMLElement | null, styles: Types.CSSStyleObject): HTMLElement | null {
     if (element === null) return element;
 
@@ -22,7 +34,9 @@ export function updateClasses(element: HTMLElement, handler: (currentClasses: st
     return element;
 }
 
-export function addClasses(element: HTMLElement, prefix: string = "layx-", ...classes: string[]): HTMLElement {
+export function addClasses(element: HTMLElement | null, prefix: string = "layx-", ...classes: string[]): HTMLElement | null {
+    if (element === null) return element;
+
     return updateClasses(element, function (currentClasses: string[], index: number, itemClass: string): void {
         if (!~index) {
             currentClasses.push(itemClass);
@@ -30,7 +44,9 @@ export function addClasses(element: HTMLElement, prefix: string = "layx-", ...cl
     }, prefix, ...classes);
 }
 
-export function removeClasses(element: HTMLElement, prefix: string = "layx-", ...classes: string[]): HTMLElement {
+export function removeClasses(element: HTMLElement | null, prefix: string = "layx-", ...classes: string[]): HTMLElement | null {
+    if (element === null) return element;
+
     return updateClasses(element, function (currentClasses: string[], index: number): void {
         if (~index) {
             currentClasses.splice(index, 1);
@@ -38,7 +54,9 @@ export function removeClasses(element: HTMLElement, prefix: string = "layx-", ..
     }, prefix, ...classes);
 }
 
-export function containClass(element: HTMLElement, prefix: string = "layx-", cls: string) {
+export function containClass(element: HTMLElement | null, prefix: string = "layx-", cls: string): boolean {
+    if (element === null) return false;
+
     const currentClasses = element.className.split(/\s+/g);
     const index = currentClasses.indexOf(prefix + cls);
     return !!~index;

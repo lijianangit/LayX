@@ -14,29 +14,35 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
-var StringHelper = require("../utils/StringHelper");
+var UIIcon_1 = require("./UIIcon");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
-var UIIcon_1 = require("./UIIcon");
 var UITitleBar = (function (_super) {
     __extends(UITitleBar, _super);
     function UITitleBar(app, window, options) {
         var _this = _super.call(this, app, window) || this;
-        _this.kind = "titleBar";
-        _this.components = {};
+        _this.elementId = _this.window.elementId + "-" + "title-bar";
         _this.icon = "icon";
+        _this._element = null;
         _this.icon = CastHelper.typeOrBooleanCast(options.icon, _this.icon);
         _this.title = options.title;
         return _this;
     }
+    Object.defineProperty(UITitleBar.prototype, "element", {
+        get: function () {
+            return document.getElementById("" + this.elementId);
+        },
+        enumerable: true,
+        configurable: true
+    });
     UITitleBar.prototype.present = function () {
         var _this = this;
-        var fragment = document.createDocumentFragment();
-        var kebabCase = StringHelper.getKebabCase(this.kind);
-        var titleBarElement = document.createElement("div");
-        ElementHelper.addClasses(titleBarElement, this.app.prefix, kebabCase, "flexbox", "flex-row", "flex-vertical-center");
+        var fragment = ElementHelper.createFragment();
+        var titleBarElement = ElementHelper.createElement("div");
+        titleBarElement.id = this.elementId;
+        ElementHelper.addClasses(titleBarElement, this.app.prefix, "title-bar", "flexbox", "flex-row", "flex-vertical-center");
         if (this.icon) {
-            var windowIconElement = document.createElement("div");
+            var windowIconElement = ElementHelper.createElement("div");
             ElementHelper.addClasses(windowIconElement, this.app.prefix, "window-icon", "flexbox", "flex-center");
             windowIconElement.addEventListener("dblclick", function (ev) {
                 ev.stopPropagation();
@@ -45,14 +51,13 @@ var UITitleBar = (function (_super) {
             titleBarElement.appendChild(windowIconElement);
             var icon = new UIIcon_1.default(this.app, this.window, this.icon);
             var iconElement = icon.present();
-            iconElement && windowIconElement.appendChild(iconElement);
-            this.components[icon.kind] = icon;
+            windowIconElement.appendChild(iconElement);
         }
         if (this.title) {
-            var titleElement = document.createElement("div");
+            var titleElement = ElementHelper.createElement("div");
             ElementHelper.addClasses(titleElement, this.app.prefix, "window-title");
             var labelElement = document.createElement("label");
-            ElementHelper.addClasses(labelElement, this.app.prefix, "label");
+            ElementHelper.addClasses(labelElement, this.app.prefix, "window-title-label");
             labelElement.innerText = this.title;
             titleElement.appendChild(labelElement);
             titleBarElement.appendChild(titleElement);

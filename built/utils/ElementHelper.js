@@ -1,5 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+function createFragment() {
+    return document.createDocumentFragment();
+}
+exports.createFragment = createFragment;
+function createElement(tagName) {
+    return document.createElement(tagName);
+}
+exports.createElement = createElement;
+function createElementNS(tagName) {
+    return document.createElementNS("http://www.w3.org/2000/svg", tagName);
+}
+exports.createElementNS = createElementNS;
 function addStyles(element, styles) {
     if (element === null)
         return element;
@@ -31,6 +43,8 @@ function addClasses(element, prefix) {
     for (var _i = 2; _i < arguments.length; _i++) {
         classes[_i - 2] = arguments[_i];
     }
+    if (element === null)
+        return element;
     return updateClasses.apply(void 0, [element, function (currentClasses, index, itemClass) {
             if (!~index) {
                 currentClasses.push(itemClass);
@@ -44,6 +58,8 @@ function removeClasses(element, prefix) {
     for (var _i = 2; _i < arguments.length; _i++) {
         classes[_i - 2] = arguments[_i];
     }
+    if (element === null)
+        return element;
     return updateClasses.apply(void 0, [element, function (currentClasses, index) {
             if (~index) {
                 currentClasses.splice(index, 1);
@@ -53,6 +69,8 @@ function removeClasses(element, prefix) {
 exports.removeClasses = removeClasses;
 function containClass(element, prefix, cls) {
     if (prefix === void 0) { prefix = "layx-"; }
+    if (element === null)
+        return false;
     var currentClasses = element.className.split(/\s+/g);
     var index = currentClasses.indexOf(prefix + cls);
     return !!~index;
