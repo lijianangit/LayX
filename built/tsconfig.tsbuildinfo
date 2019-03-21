@@ -321,89 +321,33 @@
       ]
     },
     "exportedModulesMap": {
-      "d:/.workplace/.gitee/layx/src/core/app.ts": [
-        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
-        "d:/.workplace/.gitee/layx/src/basic/interfaces/layx.ts",
+      "d:/.workplace/.gitee/layx/src/utils/typehelper.ts": [
+        "d:/.workplace/.gitee/layx/types/index.d.ts",
+        "d:/.workplace/.gitee/layx/src/basic/enums/index.ts"
+      ],
+      "d:/.workplace/.gitee/layx/src/utils/jsonhelper.ts": [
         "d:/.workplace/.gitee/layx/types/index.d.ts"
       ],
-      "d:/.workplace/.gitee/layx/src/index.ts": [
-        "d:/.workplace/.gitee/layx/src/assets/styles/index.ts",
-        "d:/.workplace/.gitee/layx/src/assets/icons/index.ts",
-        "d:/.workplace/.gitee/layx/src/basic/interfaces/layx.ts"
-      ],
-      "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts": [
-        "d:/.workplace/.gitee/layx/src/core/app.ts",
+      "d:/.workplace/.gitee/layx/src/utils/casthelper.ts": [
         "d:/.workplace/.gitee/layx/src/basic/enums/index.ts",
-        "d:/.workplace/.gitee/layx/types/index.d.ts",
-        "d:/.workplace/.gitee/layx/src/basic/models/uicomponent.ts",
-        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
+        "d:/.workplace/.gitee/layx/types/index.d.ts"
       ],
-      "d:/.workplace/.gitee/layx/src/basic/interfaces/layx.ts": [
-        "d:/.workplace/.gitee/layx/types/index.d.ts",
-        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts"
-      ],
-      "d:/.workplace/.gitee/layx/src/controls/uitoolbar.ts": [
-        "d:/.workplace/.gitee/layx/types/index.d.ts",
+      "d:/.workplace/.gitee/layx/src/basic/models/uicomponent.ts": [
         "d:/.workplace/.gitee/layx/src/core/app.ts",
-        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
-        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
-        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
+        "d:/.workplace/.gitee/layx/types/index.d.ts"
       ],
-      "d:/.workplace/.gitee/layx/src/controls/uitabbar.ts": [
-        "d:/.workplace/.gitee/layx/src/core/app.ts",
-        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
-        "d:/.workplace/.gitee/layx/types/index.d.ts",
-        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
-        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
+      "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts": [
+        "d:/.workplace/.gitee/layx/src/basic/models/uicomponent.ts"
       ],
-      "d:/.workplace/.gitee/layx/src/controls/uititlebar.ts": [
-        "d:/.workplace/.gitee/layx/src/core/app.ts",
-        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
-        "d:/.workplace/.gitee/layx/types/index.d.ts",
-        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
-        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
-      ],
-      "d:/.workplace/.gitee/layx/src/controls/uiactionbar.ts": [
-        "d:/.workplace/.gitee/layx/types/index.d.ts",
-        "d:/.workplace/.gitee/layx/src/core/app.ts",
-        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
-        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
-        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
-      ],
-      "d:/.workplace/.gitee/layx/src/controls/uiactionbutton.ts": [
+      "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts": [
         "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
         "d:/.workplace/.gitee/layx/src/core/app.ts",
-        "d:/.workplace/.gitee/layx/types/index.d.ts",
-        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
-        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
+        "d:/.workplace/.gitee/layx/src/basic/models/uicomponent.ts"
       ],
-      "d:/.workplace/.gitee/layx/src/controls/uiicon.ts": [
-        "d:/.workplace/.gitee/layx/src/core/app.ts",
-        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
-        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
-        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
+      "d:/.workplace/.gitee/layx/src/utils/elementhelper.ts": [
+        "d:/.workplace/.gitee/layx/types/index.d.ts"
       ],
-      "d:/.workplace/.gitee/layx/src/controls/uicontextmenubar.ts": [
-        "d:/.workplace/.gitee/layx/types/index.d.ts",
-        "d:/.workplace/.gitee/layx/src/core/app.ts",
-        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
-        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
-        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
-      ],
-      "d:/.workplace/.gitee/layx/src/controls/uicontextmenubutton.ts": [
-        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
-        "d:/.workplace/.gitee/layx/src/core/app.ts",
-        "d:/.workplace/.gitee/layx/types/index.d.ts",
-        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
-        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
-      ],
-      "d:/.workplace/.gitee/layx/src/basic/events/windowmovedragevent.ts": [
-        "d:/.workplace/.gitee/layx/src/core/app.ts",
-        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
-        "d:/.workplace/.gitee/layx/types/index.d.ts",
-        "d:/.workplace/.gitee/layx/src/basic/events/dragevent.ts"
-      ],
-      "d:/.workplace/.gitee/layx/src/controls/uiresizebar.ts": [
+      "d:/.workplace/.gitee/layx/src/controls/uiparclose.ts": [
         "d:/.workplace/.gitee/layx/src/core/app.ts",
         "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
         "d:/.workplace/.gitee/layx/types/index.d.ts",
@@ -416,38 +360,94 @@
         "d:/.workplace/.gitee/layx/src/basic/enums/index.ts",
         "d:/.workplace/.gitee/layx/src/basic/events/dragevent.ts"
       ],
-      "d:/.workplace/.gitee/layx/src/controls/uiparclose.ts": [
+      "d:/.workplace/.gitee/layx/src/controls/uiresizebar.ts": [
         "d:/.workplace/.gitee/layx/src/core/app.ts",
         "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
         "d:/.workplace/.gitee/layx/types/index.d.ts",
         "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
         "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
       ],
-      "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts": [
+      "d:/.workplace/.gitee/layx/src/basic/events/windowmovedragevent.ts": [
+        "d:/.workplace/.gitee/layx/src/core/app.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
+        "d:/.workplace/.gitee/layx/types/index.d.ts",
+        "d:/.workplace/.gitee/layx/src/basic/events/dragevent.ts"
+      ],
+      "d:/.workplace/.gitee/layx/src/controls/uicontextmenubutton.ts": [
         "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
         "d:/.workplace/.gitee/layx/src/core/app.ts",
-        "d:/.workplace/.gitee/layx/src/basic/models/uicomponent.ts"
-      ],
-      "d:/.workplace/.gitee/layx/src/utils/elementhelper.ts": [
-        "d:/.workplace/.gitee/layx/types/index.d.ts"
-      ],
-      "d:/.workplace/.gitee/layx/src/basic/models/uicomponent.ts": [
-        "d:/.workplace/.gitee/layx/src/core/app.ts",
-        "d:/.workplace/.gitee/layx/types/index.d.ts"
-      ],
-      "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts": [
-        "d:/.workplace/.gitee/layx/src/basic/models/uicomponent.ts"
-      ],
-      "d:/.workplace/.gitee/layx/src/utils/casthelper.ts": [
-        "d:/.workplace/.gitee/layx/src/basic/enums/index.ts",
-        "d:/.workplace/.gitee/layx/types/index.d.ts"
-      ],
-      "d:/.workplace/.gitee/layx/src/utils/jsonhelper.ts": [
-        "d:/.workplace/.gitee/layx/types/index.d.ts"
-      ],
-      "d:/.workplace/.gitee/layx/src/utils/typehelper.ts": [
         "d:/.workplace/.gitee/layx/types/index.d.ts",
-        "d:/.workplace/.gitee/layx/src/basic/enums/index.ts"
+        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
+        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
+      ],
+      "d:/.workplace/.gitee/layx/src/controls/uicontextmenubar.ts": [
+        "d:/.workplace/.gitee/layx/types/index.d.ts",
+        "d:/.workplace/.gitee/layx/src/core/app.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
+        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
+        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
+      ],
+      "d:/.workplace/.gitee/layx/src/controls/uiicon.ts": [
+        "d:/.workplace/.gitee/layx/src/core/app.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
+        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
+        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
+      ],
+      "d:/.workplace/.gitee/layx/src/controls/uiactionbutton.ts": [
+        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
+        "d:/.workplace/.gitee/layx/src/core/app.ts",
+        "d:/.workplace/.gitee/layx/types/index.d.ts",
+        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
+        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
+      ],
+      "d:/.workplace/.gitee/layx/src/controls/uiactionbar.ts": [
+        "d:/.workplace/.gitee/layx/types/index.d.ts",
+        "d:/.workplace/.gitee/layx/src/core/app.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
+        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
+        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
+      ],
+      "d:/.workplace/.gitee/layx/src/controls/uititlebar.ts": [
+        "d:/.workplace/.gitee/layx/src/core/app.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
+        "d:/.workplace/.gitee/layx/types/index.d.ts",
+        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
+        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
+      ],
+      "d:/.workplace/.gitee/layx/src/controls/uitabbar.ts": [
+        "d:/.workplace/.gitee/layx/src/core/app.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
+        "d:/.workplace/.gitee/layx/types/index.d.ts",
+        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
+        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
+      ],
+      "d:/.workplace/.gitee/layx/src/controls/uitoolbar.ts": [
+        "d:/.workplace/.gitee/layx/types/index.d.ts",
+        "d:/.workplace/.gitee/layx/src/core/app.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
+        "d:/.workplace/.gitee/layx/src/basic/models/uiwindowcomponent.ts",
+        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
+      ],
+      "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts": [
+        "d:/.workplace/.gitee/layx/src/core/app.ts",
+        "d:/.workplace/.gitee/layx/src/basic/enums/index.ts",
+        "d:/.workplace/.gitee/layx/types/index.d.ts",
+        "d:/.workplace/.gitee/layx/src/basic/models/uicomponent.ts",
+        "d:/.workplace/.gitee/layx/src/basic/interfaces/uicontrol.ts"
+      ],
+      "d:/.workplace/.gitee/layx/src/basic/interfaces/layx.ts": [
+        "d:/.workplace/.gitee/layx/types/index.d.ts",
+        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts"
+      ],
+      "d:/.workplace/.gitee/layx/src/core/app.ts": [
+        "d:/.workplace/.gitee/layx/src/controls/uiwindow.ts",
+        "d:/.workplace/.gitee/layx/src/basic/interfaces/layx.ts",
+        "d:/.workplace/.gitee/layx/types/index.d.ts"
+      ],
+      "d:/.workplace/.gitee/layx/src/index.ts": [
+        "d:/.workplace/.gitee/layx/src/assets/styles/index.ts",
+        "d:/.workplace/.gitee/layx/src/assets/icons/index.ts",
+        "d:/.workplace/.gitee/layx/src/basic/interfaces/layx.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [

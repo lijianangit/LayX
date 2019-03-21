@@ -20,7 +20,6 @@ export default abstract class UIComponent {
         key = CastHelper.stringCast(key);
         if (key.indexOf("->") > -1) {
             const keys = key.split("->");
-            // toolBar->actionBar
             let tier = component.getComponent(keys[0]);
             if (tier === null) return null;
             for (let i = 0; i < keys.length; i++) {
