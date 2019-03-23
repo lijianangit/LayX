@@ -13,7 +13,8 @@
         "preserveConstEnums": true,
         "experimentalDecorators": true,
         "pretty": true,
-        "incremental": true
+        "incremental": true,
+        // "sourceMap": true
     },
     "include": [
         "./src/**/*",
