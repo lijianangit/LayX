@@ -7,7 +7,7 @@
         content="width=device-width, initial-scale=1.0, maximum-scale=1,minimum-scale=1,user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
     <title>A magical window. - Layx</title>
-<link href="layx.min.css?2e204d8e863946451219" rel="stylesheet"><script type="text/javascript" src="layx.min.js?2e204d8e863946451219"></script></head>
+<link href="layx.min.css?89e58bda1c3164130c29" rel="stylesheet"><script type="text/javascript" src="layx.min.js?89e58bda1c3164130c29"></script></head>
 
 <body>
     <button id="create">Create</button>
@@ -26,7 +26,46 @@
                     label: '新增窗口',
                     handler: function (ev, win) {
                         alert("点击了新增，窗口句柄为：" + win.id);
-                    }
+                    },
+                    items: [
+                        {
+                            id: 'child-one',
+                            label: '子菜单一'
+                        },
+                        {
+                            id: 'child-two',
+                            label: '子菜单二',
+                            items: [
+                                {
+                                    id: 'child-one',
+                                    label: '点击我',
+                                    handler: function (ev, win) {
+                                        alert("谢谢支持。");
+                                    }
+                                },
+                                {
+                                    id: 'child-two',
+                                    label: '子菜单二'
+                                },
+                                {
+                                    id: 'child-three',
+                                    label: '子菜单三'
+                                },
+                                {
+                                    id: 'child-four',
+                                    label: '子菜单四'
+                                },
+                                {
+                                    id: 'child-five',
+                                    label: '子菜单五'
+                                }
+                            ]
+                        },
+                        {
+                            id: 'child-three',
+                            label: '子菜单三'
+                        }
+                    ]
                 },
                 {
                     id: 'edit',

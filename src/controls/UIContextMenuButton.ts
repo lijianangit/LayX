@@ -2,6 +2,8 @@ import App from "../core/App";
 import UIControl from "../basic/interfaces/UIControl";
 import UIWindowComponent from "../basic/models/UIWindowComponent";
 import UIWindow from "./UIWindow";
+import UIContextMenuBar from "./UIContextMenuBar";
+import UIIcon from "./UIIcon";
 import * as Types from "../../types";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as Enums from "../basic/enums";
@@ -9,48 +11,41 @@ import * as CastHelper from "../utils/CastHelper";
 
 export default class UIContextMenuButton extends UIWindowComponent implements UIControl {
     public static readonly height: number = 34;
-    private verticalPadding: number = 5;
-
-    public readonly elementId: string;
-    public readonly type: string;
 
     public id: string;
     public label: string;
     public handler?: (ev: MouseEvent, window: UIWindow) => void;
+    public items: Array<Types.ContextMenuButtonOption> | false;
 
-    private _element: HTMLElement | null = null;
-    get element() {
-        return document.getElementById(`${this.elementId}`);
-    }
-
-    constructor(app: App, window: UIWindow, type: string, options: Types.ContextMenuButtonOption) {
+    constructor(app: App, window: UIWindow, options: Types.ContextMenuButtonOption, private readonly index = 0) {
         super(app, window);
-
-        this.type = CastHelper.stringCast(type);
 
         this.id = CastHelper.stringCast(options.id);
         this.label = CastHelper.stringCast(options.label);
         this.handler = options.handler;
-
-        this.elementId = `${this.window.elementId}-${this.type}-${Enums.ComponentType.CONTEXT_MENU_BUTTON}-${this.id}`;
+        this.items = CastHelper.contextMenuButtonsCast(options.items);
     }
 
     present(): DocumentFragment {
         const fragment = ElementHelper.createFragment();
 
-        const contextMenuElement = ElementHelper.createElement("div");
-        contextMenuElement.id = this.elementId;
+        const contextMenuButtonElement = ElementHelper.createElement("div");
+        contextMenuButtonElement.setAttribute("data-index", `${this.index}`);
 
-        ElementHelper.addClasses(contextMenuElement, this.app.prefix,
-            Enums.ComponentType.CONTEXT_MENU_BUTTON
+        ElementHelper.addClasses(contextMenuButtonElement, this.app.prefix,
+            Enums.ComponentType.CONTEXT_MENU_BUTTON,
+            "flexbox",
+            "flex-row"
         );
 
-        ElementHelper.addStyles(contextMenuElement, <Types.CSSStyleObject>{
+        ElementHelper.addStyles(contextMenuButtonElement, <Types.CSSStyleObject>{
             height: `${UIContextMenuButton.height}px`,
-            lineHeight: `${UIContextMenuButton.height - this.verticalPadding * 2}px`
+            lineHeight: `${UIContextMenuButton.height}px`
         });
 
-        contextMenuElement.addEventListener("mousedown", (ev: MouseEvent) => {
+        contextMenuButtonElement.addEventListener("mousedown", (ev: MouseEvent) => {
+            ev.stopPropagation();
+
             if (ev.button === 0 && typeof this.handler === "function") {
                 this.handler(ev, this.window);
             }
@@ -58,12 +53,48 @@ export default class UIContextMenuButton extends UIWindowComponent implements UI
 
         const labelElement = ElementHelper.createElement("label");
         ElementHelper.addClasses(labelElement, this.app.prefix,
-            `${Enums.ComponentType.CONTEXT_MENU_BUTTON}-label`
+            `${Enums.ComponentType.CONTEXT_MENU_BUTTON}-label`,
+            "flex-item"
         );
         labelElement.innerText = this.label;
-        contextMenuElement.appendChild(labelElement);
+        contextMenuButtonElement.appendChild(labelElement);
 
-        fragment.appendChild(contextMenuElement);
+        if (this.items !== false) {
+            const contextMenuBar = new UIContextMenuBar(this.app, this.window, this.id, this.items, false);
+            const contextMenuBarElement = contextMenuBar.present();
+            contextMenuButtonElement.appendChild(contextMenuBarElement);
+
+            const childContextMenuBarElement = <HTMLElement | null>labelElement.nextElementSibling;
+
+            let waiting: number;
+            contextMenuButtonElement.addEventListener("mouseenter", (ev: MouseEvent) => {
+                waiting = setTimeout(() => {
+                    contextMenuBar.updateChildrensOffset(ev, childContextMenuBarElement, this.index);
+                }, 300);
+            });
+
+            contextMenuButtonElement.addEventListener("mouseleave", (ev: MouseEvent) => {
+                clearTimeout(waiting);
+                contextMenuBar.hideChildren(childContextMenuBarElement);
+            });
+
+            this.setComponent(Enums.ComponentType.CONTEXT_MENU_BAR, contextMenuBar);
+
+            const rightIconElement = ElementHelper.createElement("div");
+            ElementHelper.addClasses(rightIconElement, this.app.prefix,
+                "context-menu-more",
+                "flexbox",
+                "flex-center"
+            );
+
+            const icon = new UIIcon(this.app, this.window, "right");
+            const iconElement = icon.present();
+            rightIconElement.appendChild(iconElement);
+
+            contextMenuButtonElement.appendChild(rightIconElement);
+        }
+
+        fragment.appendChild(contextMenuButtonElement);
         return fragment;
     }
 }

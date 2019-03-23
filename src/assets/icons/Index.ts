@@ -6,3 +6,4 @@ import "./restore.svg";
 import "./above.svg";
 import "./more.svg";
 import "./icon.svg";
+import "./right.svg";

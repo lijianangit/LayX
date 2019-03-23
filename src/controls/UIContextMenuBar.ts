@@ -10,6 +10,7 @@ import * as Enums from "../basic/enums";
 
 export default class UIContextMenuBar extends UIWindowComponent implements UIControl {
     public readonly elementId: string;
+    public static readonly offset: number = 3;
 
     public type: string;
     public readonly contextMenuButtons: Array<Types.ContextMenuButtonOption> | false = false;
@@ -19,21 +20,20 @@ export default class UIContextMenuBar extends UIWindowComponent implements UICon
         return document.getElementById(`${this.elementId}`);
     }
 
-    constructor(app: App, window: UIWindow, type: string, contextMenuItems: Array<Types.ContextMenuButtonOption>) {
+    constructor(app: App, window: UIWindow, type: string, contextMenuItems: Array<Types.ContextMenuButtonOption>, private isTopMenu: boolean = true) {
         super(app, window);
 
-        this.type = CastHelper.stringCast(type);
         this.contextMenuButtons = CastHelper.contextMenuButtonsCast(contextMenuItems);
 
+        this.type = CastHelper.stringCast(type);
         this.elementId = `${this.window.elementId}-${this.type}-${Enums.ComponentType.CONTEXT_MENU_BAR}`;
     }
 
     present(): DocumentFragment {
         const fragment = ElementHelper.createFragment();
-
         if (this.contextMenuButtons !== false && this.contextMenuButtons.length > 0) {
             const contextMenuBarElement = ElementHelper.createElement("div");
-            contextMenuBarElement.id = this.elementId;
+            if (this.isTopMenu) contextMenuBarElement.id = this.elementId;
 
             ElementHelper.addClasses(contextMenuBarElement, this.app.prefix,
                 Enums.ComponentType.CONTEXT_MENU_BAR
@@ -54,12 +54,14 @@ export default class UIContextMenuBar extends UIWindowComponent implements UICon
     }
 
     hide(): void {
+        if (!this.isTopMenu) return;
         ElementHelper.removeClasses(this.element, this.app.prefix,
             `context-menu-bar-active`
         );
     }
 
     updateOffset(ev: MouseEvent, zIndex: number): void {
+        if (!this.isTopMenu) return;
         if (!this.element) return;
         if (this.contextMenuButtons === false || this.contextMenuButtons.length === 0) return;
 
@@ -89,16 +91,68 @@ export default class UIContextMenuBar extends UIWindowComponent implements UICon
         });
     }
 
+    updateChildrensOffset(ev: MouseEvent, childrenContextMenuBarElement: HTMLElement | null, index: number): void {
+        if (this.isTopMenu) return;
+        if (!(childrenContextMenuBarElement && childrenContextMenuBarElement.parentElement && childrenContextMenuBarElement.parentElement.parentElement)) return;
+
+        const parentContextMenuBarElement = childrenContextMenuBarElement.parentElement.parentElement;
+        const parentComputedStyle = getComputedStyle(parentContextMenuBarElement);
+        const
+            parentContextMenuWidth = Number(parentComputedStyle.width!.replace('px', '')),
+            parentContextMenuHeight = parentContextMenuBarElement.childElementCount * UIContextMenuButton.height,
+            x = Number(parentComputedStyle.left!.replace('px', '')),
+            y = Number(parentComputedStyle.top!.replace('px', ''));
+
+        const computedStyle = getComputedStyle(childrenContextMenuBarElement);
+        const contextMenuWidth = Number(computedStyle.width!.replace('px', '')),
+            contextMenuHeight = childrenContextMenuBarElement.childElementCount * UIContextMenuButton.height,
+            contextMenuTop = UIContextMenuButton.height * index;
+
+        let left = x, top = y;
+
+        if (parentContextMenuWidth + x + contextMenuWidth > innerWidth) {
+            left = x - contextMenuWidth + UIContextMenuBar.offset;
+        }
+        else {
+            left = parentContextMenuWidth + x - UIContextMenuBar.offset;
+        }
+        if (y + contextMenuTop + contextMenuHeight > innerHeight) {
+            top = innerHeight - contextMenuTop - contextMenuHeight;
+        }
+        else {
+            top = y + contextMenuTop;
+        }
+
+        ElementHelper.addClasses(childrenContextMenuBarElement, this.app.prefix,
+            `context-menu-bar-active`
+        );
+
+        ElementHelper.addStyles(childrenContextMenuBarElement, <Types.CSSStyleObject>{
+            top: `${top}px`,
+            left: `${left}px`
+        });
+    }
+
+    hideChildren(childrenContextMenuBarElement: HTMLElement | null): void {
+        if (this.isTopMenu) return;
+
+        ElementHelper.removeClasses(childrenContextMenuBarElement, this.app.prefix,
+            `context-menu-bar-active`
+        );
+    }
+
     private createContextMenuButtons(parentContextMenuBarElement: HTMLElement): void {
         if (this.contextMenuButtons === false) return;
 
         const contextMenuButtons = Array<UIContextMenuButton>();
+        let index = 0;
         for (const item of this.contextMenuButtons) {
-            const contextMenu = new UIContextMenuButton(this.app, this.window, this.type, item);
+            const contextMenu = new UIContextMenuButton(this.app, this.window, item, index);
             const contextMenuElement = contextMenu.present();
 
             parentContextMenuBarElement.appendChild(contextMenuElement);
             contextMenuButtons.push(contextMenu);
+            index++;
         }
 
         this.setComponent(Enums.ComponentType.CONTEXT_MENU_BUTTONS, contextMenuButtons);
