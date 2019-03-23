@@ -70,7 +70,7 @@ export default class UIContextMenuButton extends UIWindowComponent implements UI
             contextMenuButtonElement.addEventListener("mouseenter", (ev: MouseEvent) => {
                 waiting = setTimeout(() => {
                     contextMenuBar.updateChildrensOffset(ev, childContextMenuBarElement, this.index);
-                }, 300);
+                }, 200);
             });
 
             contextMenuButtonElement.addEventListener("mouseleave", (ev: MouseEvent) => {

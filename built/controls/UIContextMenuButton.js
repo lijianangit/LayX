@@ -59,7 +59,7 @@ var UIContextMenuButton = (function (_super) {
             contextMenuButtonElement.addEventListener("mouseenter", function (ev) {
                 waiting_1 = setTimeout(function () {
                     contextMenuBar_1.updateChildrensOffset(ev, childContextMenuBarElement_1, _this.index);
-                }, 300);
+                }, 200);
             });
             contextMenuButtonElement.addEventListener("mouseleave", function (ev) {
                 clearTimeout(waiting_1);
