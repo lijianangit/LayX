@@ -117,7 +117,7 @@ export default class UIContextMenuBar extends UIWindowComponent implements UICon
             left = parentContextMenuWidth + x - UIContextMenuBar.offset;
         }
         if (y + contextMenuTop + contextMenuHeight > innerHeight) {
-            top = innerHeight - contextMenuHeight + UIContextMenuBar.offset;
+            top = innerHeight - contextMenuHeight - UIContextMenuBar.offset;
         }
         else {
             top = y + contextMenuTop - UIContextMenuBar.offset;
