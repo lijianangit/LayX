@@ -10,7 +10,7 @@ import * as Enums from "../basic/enums";
 
 export default class UIContextMenuBar extends UIWindowComponent implements UIControl {
     public readonly elementId: string;
-    public static readonly offset: number = 3;
+    public static readonly offset: number = 4;
 
     public type: string;
     public readonly contextMenuButtons: Array<Types.ContextMenuButtonOption> | false = false;
@@ -117,10 +117,10 @@ export default class UIContextMenuBar extends UIWindowComponent implements UICon
             left = parentContextMenuWidth + x - UIContextMenuBar.offset;
         }
         if (y + contextMenuTop + contextMenuHeight > innerHeight) {
-            top = innerHeight - contextMenuTop - contextMenuHeight;
+            top = innerHeight - contextMenuHeight + UIContextMenuBar.offset;
         }
         else {
-            top = y + contextMenuTop;
+            top = y + contextMenuTop - UIContextMenuBar.offset;
         }
 
         ElementHelper.addClasses(childrenContextMenuBarElement, this.app.prefix,

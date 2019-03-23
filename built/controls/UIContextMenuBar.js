@@ -100,10 +100,10 @@ var UIContextMenuBar = (function (_super) {
             left = parentContextMenuWidth + x - UIContextMenuBar.offset;
         }
         if (y + contextMenuTop + contextMenuHeight > innerHeight) {
-            top = innerHeight - contextMenuTop - contextMenuHeight;
+            top = innerHeight - contextMenuHeight + UIContextMenuBar.offset;
         }
         else {
-            top = y + contextMenuTop;
+            top = y + contextMenuTop - UIContextMenuBar.offset;
         }
         ElementHelper.addClasses(childrenContextMenuBarElement, this.app.prefix, "context-menu-bar-active");
         ElementHelper.addStyles(childrenContextMenuBarElement, {
@@ -131,7 +131,7 @@ var UIContextMenuBar = (function (_super) {
         }
         this.setComponent("context-menu-buttons", contextMenuButtons);
     };
-    UIContextMenuBar.offset = 3;
+    UIContextMenuBar.offset = 4;
     return UIContextMenuBar;
 }(UIWindowComponent_1.default));
 exports.default = UIContextMenuBar;
