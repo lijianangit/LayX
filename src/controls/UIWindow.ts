@@ -7,6 +7,7 @@ import UIToolBar from "./UIToolBar";
 import UIActionButton from "./UIActionButton";
 import UIContextMenuBar from "./UIContextMenuBar";
 import UIActionBar from "./UIActionBar";
+import UITopMenuBar from "./UITopMenuBar";
 import * as Types from "../../types";
 import * as Enums from "../basic/enums";
 import * as ElementHelper from "../utils/ElementHelper";
@@ -41,6 +42,7 @@ export default class UIWindow extends UIComponent implements UIControl {
     public resizeBar: Types.ResizeOption | false = {};
     public toolBar: Types.ToolBarOption | false = {};
     public contextMenu: Array<Types.ContextMenuButtonOption> | false = false;
+    public topMenu: Array<Types.ContextMenuButtonOption> | false = false;
 
     private _element: HTMLElement | null = null;
     get element() {
@@ -90,6 +92,7 @@ export default class UIWindow extends UIComponent implements UIControl {
         this.resizeBar = CastHelper.jsonOrBooleanCast(options.resizeBar, this.resizeBar);
         this.toolBar = CastHelper.jsonOrBooleanCast(options.toolBar, this.toolBar);
         this.contextMenu = CastHelper.contextMenuButtonsCast(options.contextMenu);
+        this.topMenu = CastHelper.contextMenuButtonsCast(options.topMenu);
     }
 
     present(): DocumentFragment {
@@ -168,6 +171,13 @@ export default class UIWindow extends UIComponent implements UIControl {
             const toolBarElement = toolBar.present();
             windowElement.appendChild(toolBarElement);
             this.setComponent(Enums.ComponentType.TOOL_BAR, toolBar);
+        }
+
+        if (this.topMenu !== false) {
+            const topMenuBar = new UITopMenuBar(this.app, this, this.topMenu);
+            const topMenuBarElement = topMenuBar.present();
+            windowElement.appendChild(topMenuBarElement);
+            this.setComponent(Enums.ComponentType.TOP_MENU_BAR, topMenuBar);
         }
 
         if (this.resizeBar !== false) {

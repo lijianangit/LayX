@@ -59,7 +59,7 @@ export type DragMoveOption = {
 
 export type ActionBarOption = {
     enable?: boolean;
-    actionButtons?: Array<ActionButtonOption> | boolean;
+    items?: Array<ActionButtonOption> | boolean;
 } & JsonObject;
 
 export type TabBarOption = {
@@ -97,6 +97,7 @@ export type WindowOption = {
     resizeBar?: ResizeOption | boolean;
     toolBar?: ToolBarOption | boolean;
     contextMenu?: Array<ContextMenuButtonOption> | false;
+    topMenu?: Array<ContextMenuButtonOption> | false;
 } & JsonObject;
 
 export type Component = {

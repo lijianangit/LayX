@@ -24,7 +24,7 @@ var UIActionBar = (function (_super) {
         var _this = _super.call(this, app, window) || this;
         _this.elementId = _this.window.elementId + "-" + "action-bar";
         _this.enable = true;
-        _this.actionButtons = [
+        _this.items = [
             UIActionButton_1.default.info,
             UIActionButton_1.default.min,
             UIActionButton_1.default.max,
@@ -32,7 +32,7 @@ var UIActionBar = (function (_super) {
         ];
         _this._element = null;
         _this.enable = CastHelper.booleanCast(options.enable, _this.enable);
-        _this.actionButtons = CastHelper.actionButtonsCast(options.actionButtons, _this.actionButtons);
+        _this.items = CastHelper.actionButtonsCast(options.actionButtons, _this.items);
         return _this;
     }
     Object.defineProperty(UIActionBar.prototype, "element", {
@@ -64,7 +64,7 @@ var UIActionBar = (function (_super) {
         return fragment;
     };
     UIActionBar.prototype.zoomActionButtons = function (windowWidth) {
-        if (this.actionButtons === false)
+        if (this.items === false)
             return;
         var isMerge = windowWidth <= UIActionBar.actionButtonZoomWidth ? true : false;
         var actionButtons = this.getComponent("action-buttons");
@@ -105,10 +105,10 @@ var UIActionBar = (function (_super) {
         }
     };
     UIActionBar.prototype.createActionButtons = function (parentActionBarElemnt) {
-        if (this.actionButtons === false)
+        if (this.items === false)
             return;
         var actionButtons = Array();
-        for (var _i = 0, _a = this.actionButtons; _i < _a.length; _i++) {
+        for (var _i = 0, _a = this.items; _i < _a.length; _i++) {
             var item = _a[_i];
             var actionButton = new UIActionButton_1.default(this.app, this.window, item);
             var actionButtonElement = actionButton.present();

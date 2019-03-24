@@ -19,6 +19,7 @@ var UIResizeBar_1 = require("./UIResizeBar");
 var UIToolBar_1 = require("./UIToolBar");
 var UIActionButton_1 = require("./UIActionButton");
 var UIContextMenuBar_1 = require("./UIContextMenuBar");
+var UITopMenuBar_1 = require("./UITopMenuBar");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
 var TypeHelper = require("../utils/TypeHelper");
@@ -49,6 +50,7 @@ var UIWindow = (function (_super) {
         _this.resizeBar = {};
         _this.toolBar = {};
         _this.contextMenu = false;
+        _this.topMenu = false;
         _this._element = null;
         _this._flickerShadow = null;
         if (!TypeHelper.isStringWithNotEmpty(options.id))
@@ -81,6 +83,7 @@ var UIWindow = (function (_super) {
         _this.resizeBar = CastHelper.jsonOrBooleanCast(options.resizeBar, _this.resizeBar);
         _this.toolBar = CastHelper.jsonOrBooleanCast(options.toolBar, _this.toolBar);
         _this.contextMenu = CastHelper.contextMenuButtonsCast(options.contextMenu);
+        _this.topMenu = CastHelper.contextMenuButtonsCast(options.topMenu);
         return _this;
     }
     Object.defineProperty(UIWindow.prototype, "element", {
@@ -147,6 +150,12 @@ var UIWindow = (function (_super) {
             var toolBarElement = toolBar.present();
             windowElement.appendChild(toolBarElement);
             this.setComponent("tool-bar", toolBar);
+        }
+        if (this.topMenu !== false) {
+            var topMenuBar = new UITopMenuBar_1.default(this.app, this, this.topMenu);
+            var topMenuBarElement = topMenuBar.present();
+            windowElement.appendChild(topMenuBarElement);
+            this.setComponent("top-menu-bar", topMenuBar);
         }
         if (this.resizeBar !== false) {
             var resizeBar = new UIResizeBar_1.default(this.app, this, this.resizeBar);

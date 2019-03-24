@@ -9,3 +9,4 @@ require("./context-menu-bar.css");
 require("./resize-bar.css");
 require("./action-bar.css");
 require("./title-bar.css");
+require("./top-menu-bar.css");

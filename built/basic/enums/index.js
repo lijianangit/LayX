@@ -55,4 +55,6 @@ var ComponentType;
     ComponentType["TOOL_BAR"] = "tool-bar";
     ComponentType["WINDOW"] = "window";
     ComponentType["MORE_ACTION_CONTEXT_MENU_BAR"] = "more-action-context-menu-bar";
+    ComponentType["TOP_MENU_BAR"] = "top-menu-bar";
+    ComponentType["TOP_MENU_BUTTON"] = "top-menu-button";
 })(ComponentType = exports.ComponentType || (exports.ComponentType = {}));

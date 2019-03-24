@@ -15,7 +15,7 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
     public readonly elementId: string = `${this.window.elementId}-${Enums.ComponentType.ACTION_BAR}`;
 
     public enable: boolean = true;
-    public actionButtons: Array<Types.ActionButtonOption> | false = [
+    public items: Array<Types.ActionButtonOption> | false = [
         UIActionButton.info,
         UIActionButton.min,
         UIActionButton.max,
@@ -31,7 +31,7 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
         super(app, window);
 
         this.enable = CastHelper.booleanCast(options.enable, this.enable);
-        this.actionButtons = CastHelper.actionButtonsCast(options.actionButtons, this.actionButtons);
+        this.items = CastHelper.actionButtonsCast(options.actionButtons, this.items);
     }
 
     present(): DocumentFragment {
@@ -68,7 +68,7 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
     }
 
     zoomActionButtons(windowWidth: number): void {
-        if (this.actionButtons === false) return;
+        if (this.items === false) return;
 
         let isMerge = windowWidth <= UIActionBar.actionButtonZoomWidth ? true : false;
         const actionButtons = this.getComponent<Array<UIActionButton>>(Enums.ComponentType.ACTION_BUTTONS);
@@ -121,10 +121,10 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
     }
 
     private createActionButtons(parentActionBarElemnt: HTMLElement) {
-        if (this.actionButtons === false) return;
+        if (this.items === false) return;
 
         const actionButtons = Array<UIActionButton>();
-        for (const item of this.actionButtons) {
+        for (const item of this.items) {
             const actionButton = new UIActionButton(this.app, this.window, item);
             const actionButtonElement = actionButton.present();
 

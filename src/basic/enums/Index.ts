@@ -51,5 +51,7 @@ export const enum ComponentType {
     TAB_BAR = "tab-bar",
     TOOL_BAR = "tool-bar",
     WINDOW = "window",
-    MORE_ACTION_CONTEXT_MENU_BAR = "more-action-context-menu-bar"
+    MORE_ACTION_CONTEXT_MENU_BAR = "more-action-context-menu-bar",
+    TOP_MENU_BAR = "top-menu-bar",
+    TOP_MENU_BUTTON = "top-menu-button"
 }

@@ -7,3 +7,4 @@ import "./context-menu-bar.css";
 import "./resize-bar.css";
 import "./action-bar.css";
 import "./title-bar.css";
+import "./top-menu-bar.css";
