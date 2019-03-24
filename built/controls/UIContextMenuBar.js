@@ -59,7 +59,7 @@ var UIContextMenuBar = (function (_super) {
             return;
         ElementHelper.removeClasses(this.element, this.app.prefix, "context-menu-bar-active");
     };
-    UIContextMenuBar.prototype.updateOffset = function (ev, zIndex) {
+    UIContextMenuBar.prototype.updateOffset = function (ev, zIndex, fixLeft, fixTop) {
         if (!this.isTopMenu)
             return;
         if (!this.element)
@@ -69,11 +69,21 @@ var UIContextMenuBar = (function (_super) {
         var computedStyle = getComputedStyle(this.element);
         var contextMenuWidth = Number(computedStyle.width.replace('px', '')), contextMenuHeight = this.contextMenuButtons.length * UIContextMenuButton_1.default.height, x = ev.pageX, y = ev.pageY;
         var left = x, top = y;
-        if (contextMenuWidth + x > innerWidth) {
-            left = x - contextMenuWidth;
+        if (fixLeft !== undefined) {
+            left = fixLeft;
         }
-        if (contextMenuHeight + y > innerHeight) {
-            top = y - contextMenuHeight;
+        else {
+            if (contextMenuWidth + x > innerWidth) {
+                left = x - contextMenuWidth;
+            }
+        }
+        if (fixTop !== undefined) {
+            top = fixTop;
+        }
+        else {
+            if (contextMenuHeight + y > innerHeight) {
+                top = y - contextMenuHeight;
+            }
         }
         ElementHelper.addClasses(this.element, this.app.prefix, "context-menu-bar-active");
         ElementHelper.addStyles(this.element, {

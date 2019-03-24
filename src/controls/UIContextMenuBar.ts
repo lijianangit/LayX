@@ -60,7 +60,7 @@ export default class UIContextMenuBar extends UIWindowComponent implements UICon
         );
     }
 
-    updateOffset(ev: MouseEvent, zIndex: number): void {
+    updateOffset(ev: MouseEvent, zIndex: number, fixLeft?: number, fixTop?: number): void {
         if (!this.isTopMenu) return;
         if (!this.element) return;
         if (this.contextMenuButtons === false || this.contextMenuButtons.length === 0) return;
@@ -73,11 +73,22 @@ export default class UIContextMenuBar extends UIWindowComponent implements UICon
             y = ev.pageY;
 
         let left = x, top = y;
-        if (contextMenuWidth + x > innerWidth) {
-            left = x - contextMenuWidth;
+        if (fixLeft !== undefined) {
+            left = fixLeft;
         }
-        if (contextMenuHeight + y > innerHeight) {
-            top = y - contextMenuHeight;
+        else {
+            if (contextMenuWidth + x > innerWidth) {
+                left = x - contextMenuWidth;
+            }
+        }
+
+        if (fixTop !== undefined) {
+            top = fixTop;
+        }
+        else {
+            if (contextMenuHeight + y > innerHeight) {
+                top = y - contextMenuHeight;
+            }
         }
 
         ElementHelper.addClasses(this.element, this.app.prefix,

@@ -99,6 +99,8 @@ var App = (function () {
                 var contextMenuBar = _this.window.getComponent("context-menu-bar");
                 contextMenuBar && contextMenuBar.hide();
                 _this.window.hideMoreActionContextMenu();
+                var topMenuBar = _this.window.getComponent("top-menu-bar");
+                topMenuBar && topMenuBar.prevTopMenuContextBar && topMenuBar.prevTopMenuContextBar.hide();
             }
         }, true);
     };

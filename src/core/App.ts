@@ -5,6 +5,7 @@ import * as Types from "../../types";
 import * as ExceptionHelper from "../utils/ExceptionHelper";
 import * as Enums from "../basic/enums";
 import * as TypeHelper from "../utils/TypeHelper";
+import UITopMenuBar from "../controls/UITopMenuBar";
 
 export default class App {
     public readonly version: string = "3.0.0";
@@ -96,6 +97,9 @@ export default class App {
                 contextMenuBar && contextMenuBar.hide();
 
                 this.window.hideMoreActionContextMenu();
+
+                const topMenuBar = this.window.getComponent<UITopMenuBar>(Enums.ComponentType.TOP_MENU_BAR)
+                topMenuBar && topMenuBar.prevTopMenuContextBar && topMenuBar.prevTopMenuContextBar.hide();
             }
         }, true);
     }
