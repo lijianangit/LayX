@@ -93,13 +93,13 @@ export default class UIContextMenuBar extends UIWindowComponent implements UICon
 
     updateChildrensOffset(ev: MouseEvent, childrenContextMenuBarElement: HTMLElement | null, index: number): void {
         if (this.isTopMenu) return;
-        if (!(childrenContextMenuBarElement && childrenContextMenuBarElement.parentElement && childrenContextMenuBarElement.parentElement.parentElement)) return;
+        if (!(childrenContextMenuBarElement
+            && childrenContextMenuBarElement.parentElement
+            && childrenContextMenuBarElement.parentElement.parentElement)) return;
 
         const parentContextMenuBarElement = childrenContextMenuBarElement.parentElement.parentElement;
         const parentComputedStyle = getComputedStyle(parentContextMenuBarElement);
-        const
-            parentContextMenuWidth = Number(parentComputedStyle.width!.replace('px', '')),
-            parentContextMenuHeight = parentContextMenuBarElement.childElementCount * UIContextMenuButton.height,
+        const parentContextMenuWidth = Number(parentComputedStyle.width!.replace('px', '')),
             x = Number(parentComputedStyle.left!.replace('px', '')),
             y = Number(parentComputedStyle.top!.replace('px', ''));
 
@@ -108,19 +108,15 @@ export default class UIContextMenuBar extends UIWindowComponent implements UICon
             contextMenuHeight = childrenContextMenuBarElement.childElementCount * UIContextMenuButton.height,
             contextMenuTop = UIContextMenuButton.height * index;
 
-        let left = x, top = y;
+        let left = parentContextMenuWidth + x - UIContextMenuBar.offset,
+            top = y + contextMenuTop - UIContextMenuBar.offset;
 
         if (parentContextMenuWidth + x + contextMenuWidth > innerWidth) {
             left = x - contextMenuWidth + UIContextMenuBar.offset;
         }
-        else {
-            left = parentContextMenuWidth + x - UIContextMenuBar.offset;
-        }
+
         if (y + contextMenuTop + contextMenuHeight > innerHeight) {
             top = innerHeight - contextMenuHeight - UIContextMenuBar.offset;
-        }
-        else {
-            top = y + contextMenuTop - UIContextMenuBar.offset;
         }
 
         ElementHelper.addClasses(childrenContextMenuBarElement, this.app.prefix,
