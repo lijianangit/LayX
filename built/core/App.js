@@ -102,6 +102,7 @@ var App = (function () {
                 _this.window.hideMoreActionContextMenu();
                 var topMenuBar = _this.window.getComponent("top-menu-bar");
                 if (topMenuBar && topMenuBar.prevTopMenuContextBar && topMenuBar.prevTopMenuButtonElement) {
+                    topMenuBar.isActive = false;
                     topMenuBar.prevTopMenuContextBar.hide();
                     ElementHelper.removeClasses(topMenuBar.prevTopMenuButtonElement, _this.prefix, "top-menu-button" + "-active");
                 }

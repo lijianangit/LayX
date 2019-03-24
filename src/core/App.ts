@@ -101,6 +101,7 @@ export default class App {
 
                 const topMenuBar = this.window.getComponent<UITopMenuBar>(Enums.ComponentType.TOP_MENU_BAR)
                 if (topMenuBar && topMenuBar.prevTopMenuContextBar && topMenuBar.prevTopMenuButtonElement) {
+                    topMenuBar.isActive = false;
                     topMenuBar.prevTopMenuContextBar.hide();
 
                     ElementHelper.removeClasses(topMenuBar.prevTopMenuButtonElement, this.prefix,
