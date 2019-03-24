@@ -10,7 +10,7 @@ import * as Enums from "../basic/enums";
 import * as CastHelper from "../utils/CastHelper";
 
 export default class UIContextMenuButton extends UIWindowComponent implements UIControl {
-    public static readonly height: number = 34;
+    public static readonly height: number = 30;
 
     public id: string;
     public label: string;

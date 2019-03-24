@@ -6,7 +6,12 @@
 .layx-top-menu-button {
     float: left;
     padding: 0 8px;
+}
+
+.layx-top-menu-button-label {
+    display: inline-block;
     font-size: 13px;
+    color: #444444;
 }
 
 .layx-top-menu-button:hover {

@@ -76,7 +76,7 @@ var UIContextMenuButton = (function (_super) {
         fragment.appendChild(contextMenuButtonElement);
         return fragment;
     };
-    UIContextMenuButton.height = 34;
+    UIContextMenuButton.height = 30;
     return UIContextMenuButton;
 }(UIWindowComponent_1.default));
 exports.default = UIContextMenuButton;
