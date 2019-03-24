@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindow_1 = require("../controls/UIWindow");
 var ExceptionHelper = require("../utils/ExceptionHelper");
 var TypeHelper = require("../utils/TypeHelper");
+var ElementHelper = require("../utils/ElementHelper");
 var App = (function () {
     function App(layx) {
         this.layx = layx;
@@ -100,7 +101,10 @@ var App = (function () {
                 contextMenuBar && contextMenuBar.hide();
                 _this.window.hideMoreActionContextMenu();
                 var topMenuBar = _this.window.getComponent("top-menu-bar");
-                topMenuBar && topMenuBar.prevTopMenuContextBar && topMenuBar.prevTopMenuContextBar.hide();
+                if (topMenuBar && topMenuBar.prevTopMenuContextBar && topMenuBar.prevTopMenuButtonElement) {
+                    topMenuBar.prevTopMenuContextBar.hide();
+                    ElementHelper.removeClasses(topMenuBar.prevTopMenuButtonElement, _this.prefix, "top-menu-button" + "-active");
+                }
             }
         }, true);
     };
