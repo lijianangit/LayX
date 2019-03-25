@@ -89,7 +89,7 @@ var UIContextMenuBar = (function (_super) {
             left: left + "px",
         });
     };
-    UIContextMenuBar.prototype.updateChildrensOffset = function (ev, childrenContextMenuBarElement, index) {
+    UIContextMenuBar.prototype.updateChildrenOffset = function (ev, childrenContextMenuBarElement, index) {
         if (!(!this.isTopMenu
             && childrenContextMenuBarElement
             && childrenContextMenuBarElement.parentElement

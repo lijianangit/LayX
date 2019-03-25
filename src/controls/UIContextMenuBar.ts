@@ -101,7 +101,7 @@ export default class UIContextMenuBar extends UIWindowComponent implements UICon
         });
     }
 
-    updateChildrensOffset(ev: MouseEvent, childrenContextMenuBarElement: HTMLElement | null, index: number): void {
+    updateChildrenOffset(ev: MouseEvent, childrenContextMenuBarElement: HTMLElement | null, index: number): void {
         if (!(!this.isTopMenu
             && childrenContextMenuBarElement
             && childrenContextMenuBarElement.parentElement

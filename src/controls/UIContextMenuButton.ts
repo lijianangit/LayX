@@ -52,11 +52,13 @@ export default class UIContextMenuButton extends UIWindowComponent implements UI
         });
 
         const labelElement = ElementHelper.createElement("label");
+        labelElement.innerText = this.label;
+
         ElementHelper.addClasses(labelElement, this.app.prefix,
             `${Enums.ComponentType.CONTEXT_MENU_BUTTON}-label`,
             "flex-item"
         );
-        labelElement.innerText = this.label;
+        
         contextMenuButtonElement.appendChild(labelElement);
 
         if (this.items !== false) {
@@ -69,7 +71,7 @@ export default class UIContextMenuButton extends UIWindowComponent implements UI
             let waiting: number;
             contextMenuButtonElement.addEventListener("mouseenter", (ev: MouseEvent) => {
                 waiting = setTimeout(() => {
-                    contextMenuBar.updateChildrensOffset(ev, childContextMenuBarElement, this.index);
+                    contextMenuBar.updateChildrenOffset(ev, childContextMenuBarElement, this.index);
                 }, 200);
             });
 

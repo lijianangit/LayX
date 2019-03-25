@@ -47,8 +47,8 @@ var UIContextMenuButton = (function (_super) {
             }
         });
         var labelElement = ElementHelper.createElement("label");
-        ElementHelper.addClasses(labelElement, this.app.prefix, "context-menu-button" + "-label", "flex-item");
         labelElement.innerText = this.label;
+        ElementHelper.addClasses(labelElement, this.app.prefix, "context-menu-button" + "-label", "flex-item");
         contextMenuButtonElement.appendChild(labelElement);
         if (this.items !== false) {
             var contextMenuBar_1 = new UIContextMenuBar_1.default(this.app, this.window, "" + this.id, this.items, false);
@@ -58,7 +58,7 @@ var UIContextMenuButton = (function (_super) {
             var waiting_1;
             contextMenuButtonElement.addEventListener("mouseenter", function (ev) {
                 waiting_1 = setTimeout(function () {
-                    contextMenuBar_1.updateChildrensOffset(ev, childContextMenuBarElement_1, _this.index);
+                    contextMenuBar_1.updateChildrenOffset(ev, childContextMenuBarElement_1, _this.index);
                 }, 200);
             });
             contextMenuButtonElement.addEventListener("mouseleave", function (ev) {

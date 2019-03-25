@@ -57,4 +57,5 @@ var ComponentType;
     ComponentType["MORE_ACTION_CONTEXT_MENU_BAR"] = "more-action-context-menu-bar";
     ComponentType["TOP_MENU_BAR"] = "top-menu-bar";
     ComponentType["TOP_MENU_BUTTON"] = "top-menu-button";
+    ComponentType["TOP_MENU_BUTTONS"] = "top-menu-buttons";
 })(ComponentType = exports.ComponentType || (exports.ComponentType = {}));
