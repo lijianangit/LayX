@@ -13,3 +13,7 @@ export function assertNumber(x: any): never {
 export function assertNever(x: any): never {
     throw new Error("Unexpected object: " + <never>x);
 }
+
+export function assertUnique(x: any): never {
+    throw new Error("The element contains '" + <never>x + "' is exists.");
+}

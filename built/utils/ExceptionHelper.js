@@ -16,3 +16,7 @@ function assertNever(x) {
     throw new Error("Unexpected object: " + x);
 }
 exports.assertNever = assertNever;
+function assertUnique(x) {
+    throw new Error("The element contains '" + x + "' is exists.");
+}
+exports.assertUnique = assertUnique;
