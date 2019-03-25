@@ -60,7 +60,7 @@ export default class UIContextMenuButton extends UIWindowComponent implements UI
         contextMenuButtonElement.appendChild(labelElement);
 
         if (this.items !== false) {
-            const contextMenuBar = new UIContextMenuBar(this.app, this.window, this.id, this.items, false);
+            const contextMenuBar = new UIContextMenuBar(this.app, this.window, `${this.id}`, this.items, false);
             const contextMenuBarElement = contextMenuBar.present();
             contextMenuButtonElement.appendChild(contextMenuBarElement);
 

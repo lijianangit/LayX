@@ -51,7 +51,7 @@ var UIContextMenuButton = (function (_super) {
         labelElement.innerText = this.label;
         contextMenuButtonElement.appendChild(labelElement);
         if (this.items !== false) {
-            var contextMenuBar_1 = new UIContextMenuBar_1.default(this.app, this.window, this.id, this.items, false);
+            var contextMenuBar_1 = new UIContextMenuBar_1.default(this.app, this.window, "" + this.id, this.items, false);
             var contextMenuBarElement = contextMenuBar_1.present();
             contextMenuButtonElement.appendChild(contextMenuBarElement);
             var childContextMenuBarElement_1 = labelElement.nextElementSibling;
