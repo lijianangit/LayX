@@ -21,8 +21,8 @@ var UITopMenuBar = (function (_super) {
     __extends(UITopMenuBar, _super);
     function UITopMenuBar(app, window, contextMenuItems) {
         var _this = _super.call(this, app, window) || this;
-        _this.isActive = false;
         _this.elementId = _this.window.elementId + "-" + "top-menu-bar";
+        _this.isActive = false;
         _this.prevTopMenuButtonElement = null;
         _this.prevTopMenuContextBar = null;
         _this.contextMenuButtons = false;

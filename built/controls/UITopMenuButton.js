@@ -50,7 +50,9 @@ var UITopMenuButton = (function (_super) {
         var _this = this;
         element.addEventListener("mousedown", function (ev) {
             _this.topMenuBar.isActive = !_this.topMenuBar.isActive;
-            if (_this.topMenuBar.prevTopMenuContextBar && _this.topMenuBar.prevTopMenuButtonElement) {
+            if (_this.topMenuBar.prevTopMenuContextBar
+                && _this.topMenuBar.prevTopMenuButtonElement
+                && element !== _this.topMenuBar.prevTopMenuButtonElement) {
                 _this.topMenuBar.prevTopMenuContextBar.hide();
                 ElementHelper.removeClasses(_this.topMenuBar.prevTopMenuButtonElement, _this.app.prefix, "top-menu-button" + "-active");
             }

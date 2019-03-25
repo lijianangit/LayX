@@ -11,8 +11,9 @@ import * as CastHelper from "../utils/CastHelper";
 import * as Enums from "../basic/enums";
 
 export default class UITopMenuBar extends UIWindowComponent implements UIControl {
-    public isActive: boolean = false;
     public readonly elementId: string = `${this.window.elementId}-${Enums.ComponentType.TOP_MENU_BAR}`;
+
+    public isActive: boolean = false;
     public prevTopMenuButtonElement: HTMLElement | null = null;
     public prevTopMenuContextBar: UIContextMenuBar | null = null;
 

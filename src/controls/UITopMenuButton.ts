@@ -15,7 +15,7 @@ export default class UITopMenuButton extends UIWindowComponent implements UICont
     public handler?: (ev: MouseEvent, window: UIWindow) => void;
     public items: Array<Types.ContextMenuButtonOption> | false;
 
-    constructor(app: App, window: UIWindow, private readonly topMenuBar: UITopMenuBar, options: Types.ContextMenuButtonOption) {
+    constructor(app: App, window: UIWindow, public readonly topMenuBar: UITopMenuBar, options: Types.ContextMenuButtonOption) {
         super(app, window);
 
         this.id = CastHelper.stringCast(options.id);
@@ -61,7 +61,9 @@ export default class UITopMenuButton extends UIWindowComponent implements UICont
         element.addEventListener("mousedown", (ev: MouseEvent) => {
             this.topMenuBar.isActive = !this.topMenuBar.isActive;
 
-            if (this.topMenuBar.prevTopMenuContextBar && this.topMenuBar.prevTopMenuButtonElement) {
+            if (this.topMenuBar.prevTopMenuContextBar
+                && this.topMenuBar.prevTopMenuButtonElement
+                && element !== this.topMenuBar.prevTopMenuButtonElement) {
                 this.topMenuBar.prevTopMenuContextBar.hide();
 
                 ElementHelper.removeClasses(this.topMenuBar.prevTopMenuButtonElement, this.app.prefix,
@@ -72,6 +74,7 @@ export default class UITopMenuButton extends UIWindowComponent implements UICont
             const contextMenuBar = this.getComponent<UIContextMenuBar>(Enums.ComponentType.CONTEXT_MENU_BAR);
             if (contextMenuBar && contextMenuBar.element) {
                 this.topMenuBar.prevTopMenuButtonElement = element;
+
                 if (this.topMenuBar.isActive) {
                     const clientRect = element.getBoundingClientRect();
                     contextMenuBar.updateOffset(ev, this.window.zIndex + 1, clientRect.left, clientRect.top + 25);
