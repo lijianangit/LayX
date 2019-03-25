@@ -59,53 +59,53 @@ export default class UITopMenuButton extends UIWindowComponent implements UICont
 
     private bindEvent(element: HTMLElement): void {
         element.addEventListener("mousedown", (ev: MouseEvent) => {
-            this.topMenuBar.isActive = !this.topMenuBar.isActive;
+            this.topMenuBar.isActive = this.topMenuBar.currentTopMenuButtonElement === element ? (!this.topMenuBar.isActive) : true;
 
-            if (this.topMenuBar.prevTopMenuContextBar
-                && this.topMenuBar.prevTopMenuButtonElement
-                && element !== this.topMenuBar.prevTopMenuButtonElement) {
-                this.topMenuBar.prevTopMenuContextBar.hide();
-
-                ElementHelper.removeClasses(this.topMenuBar.prevTopMenuButtonElement, this.app.prefix,
+            if (this.topMenuBar.currentTopMenuButtonElement) {
+                ElementHelper.removeClasses(this.topMenuBar.currentTopMenuButtonElement, this.app.prefix,
                     Enums.ComponentType.TOP_MENU_BUTTON + "-active"
                 );
             }
 
-            const contextMenuBar = this.getComponent<UIContextMenuBar>(Enums.ComponentType.CONTEXT_MENU_BAR);
-            if (contextMenuBar && contextMenuBar.element) {
-                this.topMenuBar.prevTopMenuButtonElement = element;
+            if (this.topMenuBar.currentTopMenuContextBar) {
+                this.topMenuBar.currentTopMenuContextBar.hide();
+            }
 
-                if (this.topMenuBar.isActive) {
+            const contextMenuBar = this.getComponent<UIContextMenuBar>(Enums.ComponentType.CONTEXT_MENU_BAR);
+            if (this.topMenuBar.isActive) {
+                ElementHelper.addClasses(element, this.app.prefix,
+                    Enums.ComponentType.TOP_MENU_BUTTON + "-active"
+                );
+
+                if (contextMenuBar && contextMenuBar.element) {
                     const clientRect = element.getBoundingClientRect();
                     contextMenuBar.updateOffset(ev, this.window.zIndex + 1, clientRect.left, clientRect.top + 25);
-
-                    ElementHelper.addClasses(element, this.app.prefix,
-                        Enums.ComponentType.TOP_MENU_BUTTON + "-active"
-                    );
-
-                    this.topMenuBar.prevTopMenuContextBar = contextMenuBar;
-                }
-                else {
-                    contextMenuBar.hide();
-
-                    ElementHelper.removeClasses(element, this.app.prefix,
-                        Enums.ComponentType.TOP_MENU_BUTTON + "-active"
-                    );
                 }
             }
+            else {
+                ElementHelper.removeClasses(element, this.app.prefix,
+                    Enums.ComponentType.TOP_MENU_BUTTON + "-active"
+                );
+
+                if (contextMenuBar) {
+                    contextMenuBar.hide();
+                }
+            }
+
+            this.topMenuBar.currentTopMenuContextBar = contextMenuBar;
+            this.topMenuBar.currentTopMenuButtonElement = element;
         });
 
         element.addEventListener("mouseenter", (ev) => {
             if (this.topMenuBar.isActive) {
-                if (this.topMenuBar.prevTopMenuContextBar
-                    && this.topMenuBar.prevTopMenuButtonElement
-                    && element !== this.topMenuBar.prevTopMenuButtonElement) {
-
-                    this.topMenuBar.prevTopMenuContextBar.hide();
-
-                    ElementHelper.removeClasses(this.topMenuBar.prevTopMenuButtonElement, this.app.prefix,
+                if (this.topMenuBar.currentTopMenuButtonElement) {
+                    ElementHelper.removeClasses(this.topMenuBar.currentTopMenuButtonElement, this.app.prefix,
                         Enums.ComponentType.TOP_MENU_BUTTON + "-active"
                     );
+                }
+
+                if (this.topMenuBar.currentTopMenuContextBar) {
+                    this.topMenuBar.currentTopMenuContextBar.hide();
                 }
 
                 ElementHelper.addClasses(element, this.app.prefix,
@@ -116,11 +116,10 @@ export default class UITopMenuButton extends UIWindowComponent implements UICont
                 if (contextMenuBar && contextMenuBar.element) {
                     const clientRect = element.getBoundingClientRect();
                     contextMenuBar.updateOffset(ev, this.window.zIndex + 1, clientRect.left, clientRect.top + 25);
-
-                    this.topMenuBar.prevTopMenuContextBar = contextMenuBar;
                 }
 
-                this.topMenuBar.prevTopMenuButtonElement = element;
+                this.topMenuBar.currentTopMenuContextBar = contextMenuBar;
+                this.topMenuBar.currentTopMenuButtonElement = element;
             }
         });
     }

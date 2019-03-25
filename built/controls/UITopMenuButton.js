@@ -49,44 +49,46 @@ var UITopMenuButton = (function (_super) {
     UITopMenuButton.prototype.bindEvent = function (element) {
         var _this = this;
         element.addEventListener("mousedown", function (ev) {
-            _this.topMenuBar.isActive = !_this.topMenuBar.isActive;
-            if (_this.topMenuBar.prevTopMenuContextBar
-                && _this.topMenuBar.prevTopMenuButtonElement
-                && element !== _this.topMenuBar.prevTopMenuButtonElement) {
-                _this.topMenuBar.prevTopMenuContextBar.hide();
-                ElementHelper.removeClasses(_this.topMenuBar.prevTopMenuButtonElement, _this.app.prefix, "top-menu-button" + "-active");
+            _this.topMenuBar.isActive = _this.topMenuBar.currentTopMenuButtonElement === element ? (!_this.topMenuBar.isActive) : true;
+            if (_this.topMenuBar.currentTopMenuButtonElement) {
+                ElementHelper.removeClasses(_this.topMenuBar.currentTopMenuButtonElement, _this.app.prefix, "top-menu-button" + "-active");
+            }
+            if (_this.topMenuBar.currentTopMenuContextBar) {
+                _this.topMenuBar.currentTopMenuContextBar.hide();
             }
             var contextMenuBar = _this.getComponent("context-menu-bar");
-            if (contextMenuBar && contextMenuBar.element) {
-                _this.topMenuBar.prevTopMenuButtonElement = element;
-                if (_this.topMenuBar.isActive) {
+            if (_this.topMenuBar.isActive) {
+                ElementHelper.addClasses(element, _this.app.prefix, "top-menu-button" + "-active");
+                if (contextMenuBar && contextMenuBar.element) {
                     var clientRect = element.getBoundingClientRect();
                     contextMenuBar.updateOffset(ev, _this.window.zIndex + 1, clientRect.left, clientRect.top + 25);
-                    ElementHelper.addClasses(element, _this.app.prefix, "top-menu-button" + "-active");
-                    _this.topMenuBar.prevTopMenuContextBar = contextMenuBar;
-                }
-                else {
-                    contextMenuBar.hide();
-                    ElementHelper.removeClasses(element, _this.app.prefix, "top-menu-button" + "-active");
                 }
             }
+            else {
+                ElementHelper.removeClasses(element, _this.app.prefix, "top-menu-button" + "-active");
+                if (contextMenuBar) {
+                    contextMenuBar.hide();
+                }
+            }
+            _this.topMenuBar.currentTopMenuContextBar = contextMenuBar;
+            _this.topMenuBar.currentTopMenuButtonElement = element;
         });
         element.addEventListener("mouseenter", function (ev) {
             if (_this.topMenuBar.isActive) {
-                if (_this.topMenuBar.prevTopMenuContextBar
-                    && _this.topMenuBar.prevTopMenuButtonElement
-                    && element !== _this.topMenuBar.prevTopMenuButtonElement) {
-                    _this.topMenuBar.prevTopMenuContextBar.hide();
-                    ElementHelper.removeClasses(_this.topMenuBar.prevTopMenuButtonElement, _this.app.prefix, "top-menu-button" + "-active");
+                if (_this.topMenuBar.currentTopMenuButtonElement) {
+                    ElementHelper.removeClasses(_this.topMenuBar.currentTopMenuButtonElement, _this.app.prefix, "top-menu-button" + "-active");
+                }
+                if (_this.topMenuBar.currentTopMenuContextBar) {
+                    _this.topMenuBar.currentTopMenuContextBar.hide();
                 }
                 ElementHelper.addClasses(element, _this.app.prefix, "top-menu-button" + "-active");
                 var contextMenuBar = _this.getComponent("context-menu-bar");
                 if (contextMenuBar && contextMenuBar.element) {
                     var clientRect = element.getBoundingClientRect();
                     contextMenuBar.updateOffset(ev, _this.window.zIndex + 1, clientRect.left, clientRect.top + 25);
-                    _this.topMenuBar.prevTopMenuContextBar = contextMenuBar;
                 }
-                _this.topMenuBar.prevTopMenuButtonElement = element;
+                _this.topMenuBar.currentTopMenuContextBar = contextMenuBar;
+                _this.topMenuBar.currentTopMenuButtonElement = element;
             }
         });
     };

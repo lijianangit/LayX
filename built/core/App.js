@@ -101,10 +101,13 @@ var App = (function () {
                 contextMenuBar && contextMenuBar.hide();
                 _this.window.hideMoreActionContextMenu();
                 var topMenuBar = _this.window.getComponent("top-menu-bar");
-                if (topMenuBar && topMenuBar.prevTopMenuContextBar && topMenuBar.prevTopMenuButtonElement) {
-                    topMenuBar.isActive = false;
-                    topMenuBar.prevTopMenuContextBar.hide();
-                    ElementHelper.removeClasses(topMenuBar.prevTopMenuButtonElement, _this.prefix, "top-menu-button" + "-active");
+                if (topMenuBar) {
+                    if (topMenuBar.currentTopMenuButtonElement) {
+                        ElementHelper.removeClasses(topMenuBar.currentTopMenuButtonElement, _this.prefix, "top-menu-button" + "-active");
+                    }
+                    if (topMenuBar.currentTopMenuContextBar) {
+                        topMenuBar.currentTopMenuContextBar.hide();
+                    }
                 }
             }
         }, true);

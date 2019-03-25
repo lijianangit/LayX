@@ -14,8 +14,8 @@ export default class UITopMenuBar extends UIWindowComponent implements UIControl
     public readonly elementId: string = `${this.window.elementId}-${Enums.ComponentType.TOP_MENU_BAR}`;
 
     public isActive: boolean = false;
-    public prevTopMenuButtonElement: HTMLElement | null = null;
-    public prevTopMenuContextBar: UIContextMenuBar | null = null;
+    public currentTopMenuContextBar: UIContextMenuBar | null = null;
+    public currentTopMenuButtonElement: HTMLElement | null = null;
 
     public readonly contextMenuButtons: Array<Types.ContextMenuButtonOption> | false = false;
 
