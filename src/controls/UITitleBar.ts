@@ -8,6 +8,7 @@ import * as Types from "../../types";
 import * as CastHelper from "../utils/CastHelper";
 import * as Enums from "../basic/enums";
 import UIContextMenuBar from "./UIContextMenuBar";
+import UIToolBar from "./UIToolBar";
 
 export default class UITitleBar extends UIWindowComponent implements UIControl {
     public readonly elementId: string = `${this.window.elementId}-${Enums.ComponentType.TITLE_BAR}`;
@@ -48,47 +49,8 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
                 "flex-center"
             );
 
-            const contextMenuBar = new UIContextMenuBar(this.app, this.window, "window-icon", [
-                {
-                    id: "info",
-                    label: "关于",
-                    handler: function (ev: MouseEvent, window: UIWindow) {
-                    }
-                },
-                {
-                    id: "min",
-                    label: "最小化",
-                    handler: function (ev: MouseEvent, window: UIWindow) {
-                    }
-                },
-                {
-                    id: "max",
-                    label: "最大化",
-                    handler: function (ev: MouseEvent, window: UIWindow) {
-                        window.max();
-                    }
-                },
-                {
-                    id: "destroy",
-                    label: "关闭",
-                    handler: function (ev: MouseEvent, window: UIWindow) {
-                        window.destroy();
-                    }
-                }
-            ]);
-
-            const contextMenuBarElement = contextMenuBar.present();
-            document.body.appendChild(contextMenuBarElement);
-
-            this.setComponent(Enums.ComponentType.WINDOW_ICON_CONTEXT_MENU_BAR, contextMenuBar);
-
-            windowIconElement.addEventListener("mousedown", (ev: MouseEvent) => {
-                contextMenuBar.updateOffset(ev, this.window.zIndex + 1);
-            });
-
             windowIconElement.addEventListener("dblclick", (ev: MouseEvent) => {
                 ev.stopPropagation();
-
                 this.window.destroy();
             });
 
