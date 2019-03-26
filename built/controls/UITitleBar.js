@@ -17,6 +17,7 @@ var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var UIIcon_1 = require("./UIIcon");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
+var UIContextMenuBar_1 = require("./UIContextMenuBar");
 var UITitleBar = (function (_super) {
     __extends(UITitleBar, _super);
     function UITitleBar(app, window, options) {
@@ -44,6 +45,40 @@ var UITitleBar = (function (_super) {
         if (this.icon) {
             var windowIconElement = ElementHelper.createElement("div");
             ElementHelper.addClasses(windowIconElement, this.app.prefix, "window-icon", "flexbox", "flex-center");
+            var contextMenuBar_1 = new UIContextMenuBar_1.default(this.app, this.window, "window-icon", [
+                {
+                    id: "info",
+                    label: "关于",
+                    handler: function (ev, window) {
+                    }
+                },
+                {
+                    id: "min",
+                    label: "最小化",
+                    handler: function (ev, window) {
+                    }
+                },
+                {
+                    id: "max",
+                    label: "最大化",
+                    handler: function (ev, window) {
+                        window.max();
+                    }
+                },
+                {
+                    id: "destroy",
+                    label: "关闭",
+                    handler: function (ev, window) {
+                        window.destroy();
+                    }
+                }
+            ]);
+            var contextMenuBarElement = contextMenuBar_1.present();
+            document.body.appendChild(contextMenuBarElement);
+            this.setComponent("window-icon-context-menu-bar", contextMenuBar_1);
+            windowIconElement.addEventListener("mousedown", function (ev) {
+                contextMenuBar_1.updateOffset(ev, _this.window.zIndex + 1);
+            });
             windowIconElement.addEventListener("dblclick", function (ev) {
                 ev.stopPropagation();
                 _this.window.destroy();

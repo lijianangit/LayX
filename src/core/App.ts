@@ -101,6 +101,9 @@ export default class App {
 
                 const topMenuBar = this.window.getComponent<UITopMenuBar>(Enums.ComponentType.TOP_MENU_BAR)
                 topMenuBar && topMenuBar.hide();
+
+                const windowIconContextMenuBar = this.window.getComponent<UIContextMenuBar>(`${Enums.ComponentType.TOOL_BAR}->${Enums.ComponentType.TITLE_BAR}->${Enums.ComponentType.WINDOW_ICON_CONTEXT_MENU_BAR}`);
+                windowIconContextMenuBar && windowIconContextMenuBar.hide();
             }
         }, true);
     }
