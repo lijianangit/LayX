@@ -59,8 +59,6 @@ export default class UITopMenuButton extends UIWindowComponent implements UICont
 
     private bindEvent(element: HTMLElement): void {
         element.addEventListener("mousedown", (ev: MouseEvent) => {
-            this.topMenuBar.isActive = this.topMenuBar.currentTopMenuButtonElement === element ? (!this.topMenuBar.isActive) : true;
-
             if (this.topMenuBar.currentTopMenuButtonElement) {
                 ElementHelper.removeClasses(this.topMenuBar.currentTopMenuButtonElement, this.app.prefix,
                     Enums.ComponentType.TOP_MENU_BUTTON + "-active"

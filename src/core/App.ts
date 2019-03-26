@@ -100,20 +100,7 @@ export default class App {
                 this.window.hideMoreActionContextMenu();
 
                 const topMenuBar = this.window.getComponent<UITopMenuBar>(Enums.ComponentType.TOP_MENU_BAR)
-                if (topMenuBar) {
-                    if (topMenuBar.currentTopMenuButtonElement) {
-                        ElementHelper.removeClasses(topMenuBar.currentTopMenuButtonElement, this.prefix,
-                            Enums.ComponentType.TOP_MENU_BUTTON + "-active"
-                        );
-                    }
-                    if (topMenuBar.currentTopMenuContextBar) {
-                        topMenuBar.currentTopMenuContextBar.hide();
-                    }
-
-                    // topMenuBar.isActive = false;
-                    // topMenuBar.currentTopMenuButtonElement = null;
-                    // topMenuBar.currentTopMenuContextBar = null;
-                }
+                topMenuBar && topMenuBar.hide();
             }
         }, true);
     }

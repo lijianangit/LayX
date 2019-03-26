@@ -55,6 +55,21 @@ export default class UITopMenuBar extends UIWindowComponent implements UIControl
         return fragment;
     }
 
+    hide(): void {
+        if (this.currentTopMenuButtonElement) {
+            ElementHelper.removeClasses(this.currentTopMenuButtonElement, this.app.prefix,
+                Enums.ComponentType.TOP_MENU_BUTTON + "-active"
+            );
+        }
+        if (this.currentTopMenuContextBar) {
+            this.currentTopMenuContextBar.hide();
+        }
+
+        this.isActive = !this.isActive;
+        this.currentTopMenuContextBar = null;
+        this.currentTopMenuButtonElement = null;
+    }
+
     private createTopMenuButtons(parentTopMenuBarElement: HTMLElement): void {
         if (this.contextMenuButtons === false) return;
 

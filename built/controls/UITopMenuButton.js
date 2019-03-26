@@ -49,7 +49,6 @@ var UITopMenuButton = (function (_super) {
     UITopMenuButton.prototype.bindEvent = function (element) {
         var _this = this;
         element.addEventListener("mousedown", function (ev) {
-            _this.topMenuBar.isActive = _this.topMenuBar.currentTopMenuButtonElement === element ? (!_this.topMenuBar.isActive) : true;
             if (_this.topMenuBar.currentTopMenuButtonElement) {
                 ElementHelper.removeClasses(_this.topMenuBar.currentTopMenuButtonElement, _this.app.prefix, "top-menu-button" + "-active");
             }

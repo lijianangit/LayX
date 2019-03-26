@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindow_1 = require("../controls/UIWindow");
 var ExceptionHelper = require("../utils/ExceptionHelper");
 var TypeHelper = require("../utils/TypeHelper");
-var ElementHelper = require("../utils/ElementHelper");
 var App = (function () {
     function App(layx) {
         this.layx = layx;
@@ -101,14 +100,7 @@ var App = (function () {
                 contextMenuBar && contextMenuBar.hide();
                 _this.window.hideMoreActionContextMenu();
                 var topMenuBar = _this.window.getComponent("top-menu-bar");
-                if (topMenuBar) {
-                    if (topMenuBar.currentTopMenuButtonElement) {
-                        ElementHelper.removeClasses(topMenuBar.currentTopMenuButtonElement, _this.prefix, "top-menu-button" + "-active");
-                    }
-                    if (topMenuBar.currentTopMenuContextBar) {
-                        topMenuBar.currentTopMenuContextBar.hide();
-                    }
-                }
+                topMenuBar && topMenuBar.hide();
             }
         }, true);
     };
