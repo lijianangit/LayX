@@ -60,14 +60,11 @@ export default class UITopMenuBar extends UIWindowComponent implements UIControl
                 Enums.ComponentType.TOP_MENU_BUTTON + "-active"
             );
         }
-        if (this.currentTopMenuContextBar) {
-            this.currentTopMenuContextBar.hide();
-        }
+        if (this.currentTopMenuContextBar) this.currentTopMenuContextBar.hide();
 
-        if ((<HTMLElement>ev.target).className.indexOf(`${this.app.prefix + Enums.ComponentType.TOP_MENU_BUTTON}`) > -1) {
-            this.isActive = !this.isActive;
-        }
-        else this.isActive = false;
+        this.isActive = (<HTMLElement>ev.target).className.indexOf(`${this.app.prefix + Enums.ComponentType.TOP_MENU_BUTTON}`) > -1
+            ? !this.isActive
+            : false;
 
         this.currentTopMenuContextBar = null;
         this.currentTopMenuButtonElement = null;
