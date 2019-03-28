@@ -1,4 +1,4 @@
-# [V2.x 官网地址](https://gitee.com/monksoul/LayX）
+# [V2.x 官网地址](https://gitee.com/monksoul/LayX)
 
 ------
 
