@@ -54,14 +54,18 @@ var UITopMenuBar = (function (_super) {
         }
         return fragment;
     };
-    UITopMenuBar.prototype.hide = function () {
+    UITopMenuBar.prototype.hide = function (ev) {
         if (this.currentTopMenuButtonElement) {
             ElementHelper.removeClasses(this.currentTopMenuButtonElement, this.app.prefix, "top-menu-button" + "-active");
         }
         if (this.currentTopMenuContextBar) {
             this.currentTopMenuContextBar.hide();
         }
-        this.isActive = !this.isActive;
+        if (ev.target.className.indexOf("" + (this.app.prefix + "top-menu-button")) > -1) {
+            this.isActive = !this.isActive;
+        }
+        else
+            this.isActive = false;
         this.currentTopMenuContextBar = null;
         this.currentTopMenuButtonElement = null;
     };

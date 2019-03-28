@@ -3,7 +3,6 @@ import UIControl from "../basic/interfaces/UIControl";
 import App from "../core/App";
 import UIWindow from "./UIWindow";
 import UIContextMenuBar from "./UIContextMenuBar";
-import UIContextMenuButton from "./UIContextMenuButton";
 import UITopMenuButton from "./UITopMenuButton";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as Types from "../../types";
@@ -55,7 +54,7 @@ export default class UITopMenuBar extends UIWindowComponent implements UIControl
         return fragment;
     }
 
-    hide(): void {
+    hide(ev: MouseEvent): void {
         if (this.currentTopMenuButtonElement) {
             ElementHelper.removeClasses(this.currentTopMenuButtonElement, this.app.prefix,
                 Enums.ComponentType.TOP_MENU_BUTTON + "-active"
@@ -65,7 +64,11 @@ export default class UITopMenuBar extends UIWindowComponent implements UIControl
             this.currentTopMenuContextBar.hide();
         }
 
-        this.isActive = !this.isActive;
+        if ((<HTMLElement>ev.target).className.indexOf(`${this.app.prefix + Enums.ComponentType.TOP_MENU_BUTTON}`) > -1) {
+            this.isActive = !this.isActive;
+        }
+        else this.isActive = false;
+
         this.currentTopMenuContextBar = null;
         this.currentTopMenuButtonElement = null;
     }

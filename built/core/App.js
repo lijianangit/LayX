@@ -100,7 +100,7 @@ var App = (function () {
                 contextMenuBar && contextMenuBar.hide();
                 _this.window.hideMoreActionContextMenu();
                 var topMenuBar = _this.window.getComponent("top-menu-bar");
-                topMenuBar && topMenuBar.hide();
+                topMenuBar && topMenuBar.hide(ev);
                 var windowIconContextMenuBar = _this.window.getComponent("tool-bar" + "->" + "title-bar" + "->" + "window-icon-context-menu-bar");
                 windowIconContextMenuBar && windowIconContextMenuBar.hide();
             }
