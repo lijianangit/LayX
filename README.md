@@ -1,7 +1,3 @@
-# [V2.x 官网地址](https://gitee.com/monksoul/LayX）
-
-------
-
 # Layx v3.x 版本开发中，[v3.x 预览地址](https://monksoul.gitee.io/layx/)
 
 # [v3.x 进度](https://gitee.com/monksoul/LayX/issues/IRK3V)
