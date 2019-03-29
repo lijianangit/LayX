@@ -6,7 +6,6 @@ import * as Types from "../../types";
 import * as ExceptionHelper from "../utils/ExceptionHelper";
 import * as Enums from "../basic/enums";
 import * as TypeHelper from "../utils/TypeHelper";
-import * as ElementHelper from "../utils/ElementHelper";
 
 export default class App {
     public readonly version: string = "3.0.0";
@@ -18,6 +17,14 @@ export default class App {
     }
     set window(value: UIWindow | null) {
         this.layx.window = this._window = value;
+    }
+
+    private _lastWindow: UIWindow | null = null;
+    get lastWindow() {
+        return this._lastWindow;
+    }
+    set lastWindow(value: UIWindow | null) {
+        this.layx.lastWindow = this._lastWindow = value;
     }
 
     private _zIndex: number = 10000000;
@@ -49,6 +56,7 @@ export default class App {
             const windowPresent = uiWindow.present();
             document.body.appendChild(windowPresent);
 
+            this.lastWindow = this.window;
             this.window = uiWindow;
             this.windows.push(uiWindow);
         }
@@ -104,6 +112,11 @@ export default class App {
 
                 const windowIconContextMenuBar = this.window.getComponent<UIContextMenuBar>(`${Enums.ComponentType.TOOL_BAR}->${Enums.ComponentType.TITLE_BAR}->${Enums.ComponentType.WINDOW_ICON_CONTEXT_MENU_BAR}`);
                 windowIconContextMenuBar && windowIconContextMenuBar.hide();
+            }
+
+            if (this.lastWindow) {
+                const topMenuBar = this.lastWindow.getComponent<UITopMenuBar>(Enums.ComponentType.TOP_MENU_BAR);
+                topMenuBar && topMenuBar.hide(ev);
             }
         }, true);
     }

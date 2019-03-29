@@ -9,6 +9,7 @@ var App = (function () {
         this.version = "3.0.0";
         this.prefix = "layx-";
         this._window = null;
+        this._lastWindow = null;
         this._zIndex = 10000000;
         this._aboveZIndex = 20000000;
         this._windows = [];
@@ -20,6 +21,16 @@ var App = (function () {
         },
         set: function (value) {
             this.layx.window = this._window = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(App.prototype, "lastWindow", {
+        get: function () {
+            return this._lastWindow;
+        },
+        set: function (value) {
+            this.layx.lastWindow = this._lastWindow = value;
         },
         enumerable: true,
         configurable: true
@@ -54,6 +65,7 @@ var App = (function () {
             var uiWindow = new UIWindow_1.default(this, options);
             var windowPresent = uiWindow.present();
             document.body.appendChild(windowPresent);
+            this.lastWindow = this.window;
             this.window = uiWindow;
             this.windows.push(uiWindow);
         }
@@ -103,6 +115,10 @@ var App = (function () {
                 topMenuBar && topMenuBar.hide(ev);
                 var windowIconContextMenuBar = _this.window.getComponent("tool-bar" + "->" + "title-bar" + "->" + "window-icon-context-menu-bar");
                 windowIconContextMenuBar && windowIconContextMenuBar.hide();
+            }
+            if (_this.lastWindow) {
+                var topMenuBar = _this.lastWindow.getComponent("top-menu-bar");
+                topMenuBar && topMenuBar.hide(ev);
             }
         }, true);
     };

@@ -34,6 +34,7 @@ export default class UITopMenuBar extends UIWindowComponent implements UIControl
 
         if (this.contextMenuButtons !== false && this.contextMenuButtons.length > 0) {
             const topMenuBarElement = ElementHelper.createElement("div");
+            topMenuBarElement.setAttribute("data-window-id", this.window.id);
             topMenuBarElement.id = this.elementId;
 
             ElementHelper.addClasses(topMenuBarElement, this.app.prefix,
@@ -62,7 +63,8 @@ export default class UITopMenuBar extends UIWindowComponent implements UIControl
         }
         if (this.currentTopMenuContextBar) this.currentTopMenuContextBar.hide();
 
-        this.isActive = (<HTMLElement>ev.target).className.indexOf(`${this.app.prefix + Enums.ComponentType.TOP_MENU_BUTTON}`) > -1
+        const target = (<HTMLElement>ev.target);
+        this.isActive = target.className.indexOf(`${this.app.prefix + Enums.ComponentType.TOP_MENU_BUTTON}`) > -1 && target.getAttribute("data-window-id") === this.window.id
             ? !this.isActive
             : false;
 

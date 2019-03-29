@@ -33,6 +33,7 @@ var UITabBar = (function (_super) {
     UITabBar.prototype.present = function () {
         var fragment = ElementHelper.createFragment();
         var tabBarElement = ElementHelper.createElement("div");
+        tabBarElement.setAttribute("data-window-id", this.window.id);
         tabBarElement.id = this.elementId;
         ElementHelper.addClasses(tabBarElement, this.app.prefix, "tab-bar", "flexbox", "flex-item", "flex-row");
         fragment.appendChild(tabBarElement);

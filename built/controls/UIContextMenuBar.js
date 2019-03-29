@@ -41,6 +41,7 @@ var UIContextMenuBar = (function (_super) {
         var fragment = ElementHelper.createFragment();
         if (this.contextMenuButtons !== false && this.contextMenuButtons.length > 0) {
             var contextMenuBarElement = ElementHelper.createElement("div");
+            contextMenuBarElement.setAttribute("data-window-id", this.window.id);
             if (this.isTopMenu)
                 contextMenuBarElement.id = this.elementId;
             ElementHelper.addClasses(contextMenuBarElement, this.app.prefix, "context-menu-bar");

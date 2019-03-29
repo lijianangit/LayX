@@ -31,8 +31,10 @@ var UITopMenuButton = (function (_super) {
     UITopMenuButton.prototype.present = function () {
         var fragment = ElementHelper.createFragment();
         var topMenuButtonElement = ElementHelper.createElement("div");
+        topMenuButtonElement.setAttribute("data-window-id", this.window.id);
         ElementHelper.addClasses(topMenuButtonElement, this.app.prefix, "top-menu-button");
         var labelElement = ElementHelper.createElement("label");
+        labelElement.setAttribute("data-window-id", this.window.id);
         labelElement.innerText = this.label;
         ElementHelper.addClasses(labelElement, this.app.prefix, "top-menu-button" + "-label");
         topMenuButtonElement.appendChild(labelElement);

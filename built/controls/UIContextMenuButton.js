@@ -34,6 +34,7 @@ var UIContextMenuButton = (function (_super) {
         var _this = this;
         var fragment = ElementHelper.createFragment();
         var contextMenuButtonElement = ElementHelper.createElement("div");
+        contextMenuButtonElement.setAttribute("data-window-id", this.window.id);
         contextMenuButtonElement.setAttribute("data-index", "" + this.index);
         ElementHelper.addClasses(contextMenuButtonElement, this.app.prefix, "context-menu-button", "flexbox", "flex-row");
         ElementHelper.addStyles(contextMenuButtonElement, {
@@ -47,6 +48,7 @@ var UIContextMenuButton = (function (_super) {
             }
         });
         var labelElement = ElementHelper.createElement("label");
+        labelElement.setAttribute("data-window-id", this.window.id);
         labelElement.innerText = this.label;
         ElementHelper.addClasses(labelElement, this.app.prefix, "context-menu-button" + "-label", "flex-item");
         contextMenuButtonElement.appendChild(labelElement);
@@ -67,6 +69,7 @@ var UIContextMenuButton = (function (_super) {
             });
             this.setComponent("context-menu-bar", contextMenuBar_1);
             var rightIconElement = ElementHelper.createElement("div");
+            rightIconElement.setAttribute("data-window-id", this.window.id);
             ElementHelper.addClasses(rightIconElement, this.app.prefix, "context-menu-more", "flexbox", "flex-center");
             var icon = new UIIcon_1.default(this.app, this.window, "right");
             var iconElement = icon.present();

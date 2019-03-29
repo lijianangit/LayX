@@ -27,8 +27,10 @@ var UIIcon = (function (_super) {
     UIIcon.prototype.present = function () {
         var fragment = ElementHelper.createFragment();
         var iconElement = ElementHelper.createElementNS("svg");
+        iconElement.setAttribute("data-window-id", this.window.id);
         iconElement.setAttribute("class", this.className);
         var useElement = ElementHelper.createElementNS("use");
+        useElement.setAttribute("data-window-id", this.window.id);
         useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + this.name);
         iconElement.appendChild(useElement);
         fragment.appendChild(iconElement);

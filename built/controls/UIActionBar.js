@@ -46,6 +46,7 @@ var UIActionBar = (function (_super) {
         var fragment = ElementHelper.createFragment();
         if (this.enable === true) {
             var actionBarElement = ElementHelper.createElement("div");
+            actionBarElement.setAttribute("data-window-id", this.window.id);
             actionBarElement.id = this.elementId;
             ElementHelper.addClasses(actionBarElement, this.app.prefix, "action-bar", "flexbox", "flex-row");
             actionBarElement.addEventListener("mousedown", function (ev) {

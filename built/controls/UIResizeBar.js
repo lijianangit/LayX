@@ -63,6 +63,7 @@ var UIResizeBar = (function (_super) {
         var fragment = ElementHelper.createFragment();
         if (this.leastOneTrue()) {
             var resizeElement = ElementHelper.createElement("div");
+            resizeElement.setAttribute("data-window-id", this.window.id);
             resizeElement.id = this.elementId;
             ElementHelper.addClasses(resizeElement, this.app.prefix, "resize-bar");
             resizeElement.addEventListener("contextmenu", function (ev) {
@@ -83,6 +84,7 @@ var UIResizeBar = (function (_super) {
     };
     UIResizeBar.prototype.presentItem = function (key) {
         var itemElement = document.createElement("div");
+        itemElement.setAttribute("data-window-id", this.window.id);
         ElementHelper.addClasses(itemElement, this.app.prefix, "resize-item-" + key);
         new WindowResizeDragEvent_1.default(this.app, this.window, itemElement, key);
         return itemElement;

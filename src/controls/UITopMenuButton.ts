@@ -28,12 +28,14 @@ export default class UITopMenuButton extends UIWindowComponent implements UICont
         const fragment = ElementHelper.createFragment();
 
         const topMenuButtonElement = ElementHelper.createElement("div");
+        topMenuButtonElement.setAttribute("data-window-id", this.window.id);
 
         ElementHelper.addClasses(topMenuButtonElement, this.app.prefix,
             Enums.ComponentType.TOP_MENU_BUTTON
         );
 
         const labelElement = ElementHelper.createElement("label");
+        labelElement.setAttribute("data-window-id", this.window.id);
         labelElement.innerText = this.label;
 
         ElementHelper.addClasses(labelElement, this.app.prefix,

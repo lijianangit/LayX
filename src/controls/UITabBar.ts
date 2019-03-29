@@ -22,6 +22,7 @@ export default class UITabBar extends UIWindowComponent implements UIControl {
         const fragment = ElementHelper.createFragment();
 
         const tabBarElement = ElementHelper.createElement("div");
+        tabBarElement.setAttribute("data-window-id", this.window.id);
         tabBarElement.id = this.elementId;
 
         ElementHelper.addClasses(tabBarElement, this.app.prefix,

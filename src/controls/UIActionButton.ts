@@ -36,6 +36,7 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
         const fragment = ElementHelper.createFragment();
 
         const actionButtonElement = ElementHelper.createElement("div");
+        actionButtonElement.setAttribute("data-window-id", this.window.id);
         actionButtonElement.id = this.elementId;
         actionButtonElement.setAttribute("title", this.label);
 

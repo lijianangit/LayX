@@ -36,6 +36,7 @@ var UIParclose = (function (_super) {
     UIParclose.prototype.present = function () {
         var fragment = ElementHelper.createFragment();
         var parcloseElement = ElementHelper.createElement("div");
+        parcloseElement.setAttribute("data-window-id", this.window.id);
         parcloseElement.id = this.elementId;
         ElementHelper.addClasses(parcloseElement, this.app.prefix, "parclose");
         ElementHelper.addStyles(parcloseElement, {

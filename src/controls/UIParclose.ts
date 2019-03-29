@@ -27,6 +27,7 @@ export default class UIParclose extends UIWindowComponent implements UIControl {
         const fragment = ElementHelper.createFragment();
 
         const parcloseElement = ElementHelper.createElement("div");
+        parcloseElement.setAttribute("data-window-id", this.window.id);
         parcloseElement.id = this.elementId;
 
         ElementHelper.addClasses(parcloseElement, this.app.prefix,

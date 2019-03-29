@@ -41,6 +41,7 @@ var UITopMenuBar = (function (_super) {
         var fragment = ElementHelper.createFragment();
         if (this.contextMenuButtons !== false && this.contextMenuButtons.length > 0) {
             var topMenuBarElement = ElementHelper.createElement("div");
+            topMenuBarElement.setAttribute("data-window-id", this.window.id);
             topMenuBarElement.id = this.elementId;
             ElementHelper.addClasses(topMenuBarElement, this.app.prefix, "top-menu-bar");
             topMenuBarElement.addEventListener("contextmenu", function (ev) {
@@ -60,7 +61,8 @@ var UITopMenuBar = (function (_super) {
         }
         if (this.currentTopMenuContextBar)
             this.currentTopMenuContextBar.hide();
-        this.isActive = ev.target.className.indexOf("" + (this.app.prefix + "top-menu-button")) > -1
+        var target = ev.target;
+        this.isActive = target.className.indexOf("" + (this.app.prefix + "top-menu-button")) > -1 && target.getAttribute("data-window-id") === this.window.id
             ? !this.isActive
             : false;
         this.currentTopMenuContextBar = null;

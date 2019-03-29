@@ -30,6 +30,7 @@ export default class UIContextMenuButton extends UIWindowComponent implements UI
         const fragment = ElementHelper.createFragment();
 
         const contextMenuButtonElement = ElementHelper.createElement("div");
+        contextMenuButtonElement.setAttribute("data-window-id", this.window.id);
         contextMenuButtonElement.setAttribute("data-index", `${this.index}`);
 
         ElementHelper.addClasses(contextMenuButtonElement, this.app.prefix,
@@ -52,6 +53,7 @@ export default class UIContextMenuButton extends UIWindowComponent implements UI
         });
 
         const labelElement = ElementHelper.createElement("label");
+        labelElement.setAttribute("data-window-id", this.window.id);
         labelElement.innerText = this.label;
 
         ElementHelper.addClasses(labelElement, this.app.prefix,
@@ -83,6 +85,8 @@ export default class UIContextMenuButton extends UIWindowComponent implements UI
             this.setComponent(Enums.ComponentType.CONTEXT_MENU_BAR, contextMenuBar);
 
             const rightIconElement = ElementHelper.createElement("div");
+            rightIconElement.setAttribute("data-window-id", this.window.id);
+            
             ElementHelper.addClasses(rightIconElement, this.app.prefix,
                 "context-menu-more",
                 "flexbox",

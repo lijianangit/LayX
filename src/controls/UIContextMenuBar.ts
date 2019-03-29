@@ -34,6 +34,7 @@ export default class UIContextMenuBar extends UIWindowComponent implements UICon
 
         if (this.contextMenuButtons !== false && this.contextMenuButtons.length > 0) {
             const contextMenuBarElement = ElementHelper.createElement("div");
+            contextMenuBarElement.setAttribute("data-window-id", this.window.id);
             if (this.isTopMenu) contextMenuBarElement.id = this.elementId;
 
             ElementHelper.addClasses(contextMenuBarElement, this.app.prefix,

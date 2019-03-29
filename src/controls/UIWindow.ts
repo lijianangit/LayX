@@ -100,6 +100,7 @@ export default class UIWindow extends UIComponent implements UIControl {
 
         const windowElement = ElementHelper.createElement("div");
         windowElement.id = this.elementId;
+        windowElement.setAttribute("data-window-id", this.id);
 
         ElementHelper.addClasses(windowElement, this.app.prefix,
             Enums.ComponentType.WINDOW,
@@ -383,6 +384,7 @@ export default class UIWindow extends UIComponent implements UIControl {
             const parclose = this.getComponent<UIParclose>(Enums.ComponentType.PARCLOSE);
             parclose && parclose.updateZIndex(this.zIndex - 1);
 
+            this.app.lastWindow = this.app.window;
             this.app.window = this;
         }
     }

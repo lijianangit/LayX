@@ -39,6 +39,7 @@ var UIActionButton = (function (_super) {
         var _this = this;
         var fragment = ElementHelper.createFragment();
         var actionButtonElement = ElementHelper.createElement("div");
+        actionButtonElement.setAttribute("data-window-id", this.window.id);
         actionButtonElement.id = this.elementId;
         actionButtonElement.setAttribute("title", this.label);
         ElementHelper.addClasses(actionButtonElement, this.app.prefix, "action-button", "flexbox", "flex-center");

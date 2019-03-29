@@ -39,6 +39,7 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
 
         if (this.enable === true) {
             const actionBarElement = ElementHelper.createElement("div");
+            actionBarElement.setAttribute("data-window-id", this.window.id);
             actionBarElement.id = this.elementId;
 
             ElementHelper.addClasses(actionBarElement, this.app.prefix,

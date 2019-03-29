@@ -32,6 +32,7 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
         const fragment = ElementHelper.createFragment();
 
         const titleBarElement = ElementHelper.createElement("div");
+        titleBarElement.setAttribute("data-window-id", this.window.id);
         titleBarElement.id = this.elementId;
 
         ElementHelper.addClasses(titleBarElement, this.app.prefix,
@@ -43,6 +44,8 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
 
         if (this.icon) {
             const windowIconElement = ElementHelper.createElement("div");
+            windowIconElement.setAttribute("data-window-id", this.window.id);
+
             ElementHelper.addClasses(windowIconElement, this.app.prefix,
                 "window-icon",
                 "flexbox",
@@ -63,11 +66,15 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
 
         if (this.title) {
             const titleElement = ElementHelper.createElement("div");
+            titleElement.setAttribute("data-window-id", this.window.id);
+
             ElementHelper.addClasses(titleElement, this.app.prefix,
                 "window-title"
             );
 
             const labelElement = document.createElement("label");
+            labelElement.setAttribute("data-window-id", this.window.id);
+
             ElementHelper.addClasses(labelElement, this.app.prefix,
                 "window-title-label"
             );

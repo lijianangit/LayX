@@ -44,6 +44,7 @@ export default class UIResizeBar extends UIWindowComponent implements UIControl 
 
         if (this.leastOneTrue()) {
             const resizeElement = ElementHelper.createElement("div");
+            resizeElement.setAttribute("data-window-id", this.window.id);
             resizeElement.id = this.elementId;
 
             ElementHelper.addClasses(resizeElement, this.app.prefix,
@@ -71,6 +72,7 @@ export default class UIResizeBar extends UIWindowComponent implements UIControl 
 
     private presentItem(key: Enums.Direction): HTMLElement {
         const itemElement = document.createElement("div");
+        itemElement.setAttribute("data-window-id", this.window.id);
 
         ElementHelper.addClasses(itemElement, this.app.prefix,
             `resize-item-${key}`

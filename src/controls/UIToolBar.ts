@@ -46,6 +46,7 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
         const fragment = ElementHelper.createFragment();
 
         const toolBarElement = ElementHelper.createElement("div");
+        toolBarElement.setAttribute("data-window-id", this.window.id);
         toolBarElement.id = this.elementId;
 
         ElementHelper.addClasses(toolBarElement, this.app.prefix,

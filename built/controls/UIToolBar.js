@@ -56,6 +56,7 @@ var UIToolBar = (function (_super) {
         var _this = this;
         var fragment = ElementHelper.createFragment();
         var toolBarElement = ElementHelper.createElement("div");
+        toolBarElement.setAttribute("data-window-id", this.window.id);
         toolBarElement.id = this.elementId;
         ElementHelper.addClasses(toolBarElement, this.app.prefix, "tool-bar", "flexbox", "flex-row");
         ElementHelper.addStyles(toolBarElement, {

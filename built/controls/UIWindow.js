@@ -105,6 +105,7 @@ var UIWindow = (function (_super) {
         var fragment = ElementHelper.createFragment();
         var windowElement = ElementHelper.createElement("div");
         windowElement.id = this.elementId;
+        windowElement.setAttribute("data-window-id", this.id);
         ElementHelper.addClasses(windowElement, this.app.prefix, "window", "window-" + this.mode, "flexbox", "flex-column", this.isNeedAnimation ? "animate" : "", this.isNeedAnimation ? "animate-" + this.animate + "-create" : "");
         ElementHelper.addStyles(windowElement, {
             zIndex: this.mode === "layer" ? "" + this.zIndex : null,
@@ -316,6 +317,7 @@ var UIWindow = (function (_super) {
             }
             var parclose = this.getComponent("parclose");
             parclose && parclose.updateZIndex(this.zIndex - 1);
+            this.app.lastWindow = this.app.window;
             this.app.window = this;
         }
     };

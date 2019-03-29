@@ -20,9 +20,11 @@ export default class UIIcon extends UIWindowComponent implements UIControl {
         const fragment = ElementHelper.createFragment();
 
         const iconElement = ElementHelper.createElementNS("svg");
+        iconElement.setAttribute("data-window-id", this.window.id);
         iconElement.setAttribute("class", this.className);
 
         const useElement = ElementHelper.createElementNS("use");
+        useElement.setAttribute("data-window-id", this.window.id);
         useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", `#${this.name}`);
         iconElement.appendChild(useElement);
 

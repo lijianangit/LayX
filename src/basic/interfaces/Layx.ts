@@ -8,5 +8,6 @@ export default interface Layx {
     destroy(id: string): void;
     windows: Array<UIWindow>;
     window: UIWindow | null;
+    lastWindow: UIWindow | null;
     getWindow(id: string): UIWindow | null;
 }

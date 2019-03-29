@@ -39,10 +39,12 @@ var UITitleBar = (function (_super) {
         var _this = this;
         var fragment = ElementHelper.createFragment();
         var titleBarElement = ElementHelper.createElement("div");
+        titleBarElement.setAttribute("data-window-id", this.window.id);
         titleBarElement.id = this.elementId;
         ElementHelper.addClasses(titleBarElement, this.app.prefix, "title-bar", "flexbox", "flex-row", "flex-vertical-center");
         if (this.icon) {
             var windowIconElement = ElementHelper.createElement("div");
+            windowIconElement.setAttribute("data-window-id", this.window.id);
             ElementHelper.addClasses(windowIconElement, this.app.prefix, "window-icon", "flexbox", "flex-center");
             windowIconElement.addEventListener("dblclick", function (ev) {
                 ev.stopPropagation();
@@ -55,8 +57,10 @@ var UITitleBar = (function (_super) {
         }
         if (this.title) {
             var titleElement = ElementHelper.createElement("div");
+            titleElement.setAttribute("data-window-id", this.window.id);
             ElementHelper.addClasses(titleElement, this.app.prefix, "window-title");
             var labelElement = document.createElement("label");
+            labelElement.setAttribute("data-window-id", this.window.id);
             ElementHelper.addClasses(labelElement, this.app.prefix, "window-title-label");
             labelElement.innerText = this.title;
             titleElement.appendChild(labelElement);
