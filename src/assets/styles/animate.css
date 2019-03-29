@@ -3,6 +3,11 @@
     animation-fill-mode: both;
 }
 
+.layx-animate-1s {
+    animation-duration: 0.4s;
+    animation-fill-mode: both;
+}
+
 @keyframes layx-animate-zoom-create {
     from {
         transform: scale3d(0.9, 0.9, 0.9);
@@ -27,5 +32,23 @@
     to {
         opacity: 0;
         transform: scale3d(0.9, 0.9, 0.9);
+    }
+}
+
+@keyframes layx-animate-salver-slide-up {
+    from {
+        bottom: -45px;
+    }
+    to {
+        bottom: 0;
+    }
+}
+
+@keyframes layx-animate-salver-slide-down {
+    from {
+        bottom: 0;
+    }
+    to {
+        bottom: -45px;
     }
 }

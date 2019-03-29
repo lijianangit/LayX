@@ -2,6 +2,7 @@ import Layx from "../basic/interfaces/Layx";
 import UIWindow from "../controls/UIWindow";
 import UIContextMenuBar from "../controls/UIContextMenuBar";
 import UITopMenuBar from "../controls/UITopMenuBar";
+import UISalverBar from "../controls/UISalverBar";
 import * as Types from "../../types";
 import * as ExceptionHelper from "../utils/ExceptionHelper";
 import * as Enums from "../basic/enums";
@@ -27,6 +28,14 @@ export default class App {
         this.layx.lastWindow = this._lastWindow = value;
     }
 
+    private _salver: UISalverBar | null = null;
+    get salver() {
+        return this._salver;
+    }
+    set salver(value: UISalverBar | null) {
+        this.layx.salver = this._salver = value;
+    }
+
     private _zIndex: number = 10000000;
     get zIndex() {
         return this._zIndex = this._zIndex + 2;
@@ -35,6 +44,11 @@ export default class App {
     private _aboveZIndex: number = 20000000;
     get aboveZIndex() {
         return this._aboveZIndex = this._aboveZIndex + 2;
+    }
+
+    private _salverZIndex: number = 30000000;
+    get salverZIndex() {
+        return this._salverZIndex;
     }
 
     private _windows: Array<UIWindow> = [];
@@ -47,10 +61,16 @@ export default class App {
     }
 
     open(options: Types.WindowOption): void {
-        const window = this.getWindow(options.id);
-        if (window) {
-            window.updateZIndex();
+        if (!this.salver) {
+            const salverBar = new UISalverBar(this);
+            const salverBarElement = salverBar.present();
+            document.body.append(salverBarElement);
+
+            this.salver = salverBar;
         }
+
+        const window = this.getWindow(options.id);
+        if (window) window.updateZIndex();
         else {
             const uiWindow = new UIWindow(this, options);
             const windowPresent = uiWindow.present();
@@ -59,6 +79,8 @@ export default class App {
             this.lastWindow = this.window;
             this.window = uiWindow;
             this.windows.push(uiWindow);
+
+            this.salver.addOrUpdateItem();
         }
     }
 

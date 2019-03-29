@@ -319,6 +319,7 @@ var UIWindow = (function (_super) {
             parclose && parclose.updateZIndex(this.zIndex - 1);
             this.app.lastWindow = this.app.window;
             this.app.window = this;
+            this.app.salver && this.app.salver.addOrUpdateItem();
         }
     };
     UIWindow.prototype.hideMoreActionContextMenu = function () {

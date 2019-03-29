@@ -59,4 +59,6 @@ var ComponentType;
     ComponentType["TOP_MENU_BUTTON"] = "top-menu-button";
     ComponentType["TOP_MENU_BUTTONS"] = "top-menu-buttons";
     ComponentType["WINDOW_ICON_CONTEXT_MENU_BAR"] = "window-icon-context-menu-bar";
+    ComponentType["SALVER_BAR"] = "salver-bar";
+    ComponentType["SALVER_ITEM"] = "salver-item";
 })(ComponentType = exports.ComponentType || (exports.ComponentType = {}));

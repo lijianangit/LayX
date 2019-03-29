@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindow_1 = require("../controls/UIWindow");
+var UISalverBar_1 = require("../controls/UISalverBar");
 var ExceptionHelper = require("../utils/ExceptionHelper");
 var TypeHelper = require("../utils/TypeHelper");
 var App = (function () {
@@ -10,8 +11,10 @@ var App = (function () {
         this.prefix = "layx-";
         this._window = null;
         this._lastWindow = null;
+        this._salver = null;
         this._zIndex = 10000000;
         this._aboveZIndex = 20000000;
+        this._salverZIndex = 30000000;
         this._windows = [];
         this.init();
     }
@@ -35,6 +38,16 @@ var App = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(App.prototype, "salver", {
+        get: function () {
+            return this._salver;
+        },
+        set: function (value) {
+            this.layx.salver = this._salver = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(App.prototype, "zIndex", {
         get: function () {
             return this._zIndex = this._zIndex + 2;
@@ -49,6 +62,13 @@ var App = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(App.prototype, "salverZIndex", {
+        get: function () {
+            return this._salverZIndex;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(App.prototype, "windows", {
         get: function () {
             return this._windows;
@@ -57,10 +77,15 @@ var App = (function () {
         configurable: true
     });
     App.prototype.open = function (options) {
-        var window = this.getWindow(options.id);
-        if (window) {
-            window.updateZIndex();
+        if (!this.salver) {
+            var salverBar = new UISalverBar_1.default(this);
+            var salverBarElement = salverBar.present();
+            document.body.append(salverBarElement);
+            this.salver = salverBar;
         }
+        var window = this.getWindow(options.id);
+        if (window)
+            window.updateZIndex();
         else {
             var uiWindow = new UIWindow_1.default(this, options);
             var windowPresent = uiWindow.present();
@@ -68,6 +93,7 @@ var App = (function () {
             this.lastWindow = this.window;
             this.window = uiWindow;
             this.windows.push(uiWindow);
+            this.salver.addOrUpdateItem();
         }
     };
     App.prototype.destroy = function (id) {

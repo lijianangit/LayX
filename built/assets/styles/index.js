@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./common.css");
+require("./salver-bar.css");
 require("./icon.css");
 require("./window.css");
 require("./animate.css");

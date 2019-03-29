@@ -1,4 +1,5 @@
 import "./common.css";
+import "./salver-bar.css";
 import "./icon.css";
 import "./window.css";
 import "./animate.css";
