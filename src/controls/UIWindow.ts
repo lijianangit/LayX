@@ -146,6 +146,9 @@ export default class UIWindow extends UIComponent implements UIControl {
                             "body-noscroll"
                         );
                     }
+
+                    this.app.salver && this.app.salver.removeItem();
+
                     const index = this.app.windows.indexOf(this);
                     this.app.windows.splice(index, 1);
 

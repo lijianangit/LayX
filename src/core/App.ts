@@ -7,6 +7,7 @@ import * as Types from "../../types";
 import * as ExceptionHelper from "../utils/ExceptionHelper";
 import * as Enums from "../basic/enums";
 import * as TypeHelper from "../utils/TypeHelper";
+import * as ElementHelper from "../utils/ElementHelper";
 
 export default class App {
     public readonly version: string = "3.0.0";
@@ -139,6 +140,20 @@ export default class App {
             if (this.lastWindow) {
                 const topMenuBar = this.lastWindow.getComponent<UITopMenuBar>(Enums.ComponentType.TOP_MENU_BAR);
                 topMenuBar && topMenuBar.hide(ev);
+            }
+        }, true);
+
+        document.addEventListener("mousemove", (ev: MouseEvent) => {
+            if (this.salver && this.salver.element) {
+                if (ev.pageY >= innerHeight - 30) {
+                    if (ElementHelper.containClass(this.salver.element, this.prefix, "salver-bar-delay")) return;
+
+                    this.salver.show(true);
+                }
+                else {
+                    if (!ElementHelper.containClass(this.salver.element, this.prefix, "salver-bar-delay")) return;
+                    this.salver.hide();
+                }
             }
         }, true);
     }

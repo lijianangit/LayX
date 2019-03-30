@@ -43,7 +43,7 @@ export default class UISalverBar extends UIComponent implements UIControl {
 
         ElementHelper.addClasses(salverBarElement, this.app.prefix,
             Enums.ComponentType.SALVER_BAR,
-            "animate-1s",
+            "animate-d3s",
             "flexbox",
             "flex-row"
         );
@@ -56,6 +56,8 @@ export default class UISalverBar extends UIComponent implements UIControl {
 
         salverBarElement.addEventListener("animationend", (ev: AnimationEvent) => {
             if (ElementHelper.containClass(this.element, this.app.prefix, "animate-salver-slide-up")) {
+                if (ElementHelper.containClass(this.element, this.app.prefix, "salver-bar-delay")) return;
+
                 ElementHelper.removeClasses(this.element, this.app.prefix,
                     "animate-salver-slide-up"
                 );
@@ -64,7 +66,7 @@ export default class UISalverBar extends UIComponent implements UIControl {
                     "animate-salver-slide-down"
                 );
             }
-            else{
+            else {
                 ElementHelper.removeClasses(this.element, this.app.prefix,
                     "animate-salver-slide-up",
                     "animate-salver-slide-down"
@@ -105,13 +107,21 @@ export default class UISalverBar extends UIComponent implements UIControl {
                 height: `${UISalverBar.size}px`
             });
 
+            itemElement.addEventListener("mousedown", (ev: MouseEvent) => {
+                const windowId = itemElement.getAttribute("data-window-id");
+                if (!windowId) return;
+
+                const window = this.app.getWindow(windowId);
+                window && window.updateZIndex();
+            });
+
             itemElement.innerText = "Layx";
 
             fragment.appendChild(itemElement);
             this.element.appendChild(fragment);
-            this.updateOffset();
 
             this.items.push(this.app.window.id);
+            this.updateOffset();
         }
         else {
             const currentItemElement = this.element.querySelector(`.${this.app.prefix + Enums.ComponentType.SALVER_ITEM}[data-window-id='${this.app.window.id}']`);
@@ -121,6 +131,22 @@ export default class UISalverBar extends UIComponent implements UIControl {
         }
 
         this.show();
+    }
+
+    removeItem() {
+        if (!this.app.window || !this.element) return;
+
+        if (this.items.indexOf(this.app.window.id) > -1) {
+            const currentSelectItemElement = this.element.querySelector(`.${this.app.prefix + Enums.ComponentType.SALVER_ITEM}[data-window-id='${this.app.window.id}']`);
+            if (currentSelectItemElement && currentSelectItemElement.parentElement) {
+                currentSelectItemElement.parentElement.removeChild(currentSelectItemElement);
+            }
+
+            const index = this.items.indexOf(this.app.window.id);
+            this.items.splice(index, 1);
+
+            this.show();
+        }
     }
 
     updateOffset() {
@@ -133,9 +159,21 @@ export default class UISalverBar extends UIComponent implements UIControl {
         }
     }
 
-    show() {
+    show(isDelay: boolean = false) {
         ElementHelper.addClasses(this.element, this.app.prefix,
-            "animate-salver-slide-up"
+            "animate-salver-slide-up",
+            isDelay ? "salver-bar-delay" : ""
+        );
+    }
+
+    hide() {
+        ElementHelper.removeClasses(this.element, this.app.prefix,
+            "animate-salver-slide-up",
+            "salver-bar-delay"
+        );
+
+        ElementHelper.addClasses(this.element, this.app.prefix,
+            "animate-salver-slide-down"
         );
     }
 }
