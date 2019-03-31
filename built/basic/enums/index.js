@@ -42,6 +42,7 @@ var WindowStatus;
 var ComponentType;
 (function (ComponentType) {
     ComponentType["ICON"] = "icon";
+    ComponentType["WINDOW_ICON"] = "window-icon";
     ComponentType["ACTION_BUTTON"] = "action-button";
     ComponentType["PARCLOSE"] = "parclose";
     ComponentType["RESIZE_BAR"] = "resize-bar";

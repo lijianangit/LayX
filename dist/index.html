@@ -7,18 +7,21 @@
         content="width=device-width, initial-scale=1.0, maximum-scale=1,minimum-scale=1,user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
     <title>A magical window. - Layx</title>
-<link href="layx.min.css?ce5a5745c5be176b43db" rel="stylesheet"><script type="text/javascript" src="layx.min.js?ce5a5745c5be176b43db"></script></head>
+<link href="layx.min.css?7f2b90bc6d26ee9e8f4c" rel="stylesheet"><script type="text/javascript" src="layx.min.js?7f2b90bc6d26ee9e8f4c"></script></head>
 
 <body>
     <button id="create">Create</button>
     <button id="create2">Create2</button>
+    <button id="create3">Create3</button>
+    <button id="create4">Create4</button>
+    <button id="create5">Create5</button>
     <script type="text/javascript">
         document.getElementById("create").onclick = function () {
             layx.open({
                 id: "hello-world",
                 toolBar: {
                     titleBar: {
-                        title: "Layx - A magical window."
+                        title: "Layx - Create1."
                     }
                 },
                 topMenu: [
@@ -178,7 +181,7 @@
                 id: "hello-world2",
                 toolBar: {
                     titleBar: {
-                        title: "Layx - A magical window."
+                        title: "Layx - Create2."
                     }
                 },
                 offset: [100, 50],
@@ -332,6 +335,39 @@
                         alert("点击了关于，窗口句柄为：" + win.id);
                     }
                 }]
+            });
+        }
+        document.getElementById("create3").onclick = function () {
+            layx.open({
+                id: "hello-world3",
+                toolBar: {
+                    titleBar: {
+                        title: "Layx - Create3."
+                    }
+                },
+                offset: "rightBottom"
+            });
+        }
+        document.getElementById("create4").onclick = function () {
+            layx.open({
+                id: "hello-world4",
+                toolBar: {
+                    titleBar: {
+                        title: "Layx - Create4."
+                    }
+                },
+                offset: "bottomCenter"
+            });
+        }
+        document.getElementById("create5").onclick = function () {
+            layx.open({
+                id: "hello-world5",
+                toolBar: {
+                    titleBar: {
+                        title: "Layx - Create5."
+                    }
+                },
+                offset: "leftTop"
             });
         }
     </script>

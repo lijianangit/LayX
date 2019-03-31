@@ -54,6 +54,7 @@ var UITitleBar = (function (_super) {
             var icon = new UIIcon_1.default(this.app, this.window, this.icon);
             var iconElement = icon.present();
             windowIconElement.appendChild(iconElement);
+            this.setComponent("window-icon", icon);
         }
         if (this.title) {
             var titleElement = ElementHelper.createElement("div");

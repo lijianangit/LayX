@@ -80,7 +80,18 @@ var UISalverBar = (function (_super) {
                 var window = _this.app.getWindow(windowId);
                 window && window.updateZIndex();
             });
-            itemElement_1.innerText = "Layx";
+            if (this.app.window) {
+                var titleBar = this.app.window.getComponent("tool-bar" + "->" + "title-bar");
+                if (titleBar) {
+                    var windowIcon = titleBar.getComponent("" + "window-icon");
+                    if (windowIcon) {
+                        itemElement_1.setAttribute("title", titleBar.title || "");
+                        itemElement_1.appendChild(windowIcon.present());
+                    }
+                }
+            }
+            else
+                itemElement_1.innerText = "Layx";
             fragment.appendChild(itemElement_1);
             this.element.appendChild(fragment);
             this.items.push(this.app.window.id);
