@@ -132,7 +132,10 @@ var UIWindow = (function (_super) {
                     if (_this.status === "max") {
                         ElementHelper.removeClasses(document.body, "z" + _this.app.prefix, "body-noscroll");
                     }
-                    _this.app.salver && _this.app.salver.removeItem();
+                    if (_this.app.salver) {
+                        _this.app.salver.removeItem();
+                        _this.app.salver.updateOffset();
+                    }
                     var index = _this.app.windows.indexOf(_this);
                     _this.app.windows.splice(index, 1);
                     _this.element
