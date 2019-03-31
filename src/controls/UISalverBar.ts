@@ -99,6 +99,14 @@ export default class UISalverBar extends UIComponent implements UIControl {
                 window && window.updateZIndex();
             });
 
+            itemElement.addEventListener("dblclick", (ev: MouseEvent) => {
+                const windowId = itemElement.getAttribute("data-window-id");
+                if (!windowId) return;
+
+                const window = this.app.getWindow(windowId);
+                window && window.destroy();
+            });
+
             if (this.app.window) {
                 const titleBar = this.app.window.getComponent<UITitleBar>(`${Enums.ComponentType.TOOL_BAR}->${Enums.ComponentType.TITLE_BAR}`);
                 if (titleBar) {

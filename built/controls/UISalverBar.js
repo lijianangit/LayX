@@ -80,6 +80,13 @@ var UISalverBar = (function (_super) {
                 var window = _this.app.getWindow(windowId);
                 window && window.updateZIndex();
             });
+            itemElement_1.addEventListener("dblclick", function (ev) {
+                var windowId = itemElement_1.getAttribute("data-window-id");
+                if (!windowId)
+                    return;
+                var window = _this.app.getWindow(windowId);
+                window && window.destroy();
+            });
             if (this.app.window) {
                 var titleBar = this.app.window.getComponent("tool-bar" + "->" + "title-bar");
                 if (titleBar) {
