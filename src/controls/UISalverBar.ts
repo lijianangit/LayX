@@ -7,6 +7,7 @@ import WindowMoveDragEvent from "../basic/events/WindowMoveDragEvent";
 import UIActionBar from "./UIActionBar";
 import UITitleBar from "./UITitleBar";
 import UITabBar from "./UITabBar";
+import UIIcon from "./UIIcon";
 import * as Types from "../../types";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as CastHelper from "../utils/CastHelper";
@@ -98,7 +99,17 @@ export default class UISalverBar extends UIComponent implements UIControl {
                 window && window.updateZIndex();
             });
 
-            itemElement.innerText = "Layx";
+            if (this.app.window) {
+                const titleBar = this.app.window.getComponent<UITitleBar>(`${Enums.ComponentType.TOOL_BAR}->${Enums.ComponentType.TITLE_BAR}`);
+                if (titleBar) {
+                    const windowIcon = titleBar.getComponent<UIIcon>(`${Enums.ComponentType.WINDOW_ICON}`);
+                    if (windowIcon) {
+                        itemElement.setAttribute("title", titleBar.title || "");
+                        itemElement.appendChild(windowIcon.present());
+                    }
+                }
+            }
+            else itemElement.innerText = "Layx";
 
             fragment.appendChild(itemElement);
             this.element.appendChild(fragment);

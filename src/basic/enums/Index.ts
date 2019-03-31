@@ -39,6 +39,7 @@ export const enum WindowStatus {
 
 export const enum ComponentType {
     ICON = "icon",
+    WINDOW_ICON="window-icon",
     ACTION_BUTTON = "action-button",
     PARCLOSE = "parclose",
     RESIZE_BAR = "resize-bar",

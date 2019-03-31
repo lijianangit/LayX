@@ -35,3 +35,12 @@
 .layx-salver-item.layx-salver-item-active:after {
     border-top: 5px solid #3baced;
 }
+
+.layx-salver-item .layx-icon {
+    font-size: 20px;
+    color: #666;
+}
+
+.layx-salver-item.layx-salver-item-active .layx-icon {
+    color: #3baced;
+}
