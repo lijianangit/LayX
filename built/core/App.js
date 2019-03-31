@@ -86,8 +86,9 @@ var App = (function () {
             this.salver = salverBar;
         }
         var window = this.getWindow(options.id);
-        if (window)
+        if (window) {
             window.updateZIndex();
+        }
         else {
             var uiWindow = new UIWindow_1.default(this, options);
             var windowPresent = uiWindow.present();

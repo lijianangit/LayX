@@ -96,7 +96,25 @@ export default class UISalverBar extends UIComponent implements UIControl {
                 if (!windowId) return;
 
                 const window = this.app.getWindow(windowId);
-                window && window.updateZIndex();
+                if (window) {
+                    window.updateZIndex();
+                    if (window.status === Enums.WindowStatus.MIN) {
+                        ElementHelper.removeClasses(window.element, this.app.prefix,
+                            "window-min"
+                        );
+                        ElementHelper.addClasses(window.element, this.app.prefix,
+                            window.isNeedAnimation ? "animate" : "",
+                            window.isNeedAnimation ? `animate-${window.animate}-create` : ""
+                        );
+                        if (!ElementHelper.containClass(itemElement, this.app.prefix, "salver-item-active")) {
+                            ElementHelper.addClasses(itemElement, this.app.prefix,
+                                "salver-item-active"
+                            );
+                        }
+
+                        window.status = window.lastStatus;
+                    }
+                }
             });
 
             itemElement.addEventListener("dblclick", (ev: MouseEvent) => {

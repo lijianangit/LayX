@@ -84,6 +84,7 @@ var UIActionButton = (function (_super) {
         id: "min",
         label: "最小化",
         handler: function (ev, window) {
+            window.min();
         }
     };
     UIActionButton.info = {

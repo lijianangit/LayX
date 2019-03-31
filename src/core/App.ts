@@ -71,7 +71,9 @@ export default class App {
         }
 
         const window = this.getWindow(options.id);
-        if (window) window.updateZIndex();
+        if (window) {
+            window.updateZIndex();
+        }
         else {
             const uiWindow = new UIWindow(this, options);
             const windowPresent = uiWindow.present();

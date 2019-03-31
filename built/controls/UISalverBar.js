@@ -78,7 +78,17 @@ var UISalverBar = (function (_super) {
                 if (!windowId)
                     return;
                 var window = _this.app.getWindow(windowId);
-                window && window.updateZIndex();
+                if (window) {
+                    window.updateZIndex();
+                    if (window.status === "min") {
+                        ElementHelper.removeClasses(window.element, _this.app.prefix, "window-min");
+                        ElementHelper.addClasses(window.element, _this.app.prefix, window.isNeedAnimation ? "animate" : "", window.isNeedAnimation ? "animate-" + window.animate + "-create" : "");
+                        if (!ElementHelper.containClass(itemElement_1, _this.app.prefix, "salver-item-active")) {
+                            ElementHelper.addClasses(itemElement_1, _this.app.prefix, "salver-item-active");
+                        }
+                        window.status = window.lastStatus;
+                    }
+                }
             });
             itemElement_1.addEventListener("dblclick", function (ev) {
                 var windowId = itemElement_1.getAttribute("data-window-id");

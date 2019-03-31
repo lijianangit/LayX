@@ -31,6 +31,7 @@ var UIWindow = (function (_super) {
         var _this = _super.call(this, app) || this;
         _this.app = _this.app;
         _this.status = "normal";
+        _this.lastStatus = "normal";
         _this.flickering = false;
         _this.zIndex = _this.app.zIndex;
         _this.isNeedAnimation = false;
@@ -142,6 +143,15 @@ var UIWindow = (function (_super) {
                         && _this.element.parentElement
                         && _this.element.parentElement.removeChild(_this.element);
                 }
+                if (ElementHelper.containClass(_this.element, _this.app.prefix, "animate-" + _this.animate + "-to-min")) {
+                    if (_this.app.salver && _this.app.salver.element) {
+                        var currentItemElement = _this.app.salver.element.querySelector("." + (_this.app.prefix + "salver-item") + "[data-window-id='" + _this.id + "']");
+                        ElementHelper.removeClasses(currentItemElement, _this.app.prefix, "salver-item-active");
+                    }
+                    ElementHelper.addClasses(_this.element, _this.app.prefix, "window-min");
+                    ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-" + _this.animate + "-to-min");
+                    _this.status = "min";
+                }
             });
             windowElement.addEventListener("transitionend", function (ev) {
                 ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-" + _this.animate + "-to-max", "animate-" + _this.animate + "-to-normal");
@@ -239,6 +249,7 @@ var UIWindow = (function (_super) {
     };
     UIWindow.prototype.max = function () {
         if (this.element && this.element.parentElement && this.status !== "max") {
+            this.lastStatus = this.status;
             ElementHelper.addClasses(this.element, this.app.prefix, this.isNeedAnimation ? "animate-" + this.animate + "-to-max" : "");
             ElementHelper.addStyles(this.element, {
                 top: "0",
@@ -269,6 +280,12 @@ var UIWindow = (function (_super) {
             }
             this.status = "max";
             this.zoomActionButtons(innerWidth);
+        }
+    };
+    UIWindow.prototype.min = function () {
+        if (this.element) {
+            this.lastStatus = this.status;
+            ElementHelper.addClasses(this.element, this.app.prefix, this.isNeedAnimation ? "animate-" + this.animate + "-to-min" : "");
         }
     };
     UIWindow.prototype.flicker = function () {

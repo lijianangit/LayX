@@ -18,10 +18,11 @@ import * as ExceptionHelper from "../utils/ExceptionHelper";
 export default class UIWindow extends UIComponent implements UIControl {
     public app: App = this.app;
     public status: Enums.WindowStatus = Enums.WindowStatus.NORMAL;
+    public lastStatus: Enums.WindowStatus = Enums.WindowStatus.NORMAL;
     public readonly elementId: string;
     private flickering: boolean = false;
     public zIndex: number = this.app.zIndex;
-    private isNeedAnimation: boolean = false;
+    public isNeedAnimation: boolean = false;
 
     public readonly id: string;
     public width: number = 800;
@@ -159,6 +160,23 @@ export default class UIWindow extends UIComponent implements UIControl {
                         && this.element.parentElement
                         && this.element.parentElement.removeChild(this.element);
                 }
+
+                if (ElementHelper.containClass(this.element, this.app.prefix, `animate-${this.animate}-to-min`)) {
+                    if (this.app.salver && this.app.salver.element) {
+                        const currentItemElement = this.app.salver.element.querySelector(`.${this.app.prefix + Enums.ComponentType.SALVER_ITEM}[data-window-id='${this.id}']`);
+                        ElementHelper.removeClasses(<HTMLElement>currentItemElement, this.app.prefix,
+                            "salver-item-active"
+                        );
+                    }
+                    ElementHelper.addClasses(this.element, this.app.prefix,
+                        "window-min"
+                    );
+                    ElementHelper.removeClasses(this.element, this.app.prefix,
+                        `animate-${this.animate}-to-min`
+                    );
+
+                    this.status = Enums.WindowStatus.MIN;
+                }
             });
 
             windowElement.addEventListener("transitionend", (ev: TransitionEvent) => {
@@ -291,6 +309,8 @@ export default class UIWindow extends UIComponent implements UIControl {
 
     max(): void {
         if (this.element && this.element.parentElement && this.status !== Enums.WindowStatus.MAX) {
+            this.lastStatus = this.status;
+
             ElementHelper.addClasses(this.element, this.app.prefix,
                 this.isNeedAnimation ? `animate-${this.animate}-to-max` : ""
             );
@@ -333,6 +353,15 @@ export default class UIWindow extends UIComponent implements UIControl {
             this.status = Enums.WindowStatus.MAX;
 
             this.zoomActionButtons(innerWidth);
+        }
+    }
+
+    min(): void {
+        if (this.element) {
+            this.lastStatus = this.status;
+            ElementHelper.addClasses(this.element, this.app.prefix,
+                this.isNeedAnimation ? `animate-${this.animate}-to-min` : ""
+            );
         }
     }
 

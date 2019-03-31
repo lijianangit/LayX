@@ -95,6 +95,7 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
         id: "min",
         label: "最小化",
         handler: function (ev: MouseEvent, window: UIWindow) {
+            window.min();
         }
     };
 

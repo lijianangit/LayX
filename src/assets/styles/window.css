@@ -7,12 +7,21 @@
     position: fixed;
 }
 
+.layx-window.layx-window-min {
+    opacity: 0;
+    display: none;
+}
+
 .layx-window.layx-animate-zoom-create {
     animation-name: layx-animate-zoom-create;
 }
 
 .layx-window.layx-animate-zoom-destroy {
     animation-name: layx-animate-zoom-destroy;
+}
+
+.layx-window.layx-animate-zoom-to-min {
+    animation-name: layx-animate-zoom-to-min;
 }
 
 .layx-window.layx-animate-zoom-drag-to-normal {
