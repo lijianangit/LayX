@@ -42,29 +42,22 @@ var UISalverBar = (function (_super) {
         configurable: true
     });
     UISalverBar.prototype.present = function () {
-        var _this = this;
         var fragment = ElementHelper.createFragment();
         var salverBarElement = ElementHelper.createElement("div");
         salverBarElement.id = this.elementId;
-        ElementHelper.addClasses(salverBarElement, this.app.prefix, "salver-bar", "animate-1s", "flexbox", "flex-row");
+        ElementHelper.addClasses(salverBarElement, this.app.prefix, "salver-bar", "animate-d3s", "flexbox", "flex-row");
         ElementHelper.addStyles(salverBarElement, {
             zIndex: "" + this.app.salverZIndex,
             height: UISalverBar.size + "px",
             bottom: "-" + (UISalverBar.size - UISalverBar.talentHeight) + "px"
         });
         salverBarElement.addEventListener("animationend", function (ev) {
-            if (ElementHelper.containClass(_this.element, _this.app.prefix, "animate-salver-slide-up")) {
-                ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-salver-slide-up");
-                ElementHelper.addClasses(_this.element, _this.app.prefix, "animate-salver-slide-down");
-            }
-            else {
-                ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-salver-slide-up", "animate-salver-slide-down");
-            }
         });
         fragment.appendChild(salverBarElement);
         return fragment;
     };
     UISalverBar.prototype.addOrUpdateItem = function () {
+        var _this = this;
         if (!this.app.window || !this.element)
             return;
         if (this.app.lastWindow) {
@@ -73,24 +66,42 @@ var UISalverBar = (function (_super) {
         }
         if (this.items.indexOf(this.app.window.id) === -1) {
             var fragment = ElementHelper.createFragment();
-            var itemElement = ElementHelper.createElement("div");
-            itemElement.setAttribute("data-window-id", this.app.window.id);
-            ElementHelper.addClasses(itemElement, this.app.prefix, "salver-item", "flexbox", "flex-center", "salver-item-active");
-            ElementHelper.addStyles(itemElement, {
+            var itemElement_1 = ElementHelper.createElement("div");
+            itemElement_1.setAttribute("data-window-id", this.app.window.id);
+            ElementHelper.addClasses(itemElement_1, this.app.prefix, "salver-item", "flexbox", "flex-center", "salver-item-active");
+            ElementHelper.addStyles(itemElement_1, {
                 width: UISalverBar.size + "px",
                 height: UISalverBar.size + "px"
             });
-            itemElement.innerText = "Layx";
-            fragment.appendChild(itemElement);
+            itemElement_1.addEventListener("mousedown", function (ev) {
+                var windowId = itemElement_1.getAttribute("data-window-id");
+                if (!windowId)
+                    return;
+                var window = _this.app.getWindow(windowId);
+                window && window.updateZIndex();
+            });
+            itemElement_1.innerText = "Layx";
+            fragment.appendChild(itemElement_1);
             this.element.appendChild(fragment);
-            this.updateOffset();
             this.items.push(this.app.window.id);
+            this.updateOffset();
         }
         else {
             var currentItemElement = this.element.querySelector("." + (this.app.prefix + "salver-item") + "[data-window-id='" + this.app.window.id + "']");
             ElementHelper.addClasses(currentItemElement, this.app.prefix, "salver-item-active");
         }
-        this.show();
+    };
+    UISalverBar.prototype.removeItem = function () {
+        if (!this.app.window || !this.element)
+            return;
+        if (this.items.indexOf(this.app.window.id) > -1) {
+            var currentSelectItemElement = this.element.querySelector("." + (this.app.prefix + "salver-item") + "[data-window-id='" + this.app.window.id + "']");
+            if (currentSelectItemElement && currentSelectItemElement.parentElement) {
+                currentSelectItemElement.parentElement.removeChild(currentSelectItemElement);
+            }
+            var index = this.items.indexOf(this.app.window.id);
+            this.items.splice(index, 1);
+        }
     };
     UISalverBar.prototype.updateOffset = function () {
         if (this.element) {
@@ -101,7 +112,12 @@ var UISalverBar = (function (_super) {
         }
     };
     UISalverBar.prototype.show = function () {
-        ElementHelper.addClasses(this.element, this.app.prefix, "animate-salver-slide-up");
+        ElementHelper.removeClasses(this.element, this.app.prefix, "animate-salver-slide-down");
+        ElementHelper.addClasses(this.element, this.app.prefix, "animate-salver-slide-up", "salver-bar-keep");
+    };
+    UISalverBar.prototype.hide = function () {
+        ElementHelper.removeClasses(this.element, this.app.prefix, "animate-salver-slide-up", "salver-bar-keep");
+        ElementHelper.addClasses(this.element, this.app.prefix, "animate-salver-slide-down");
     };
     UISalverBar.size = 50;
     UISalverBar.talentHeight = 5;

@@ -81,7 +81,9 @@ export default class App {
             this.window = uiWindow;
             this.windows.push(uiWindow);
 
-            this.salver.addOrUpdateItem();
+            setTimeout(() => {
+                this.salver!.addOrUpdateItem();
+            }, 30);
         }
     }
 
@@ -145,13 +147,12 @@ export default class App {
 
         document.addEventListener("mousemove", (ev: MouseEvent) => {
             if (this.salver && this.salver.element) {
-                if (ev.pageY >= innerHeight - 30) {
-                    if (ElementHelper.containClass(this.salver.element, this.prefix, "salver-bar-delay")) return;
-
-                    this.salver.show(true);
+                if (ev.pageY >= innerHeight - 50) {
+                    if (ElementHelper.containClass(this.salver.element, this.prefix, "salver-bar-keep")) return;
+                    this.salver.show();
                 }
                 else {
-                    if (!ElementHelper.containClass(this.salver.element, this.prefix, "salver-bar-delay")) return;
+                    if (!ElementHelper.containClass(this.salver.element, this.prefix, "salver-bar-keep")) return;
                     this.salver.hide();
                 }
             }

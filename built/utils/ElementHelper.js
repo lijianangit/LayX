@@ -30,8 +30,10 @@ function updateClasses(element, handler, prefix) {
     }
     var currentClasses = element.className.split(/\s+/g);
     classes.forEach(function (item) {
-        var cls = prefix + item, index = currentClasses.indexOf(cls);
-        handler(currentClasses, index, cls);
+        if (item) {
+            var cls = prefix + item, index = currentClasses.indexOf(cls);
+            handler(currentClasses, index, cls);
+        }
     });
     element.className = currentClasses.join(" ").trim();
     return element;

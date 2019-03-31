@@ -55,23 +55,6 @@ export default class UISalverBar extends UIComponent implements UIControl {
         });
 
         salverBarElement.addEventListener("animationend", (ev: AnimationEvent) => {
-            if (ElementHelper.containClass(this.element, this.app.prefix, "animate-salver-slide-up")) {
-                if (ElementHelper.containClass(this.element, this.app.prefix, "salver-bar-delay")) return;
-
-                ElementHelper.removeClasses(this.element, this.app.prefix,
-                    "animate-salver-slide-up"
-                );
-
-                ElementHelper.addClasses(this.element, this.app.prefix,
-                    "animate-salver-slide-down"
-                );
-            }
-            else {
-                ElementHelper.removeClasses(this.element, this.app.prefix,
-                    "animate-salver-slide-up",
-                    "animate-salver-slide-down"
-                );
-            }
         });
 
         fragment.appendChild(salverBarElement);
@@ -129,8 +112,6 @@ export default class UISalverBar extends UIComponent implements UIControl {
                 "salver-item-active"
             );
         }
-
-        this.show();
     }
 
     removeItem() {
@@ -144,8 +125,6 @@ export default class UISalverBar extends UIComponent implements UIControl {
 
             const index = this.items.indexOf(this.app.window.id);
             this.items.splice(index, 1);
-
-            this.show();
         }
     }
 
@@ -159,17 +138,21 @@ export default class UISalverBar extends UIComponent implements UIControl {
         }
     }
 
-    show(isDelay: boolean = false) {
+    show() {
+        ElementHelper.removeClasses(this.element, this.app.prefix,
+            "animate-salver-slide-down"
+        );
+
         ElementHelper.addClasses(this.element, this.app.prefix,
             "animate-salver-slide-up",
-            isDelay ? "salver-bar-delay" : ""
+            "salver-bar-keep"
         );
     }
 
     hide() {
         ElementHelper.removeClasses(this.element, this.app.prefix,
             "animate-salver-slide-up",
-            "salver-bar-delay"
+            "salver-bar-keep"
         );
 
         ElementHelper.addClasses(this.element, this.app.prefix,

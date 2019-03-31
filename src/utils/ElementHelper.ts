@@ -24,10 +24,12 @@ export function addStyles(element: HTMLElement | null, styles: Types.CSSStyleObj
 export function updateClasses(element: HTMLElement, handler: (currentClasses: string[], index: number, itemClass: string) => void, prefix: string = "layx-", ...classes: string[]): HTMLElement {
     const currentClasses = element.className.split(/\s+/g);
     classes.forEach((item) => {
-        const cls = prefix + item,
-            index = currentClasses.indexOf(cls);
+        if (item) {
+            const cls = prefix + item,
+                index = currentClasses.indexOf(cls);
 
-        handler(currentClasses, index, cls);
+            handler(currentClasses, index, cls);
+        }
     });
     element.className = currentClasses.join(" ").trim();
 

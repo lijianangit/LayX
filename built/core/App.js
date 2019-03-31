@@ -4,6 +4,7 @@ var UIWindow_1 = require("../controls/UIWindow");
 var UISalverBar_1 = require("../controls/UISalverBar");
 var ExceptionHelper = require("../utils/ExceptionHelper");
 var TypeHelper = require("../utils/TypeHelper");
+var ElementHelper = require("../utils/ElementHelper");
 var App = (function () {
     function App(layx) {
         this.layx = layx;
@@ -77,6 +78,7 @@ var App = (function () {
         configurable: true
     });
     App.prototype.open = function (options) {
+        var _this = this;
         if (!this.salver) {
             var salverBar = new UISalverBar_1.default(this);
             var salverBarElement = salverBar.present();
@@ -93,7 +95,9 @@ var App = (function () {
             this.lastWindow = this.window;
             this.window = uiWindow;
             this.windows.push(uiWindow);
-            this.salver.addOrUpdateItem();
+            setTimeout(function () {
+                _this.salver.addOrUpdateItem();
+            }, 30);
         }
     };
     App.prototype.destroy = function (id) {
@@ -145,6 +149,20 @@ var App = (function () {
             if (_this.lastWindow) {
                 var topMenuBar = _this.lastWindow.getComponent("top-menu-bar");
                 topMenuBar && topMenuBar.hide(ev);
+            }
+        }, true);
+        document.addEventListener("mousemove", function (ev) {
+            if (_this.salver && _this.salver.element) {
+                if (ev.pageY >= innerHeight - 50) {
+                    if (ElementHelper.containClass(_this.salver.element, _this.prefix, "salver-bar-keep"))
+                        return;
+                    _this.salver.show();
+                }
+                else {
+                    if (!ElementHelper.containClass(_this.salver.element, _this.prefix, "salver-bar-keep"))
+                        return;
+                    _this.salver.hide();
+                }
             }
         }, true);
     };
