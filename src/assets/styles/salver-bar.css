@@ -19,7 +19,7 @@
 .layx-salver-item:after {
     position: absolute;
     content: '';
-    border-top: 5px solid #bbb;
+    border-top: 5px solid #eee;
     left: 0;
     top: 0;
     right: 0;
