@@ -54,7 +54,14 @@ export default class UISalverButton extends UIComponent implements UIControl {
         const window = this.app.getWindow(this.windowId);
 
         salverButtonElement.addEventListener("mousedown", (ev: MouseEvent) => {
-            window!.updateZIndex(true);
+            if (!window) return;
+
+            if (window === this.app.window && window.status !== Enums.WindowStatus.MIN) {
+                window.min();
+            }
+            else {
+                window.updateZIndex(true);
+            }
         });
 
         salverButtonElement.addEventListener("dblclick", (ev: MouseEvent) => {

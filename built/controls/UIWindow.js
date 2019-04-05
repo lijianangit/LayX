@@ -344,19 +344,21 @@ var UIWindow = (function (_super) {
     UIWindow.prototype.updateZIndex = function (disabledAnimated) {
         if (disabledAnimated === void 0) { disabledAnimated = false; }
         var _a;
-        if (this === this.app.window)
+        if (this === this.app.window && this.status !== "min")
             return;
+        var windowElement = this.element;
         if (this.mode === "layer") {
             if (this.status === "min") {
-                ElementHelper.removeClasses(this.element, this.app.prefix, "window-min");
+                ElementHelper.removeClasses(windowElement, this.app.prefix, "window-min");
+                ElementHelper.addClasses(windowElement, this.app.prefix, this.enableAnimated ? "animate-" + this.animate + "-show" : "");
                 (_a = StringHelper.exchangeValue(this.status, this.lastStatus), this.status = _a[0], this.lastStatus = _a[1]);
             }
             this.zIndex = this.app.zIndex;
-            ElementHelper.addStyles(this.element, {
+            ElementHelper.addStyles(windowElement, {
                 zIndex: "" + this.zIndex
             });
             if (!disabledAnimated && this.enableAnimated) {
-                ElementHelper.addClasses(this.element, this.app.prefix, "animate-" + this.animate + "-show");
+                ElementHelper.addClasses(windowElement, this.app.prefix, "animate-" + this.animate + "-show");
             }
             var parclose = this.getComponent("parclose");
             parclose && parclose.updateZIndex(this.zIndex - 1);

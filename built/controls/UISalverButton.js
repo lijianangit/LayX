@@ -34,6 +34,7 @@ var UISalverButton = (function (_super) {
         configurable: true
     });
     UISalverButton.prototype.present = function () {
+        var _this = this;
         var fragment = ElementHelper.createFragment();
         var salverButtonElement = ElementHelper.createElement("div");
         salverButtonElement.id = this.elementId;
@@ -45,7 +46,14 @@ var UISalverButton = (function (_super) {
         });
         var window = this.app.getWindow(this.windowId);
         salverButtonElement.addEventListener("mousedown", function (ev) {
-            window.updateZIndex(true);
+            if (!window)
+                return;
+            if (window === _this.app.window && window.status !== "min") {
+                window.min();
+            }
+            else {
+                window.updateZIndex(true);
+            }
         });
         salverButtonElement.addEventListener("dblclick", function (ev) {
             window.destroy();
