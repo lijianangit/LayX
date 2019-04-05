@@ -64,10 +64,6 @@ export default class UISalverButton extends UIComponent implements UIControl {
             }
         });
 
-        salverButtonElement.addEventListener("dblclick", (ev: MouseEvent) => {
-            window!.destroy();
-        });
-
         const titleBar = window!.getComponent<UITitleBar>(`
             ${Enums.ComponentType.TOOL_BAR}
             /${Enums.ComponentType.TITLE_BAR}`);
