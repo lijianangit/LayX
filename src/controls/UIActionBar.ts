@@ -132,6 +132,7 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
             parentActionBarElemnt.appendChild(actionButtonElement);
             actionButtons.push(actionButton);
         }
+        
         this.setComponent(Enums.ComponentType.ACTION_BUTTONS, actionButtons);
     }
 }

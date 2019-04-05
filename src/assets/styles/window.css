@@ -12,8 +12,8 @@
     display: none;
 }
 
-.layx-window.layx-animate-zoom-create {
-    animation-name: layx-animate-zoom-create;
+.layx-window.layx-animate-zoom-show {
+    animation-name: layx-animate-zoom-show;
 }
 
 .layx-window.layx-animate-zoom-destroy {

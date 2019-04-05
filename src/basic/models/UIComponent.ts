@@ -1,6 +1,7 @@
 import App from "../../core/App";
 import * as Types from "../../../types";
 import * as CastHelper from "../../utils/CastHelper";
+import * as StringHelper from "../../utils/StringHelper";
 
 export default abstract class UIComponent {
     private state: any;
@@ -18,8 +19,10 @@ export default abstract class UIComponent {
 
     getComponent<T extends UIComponent | Array<UIComponent>>(key: string, component: UIComponent = this): T | null {
         key = CastHelper.stringCast(key);
-        if (key.indexOf("->") > -1) {
-            const keys = key.split("->");
+        key = StringHelper.removeValidSymbol(key);
+        
+        if (key.indexOf("/") > -1) {
+            const keys = key.split("/");
             let tier = component.getComponent(keys[0]);
             if (tier === null) return null;
             for (let i = 0; i < keys.length; i++) {

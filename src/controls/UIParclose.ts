@@ -35,7 +35,8 @@ export default class UIParclose extends UIWindowComponent implements UIControl {
         );
 
         ElementHelper.addStyles(parcloseElement, <Types.CSSStyleObject>{
-            backgroundColor: `rgba(0,0,0,${this.opacity})`
+            backgroundColor: `rgba(0,0,0,${this.opacity})`,
+            zIndex: `${this.window.zIndex - 1}`
         });
 
         this.bindEvent(parcloseElement);
@@ -50,12 +51,12 @@ export default class UIParclose extends UIWindowComponent implements UIControl {
         });
     }
 
-    private bindEvent(element: HTMLElement): void {
-        element.addEventListener("mousedown", (ev: MouseEvent) => {
+    private bindEvent(parcloseElement: HTMLElement): void {
+        parcloseElement.addEventListener("mousedown", (ev: MouseEvent) => {
             this.window.flicker();
         }, true);
 
-        element.addEventListener("contextmenu", (ev: MouseEvent) => {
+        parcloseElement.addEventListener("contextmenu", (ev: MouseEvent) => {
             ev.preventDefault();
             ev.returnValue = false;
             return false;

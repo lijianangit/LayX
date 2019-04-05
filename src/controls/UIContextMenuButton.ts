@@ -60,7 +60,7 @@ export default class UIContextMenuButton extends UIWindowComponent implements UI
             `${Enums.ComponentType.CONTEXT_MENU_BUTTON}-label`,
             "flex-item"
         );
-        
+
         contextMenuButtonElement.appendChild(labelElement);
 
         if (this.items !== false) {
@@ -86,7 +86,7 @@ export default class UIContextMenuButton extends UIWindowComponent implements UI
 
             const rightIconElement = ElementHelper.createElement("div");
             rightIconElement.setAttribute("data-window-id", this.window.id);
-            
+
             ElementHelper.addClasses(rightIconElement, this.app.prefix,
                 "context-menu-more",
                 "flexbox",

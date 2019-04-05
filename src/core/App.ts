@@ -62,18 +62,8 @@ export default class App {
     }
 
     open(options: Types.WindowOption): void {
-        if (!this.salver) {
-            const salverBar = new UISalverBar(this);
-            const salverBarElement = salverBar.present();
-            document.body.append(salverBarElement);
-
-            this.salver = salverBar;
-        }
-
         const window = this.getWindow(options.id);
-        if (window) {
-            window.updateZIndex();
-        }
+        if (window) window.updateZIndex();
         else {
             const uiWindow = new UIWindow(this, options);
             const windowPresent = uiWindow.present();
@@ -83,9 +73,7 @@ export default class App {
             this.window = uiWindow;
             this.windows.push(uiWindow);
 
-            setTimeout(() => {
-                this.salver!.addOrUpdateItem();
-            }, 30);
+            if (this.salver) this.salver.addOrUpdateItem();
         }
     }
 
@@ -93,9 +81,7 @@ export default class App {
         if (!TypeHelper.isStringWithNotEmpty(id)) ExceptionHelper.assertId();
 
         const window = this.getWindow(id);
-        if (window) {
-            window.destroy();
-        }
+        if (window) window.destroy();
     }
 
     getWindow(id: string): UIWindow | null {
@@ -122,9 +108,7 @@ export default class App {
 
     private bindEvent(): void {
         document.addEventListener("DOMContentLoaded", () => {
-            if (!document.body.id) {
-                document.body.id = `${this.prefix}body`;
-            }
+            if (!document.body.id) document.body.id = `${this.prefix}body`;
         });
 
         document.addEventListener("mousedown", (ev: MouseEvent) => {
@@ -137,7 +121,11 @@ export default class App {
                 const topMenuBar = this.window.getComponent<UITopMenuBar>(Enums.ComponentType.TOP_MENU_BAR);
                 topMenuBar && topMenuBar.hide(ev);
 
-                const windowIconContextMenuBar = this.window.getComponent<UIContextMenuBar>(`${Enums.ComponentType.TOOL_BAR}->${Enums.ComponentType.TITLE_BAR}->${Enums.ComponentType.WINDOW_ICON_CONTEXT_MENU_BAR}`);
+                const windowIconContextMenuBar = this.window.getComponent<UIContextMenuBar>(`
+                ${Enums.ComponentType.TOOL_BAR}
+                /${Enums.ComponentType.TITLE_BAR}
+                /${Enums.ComponentType.WINDOW_ICON_CONTEXT_MENU_BAR}`);
+
                 windowIconContextMenuBar && windowIconContextMenuBar.hide();
             }
 
@@ -155,7 +143,7 @@ export default class App {
                 }
                 else {
                     if (!ElementHelper.containClass(this.salver.element, this.prefix, "salver-bar-keep")) return;
-                    this.salver.hide();
+                    this.salver.show(false);
                 }
             }
         }, true);

@@ -32,6 +32,7 @@ export const enum WindowOffset {
 }
 
 export const enum WindowStatus {
+    NONE = "none",
     NORMAL = "normal",
     MAX = "max",
     MIN = "min"
@@ -39,7 +40,7 @@ export const enum WindowStatus {
 
 export const enum ComponentType {
     ICON = "icon",
-    WINDOW_ICON="window-icon",
+    WINDOW_ICON = "window-icon",
     ACTION_BUTTON = "action-button",
     PARCLOSE = "parclose",
     RESIZE_BAR = "resize-bar",
@@ -58,5 +59,5 @@ export const enum ComponentType {
     TOP_MENU_BUTTONS = "top-menu-buttons",
     WINDOW_ICON_CONTEXT_MENU_BAR = "window-icon-context-menu-bar",
     SALVER_BAR = "salver-bar",
-    SALVER_ITEM = "salver-item"
+    SALVER_BUTTON = "salver-button"
 }

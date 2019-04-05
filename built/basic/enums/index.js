@@ -35,6 +35,7 @@ var WindowOffset;
 })(WindowOffset = exports.WindowOffset || (exports.WindowOffset = {}));
 var WindowStatus;
 (function (WindowStatus) {
+    WindowStatus["NONE"] = "none";
     WindowStatus["NORMAL"] = "normal";
     WindowStatus["MAX"] = "max";
     WindowStatus["MIN"] = "min";
@@ -61,5 +62,5 @@ var ComponentType;
     ComponentType["TOP_MENU_BUTTONS"] = "top-menu-buttons";
     ComponentType["WINDOW_ICON_CONTEXT_MENU_BAR"] = "window-icon-context-menu-bar";
     ComponentType["SALVER_BAR"] = "salver-bar";
-    ComponentType["SALVER_ITEM"] = "salver-item";
+    ComponentType["SALVER_BUTTON"] = "salver-button";
 })(ComponentType = exports.ComponentType || (exports.ComponentType = {}));

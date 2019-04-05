@@ -12,3 +12,18 @@ function getCamelCase(str) {
     });
 }
 exports.getCamelCase = getCamelCase;
+function exchangeValue(first, two) {
+    var temp = first;
+    first = two;
+    two = temp;
+    return [first, two];
+}
+exports.exchangeValue = exchangeValue;
+function removeValidSymbol(str) {
+    var resultStr = str.trim();
+    if (resultStr.length === 0)
+        return resultStr;
+    resultStr = str.replace(/[\r\n\t\s]/g, "");
+    return resultStr;
+}
+exports.removeValidSymbol = removeValidSymbol;

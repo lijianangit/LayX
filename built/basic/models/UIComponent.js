@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var CastHelper = require("../../utils/CastHelper");
+var StringHelper = require("../../utils/StringHelper");
 var UIComponent = (function () {
     function UIComponent(app) {
         this.app = app;
@@ -15,8 +16,9 @@ var UIComponent = (function () {
     UIComponent.prototype.getComponent = function (key, component) {
         if (component === void 0) { component = this; }
         key = CastHelper.stringCast(key);
-        if (key.indexOf("->") > -1) {
-            var keys = key.split("->");
+        key = StringHelper.removeValidSymbol(key);
+        if (key.indexOf("/") > -1) {
+            var keys = key.split("/");
             var tier = component.getComponent(keys[0]);
             if (tier === null)
                 return null;

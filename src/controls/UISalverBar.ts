@@ -1,23 +1,13 @@
 import App from "../core/App";
 import UIControl from "../basic/interfaces/UIControl";
 import UIComponent from "../basic/models/UIComponent";
-import UIWindowComponent from "../basic/models/UIWindowComponent";
-import UIWindow from "./UIWindow";
-import WindowMoveDragEvent from "../basic/events/WindowMoveDragEvent";
-import UIActionBar from "./UIActionBar";
-import UITitleBar from "./UITitleBar";
-import UITabBar from "./UITabBar";
-import UIIcon from "./UIIcon";
+import UISalverButton from "./UISalverButton";
 import * as Types from "../../types";
 import * as ElementHelper from "../utils/ElementHelper";
-import * as CastHelper from "../utils/CastHelper";
 import * as Enums from "../basic/enums";
 
 export default class UISalverBar extends UIComponent implements UIControl {
     public readonly elementId: string = `${this.app.prefix + Enums.ComponentType.SALVER_BAR}`;
-
-    public static size: number = 50;
-    public static talentHeight: number = 5;
 
     private _element: HTMLElement | null = null;
     get element() {
@@ -51,8 +41,8 @@ export default class UISalverBar extends UIComponent implements UIControl {
 
         ElementHelper.addStyles(salverBarElement, <Types.CSSStyleObject>{
             zIndex: `${this.app.salverZIndex}`,
-            height: `${UISalverBar.size}px`,
-            bottom: `-${UISalverBar.size - UISalverBar.talentHeight}px`
+            height: `${UISalverButton.size}px`,
+            bottom: `-${UISalverButton.size - UISalverButton.talentHeight}px`
         });
 
         salverBarElement.addEventListener("animationend", (ev: AnimationEvent) => {
@@ -64,136 +54,80 @@ export default class UISalverBar extends UIComponent implements UIControl {
     }
 
     addOrUpdateItem(): void {
-        if (!this.app.window || !this.element) return;
+        const salverElement = this.element;
+        if (!this.app.window || !salverElement) return;
 
-        if (this.app.lastWindow) {
-            const lastSelectItemElement = this.element.querySelector(`.${this.app.prefix + Enums.ComponentType.SALVER_ITEM}[data-window-id='${this.app.lastWindow.id}']`);
-            ElementHelper.removeClasses(<HTMLElement>lastSelectItemElement, this.app.prefix,
-                "salver-item-active"
+        const lastWindow = this.app.lastWindow;
+        if (lastWindow) {
+            const lastSalverButton = new UISalverButton(this.app, lastWindow.id);
+            ElementHelper.removeClasses(lastSalverButton.element, this.app.prefix,
+                "salver-button-active"
             );
         }
 
-        if (this.items.indexOf(this.app.window.id) === -1) {
-            const fragment = ElementHelper.createFragment();
+        const windowId = this.app.window.id;
+        const salverButton = new UISalverButton(this.app, windowId);
+        if (this.items.indexOf(windowId) === -1) {
+            const salverButtonElement = salverButton.present();
 
-            const itemElement = ElementHelper.createElement("div");
-            itemElement.setAttribute("data-window-id", this.app.window.id);
+            salverElement.appendChild(salverButtonElement);
+            this.items.push(windowId);
 
-            ElementHelper.addClasses(itemElement, this.app.prefix,
-                Enums.ComponentType.SALVER_ITEM,
-                "flexbox",
-                "flex-center",
-                "salver-item-active"
-            );
-
-            ElementHelper.addStyles(itemElement, <Types.CSSStyleObject>{
-                width: `${UISalverBar.size}px`,
-                height: `${UISalverBar.size}px`
-            });
-
-            itemElement.addEventListener("mousedown", (ev: MouseEvent) => {
-                const windowId = itemElement.getAttribute("data-window-id");
-                if (!windowId) return;
-
-                const window = this.app.getWindow(windowId);
-                if (window) {
-                    window.updateZIndex();
-                    if (window.status === Enums.WindowStatus.MIN) {
-                        ElementHelper.removeClasses(window.element, this.app.prefix,
-                            "window-min"
-                        );
-                        ElementHelper.addClasses(window.element, this.app.prefix,
-                            window.isNeedAnimation ? "animate" : "",
-                            window.isNeedAnimation ? `animate-${window.animate}-create` : ""
-                        );
-                        if (!ElementHelper.containClass(itemElement, this.app.prefix, "salver-item-active")) {
-                            ElementHelper.addClasses(itemElement, this.app.prefix,
-                                "salver-item-active"
-                            );
-                        }
-
-                        window.status = window.lastStatus;
-                    }
-                }
-            });
-
-            itemElement.addEventListener("dblclick", (ev: MouseEvent) => {
-                const windowId = itemElement.getAttribute("data-window-id");
-                if (!windowId) return;
-
-                const window = this.app.getWindow(windowId);
-                window && window.destroy();
-            });
-
-            if (this.app.window) {
-                const titleBar = this.app.window.getComponent<UITitleBar>(`${Enums.ComponentType.TOOL_BAR}->${Enums.ComponentType.TITLE_BAR}`);
-                if (titleBar) {
-                    const windowIcon = titleBar.getComponent<UIIcon>(`${Enums.ComponentType.WINDOW_ICON}`);
-                    if (windowIcon) {
-                        itemElement.setAttribute("title", titleBar.title || "");
-                        itemElement.appendChild(windowIcon.present());
-                    }
-                }
-            }
-            else itemElement.innerText = "Layx";
-
-            fragment.appendChild(itemElement);
-            this.element.appendChild(fragment);
-
-            this.items.push(this.app.window.id);
             this.updateOffset();
         }
         else {
-            const currentItemElement = this.element.querySelector(`.${this.app.prefix + Enums.ComponentType.SALVER_ITEM}[data-window-id='${this.app.window.id}']`);
-            ElementHelper.addClasses(<HTMLElement>currentItemElement, this.app.prefix,
-                "salver-item-active"
+            ElementHelper.addClasses(salverButton.element, this.app.prefix,
+                "salver-button-active"
             );
         }
     }
 
     removeItem() {
-        if (!this.app.window || !this.element) return;
+        const salverElement = this.element;
+        if (!this.app.window || !salverElement) return;
 
-        if (this.items.indexOf(this.app.window.id) > -1) {
-            const currentSelectItemElement = this.element.querySelector(`.${this.app.prefix + Enums.ComponentType.SALVER_ITEM}[data-window-id='${this.app.window.id}']`);
-            if (currentSelectItemElement && currentSelectItemElement.parentElement) {
-                currentSelectItemElement.parentElement.removeChild(currentSelectItemElement);
-            }
+        const windowId = this.app.window.id;
+        const salverButton = new UISalverButton(this.app, windowId);
 
-            const index = this.items.indexOf(this.app.window.id);
-            this.items.splice(index, 1);
-        }
+        ElementHelper.removeElement(salverButton.element);
+
+        const index = this.items.indexOf(windowId);
+        this.items.splice(index, 1);
+
+        this.updateOffset();
     }
 
     updateOffset() {
-        if (this.element) {
-            const itemsWidth = this.items.length * UISalverBar.size;
+        const salverElement = this.element;
+        if (!salverElement) return;
 
-            ElementHelper.addStyles(this.element, <Types.CSSStyleObject>{
-                left: `${(innerWidth - itemsWidth) / 2}px`
-            });
+        const itemsWidth = this.items.length * UISalverButton.size;
+
+        ElementHelper.addStyles(salverElement, <Types.CSSStyleObject>{
+            left: `${(innerWidth - itemsWidth) / 2}px`
+        });
+    }
+
+    show(isVisible: boolean = true) {
+        if (isVisible) {
+            ElementHelper.removeClasses(this.element, this.app.prefix,
+                "animate-salver-slide-down"
+            );
+
+            ElementHelper.addClasses(this.element, this.app.prefix,
+                "animate-salver-slide-up",
+                "salver-bar-keep"
+            );
         }
-    }
+        else {
+            ElementHelper.removeClasses(this.element, this.app.prefix,
+                "animate-salver-slide-up",
+                "salver-bar-keep"
+            );
 
-    show() {
-        ElementHelper.removeClasses(this.element, this.app.prefix,
-            "animate-salver-slide-down"
-        );
-
-        ElementHelper.addClasses(this.element, this.app.prefix,
-            "animate-salver-slide-up",
-            "salver-bar-keep"
-        );
-    }
-
-    hide() {
-        ElementHelper.removeClasses(this.element, this.app.prefix,
-            "animate-salver-slide-up",
-            "salver-bar-keep"
-        );
-
-        ElementHelper.addClasses(this.element, this.app.prefix,
-            "animate-salver-slide-down"
-        );
+            ElementHelper.addClasses(this.element, this.app.prefix,
+                "animate-salver-slide-down"
+            );
+        }
     }
 }

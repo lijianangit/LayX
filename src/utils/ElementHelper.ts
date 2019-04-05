@@ -63,3 +63,10 @@ export function containClass(element: HTMLElement | null, prefix: string = "layx
     const index = currentClasses.indexOf(prefix + cls);
     return !!~index;
 }
+
+export function removeElement(element: HTMLElement | null) {
+    if (!element) return;
+    if (!element.parentElement) return;
+
+    element.parentElement.removeChild(element);
+}

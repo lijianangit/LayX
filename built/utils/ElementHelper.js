@@ -78,3 +78,11 @@ function containClass(element, prefix, cls) {
     return !!~index;
 }
 exports.containClass = containClass;
+function removeElement(element) {
+    if (!element)
+        return;
+    if (!element.parentElement)
+        return;
+    element.parentElement.removeChild(element);
+}
+exports.removeElement = removeElement;

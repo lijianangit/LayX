@@ -40,7 +40,8 @@ var UIParclose = (function (_super) {
         parcloseElement.id = this.elementId;
         ElementHelper.addClasses(parcloseElement, this.app.prefix, "parclose");
         ElementHelper.addStyles(parcloseElement, {
-            backgroundColor: "rgba(0,0,0," + this.opacity + ")"
+            backgroundColor: "rgba(0,0,0," + this.opacity + ")",
+            zIndex: "" + (this.window.zIndex - 1)
         });
         this.bindEvent(parcloseElement);
         fragment.appendChild(parcloseElement);
@@ -51,12 +52,12 @@ var UIParclose = (function (_super) {
             zIndex: "" + zIndex
         });
     };
-    UIParclose.prototype.bindEvent = function (element) {
+    UIParclose.prototype.bindEvent = function (parcloseElement) {
         var _this = this;
-        element.addEventListener("mousedown", function (ev) {
+        parcloseElement.addEventListener("mousedown", function (ev) {
             _this.window.flicker();
         }, true);
-        element.addEventListener("contextmenu", function (ev) {
+        parcloseElement.addEventListener("contextmenu", function (ev) {
             ev.preventDefault();
             ev.returnValue = false;
             return false;

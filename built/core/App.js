@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindow_1 = require("../controls/UIWindow");
-var UISalverBar_1 = require("../controls/UISalverBar");
 var ExceptionHelper = require("../utils/ExceptionHelper");
 var TypeHelper = require("../utils/TypeHelper");
 var ElementHelper = require("../utils/ElementHelper");
@@ -78,17 +77,9 @@ var App = (function () {
         configurable: true
     });
     App.prototype.open = function (options) {
-        var _this = this;
-        if (!this.salver) {
-            var salverBar = new UISalverBar_1.default(this);
-            var salverBarElement = salverBar.present();
-            document.body.append(salverBarElement);
-            this.salver = salverBar;
-        }
         var window = this.getWindow(options.id);
-        if (window) {
+        if (window)
             window.updateZIndex();
-        }
         else {
             var uiWindow = new UIWindow_1.default(this, options);
             var windowPresent = uiWindow.present();
@@ -96,18 +87,16 @@ var App = (function () {
             this.lastWindow = this.window;
             this.window = uiWindow;
             this.windows.push(uiWindow);
-            setTimeout(function () {
-                _this.salver.addOrUpdateItem();
-            }, 30);
+            if (this.salver)
+                this.salver.addOrUpdateItem();
         }
     };
     App.prototype.destroy = function (id) {
         if (!TypeHelper.isStringWithNotEmpty(id))
             ExceptionHelper.assertId();
         var window = this.getWindow(id);
-        if (window) {
+        if (window)
             window.destroy();
-        }
     };
     App.prototype.getWindow = function (id) {
         if (!TypeHelper.isStringWithNotEmpty(id))
@@ -133,9 +122,8 @@ var App = (function () {
     App.prototype.bindEvent = function () {
         var _this = this;
         document.addEventListener("DOMContentLoaded", function () {
-            if (!document.body.id) {
+            if (!document.body.id)
                 document.body.id = _this.prefix + "body";
-            }
         });
         document.addEventListener("mousedown", function (ev) {
             if (_this.window) {
@@ -144,7 +132,7 @@ var App = (function () {
                 _this.window.hideMoreActionContextMenu();
                 var topMenuBar = _this.window.getComponent("top-menu-bar");
                 topMenuBar && topMenuBar.hide(ev);
-                var windowIconContextMenuBar = _this.window.getComponent("tool-bar" + "->" + "title-bar" + "->" + "window-icon-context-menu-bar");
+                var windowIconContextMenuBar = _this.window.getComponent("\n                " + "tool-bar" + "\n                /" + "title-bar" + "\n                /" + "window-icon-context-menu-bar");
                 windowIconContextMenuBar && windowIconContextMenuBar.hide();
             }
             if (_this.lastWindow) {
@@ -162,7 +150,7 @@ var App = (function () {
                 else {
                     if (!ElementHelper.containClass(_this.salver.element, _this.prefix, "salver-bar-keep"))
                         return;
-                    _this.salver.hide();
+                    _this.salver.show(false);
                 }
             }
         }, true);
