@@ -201,3 +201,14 @@ export function actionButtonsCast(option: Array<Types.ActionButtonOption> | bool
     TypeHelper.isActionButtons(option);
     return option;
 }
+
+export function contentTypeCast(option: any, defaultValue: Enums.WindowContentType): Enums.WindowContentType {
+    if (option === undefined) return defaultValue;
+    TypeHelper.isContentType(option)
+    return option;
+}
+
+export function stringOrElementCast(option: any): string | Element {
+    if (!TypeHelper.isStringOrElement(option)) return ExceptionHelper.assertNever(option);
+    return option;
+}

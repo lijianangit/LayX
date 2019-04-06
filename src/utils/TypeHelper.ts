@@ -11,7 +11,6 @@ export function isWindowCoord(obj: any): obj is Types.WindowCoord {
 }
 
 export function isWindowMode(obj: any): obj is Enums.WindowMode {
-    let isSelf: boolean = false;
     switch (obj) {
         case Enums.WindowMode.LAYER:
         case Enums.WindowMode.EMBED:
@@ -19,11 +18,9 @@ export function isWindowMode(obj: any): obj is Enums.WindowMode {
         default:
             return ExceptionHelper.assertNever(<never>obj);
     }
-    return isSelf;
 }
 
 export function isWindowAnimate(obj: any): obj is Enums.WindowAnimate {
-    let isSelf: boolean = false;
     switch (obj) {
         case Enums.WindowAnimate.NONE:
         case Enums.WindowAnimate.ZOOM:
@@ -31,7 +28,6 @@ export function isWindowAnimate(obj: any): obj is Enums.WindowAnimate {
         default:
             return ExceptionHelper.assertNever(<never>obj);
     }
-    return isSelf;
 }
 
 export function isJsonObject(obj: any): obj is Types.JsonObject {
@@ -93,4 +89,25 @@ export function isActionButtons(obj: Array<any>): obj is Array<Types.ActionButto
 export function isStringWithNotEmpty(obj: any): obj is string {
     return typeof obj === "string"
         && obj.trim().length > 0;
+}
+
+export function isElement(obj: any): obj is Element {
+    return typeof obj === "object"
+        && obj instanceof Element;
+}
+
+export function isContentType(obj: any): obj is Enums.WindowContentType {
+    switch (obj) {
+        case Enums.WindowContentType.HTML:
+        case Enums.WindowContentType.LOCAL_URL:
+        case Enums.WindowContentType.NON_LOCAL_URL:
+            return true;
+        default:
+            return ExceptionHelper.assertNever(<never>obj);
+    }
+}
+
+
+export function isStringOrElement(obj: any): obj is string | Element {
+    return typeof obj === "string" || isElement(obj);
 }

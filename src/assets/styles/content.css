@@ -1,0 +1,6 @@
+.layx-content-container {
+    width: 100%;
+    position: relative;
+    overflow: auto;
+    font-size: 14px;
+}

@@ -9,6 +9,7 @@ import UIContextMenuBar from "./UIContextMenuBar";
 import UIActionBar from "./UIActionBar";
 import UITopMenuBar from "./UITopMenuBar";
 import UISalverBar from "./UISalverBar";
+import UIContent from "./UIContent";
 import * as Types from "../../types";
 import * as Enums from "../basic/enums";
 import * as ElementHelper from "../utils/ElementHelper";
@@ -45,6 +46,7 @@ export default class UIWindow extends UIComponent implements UIControl {
     public toolBar: Types.ToolBarOption | false = {};
     public contextMenu: Array<Types.ContextMenuButtonOption> | false = false;
     public topMenu: Array<Types.ContextMenuButtonOption> | false = false;
+    public content: Types.ContentOption | false = {};
 
     private _element: HTMLElement | null = null;
     get element() {
@@ -95,6 +97,7 @@ export default class UIWindow extends UIComponent implements UIControl {
         this.toolBar = CastHelper.jsonOrBooleanCast(options.toolBar, this.toolBar);
         this.contextMenu = CastHelper.contextMenuButtonsCast(options.contextMenu);
         this.topMenu = CastHelper.contextMenuButtonsCast(options.topMenu);
+        this.content = CastHelper.jsonOrBooleanCast(options.content, this.content);
     }
 
     present(): DocumentFragment {
@@ -149,13 +152,19 @@ export default class UIWindow extends UIComponent implements UIControl {
             this.setComponent(Enums.ComponentType.TOP_MENU_BAR, topMenuBar);
         }
 
+        if (this.content !== false) {
+            const content = new UIContent(this.app, this, this.content);
+            const contentElement = content.present();
+            windowElement.appendChild(contentElement);
+            this.setComponent(Enums.ComponentType.CONTENT_CONTAINER, content);
+        }
+
         if (this.resizeBar !== false) {
             const resizeBar = new UIResizeBar(this.app, this, this.resizeBar);
             const resizeElement = resizeBar.present();
             windowElement.appendChild(resizeElement);
             this.setComponent(Enums.ComponentType.RESIZE_BAR, resizeBar);
         }
-
 
         if (this.parclose !== false) {
             const parclose = new UIParclose(this.app, this, { opacity: this.parclose });

@@ -211,3 +211,16 @@ function actionButtonsCast(option, defaultValue) {
     return option;
 }
 exports.actionButtonsCast = actionButtonsCast;
+function contentTypeCast(option, defaultValue) {
+    if (option === undefined)
+        return defaultValue;
+    TypeHelper.isContentType(option);
+    return option;
+}
+exports.contentTypeCast = contentTypeCast;
+function stringOrElementCast(option) {
+    if (!TypeHelper.isStringOrElement(option))
+        return ExceptionHelper.assertNever(option);
+    return option;
+}
+exports.stringOrElementCast = stringOrElementCast;

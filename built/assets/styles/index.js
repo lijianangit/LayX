@@ -11,3 +11,4 @@ require("./resize-bar.css");
 require("./action-bar.css");
 require("./title-bar.css");
 require("./top-menu-bar.css");
+require("./content.css");

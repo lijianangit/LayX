@@ -63,4 +63,12 @@ var ComponentType;
     ComponentType["WINDOW_ICON_CONTEXT_MENU_BAR"] = "window-icon-context-menu-bar";
     ComponentType["SALVER_BAR"] = "salver-bar";
     ComponentType["SALVER_BUTTON"] = "salver-button";
+    ComponentType["CONTENT_CONTAINER"] = "content-container";
+    ComponentType["HTML_CONTENT"] = "html-content";
 })(ComponentType = exports.ComponentType || (exports.ComponentType = {}));
+var WindowContentType;
+(function (WindowContentType) {
+    WindowContentType["HTML"] = "html";
+    WindowContentType["LOCAL_URL"] = "local-url";
+    WindowContentType["NON_LOCAL_URL"] = "non-local-url";
+})(WindowContentType = exports.WindowContentType || (exports.WindowContentType = {}));

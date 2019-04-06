@@ -10,7 +10,6 @@ function isWindowCoord(obj) {
 }
 exports.isWindowCoord = isWindowCoord;
 function isWindowMode(obj) {
-    var isSelf = false;
     switch (obj) {
         case "layer":
         case "embed":
@@ -18,11 +17,9 @@ function isWindowMode(obj) {
         default:
             return ExceptionHelper.assertNever(obj);
     }
-    return isSelf;
 }
 exports.isWindowMode = isWindowMode;
 function isWindowAnimate(obj) {
-    var isSelf = false;
     switch (obj) {
         case "none":
         case "zoom":
@@ -30,7 +27,6 @@ function isWindowAnimate(obj) {
         default:
             return ExceptionHelper.assertNever(obj);
     }
-    return isSelf;
 }
 exports.isWindowAnimate = isWindowAnimate;
 function isJsonObject(obj) {
@@ -94,3 +90,23 @@ function isStringWithNotEmpty(obj) {
         && obj.trim().length > 0;
 }
 exports.isStringWithNotEmpty = isStringWithNotEmpty;
+function isElement(obj) {
+    return typeof obj === "object"
+        && obj instanceof Element;
+}
+exports.isElement = isElement;
+function isContentType(obj) {
+    switch (obj) {
+        case "html":
+        case "local-url":
+        case "non-local-url":
+            return true;
+        default:
+            return ExceptionHelper.assertNever(obj);
+    }
+}
+exports.isContentType = isContentType;
+function isStringOrElement(obj) {
+    return typeof obj === "string" || isElement(obj);
+}
+exports.isStringOrElement = isStringOrElement;

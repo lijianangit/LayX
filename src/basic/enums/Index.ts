@@ -59,5 +59,13 @@ export const enum ComponentType {
     TOP_MENU_BUTTONS = "top-menu-buttons",
     WINDOW_ICON_CONTEXT_MENU_BAR = "window-icon-context-menu-bar",
     SALVER_BAR = "salver-bar",
-    SALVER_BUTTON = "salver-button"
+    SALVER_BUTTON = "salver-button",
+    CONTENT_CONTAINER = "content-container",
+    HTML_CONTENT = "html-content"
+}
+
+export const enum WindowContentType {
+    HTML = "html",
+    LOCAL_URL = "local-url",
+    NON_LOCAL_URL = "non-local-url"
 }

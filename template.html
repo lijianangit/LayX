@@ -15,10 +15,56 @@
     <button id="create3">Create3</button>
     <button id="create4">Create4</button>
     <button id="create5">Create5</button>
+    <div id="about-layx" style="display:none;padding: 10px;line-height: 1.5;">
+        <h2>Layx 一个神奇的UI窗口</h2>
+        <p>Layx
+            诞生于一次C/S架构系统往B/S架构系统迁移项目中。起初，我们想在B/S架构上实现类C/S架构窗口功能，但百度、谷歌过后依然没能找到合适的Javascript插件。于是乎在2018年05月01日五一劳动节期间连夜赶工创造出了
+            Layx 。</p>
+        <p>目前 Layx 拥有和C/S架构一样灵活的操作方式，支持网页多窗口、多任务协同操作，支持窗口各种事件。</p>
+        <h2>Layx 一个神奇的UI窗口</h2>
+        <p>Layx
+            诞生于一次C/S架构系统往B/S架构系统迁移项目中。起初，我们想在B/S架构上实现类C/S架构窗口功能，但百度、谷歌过后依然没能找到合适的Javascript插件。于是乎在2018年05月01日五一劳动节期间连夜赶工创造出了
+            Layx 。</p>
+        <p>目前 Layx 拥有和C/S架构一样灵活的操作方式，支持网页多窗口、多任务协同操作，支持窗口各种事件。</p>
+        <h2>Layx 一个神奇的UI窗口</h2>
+        <p>Layx
+            诞生于一次C/S架构系统往B/S架构系统迁移项目中。起初，我们想在B/S架构上实现类C/S架构窗口功能，但百度、谷歌过后依然没能找到合适的Javascript插件。于是乎在2018年05月01日五一劳动节期间连夜赶工创造出了
+            Layx 。</p>
+        <p>目前 Layx 拥有和C/S架构一样灵活的操作方式，支持网页多窗口、多任务协同操作，支持窗口各种事件。</p>
+        <h2>Layx 一个神奇的UI窗口</h2>
+        <p>Layx
+            诞生于一次C/S架构系统往B/S架构系统迁移项目中。起初，我们想在B/S架构上实现类C/S架构窗口功能，但百度、谷歌过后依然没能找到合适的Javascript插件。于是乎在2018年05月01日五一劳动节期间连夜赶工创造出了
+            Layx 。</p>
+        <p>目前 Layx 拥有和C/S架构一样灵活的操作方式，支持网页多窗口、多任务协同操作，支持窗口各种事件。</p>
+        <h2>Layx 一个神奇的UI窗口</h2>
+        <p>Layx
+            诞生于一次C/S架构系统往B/S架构系统迁移项目中。起初，我们想在B/S架构上实现类C/S架构窗口功能，但百度、谷歌过后依然没能找到合适的Javascript插件。于是乎在2018年05月01日五一劳动节期间连夜赶工创造出了
+            Layx 。</p>
+        <p>目前 Layx 拥有和C/S架构一样灵活的操作方式，支持网页多窗口、多任务协同操作，支持窗口各种事件。</p>
+        <h2>Layx 一个神奇的UI窗口</h2>
+        <p>Layx
+            诞生于一次C/S架构系统往B/S架构系统迁移项目中。起初，我们想在B/S架构上实现类C/S架构窗口功能，但百度、谷歌过后依然没能找到合适的Javascript插件。于是乎在2018年05月01日五一劳动节期间连夜赶工创造出了
+            Layx 。</p>
+        <p>目前 Layx 拥有和C/S架构一样灵活的操作方式，支持网页多窗口、多任务协同操作，支持窗口各种事件。</p>
+        <h2>Layx 一个神奇的UI窗口</h2>
+        <p>Layx
+            诞生于一次C/S架构系统往B/S架构系统迁移项目中。起初，我们想在B/S架构上实现类C/S架构窗口功能，但百度、谷歌过后依然没能找到合适的Javascript插件。于是乎在2018年05月01日五一劳动节期间连夜赶工创造出了
+            Layx 。</p>
+        <p>目前 Layx 拥有和C/S架构一样灵活的操作方式，支持网页多窗口、多任务协同操作，支持窗口各种事件。</p>
+        <h2>Layx 一个神奇的UI窗口</h2>
+        <p>Layx
+            诞生于一次C/S架构系统往B/S架构系统迁移项目中。起初，我们想在B/S架构上实现类C/S架构窗口功能，但百度、谷歌过后依然没能找到合适的Javascript插件。于是乎在2018年05月01日五一劳动节期间连夜赶工创造出了
+            Layx 。</p>
+        <p>目前 Layx 拥有和C/S架构一样灵活的操作方式，支持网页多窗口、多任务协同操作，支持窗口各种事件。</p>
+    </div>
     <script type="text/javascript">
         document.getElementById("create").onclick = function () {
             layx.open({
                 id: "hello-world",
+                content: {
+                    type: 'html',
+                    value: document.getElementById("about-layx")
+                },
                 toolBar: {
                     titleBar: {
                         title: "Layx - Create1."
@@ -179,6 +225,10 @@
         document.getElementById("create2").onclick = function () {
             layx.open({
                 id: "hello-world2",
+                content: {
+                    type: 'html',
+                    value: '一个神奇的UI窗口'
+                },
                 toolBar: {
                     titleBar: {
                         title: "Layx - Create2."
@@ -340,6 +390,10 @@
         document.getElementById("create3").onclick = function () {
             layx.open({
                 id: "hello-world3",
+                content: {
+                    type: 'html',
+                    value: '一个神奇的UI窗口'
+                },
                 toolBar: {
                     titleBar: {
                         title: "Layx - Create3."
@@ -351,6 +405,10 @@
         document.getElementById("create4").onclick = function () {
             layx.open({
                 id: "hello-world4",
+                content: {
+                    type: 'html',
+                    value: '一个神奇的UI窗口'
+                },
                 toolBar: {
                     titleBar: {
                         title: "Layx - Create4."
@@ -362,6 +420,10 @@
         document.getElementById("create5").onclick = function () {
             layx.open({
                 id: "hello-world5",
+                content: {
+                    type: 'html',
+                    value: '一个神奇的UI窗口'
+                },
                 toolBar: {
                     titleBar: {
                         title: "Layx - Create5."

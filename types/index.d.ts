@@ -79,6 +79,11 @@ export type ToolBarOption = {
     actionBar?: ActionBarOption | boolean;
 } & JsonObject;
 
+export type ContentOption = {
+    type?: Enums.WindowContentType;
+    value?: string | Element
+};
+
 export type WindowOption = {
     id: string;
     mode?: Enums.WindowMode;
@@ -98,6 +103,7 @@ export type WindowOption = {
     toolBar?: ToolBarOption | boolean;
     contextMenu?: Array<ContextMenuButtonOption> | false;
     topMenu?: Array<ContextMenuButtonOption> | false;
+    content?: ContentOption
 } & JsonObject;
 
 export type Component = {
