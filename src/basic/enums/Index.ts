@@ -58,6 +58,7 @@ export const enum ComponentType {
     TOP_MENU_BUTTON = "top-menu-button",
     TOP_MENU_BUTTONS = "top-menu-buttons",
     WINDOW_ICON_CONTEXT_MENU_BAR = "window-icon-context-menu-bar",
+    SALVER = "salver",
     SALVER_BAR = "salver-bar",
     SALVER_BUTTON = "salver-button",
     CONTENT_CONTAINER = "content-container",

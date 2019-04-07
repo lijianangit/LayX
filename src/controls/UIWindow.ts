@@ -431,34 +431,43 @@ export default class UIWindow extends UIComponent implements UIControl {
         }
     }
 
+    private showThis(windowElement?: HTMLElement | null) {
+        if (this.status === Enums.WindowStatus.MIN) {
+            windowElement = windowElement || this.element;
+
+            ElementHelper.removeClasses(windowElement, this.app.prefix,
+                `window-min`
+            );
+
+            ElementHelper.addClasses(windowElement, this.app.prefix,
+                this.enableAnimated ? `animate-${this.animate}-show` : ""
+            );
+
+            if (this.enableAnimated) {
+                ElementHelper.addClasses(windowElement, this.app.prefix,
+                    `animate-${this.animate}-show`
+                );
+            }
+
+            ([this.status, this.lastStatus] = StringHelper.exchangeValue(this.status, this.lastStatus));
+        }
+    }
+
     updateZIndex(disabledAnimated: boolean = false): void {
-        if (this === this.app.window && this.status !== Enums.WindowStatus.MIN) return;
+        if (this === this.app.window) {
+            this.showThis();
+            return;
+        };
 
         const windowElement = this.element;
         if (this.mode === Enums.WindowMode.LAYER) {
-            if (this.status === Enums.WindowStatus.MIN) {
-                ElementHelper.removeClasses(windowElement, this.app.prefix,
-                    `window-min`
-                );
-
-                ElementHelper.addClasses(windowElement, this.app.prefix,
-                    this.enableAnimated ? `animate-${this.animate}-show` : ""
-                );
-
-                ([this.status, this.lastStatus] = StringHelper.exchangeValue(this.status, this.lastStatus));
-            }
+            this.showThis(windowElement);
 
             this.zIndex = this.app.zIndex;
 
             ElementHelper.addStyles(windowElement, <Types.CSSStyleObject>{
                 zIndex: `${this.zIndex}`
             });
-
-            if (!disabledAnimated && this.enableAnimated) {
-                ElementHelper.addClasses(windowElement, this.app.prefix,
-                    `animate-${this.animate}-show`
-                );
-            }
 
             const parclose = this.getComponent<UIParclose>(Enums.ComponentType.PARCLOSE);
             parclose && parclose.updateZIndex(this.zIndex - 1);

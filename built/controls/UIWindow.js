@@ -350,25 +350,32 @@ var UIWindow = (function (_super) {
             }, duration);
         }
     };
+    UIWindow.prototype.showThis = function (windowElement) {
+        var _a;
+        if (this.status === "min") {
+            windowElement = windowElement || this.element;
+            ElementHelper.removeClasses(windowElement, this.app.prefix, "window-min");
+            ElementHelper.addClasses(windowElement, this.app.prefix, this.enableAnimated ? "animate-" + this.animate + "-show" : "");
+            if (this.enableAnimated) {
+                ElementHelper.addClasses(windowElement, this.app.prefix, "animate-" + this.animate + "-show");
+            }
+            (_a = StringHelper.exchangeValue(this.status, this.lastStatus), this.status = _a[0], this.lastStatus = _a[1]);
+        }
+    };
     UIWindow.prototype.updateZIndex = function (disabledAnimated) {
         if (disabledAnimated === void 0) { disabledAnimated = false; }
-        var _a;
-        if (this === this.app.window && this.status !== "min")
+        if (this === this.app.window) {
+            this.showThis();
             return;
+        }
+        ;
         var windowElement = this.element;
         if (this.mode === "layer") {
-            if (this.status === "min") {
-                ElementHelper.removeClasses(windowElement, this.app.prefix, "window-min");
-                ElementHelper.addClasses(windowElement, this.app.prefix, this.enableAnimated ? "animate-" + this.animate + "-show" : "");
-                (_a = StringHelper.exchangeValue(this.status, this.lastStatus), this.status = _a[0], this.lastStatus = _a[1]);
-            }
+            this.showThis(windowElement);
             this.zIndex = this.app.zIndex;
             ElementHelper.addStyles(windowElement, {
                 zIndex: "" + this.zIndex
             });
-            if (!disabledAnimated && this.enableAnimated) {
-                ElementHelper.addClasses(windowElement, this.app.prefix, "animate-" + this.animate + "-show");
-            }
             var parclose = this.getComponent("parclose");
             parclose && parclose.updateZIndex(this.zIndex - 1);
             this.app.lastWindow = this.app.window;
