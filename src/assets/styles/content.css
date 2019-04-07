@@ -3,4 +3,9 @@
     position: relative;
     overflow: auto;
     font-size: 14px;
+    opacity: 1;
+}
+
+.layx-content-container.layx-content-container-fade-out {
+    opacity: 0;
 }

@@ -29,5 +29,7 @@
 }
 
 .layx-window.layx-animate-zoom-to-max, .layx-window.layx-animate-zoom-to-normal {
-    transition: all 0.1s ease-in-out;
+    transition-property: left, top, width, height;
+    transition-duration: 0.1s;
+    transition-timing-function: ease-in-out;
 }

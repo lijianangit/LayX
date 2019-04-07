@@ -41,7 +41,7 @@ var UIContent = (function (_super) {
         var contentElement = ElementHelper.createElement("div");
         contentElement.setAttribute("data-window-id", this.window.id);
         contentElement.id = this.elementId;
-        ElementHelper.addClasses(contentElement, this.app.prefix, "content-container", "flex-item");
+        ElementHelper.addClasses(contentElement, this.app.prefix, "content-container", "content-container" + "-fade-out", "flex-item");
         ElementHelper.addClasses(contentElement, this.app.prefix, "content-container");
         switch (this.type) {
             case "html":

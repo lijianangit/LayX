@@ -135,7 +135,7 @@ export default class UIWindow extends UIComponent implements UIControl {
         });
 
         windowElement.addEventListener("mousedown", (ev: MouseEvent) => {
-            this.updateZIndex(true);
+            this.updateZIndex();
         }, true);
 
         if (this.toolBar !== false) {
@@ -194,6 +194,22 @@ export default class UIWindow extends UIComponent implements UIControl {
         return fragment;
     }
 
+    private handlerContentByAnimate(isFadeOut: boolean = true) {
+        const content = this.getComponent<UIContent>(Enums.ComponentType.CONTENT_CONTAINER);
+        if (content) {
+            if (isFadeOut) {
+                ElementHelper.addClasses(content.element, this.app.prefix,
+                    `${Enums.ComponentType.CONTENT_CONTAINER}-fade-out`
+                );
+            }
+            else {
+                ElementHelper.removeClasses(content.element, this.app.prefix,
+                    `${Enums.ComponentType.CONTENT_CONTAINER}-fade-out`
+                );
+            }
+        }
+    }
+
     private bindEvent(windowElement: HTMLElement): void {
         if (this.contextMenu !== false) {
             windowElement.addEventListener("contextmenu", (ev: MouseEvent) => {
@@ -207,27 +223,33 @@ export default class UIWindow extends UIComponent implements UIControl {
             });
         }
 
-        if (this.enableAnimated) {
-            windowElement.addEventListener("animationend", (ev: AnimationEvent) => {
-                ElementHelper.removeClasses(this.element, this.app.prefix,
-                    `animate-${this.animate}-show`,
-                    `animate-${this.animate}-drag-to-normal`
-                );
+        windowElement.addEventListener("animationstart", (ev: AnimationEvent) => {
+            this.handlerContentByAnimate();
+        });
 
-                if (ElementHelper.containClass(this.element, this.app.prefix,
-                    `animate-${this.animate}-destroy`)) this.remove();
+        windowElement.addEventListener("animationend", (ev: AnimationEvent) => {
+            ElementHelper.removeClasses(this.element, this.app.prefix,
+                `animate-${this.animate}-show`,
+                `animate-${this.animate}-drag-to-normal`
+            );
 
-                if (ElementHelper.containClass(this.element, this.app.prefix,
-                    `animate-${this.animate}-to-min`)) this.minimize();
-            });
+            if (ElementHelper.containClass(this.element, this.app.prefix,
+                `animate-${this.animate}-destroy`)) this.remove();
 
-            windowElement.addEventListener("transitionend", (ev: TransitionEvent) => {
-                ElementHelper.removeClasses(this.element, this.app.prefix,
-                    `animate-${this.animate}-to-max`,
-                    `animate-${this.animate}-to-normal`
-                );
-            });
-        }
+            if (ElementHelper.containClass(this.element, this.app.prefix,
+                `animate-${this.animate}-to-min`)) this.minimize();
+
+            this.handlerContentByAnimate(false);
+        });
+
+        windowElement.addEventListener("transitionend", (ev: TransitionEvent) => {
+            ElementHelper.removeClasses(this.element, this.app.prefix,
+                `animate-${this.animate}-to-max`,
+                `animate-${this.animate}-to-normal`
+            );
+
+            this.handlerContentByAnimate(false);
+        });
     }
 
     destroy(): void {
@@ -261,6 +283,8 @@ export default class UIWindow extends UIComponent implements UIControl {
 
         this.lastStatus = this.status;
         this.status = Enums.WindowStatus.NORMAL;
+
+        this.handlerContentByAnimate();
 
         ElementHelper.removeClasses(document.body, `z${this.app.prefix}`,
             "body-noscroll"
@@ -314,6 +338,8 @@ export default class UIWindow extends UIComponent implements UIControl {
     max(): void {
         const windowElement = this.element;
         if (!windowElement || !windowElement.parentElement || this.status === Enums.WindowStatus.MAX) return;
+
+        this.handlerContentByAnimate();
 
         this.lastStatus = this.status;
         this.status = Enums.WindowStatus.MAX;
@@ -433,6 +459,8 @@ export default class UIWindow extends UIComponent implements UIControl {
 
     private showThis(windowElement?: HTMLElement | null) {
         if (this.status === Enums.WindowStatus.MIN) {
+            this.handlerContentByAnimate(true);
+
             windowElement = windowElement || this.element;
 
             ElementHelper.removeClasses(windowElement, this.app.prefix,
@@ -453,7 +481,7 @@ export default class UIWindow extends UIComponent implements UIControl {
         }
     }
 
-    updateZIndex(disabledAnimated: boolean = false): void {
+    updateZIndex(): void {
         if (this === this.app.window) {
             this.showThis();
             return;

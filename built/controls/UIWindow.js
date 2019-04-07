@@ -130,7 +130,7 @@ var UIWindow = (function (_super) {
             webkitBoxShadow: this.shadow
         });
         windowElement.addEventListener("mousedown", function (ev) {
-            _this.updateZIndex(true);
+            _this.updateZIndex();
         }, true);
         if (this.toolBar !== false) {
             var toolBar = new UIToolBar_1.default(this.app, this, this.toolBar);
@@ -178,6 +178,18 @@ var UIWindow = (function (_super) {
         fragment.appendChild(windowElement);
         return fragment;
     };
+    UIWindow.prototype.handlerContentByAnimate = function (isFadeOut) {
+        if (isFadeOut === void 0) { isFadeOut = true; }
+        var content = this.getComponent("content-container");
+        if (content) {
+            if (isFadeOut) {
+                ElementHelper.addClasses(content.element, this.app.prefix, "content-container" + "-fade-out");
+            }
+            else {
+                ElementHelper.removeClasses(content.element, this.app.prefix, "content-container" + "-fade-out");
+            }
+        }
+    };
     UIWindow.prototype.bindEvent = function (windowElement) {
         var _this = this;
         if (this.contextMenu !== false) {
@@ -189,18 +201,21 @@ var UIWindow = (function (_super) {
                 return false;
             });
         }
-        if (this.enableAnimated) {
-            windowElement.addEventListener("animationend", function (ev) {
-                ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-" + _this.animate + "-show", "animate-" + _this.animate + "-drag-to-normal");
-                if (ElementHelper.containClass(_this.element, _this.app.prefix, "animate-" + _this.animate + "-destroy"))
-                    _this.remove();
-                if (ElementHelper.containClass(_this.element, _this.app.prefix, "animate-" + _this.animate + "-to-min"))
-                    _this.minimize();
-            });
-            windowElement.addEventListener("transitionend", function (ev) {
-                ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-" + _this.animate + "-to-max", "animate-" + _this.animate + "-to-normal");
-            });
-        }
+        windowElement.addEventListener("animationstart", function (ev) {
+            _this.handlerContentByAnimate();
+        });
+        windowElement.addEventListener("animationend", function (ev) {
+            ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-" + _this.animate + "-show", "animate-" + _this.animate + "-drag-to-normal");
+            if (ElementHelper.containClass(_this.element, _this.app.prefix, "animate-" + _this.animate + "-destroy"))
+                _this.remove();
+            if (ElementHelper.containClass(_this.element, _this.app.prefix, "animate-" + _this.animate + "-to-min"))
+                _this.minimize();
+            _this.handlerContentByAnimate(false);
+        });
+        windowElement.addEventListener("transitionend", function (ev) {
+            ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-" + _this.animate + "-to-max", "animate-" + _this.animate + "-to-normal");
+            _this.handlerContentByAnimate(false);
+        });
     };
     UIWindow.prototype.destroy = function () {
         if (this.enableAnimated) {
@@ -227,6 +242,7 @@ var UIWindow = (function (_super) {
             return;
         this.lastStatus = this.status;
         this.status = "normal";
+        this.handlerContentByAnimate();
         ElementHelper.removeClasses(document.body, "z" + this.app.prefix, "body-noscroll");
         ElementHelper.addClasses(windowElement, this.app.prefix, this.enableAnimated ? (dragToNormal === false ? "animate-" + this.animate + "-to-normal" : "animate-" + this.animate + "-drag-to-normal") : "");
         ElementHelper.addStyles(windowElement, {
@@ -262,6 +278,7 @@ var UIWindow = (function (_super) {
         var windowElement = this.element;
         if (!windowElement || !windowElement.parentElement || this.status === "max")
             return;
+        this.handlerContentByAnimate();
         this.lastStatus = this.status;
         this.status = "max";
         ElementHelper.addClasses(document.body, "z" + this.app.prefix, "body-noscroll");
@@ -353,6 +370,7 @@ var UIWindow = (function (_super) {
     UIWindow.prototype.showThis = function (windowElement) {
         var _a;
         if (this.status === "min") {
+            this.handlerContentByAnimate(true);
             windowElement = windowElement || this.element;
             ElementHelper.removeClasses(windowElement, this.app.prefix, "window-min");
             ElementHelper.addClasses(windowElement, this.app.prefix, this.enableAnimated ? "animate-" + this.animate + "-show" : "");
@@ -362,8 +380,7 @@ var UIWindow = (function (_super) {
             (_a = StringHelper.exchangeValue(this.status, this.lastStatus), this.status = _a[0], this.lastStatus = _a[1]);
         }
     };
-    UIWindow.prototype.updateZIndex = function (disabledAnimated) {
-        if (disabledAnimated === void 0) { disabledAnimated = false; }
+    UIWindow.prototype.updateZIndex = function () {
         if (this === this.app.window) {
             this.showThis();
             return;

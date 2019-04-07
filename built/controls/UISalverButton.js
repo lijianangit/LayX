@@ -52,7 +52,7 @@ var UISalverButton = (function (_super) {
                 window.min();
             }
             else {
-                window.updateZIndex(true);
+                window.updateZIndex();
             }
         });
         var titleBar = window.getComponent("\n            " + "tool-bar" + "\n            /" + "title-bar");

@@ -60,7 +60,7 @@ export default class UISalverButton extends UIComponent implements UIControl {
                 window.min();
             }
             else {
-                window.updateZIndex(true);
+                window.updateZIndex();
             }
         });
 

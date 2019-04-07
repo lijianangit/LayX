@@ -36,6 +36,7 @@ export default class UIContent extends UIWindowComponent implements UIControl {
 
         ElementHelper.addClasses(contentElement, this.app.prefix,
             Enums.ComponentType.CONTENT_CONTAINER,
+            `${Enums.ComponentType.CONTENT_CONTAINER}-fade-out`,
             "flex-item"
         );
 
