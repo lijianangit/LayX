@@ -61,6 +61,7 @@ export const enum ComponentType {
     SALVER = "salver",
     SALVER_BAR = "salver-bar",
     SALVER_BUTTON = "salver-button",
+    CONTENT="content",
     CONTENT_CONTAINER = "content-container",
     HTML_CONTENT = "html-content",
     URL_CONTENT = "url-content"

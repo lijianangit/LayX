@@ -64,6 +64,7 @@ var ComponentType;
     ComponentType["SALVER"] = "salver";
     ComponentType["SALVER_BAR"] = "salver-bar";
     ComponentType["SALVER_BUTTON"] = "salver-button";
+    ComponentType["CONTENT"] = "content";
     ComponentType["CONTENT_CONTAINER"] = "content-container";
     ComponentType["HTML_CONTENT"] = "html-content";
     ComponentType["URL_CONTENT"] = "url-content";

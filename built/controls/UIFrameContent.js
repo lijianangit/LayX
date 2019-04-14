@@ -22,12 +22,23 @@ var UIFrameContent = (function (_super) {
         var _this = _super.call(this, app, window) || this;
         _this.elementId = _this.window.elementId + "-" + "url-content";
         _this._element = null;
+        _this._contentWindow = null;
         _this.url = CastHelper.stringCast(url);
         return _this;
     }
     Object.defineProperty(UIFrameContent.prototype, "element", {
         get: function () {
             return document.getElementById("" + this.elementId);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIFrameContent.prototype, "contentWindow", {
+        get: function () {
+            var frameElement = document.getElementById("" + this.elementId);
+            if (!frameElement)
+                return null;
+            return frameElement.contentWindow;
         },
         enumerable: true,
         configurable: true

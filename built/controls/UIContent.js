@@ -15,9 +15,9 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var UIHtmlContent_1 = require("./UIHtmlContent");
+var UIFrameContent_1 = require("./UIFrameContent");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
-var UIFrameContent_1 = require("./UIFrameContent");
 var UIContent = (function (_super) {
     __extends(UIContent, _super);
     function UIContent(app, window, options) {
@@ -49,11 +49,13 @@ var UIContent = (function (_super) {
                 var htmlContent = new UIHtmlContent_1.default(this.app, this.window, this.value);
                 var htmlElement = htmlContent.present();
                 contentElement.appendChild(htmlElement);
+                this.setComponent("content", htmlContent);
                 break;
             case "local-url":
                 var frameContent = new UIFrameContent_1.default(this.app, this.window, this.value);
                 var frameContentElement = frameContent.present();
                 contentElement.appendChild(frameContentElement);
+                this.setComponent("content", frameContent);
                 break;
         }
         fragment.appendChild(contentElement);
