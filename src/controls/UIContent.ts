@@ -8,6 +8,7 @@ import * as ElementHelper from "../utils/ElementHelper";
 import * as CastHelper from "../utils/CastHelper";
 import * as Enums from "../basic/enums";
 import * as TypeHelper from "../utils/TypeHelper";
+import UIFrameContent from "./UIFrameContent";
 
 export default class UIContent extends UIWindowComponent implements UIControl {
     public readonly elementId: string = `${this.window.elementId}-${Enums.ComponentType.CONTENT_CONTAINER}`;
@@ -49,6 +50,11 @@ export default class UIContent extends UIWindowComponent implements UIControl {
                 const htmlContent = new UIHtmlContent(this.app, this.window, this.value);
                 const htmlElement = htmlContent.present();
                 contentElement.appendChild(htmlElement);
+                break;
+            case Enums.WindowContentType.LOCAL_URL:
+                const frameContent = new UIFrameContent(this.app, this.window, <string>this.value);
+                const frameContentElement = frameContent.present();
+                contentElement.appendChild(frameContentElement);
                 break;
         }
 

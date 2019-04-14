@@ -66,6 +66,7 @@ var ComponentType;
     ComponentType["SALVER_BUTTON"] = "salver-button";
     ComponentType["CONTENT_CONTAINER"] = "content-container";
     ComponentType["HTML_CONTENT"] = "html-content";
+    ComponentType["URL_CONTENT"] = "url-content";
 })(ComponentType = exports.ComponentType || (exports.ComponentType = {}));
 var WindowContentType;
 (function (WindowContentType) {
