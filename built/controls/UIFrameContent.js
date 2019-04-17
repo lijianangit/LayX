@@ -63,17 +63,19 @@ var UIFrameContent = (function (_super) {
             var contentWindow = frameContentElement.contentWindow;
             if (!contentWindow)
                 return;
-            contentWindow.document.addEventListener("contextmenu", function (ev) {
-                ev.preventDefault();
-                ev.returnValue = false;
-                var event = document.createEvent('Event');
-                event.initEvent("contextmenu", true);
-                _this.window.element.dispatchEvent(event);
-                var clientRect = _this.element.getBoundingClientRect();
-                var contextMenuBar = _this.window.getComponent("" + "context-menu-bar");
-                contextMenuBar && contextMenuBar.updateOffset(ev, _this.window.zIndex + 1, ev.pageX + clientRect.left, ev.pageY + clientRect.top);
-                return false;
-            });
+            if (_this.window.contextMenu !== false) {
+                contentWindow.document.addEventListener("contextmenu", function (ev) {
+                    ev.preventDefault();
+                    ev.returnValue = false;
+                    var event = document.createEvent('Event');
+                    event.initEvent("contextmenu", true);
+                    _this.window.element.dispatchEvent(event);
+                    var clientRect = _this.element.getBoundingClientRect();
+                    var contextMenuBar = _this.window.getComponent("" + "context-menu-bar");
+                    contextMenuBar && contextMenuBar.updateOffset(ev, _this.window.zIndex + 1, ev.pageX + clientRect.left, ev.pageY + clientRect.top);
+                    return false;
+                });
+            }
             contentWindow.document.addEventListener("mousedown", function (ev) {
                 var event = document.createEvent('Event');
                 event.initEvent("mousedown", true);

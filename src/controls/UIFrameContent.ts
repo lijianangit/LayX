@@ -60,20 +60,22 @@ export default class UIFrameContent extends UIWindowComponent implements UIContr
             const contentWindow = frameContentElement.contentWindow;
             if (!contentWindow) return;
 
-            contentWindow.document.addEventListener("contextmenu", (ev: MouseEvent) => {
-                ev.preventDefault();
-                ev.returnValue = false;
+            if (this.window.contextMenu !== false) {
+                contentWindow.document.addEventListener("contextmenu", (ev: MouseEvent) => {
+                    ev.preventDefault();
+                    ev.returnValue = false;
 
-                const event = document.createEvent('Event');
-                event.initEvent("contextmenu", true);
-                this.window.element!.dispatchEvent(event);
+                    const event = document.createEvent('Event');
+                    event.initEvent("contextmenu", true);
+                    this.window.element!.dispatchEvent(event);
 
-                const clientRect = this.element!.getBoundingClientRect();
-                const contextMenuBar = this.window.getComponent<UIContextMenuBar>(`${Enums.ComponentType.CONTEXT_MENU_BAR}`);
-                contextMenuBar && contextMenuBar.updateOffset(ev, this.window.zIndex + 1, ev.pageX + clientRect.left, ev.pageY + clientRect.top);
+                    const clientRect = this.element!.getBoundingClientRect();
+                    const contextMenuBar = this.window.getComponent<UIContextMenuBar>(`${Enums.ComponentType.CONTEXT_MENU_BAR}`);
+                    contextMenuBar && contextMenuBar.updateOffset(ev, this.window.zIndex + 1, ev.pageX + clientRect.left, ev.pageY + clientRect.top);
 
-                return false;
-            });
+                    return false;
+                });
+            }
 
             contentWindow.document.addEventListener("mousedown", (ev: MouseEvent) => {
                 const event = document.createEvent('Event');
