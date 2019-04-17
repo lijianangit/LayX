@@ -250,7 +250,7 @@ var UIWindow = (function (_super) {
             left: this.left + "px",
             width: this.width + "px",
             height: this.height + "px",
-            borderRadius: this.borderRadius + "px"
+            borderRadius: this.borderRadius
         });
         var resizeBar = this.getComponent("resize-bar");
         if (resizeBar) {

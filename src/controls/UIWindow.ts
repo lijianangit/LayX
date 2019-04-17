@@ -301,7 +301,7 @@ export default class UIWindow extends UIComponent implements UIControl {
             left: `${this.left}px`,
             width: `${this.width}px`,
             height: `${this.height}px`,
-            borderRadius: `${this.borderRadius}px`
+            borderRadius: this.borderRadius
         });
 
         const resizeBar = this.getComponent<UIResizeBar>(Enums.ComponentType.RESIZE_BAR);
