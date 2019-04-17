@@ -6,6 +6,21 @@
     opacity: 1;
 }
 
+.layx-content-penetrate {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+    background: transparent;
+    visibility: hidden;
+}
+
+.layx-content-penetrate.layx-content-penetrate-active {
+    visibility: visible;
+}
+
 .layx-content-container.layx-content-container-fade-out {
     opacity: 0;
 }

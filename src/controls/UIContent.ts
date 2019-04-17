@@ -21,6 +21,14 @@ export default class UIContent extends UIWindowComponent implements UIControl {
         return document.getElementById(`${this.elementId}`);
     }
 
+    private _penetrateElement: HTMLElement | null = null;
+    get penetrateElement() {
+        const element = this.element;
+        if (!element) return null;
+
+        return element.querySelector<HTMLElement>(`.${this.app.prefix + Enums.ComponentType.CONTENT_PENETRATE}`);
+    }
+
     constructor(app: App, window: UIWindow, options: Types.ContentOption) {
         super(app, window);
 
@@ -45,6 +53,13 @@ export default class UIContent extends UIWindowComponent implements UIControl {
             Enums.ComponentType.CONTENT_CONTAINER
         );
 
+        const penetrateElement = ElementHelper.createElement("div");
+        ElementHelper.addClasses(penetrateElement, this.app.prefix,
+            Enums.ComponentType.CONTENT_PENETRATE
+        );
+        contentElement.appendChild(penetrateElement);
+
+
         switch (this.type) {
             case Enums.WindowContentType.HTML:
                 const htmlContent = new UIHtmlContent(this.app, this.window, this.value);
@@ -64,5 +79,18 @@ export default class UIContent extends UIWindowComponent implements UIControl {
 
         fragment.appendChild(contentElement);
         return fragment;
+    }
+
+    showPenetrate(isShow: boolean = true) {
+        if (isShow) {
+            ElementHelper.addClasses(this.penetrateElement, this.app.prefix,
+                `${Enums.ComponentType.CONTENT_PENETRATE}-active`
+            );
+        }
+        else {
+            ElementHelper.removeClasses(this.penetrateElement, this.app.prefix,
+                `${Enums.ComponentType.CONTENT_PENETRATE}-active`
+            );
+        }
     }
 }

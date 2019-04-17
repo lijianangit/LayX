@@ -1,5 +1,6 @@
 import App from "../../core/App";
 import UIWindow from "../../controls/UIWindow";
+import UIContent from "../../controls/UIContent";
 import DragEvent from "./DragEvent";
 import * as Enums from "../enums";
 import * as Types from "../../../types";
@@ -12,6 +13,8 @@ export default class WindowResizeDragEvent extends DragEvent {
     private _width: number = 0;
     private _height: number = 0;
 
+    private content: UIContent | null = this.window.getComponent<UIContent>(Enums.ComponentType.CONTENT_CONTAINER);
+
     constructor(public app: App, public window: UIWindow, dragElement: HTMLElement, public direction: Enums.Direction) {
         super(dragElement);
     }
@@ -20,6 +23,7 @@ export default class WindowResizeDragEvent extends DragEvent {
         if (this.window.status !== Enums.WindowStatus.NORMAL) {
             return false;
         }
+
         this._top = this.window.top;
         this._left = this.window.left;
         this._width = this.window.width;
@@ -138,5 +142,14 @@ export default class WindowResizeDragEvent extends DragEvent {
             this.isShowMoreActionButton = false;
             this.window.zoomActionButtons(width);
         }
+    }
+
+    mouseStar(ev: MouseEvent): void {
+        if (this.content) this.content.showPenetrate();
+    }
+    mouseMove(ev: MouseEvent): void {
+    }
+    mouseEnd(ev: MouseEvent): void {
+        if (this.content) this.content.showPenetrate(false);
     }
 }

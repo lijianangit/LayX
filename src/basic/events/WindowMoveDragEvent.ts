@@ -75,11 +75,18 @@ export default class WindowMoveDragEvent extends DragEvent {
             } else if (innerWidth - x > this.window.width / 2 && x >= innerWidth - this.window.width) {
                 this._left = x - this.window.width / 2;
             }
-            
+
             this.window.top = distanceY;
             this.window.left = this._left;
 
             this.window.normal(true);
         }
+    }
+
+    mouseStar(ev: MouseEvent): void {
+    }
+    mouseMove(ev: MouseEvent): void {
+    }
+    mouseEnd(ev: MouseEvent): void {
     }
 }

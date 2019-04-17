@@ -9,9 +9,9 @@ export default abstract class DragEvent {
     }
 
     private readonly mousedown: (this: HTMLElement, ev: MouseEvent) => any = (ev: MouseEvent) => {
-        if (ev.button === 0) {
-            ev.preventDefault();
+        this.mouseStar(ev);
 
+        if (ev.button === 0) {
             this.startX = ev.pageX;
             this.startY = ev.pageY;
             if (this.dragStart(ev, this.startX, this.startY) !== false) {
@@ -22,6 +22,8 @@ export default abstract class DragEvent {
     };
 
     private readonly mousemove: (this: Document, ev: MouseEvent) => any = (ev: MouseEvent) => {
+        this.mouseMove(ev);
+
         const currentX = ev.pageX;
         const currentY = ev.pageY;
         const distanceX = currentX - this.startX;
@@ -39,6 +41,7 @@ export default abstract class DragEvent {
     };
 
     private readonly mouseup: (this: Document, ev: MouseEvent) => any = (ev: MouseEvent) => {
+        this.mouseEnd(ev);
         document.removeEventListener("mousemove", this.mousemove);
         document.removeEventListener("mouseup", this.mouseup);
         this.dragEnd(ev, ev.pageX, ev.pageY);
@@ -46,11 +49,16 @@ export default abstract class DragEvent {
         this.isDragging = false;
     };
 
+
     abstract dragStart(ev: MouseEvent, x: number, y: number): void | false;
 
     abstract dragging(ev: MouseEvent, x: number, y: number, distanceX: number, distanceY: number): void;
 
     abstract dragEnd(ev: MouseEvent, x: number, y: number): void;
+
+    abstract mouseStar(ev: MouseEvent): void;
+    abstract mouseMove(ev: MouseEvent): void;
+    abstract mouseEnd(ev: MouseEvent): void;
 
     draggingFirst(ev: MouseEvent, x: number, y: number, distanceX: number, distanceY: number): void { }
 }

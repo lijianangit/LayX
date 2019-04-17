@@ -8,8 +8,8 @@ var DragEvent = (function () {
         this.startX = 0;
         this.startY = 0;
         this.mousedown = function (ev) {
+            _this.mouseStar(ev);
             if (ev.button === 0) {
-                ev.preventDefault();
                 _this.startX = ev.pageX;
                 _this.startY = ev.pageY;
                 if (_this.dragStart(ev, _this.startX, _this.startY) !== false) {
@@ -20,6 +20,7 @@ var DragEvent = (function () {
             }
         };
         this.mousemove = function (ev) {
+            _this.mouseMove(ev);
             var currentX = ev.pageX;
             var currentY = ev.pageY;
             var distanceX = currentX - _this.startX;
@@ -34,6 +35,7 @@ var DragEvent = (function () {
             }
         };
         this.mouseup = function (ev) {
+            _this.mouseEnd(ev);
             document.removeEventListener("mousemove", _this.mousemove);
             document.removeEventListener("mouseup", _this.mouseup);
             _this.dragEnd(ev, ev.pageX, ev.pageY);

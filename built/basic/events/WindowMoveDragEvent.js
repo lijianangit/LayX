@@ -87,6 +87,12 @@ var WindowMoveDragEvent = (function (_super) {
             this.window.normal(true);
         }
     };
+    WindowMoveDragEvent.prototype.mouseStar = function (ev) {
+    };
+    WindowMoveDragEvent.prototype.mouseMove = function (ev) {
+    };
+    WindowMoveDragEvent.prototype.mouseEnd = function (ev) {
+    };
     return WindowMoveDragEvent;
 }(DragEvent_1.default));
 exports.default = WindowMoveDragEvent;

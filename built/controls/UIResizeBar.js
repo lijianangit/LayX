@@ -66,12 +66,7 @@ var UIResizeBar = (function (_super) {
             resizeElement.setAttribute("data-window-id", this.window.id);
             resizeElement.id = this.elementId;
             ElementHelper.addClasses(resizeElement, this.app.prefix, "resize-bar");
-            resizeElement.addEventListener("contextmenu", function (ev) {
-                ev.preventDefault();
-                ev.stopPropagation();
-                ev.returnValue = false;
-                return false;
-            });
+            this.bindEvent(resizeElement);
             for (var _i = 0, _a = this.directions; _i < _a.length; _i++) {
                 var key = _a[_i];
                 if (this[StringHelper.getCamelCase(key)] === true) {
@@ -88,6 +83,14 @@ var UIResizeBar = (function (_super) {
         ElementHelper.addClasses(itemElement, this.app.prefix, "resize-item-" + key);
         new WindowResizeDragEvent_1.default(this.app, this.window, itemElement, key);
         return itemElement;
+    };
+    UIResizeBar.prototype.bindEvent = function (resizeBarElement) {
+        resizeBarElement.addEventListener("contextmenu", function (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            ev.returnValue = false;
+            return false;
+        });
     };
     UIResizeBar.prototype.leastOneTrue = function () {
         var isExist = false;

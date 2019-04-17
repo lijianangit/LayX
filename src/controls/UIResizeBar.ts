@@ -2,6 +2,7 @@ import App from "../core/App";
 import UIControl from "../basic/interfaces/UIControl";
 import UIWindowComponent from "../basic/models/UIWindowComponent";
 import UIWindow from "./UIWindow";
+import UIContent from "./UIContent";
 import WindowResizeDragEvent from "../basic/events/WindowResizeDragEvent";
 import * as Types from "../../types";
 import * as Enums from "../basic/enums";
@@ -51,12 +52,7 @@ export default class UIResizeBar extends UIWindowComponent implements UIControl 
                 Enums.ComponentType.RESIZE_BAR
             );
 
-            resizeElement.addEventListener("contextmenu", (ev: MouseEvent) => {
-                ev.preventDefault();
-                ev.stopPropagation();
-                ev.returnValue = false;
-                return false;
-            });
+            this.bindEvent(resizeElement);
 
             for (const key of this.directions) {
                 if ((<any>this)[StringHelper.getCamelCase(key)] === true) {
@@ -81,6 +77,15 @@ export default class UIResizeBar extends UIWindowComponent implements UIControl 
         new WindowResizeDragEvent(this.app, this.window, itemElement, key);
 
         return itemElement;
+    }
+
+    private bindEvent(resizeBarElement: HTMLElement) {
+        resizeBarElement.addEventListener("contextmenu", (ev: MouseEvent) => {
+            ev.preventDefault();
+            ev.stopPropagation();
+            ev.returnValue = false;
+            return false;
+        });
     }
 
     private readonly directions = [

@@ -27,6 +27,7 @@ var WindowResizeDragEvent = (function (_super) {
         _this._left = 0;
         _this._width = 0;
         _this._height = 0;
+        _this.content = _this.window.getComponent("content-container");
         return _this;
     }
     WindowResizeDragEvent.prototype.dragStart = function (ev, x, y) {
@@ -145,6 +146,16 @@ var WindowResizeDragEvent = (function (_super) {
             this.isShowMoreActionButton = false;
             this.window.zoomActionButtons(width);
         }
+    };
+    WindowResizeDragEvent.prototype.mouseStar = function (ev) {
+        if (this.content)
+            this.content.showPenetrate();
+    };
+    WindowResizeDragEvent.prototype.mouseMove = function (ev) {
+    };
+    WindowResizeDragEvent.prototype.mouseEnd = function (ev) {
+        if (this.content)
+            this.content.showPenetrate(false);
     };
     return WindowResizeDragEvent;
 }(DragEvent_1.default));
