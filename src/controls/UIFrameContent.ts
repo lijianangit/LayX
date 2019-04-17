@@ -80,6 +80,22 @@ export default class UIFrameContent extends UIWindowComponent implements UIContr
                 event.initEvent("mousedown", true);
                 this.window.element!.dispatchEvent(event);
             });
+
+            contentWindow.addEventListener("mousemove", (ev: MouseEvent) => {
+                const clientRect = this.element!.getBoundingClientRect();
+                const pageY = ev.pageY + clientRect.top;
+
+                if (this.app.salver && this.app.salver.element) {
+                    if (pageY >= parent.innerHeight - 50) {
+                        if (ElementHelper.containClass(this.app.salver.element, this.app.prefix, "salver-bar-keep")) return;
+                        this.app.salver.show();
+                    }
+                    else {
+                        if (!ElementHelper.containClass(this.app.salver.element, this.app.prefix, "salver-bar-keep")) return;
+                        this.app.salver.show(false);
+                    }
+                }
+            });
         });
     }
 }

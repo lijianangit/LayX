@@ -79,6 +79,22 @@ var UIFrameContent = (function (_super) {
                 event.initEvent("mousedown", true);
                 _this.window.element.dispatchEvent(event);
             });
+            contentWindow.addEventListener("mousemove", function (ev) {
+                var clientRect = _this.element.getBoundingClientRect();
+                var pageY = ev.pageY + clientRect.top;
+                if (_this.app.salver && _this.app.salver.element) {
+                    if (pageY >= parent.innerHeight - 50) {
+                        if (ElementHelper.containClass(_this.app.salver.element, _this.app.prefix, "salver-bar-keep"))
+                            return;
+                        _this.app.salver.show();
+                    }
+                    else {
+                        if (!ElementHelper.containClass(_this.app.salver.element, _this.app.prefix, "salver-bar-keep"))
+                            return;
+                        _this.app.salver.show(false);
+                    }
+                }
+            });
         });
     };
     return UIFrameContent;
