@@ -53,7 +53,10 @@ export default class App {
         return this._salverZIndex;
     }
 
-    public readonly noticeZIndex: number = 40000000;
+    private _noticeZIndex: number = 20000000;
+    get noticeZIndex() {
+        return this._noticeZIndex = this._noticeZIndex + 1;
+    }
 
     private _windows: Array<UIWindow> = [];
     get windows() {

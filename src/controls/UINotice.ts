@@ -14,7 +14,7 @@ export default class UINotice extends UIComponent implements UIControl {
 
     public static readonly topOffset: number = 24;
     public static readonly space: number = 10;
-    public readonly id: number = this.app.notices.length + this.app.noticeZIndex;
+    public readonly id: number = this.app.noticeZIndex;
     public readonly elementId: string = `${this.app.prefix + Enums.ComponentType.NOTICE}-${this.id}`;
 
     public type: Enums.NoticeType = Enums.NoticeType.INFO;
@@ -49,13 +49,12 @@ export default class UINotice extends UIComponent implements UIControl {
 
         ElementHelper.addClasses(noticeElement, this.app.prefix,
             Enums.ComponentType.NOTICE,
-
             "animate-d3s",
             "animate-fade-in-right"
         );
 
         ElementHelper.addStyles(noticeElement, <Types.CSSStyleObject>{
-            zIndex: `${this.app.noticeZIndex}`,
+            zIndex: `${this.id}`,
         });
 
         this.bindEvent(noticeElement);

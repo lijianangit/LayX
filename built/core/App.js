@@ -16,7 +16,7 @@ var App = (function () {
         this._zIndex = 10000000;
         this._aboveZIndex = 20000000;
         this._salverZIndex = 30000000;
-        this.noticeZIndex = 40000000;
+        this._noticeZIndex = 20000000;
         this._windows = [];
         this._notices = [];
         this.init();
@@ -68,6 +68,13 @@ var App = (function () {
     Object.defineProperty(App.prototype, "salverZIndex", {
         get: function () {
             return this._salverZIndex;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(App.prototype, "noticeZIndex", {
+        get: function () {
+            return this._noticeZIndex = this._noticeZIndex + 1;
         },
         enumerable: true,
         configurable: true

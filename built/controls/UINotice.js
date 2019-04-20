@@ -24,7 +24,7 @@ var UINotice = (function (_super) {
         var _this = _super.call(this, app) || this;
         _this.timer = 0;
         _this.fps = 10;
-        _this.id = _this.app.notices.length + _this.app.noticeZIndex;
+        _this.id = _this.app.noticeZIndex;
         _this.elementId = _this.app.prefix + "notice" + "-" + _this.id;
         _this.type = "info";
         _this.timeout = 3000;
@@ -56,7 +56,7 @@ var UINotice = (function (_super) {
         noticeElement.id = this.elementId;
         ElementHelper.addClasses(noticeElement, this.app.prefix, "notice", "animate-d3s", "animate-fade-in-right");
         ElementHelper.addStyles(noticeElement, {
-            zIndex: "" + this.app.noticeZIndex,
+            zIndex: "" + this.id,
         });
         this.bindEvent(noticeElement);
         this.createClose(noticeElement);
