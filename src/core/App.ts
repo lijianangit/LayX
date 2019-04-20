@@ -3,6 +3,7 @@ import UIWindow from "../controls/UIWindow";
 import UIContextMenuBar from "../controls/UIContextMenuBar";
 import UITopMenuBar from "../controls/UITopMenuBar";
 import UISalverBar from "../controls/UISalverBar";
+import UINotice from "../controls/UINotice";
 import * as Types from "../../types";
 import * as ExceptionHelper from "../utils/ExceptionHelper";
 import * as Enums from "../basic/enums";
@@ -52,9 +53,16 @@ export default class App {
         return this._salverZIndex;
     }
 
+    public readonly noticeZIndex: number = 40000000;
+
     private _windows: Array<UIWindow> = [];
     get windows() {
         return this._windows;
+    }
+
+    private _notices: Array<UINotice> = [];
+    get notices() {
+        return this._notices;
     }
 
     constructor(private readonly layx: Layx) {
@@ -100,6 +108,15 @@ export default class App {
             }
         }
         return null;
+    }
+
+    notice(options: Types.NoticeOption): void {
+        const notice = new UINotice(this, options);
+        const noticeElement = notice.present();
+        document.body.append(noticeElement);
+        this.notices.push(notice);
+        const index = this.notices.indexOf(notice);
+        notice.updateOffset(index, true);
     }
 
     private init(): void {

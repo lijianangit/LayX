@@ -111,3 +111,15 @@ export function isContentType(obj: any): obj is Enums.WindowContentType {
 export function isStringOrElement(obj: any): obj is string | Element {
     return typeof obj === "string" || isElement(obj);
 }
+
+export function isNoticeType(obj: any): obj is Enums.NoticeType {
+    switch (obj) {
+        case Enums.NoticeType.INFO:
+        case Enums.NoticeType.SUCCESS:
+        case Enums.NoticeType.WARNING:
+        case Enums.NoticeType.ERROR:
+            return true;
+        default:
+            return ExceptionHelper.assertNever(<never>obj);
+    }
+}

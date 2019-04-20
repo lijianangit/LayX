@@ -69,6 +69,14 @@ function undefinedCast(option, defaultValue) {
         return option;
 }
 exports.undefinedCast = undefinedCast;
+function stringOrUndefinedCast(option) {
+    if (option === undefined)
+        return undefined;
+    if (!TypeHelper.isStringWithNotEmpty(option))
+        return ExceptionHelper.assertString(option);
+    return option;
+}
+exports.stringOrUndefinedCast = stringOrUndefinedCast;
 function windowModeCast(option, defaultValue) {
     if (option === undefined)
         return defaultValue;
@@ -224,3 +232,10 @@ function stringOrElementCast(option) {
     return option;
 }
 exports.stringOrElementCast = stringOrElementCast;
+function noticeTypeCast(option, defaultValue) {
+    if (option === undefined)
+        return defaultValue;
+    TypeHelper.isNoticeType(option);
+    return option;
+}
+exports.noticeTypeCast = noticeTypeCast;

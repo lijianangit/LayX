@@ -63,6 +63,12 @@ export function undefinedCast<T>(option: T, defaultValue: T): T {
     else return option;
 }
 
+export function stringOrUndefinedCast(option: any): string | undefined {
+    if (option === undefined) return undefined;
+    if (!TypeHelper.isStringWithNotEmpty(option)) return ExceptionHelper.assertString(option);
+    return option;
+}
+
 export function windowModeCast(option: any, defaultValue: Enums.WindowMode): Enums.WindowMode {
     if (option === undefined) return defaultValue;
     TypeHelper.isWindowMode(option)
@@ -210,5 +216,11 @@ export function contentTypeCast(option: any, defaultValue: Enums.WindowContentTy
 
 export function stringOrElementCast(option: any): string | Element {
     if (!TypeHelper.isStringOrElement(option)) return ExceptionHelper.assertNever(option);
+    return option;
+}
+
+export function noticeTypeCast(option: any, defaultValue: Enums.NoticeType): Enums.NoticeType {
+    if (option === undefined) return defaultValue;
+    TypeHelper.isNoticeType(option)
     return option;
 }

@@ -71,7 +71,7 @@ var UIContextMenuButton = (function (_super) {
             var rightIconElement = ElementHelper.createElement("div");
             rightIconElement.setAttribute("data-window-id", this.window.id);
             ElementHelper.addClasses(rightIconElement, this.app.prefix, "context-menu-more", "flexbox", "flex-center");
-            var icon = new UIIcon_1.default(this.app, this.window, "right");
+            var icon = new UIIcon_1.default(this.app, "right");
             var iconElement = icon.present();
             rightIconElement.appendChild(iconElement);
             contextMenuButtonElement.appendChild(rightIconElement);

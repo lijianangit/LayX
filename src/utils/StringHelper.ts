@@ -26,3 +26,15 @@ export function removeValidSymbol(str: string): string {
 
     return resultStr;
 }
+
+export function mendZero(str: string, total: number): string {
+    if (str.length === total) return str;
+    if (str.length < total) {
+        let zeros = "";
+        for (let i = 0; i < total - str.length; i++) {
+            zeros += "0";
+        }
+        return zeros + str;
+    }
+    return str.substr(0, total);
+}

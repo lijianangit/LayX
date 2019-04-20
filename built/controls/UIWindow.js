@@ -205,10 +205,11 @@ var UIWindow = (function (_super) {
             _this.handlerContentByAnimate();
         });
         windowElement.addEventListener("animationend", function (ev) {
-            ElementHelper.removeClasses(_this.element, _this.app.prefix, "animate-" + _this.animate + "-show", "animate-" + _this.animate + "-drag-to-normal");
-            if (ElementHelper.containClass(_this.element, _this.app.prefix, "animate-" + _this.animate + "-destroy"))
+            var element = _this.element;
+            ElementHelper.removeClasses(element, _this.app.prefix, "animate-" + _this.animate + "-show", "animate-" + _this.animate + "-drag-to-normal");
+            if (ElementHelper.containClass(element, _this.app.prefix, "animate-" + _this.animate + "-destroy"))
                 _this.remove();
-            if (ElementHelper.containClass(_this.element, _this.app.prefix, "animate-" + _this.animate + "-to-min"))
+            if (ElementHelper.containClass(element, _this.app.prefix, "animate-" + _this.animate + "-to-min"))
                 _this.minimize();
             _this.handlerContentByAnimate(false);
         });

@@ -13,13 +13,13 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
+var UIComponent_1 = require("../basic/models/UIComponent");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
 var UIIcon = (function (_super) {
     __extends(UIIcon, _super);
-    function UIIcon(app, window, name) {
-        var _this = _super.call(this, app, window) || this;
+    function UIIcon(app, name) {
+        var _this = _super.call(this, app) || this;
         _this.className = "" + (_this.app.prefix + "icon");
         _this.name = CastHelper.stringCast(name);
         return _this;
@@ -27,15 +27,13 @@ var UIIcon = (function (_super) {
     UIIcon.prototype.present = function () {
         var fragment = ElementHelper.createFragment();
         var iconElement = ElementHelper.createElementNS("svg");
-        iconElement.setAttribute("data-window-id", this.window.id);
         iconElement.setAttribute("class", this.className);
         var useElement = ElementHelper.createElementNS("use");
-        useElement.setAttribute("data-window-id", this.window.id);
         useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + this.name);
         iconElement.appendChild(useElement);
         fragment.appendChild(iconElement);
         return fragment;
     };
     return UIIcon;
-}(UIWindowComponent_1.default));
+}(UIComponent_1.default));
 exports.default = UIIcon;

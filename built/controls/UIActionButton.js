@@ -51,7 +51,7 @@ var UIActionButton = (function (_super) {
                 _this.handler(ev, _this.window);
             }
         }, true);
-        var icon = new UIIcon_1.default(this.app, this.window, this.id);
+        var icon = new UIIcon_1.default(this.app, this.id);
         var iconElement = icon.present();
         actionButtonElement.appendChild(iconElement);
         this.setComponent("action-button", icon);

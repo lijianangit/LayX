@@ -51,7 +51,7 @@ var UITitleBar = (function (_super) {
                 _this.window.destroy();
             });
             titleBarElement.appendChild(windowIconElement);
-            var icon = new UIIcon_1.default(this.app, this.window, this.icon);
+            var icon = new UIIcon_1.default(this.app, this.icon);
             var iconElement = icon.present();
             windowIconElement.appendChild(iconElement);
             this.setComponent("window-icon", icon);

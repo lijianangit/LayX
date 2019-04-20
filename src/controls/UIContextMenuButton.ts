@@ -93,7 +93,7 @@ export default class UIContextMenuButton extends UIWindowComponent implements UI
                 "flex-center"
             );
 
-            const icon = new UIIcon(this.app, this.window, "right");
+            const icon = new UIIcon(this.app,"right");
             const iconElement = icon.present();
             rightIconElement.appendChild(iconElement);
 

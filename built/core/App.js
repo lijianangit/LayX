@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindow_1 = require("../controls/UIWindow");
+var UINotice_1 = require("../controls/UINotice");
 var ExceptionHelper = require("../utils/ExceptionHelper");
 var TypeHelper = require("../utils/TypeHelper");
 var ElementHelper = require("../utils/ElementHelper");
@@ -15,7 +16,9 @@ var App = (function () {
         this._zIndex = 10000000;
         this._aboveZIndex = 20000000;
         this._salverZIndex = 30000000;
+        this.noticeZIndex = 40000000;
         this._windows = [];
+        this._notices = [];
         this.init();
     }
     Object.defineProperty(App.prototype, "window", {
@@ -76,6 +79,13 @@ var App = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(App.prototype, "notices", {
+        get: function () {
+            return this._notices;
+        },
+        enumerable: true,
+        configurable: true
+    });
     App.prototype.open = function (options) {
         var window = this.getWindow(options.id);
         if (window)
@@ -115,6 +125,14 @@ var App = (function () {
             }
         }
         return null;
+    };
+    App.prototype.notice = function (options) {
+        var notice = new UINotice_1.default(this, options);
+        var noticeElement = notice.present();
+        document.body.append(noticeElement);
+        this.notices.push(notice);
+        var index = this.notices.indexOf(notice);
+        notice.updateOffset(index, true);
     };
     App.prototype.init = function () {
         this.bindEvent();

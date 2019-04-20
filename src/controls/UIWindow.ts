@@ -228,15 +228,17 @@ export default class UIWindow extends UIComponent implements UIControl {
         });
 
         windowElement.addEventListener("animationend", (ev: AnimationEvent) => {
-            ElementHelper.removeClasses(this.element, this.app.prefix,
+            const element = this.element;
+            
+            ElementHelper.removeClasses(element, this.app.prefix,
                 `animate-${this.animate}-show`,
                 `animate-${this.animate}-drag-to-normal`
             );
 
-            if (ElementHelper.containClass(this.element, this.app.prefix,
+            if (ElementHelper.containClass(element, this.app.prefix,
                 `animate-${this.animate}-destroy`)) this.remove();
 
-            if (ElementHelper.containClass(this.element, this.app.prefix,
+            if (ElementHelper.containClass(element, this.app.prefix,
                 `animate-${this.animate}-to-min`)) this.minimize();
 
             this.handlerContentByAnimate(false);

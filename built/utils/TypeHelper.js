@@ -110,3 +110,15 @@ function isStringOrElement(obj) {
     return typeof obj === "string" || isElement(obj);
 }
 exports.isStringOrElement = isStringOrElement;
+function isNoticeType(obj) {
+    switch (obj) {
+        case "info":
+        case "success":
+        case "warning":
+        case "error":
+            return true;
+        default:
+            return ExceptionHelper.assertNever(obj);
+    }
+}
+exports.isNoticeType = isNoticeType;

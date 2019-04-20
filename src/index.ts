@@ -22,5 +22,10 @@ export default (function layx(): Layx {
         app.destroy(id);
     }
 
+    layx.notice = function (options: Types.NoticeOption) {
+        app.notice(options);
+    }
+    layx.notices = app.notices;
+
     return layx;
 })();

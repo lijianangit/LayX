@@ -59,7 +59,7 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
 
             titleBarElement.appendChild(windowIconElement);
 
-            const icon = new UIIcon(this.app, this.window, this.icon);
+            const icon = new UIIcon(this.app, this.icon);
             const iconElement = icon.present();
             windowIconElement.appendChild(iconElement);
 

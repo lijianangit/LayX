@@ -69,6 +69,7 @@ var ComponentType;
     ComponentType["CONTENT_CONTAINER"] = "content-container";
     ComponentType["HTML_CONTENT"] = "html-content";
     ComponentType["URL_CONTENT"] = "url-content";
+    ComponentType["NOTICE"] = "notice";
 })(ComponentType = exports.ComponentType || (exports.ComponentType = {}));
 var WindowContentType;
 (function (WindowContentType) {
@@ -76,3 +77,10 @@ var WindowContentType;
     WindowContentType["LOCAL_URL"] = "local-url";
     WindowContentType["NON_LOCAL_URL"] = "non-local-url";
 })(WindowContentType = exports.WindowContentType || (exports.WindowContentType = {}));
+var NoticeType;
+(function (NoticeType) {
+    NoticeType["INFO"] = "info";
+    NoticeType["SUCCESS"] = "success";
+    NoticeType["WARNING"] = "warning";
+    NoticeType["ERROR"] = "error";
+})(NoticeType = exports.NoticeType || (exports.NoticeType = {}));

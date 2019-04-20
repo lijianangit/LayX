@@ -111,4 +111,11 @@ export type Component = {
     [key: string]: UIComponent | Array<UIComponent>;
 }
 
+export type NoticeOption = {
+    type?: Enums.NoticeType;
+    title?: string;
+    message: string;
+    timeout?: number;
+};
+
 export type ConfigOptions = {};

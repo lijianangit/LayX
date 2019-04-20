@@ -69,7 +69,7 @@ export default class UISalverButton extends UIComponent implements UIControl {
             /${Enums.ComponentType.TITLE_BAR}`);
 
         let defaultTitle: string | undefined = "未命名标题";
-        let defaultIcon: UIIcon | null = new UIIcon(this.app, <UIWindow>window, "icon");
+        let defaultIcon: UIIcon | null = new UIIcon(this.app,"icon");
 
         if (titleBar) {
             defaultTitle = titleBar.title || defaultTitle;

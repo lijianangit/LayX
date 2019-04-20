@@ -65,11 +65,19 @@ export const enum ComponentType {
     CONTENT_PENETRATE = "content-penetrate",
     CONTENT_CONTAINER = "content-container",
     HTML_CONTENT = "html-content",
-    URL_CONTENT = "url-content"
+    URL_CONTENT = "url-content",
+    NOTICE = "notice"
 }
 
 export const enum WindowContentType {
     HTML = "html",
     LOCAL_URL = "local-url",
     NON_LOCAL_URL = "non-local-url"
+}
+
+export const enum NoticeType {
+    INFO = "info",
+    SUCCESS = "success",
+    WARNING = "warning",
+    ERROR = "error"
 }

@@ -27,3 +27,16 @@ function removeValidSymbol(str) {
     return resultStr;
 }
 exports.removeValidSymbol = removeValidSymbol;
+function mendZero(str, total) {
+    if (str.length === total)
+        return str;
+    if (str.length < total) {
+        var zeros = "";
+        for (var i = 0; i < total - str.length; i++) {
+            zeros += "0";
+        }
+        return zeros + str;
+    }
+    return str.substr(0, total);
+}
+exports.mendZero = mendZero;

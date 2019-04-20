@@ -18,5 +18,9 @@ exports.default = (function layx() {
     layx.destroy = function (id) {
         app.destroy(id);
     };
+    layx.notice = function (options) {
+        app.notice(options);
+    };
+    layx.notices = app.notices;
     return layx;
 })();

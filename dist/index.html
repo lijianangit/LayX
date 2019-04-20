@@ -7,7 +7,7 @@
         content="width=device-width, initial-scale=1.0, maximum-scale=1,minimum-scale=1,user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
     <title>A magical window. - Layx</title>
-<link href="layx.min.css?f7a41a7375ac027a1b18" rel="stylesheet"><script type="text/javascript" src="layx.min.js?f7a41a7375ac027a1b18"></script></head>
+<link href="layx.min.css?6cf3e2a33467af9954db" rel="stylesheet"><script type="text/javascript" src="layx.min.js?6cf3e2a33467af9954db"></script></head>
 
 <body>
     <button id="create">Create</button>
@@ -15,6 +15,7 @@
     <button id="create3">Create3</button>
     <button id="create4">Create4</button>
     <button id="create5">Create5</button>
+    <button id="notice">Notice</button>
     <div id="about-layx" style="display:none;padding: 10px;line-height: 1.5;">
         <h2>Layx 一个神奇的UI窗口</h2>
         <p>Layx
@@ -388,6 +389,12 @@
                     }
                 },
                 offset: "leftTop"
+            });
+        }
+        document.getElementById("notice").onclick=function(){
+            layx.notice({
+                title:'消息提示',
+                message:'我是消息提示消息提示消息提示消息提示消息提示'
             });
         }
     </script>

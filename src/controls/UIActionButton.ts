@@ -56,7 +56,7 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
             }
         }, true);
 
-        const icon = new UIIcon(this.app, this.window, this.id);
+        const icon = new UIIcon(this.app, this.id);
         const iconElement = icon.present();
         actionButtonElement.appendChild(iconElement);
 

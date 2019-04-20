@@ -57,7 +57,7 @@ var UISalverButton = (function (_super) {
         });
         var titleBar = window.getComponent("\n            " + "tool-bar" + "\n            /" + "title-bar");
         var defaultTitle = "未命名标题";
-        var defaultIcon = new UIIcon_1.default(this.app, window, "icon");
+        var defaultIcon = new UIIcon_1.default(this.app, "icon");
         if (titleBar) {
             defaultTitle = titleBar.title || defaultTitle;
             var windowIcon = titleBar.getComponent("" + "window-icon");
