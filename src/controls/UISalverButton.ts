@@ -12,6 +12,7 @@ import * as Types from "../../types";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as CastHelper from "../utils/CastHelper";
 import * as Enums from "../basic/enums";
+import * as EventHelper from "../utils/EventHelper";
 
 export default class UISalverButton extends UIComponent implements UIControl {
     public static size: number = 50;
@@ -53,7 +54,7 @@ export default class UISalverButton extends UIComponent implements UIControl {
 
         const window = this.app.getWindow(this.windowId);
 
-        salverButtonElement.addEventListener("mousedown", (ev: MouseEvent) => {
+        EventHelper.addTouchStartEvent(salverButtonElement, (ev: MouseEvent | TouchEvent) => {
             if (!window) return;
 
             if (window === this.app.window && window.status !== Enums.WindowStatus.MIN) {
@@ -69,7 +70,7 @@ export default class UISalverButton extends UIComponent implements UIControl {
             /${Enums.ComponentType.TITLE_BAR}`);
 
         let defaultTitle: string | undefined = "未命名标题";
-        let defaultIcon: UIIcon | null = new UIIcon(this.app,"icon");
+        let defaultIcon: UIIcon | null = new UIIcon(this.app, "icon");
 
         if (titleBar) {
             defaultTitle = titleBar.title || defaultTitle;

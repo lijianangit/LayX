@@ -5,8 +5,10 @@ var UINotice_1 = require("../controls/UINotice");
 var ExceptionHelper = require("../utils/ExceptionHelper");
 var TypeHelper = require("../utils/TypeHelper");
 var ElementHelper = require("../utils/ElementHelper");
+var EventHelper = require("../utils/EventHelper");
 var App = (function () {
     function App(layx) {
+        var _this = this;
         this.layx = layx;
         this.version = "3.0.0";
         this.prefix = "layx-";
@@ -19,6 +21,35 @@ var App = (function () {
         this._noticeZIndex = 20000000;
         this._windows = [];
         this._notices = [];
+        this.mousedown = function (ev) {
+            if (_this.window) {
+                var contextMenuBar = _this.window.getComponent("context-menu-bar");
+                contextMenuBar && contextMenuBar.hide();
+                _this.window.hideMoreActionContextMenu();
+                var topMenuBar = _this.window.getComponent("top-menu-bar");
+                topMenuBar && topMenuBar.hide(ev);
+                var windowIconContextMenuBar = _this.window.getComponent("\n            " + "tool-bar" + "\n            /" + "title-bar" + "\n            /" + "window-icon-context-menu-bar");
+                windowIconContextMenuBar && windowIconContextMenuBar.hide();
+            }
+            if (_this.lastWindow) {
+                var topMenuBar = _this.lastWindow.getComponent("top-menu-bar");
+                topMenuBar && topMenuBar.hide(ev);
+            }
+        };
+        this.mousemove = function (ev) {
+            if (_this.salver && _this.salver.element) {
+                if ((TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY) >= innerHeight - 50) {
+                    if (ElementHelper.containClass(_this.salver.element, _this.prefix, "salver-bar-keep"))
+                        return;
+                    _this.salver.show();
+                }
+                else {
+                    if (!ElementHelper.containClass(_this.salver.element, _this.prefix, "salver-bar-keep"))
+                        return;
+                    _this.salver.show(false);
+                }
+            }
+        };
         this.init();
     }
     Object.defineProperty(App.prototype, "window", {
@@ -150,35 +181,8 @@ var App = (function () {
             if (!document.body.id)
                 document.body.id = _this.prefix + "body";
         });
-        document.addEventListener("mousedown", function (ev) {
-            if (_this.window) {
-                var contextMenuBar = _this.window.getComponent("context-menu-bar");
-                contextMenuBar && contextMenuBar.hide();
-                _this.window.hideMoreActionContextMenu();
-                var topMenuBar = _this.window.getComponent("top-menu-bar");
-                topMenuBar && topMenuBar.hide(ev);
-                var windowIconContextMenuBar = _this.window.getComponent("\n                " + "tool-bar" + "\n                /" + "title-bar" + "\n                /" + "window-icon-context-menu-bar");
-                windowIconContextMenuBar && windowIconContextMenuBar.hide();
-            }
-            if (_this.lastWindow) {
-                var topMenuBar = _this.lastWindow.getComponent("top-menu-bar");
-                topMenuBar && topMenuBar.hide(ev);
-            }
-        }, true);
-        document.addEventListener("mousemove", function (ev) {
-            if (_this.salver && _this.salver.element) {
-                if (ev.pageY >= innerHeight - 50) {
-                    if (ElementHelper.containClass(_this.salver.element, _this.prefix, "salver-bar-keep"))
-                        return;
-                    _this.salver.show();
-                }
-                else {
-                    if (!ElementHelper.containClass(_this.salver.element, _this.prefix, "salver-bar-keep"))
-                        return;
-                    _this.salver.show(false);
-                }
-            }
-        }, true);
+        EventHelper.addTouchStartEvent(document, this.mousedown, true);
+        EventHelper.addTouchMoveEvent(document, this.mousemove, true);
     };
     return App;
 }());

@@ -7,6 +7,7 @@ import * as Types from "../../types";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as CastHelper from "../utils/CastHelper";
 import * as Enums from "../basic/enums";
+import * as EventHelper from "../utils/EventHelper";
 
 export default class UIActionButton extends UIWindowComponent implements UIControl {
     public static readonly width: number = 45;
@@ -15,7 +16,7 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
 
     public id: string;
     public label: string;
-    public handler?: (ev: MouseEvent, window: UIWindow) => void;
+    public handler?: (ev: MouseEvent | TouchEvent, window: UIWindow) => void;
 
     private _element: HTMLElement | null = null;
     get element() {
@@ -50,8 +51,8 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
             width: `${UIActionButton.width}px`
         });
 
-        actionButtonElement.addEventListener("mousedown", (ev: MouseEvent) => {
-            if (ev.button === 0 && typeof this.handler === "function") {
+        EventHelper.addTouchStartEvent(actionButtonElement, (ev: MouseEvent | TouchEvent) => {
+            if (((ev instanceof MouseEvent && ev.button === 0) || (ev instanceof TouchEvent && ev.touches.length === 1)) && typeof this.handler === "function") {
                 this.handler(ev, this.window);
             }
         }, true);
@@ -70,7 +71,7 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
     public static readonly destroy: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "destroy",
         label: "关闭",
-        handler: function (ev: MouseEvent, window: UIWindow) {
+        handler: function (ev: MouseEvent | TouchEvent, window: UIWindow) {
             window.destroy();
         }
     };
@@ -78,7 +79,7 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
     public static readonly max: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "max",
         label: "最大化",
-        handler: function (ev: MouseEvent, window: UIWindow) {
+        handler: function (ev: MouseEvent | TouchEvent, window: UIWindow) {
             window.max();
         }
     };
@@ -86,7 +87,7 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
     public static readonly restore: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "restore",
         label: "恢复",
-        handler: function (ev: MouseEvent, window: UIWindow) {
+        handler: function (ev: MouseEvent | TouchEvent, window: UIWindow) {
             window.normal();
         }
     };
@@ -94,7 +95,7 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
     public static readonly min: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "min",
         label: "最小化",
-        handler: function (ev: MouseEvent, window: UIWindow) {
+        handler: function (ev: MouseEvent | TouchEvent, window: UIWindow) {
             window.min();
         }
     };
@@ -102,14 +103,14 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
     public static readonly info: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "info",
         label: "关于",
-        handler: function (ev: MouseEvent, window: UIWindow) {
+        handler: function (ev: MouseEvent | TouchEvent, window: UIWindow) {
         }
     };
 
     public static readonly more: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "more",
         label: "更多操作",
-        handler: function (ev: MouseEvent, window: UIWindow) {
+        handler: function (ev: MouseEvent | TouchEvent, window: UIWindow) {
         }
     };
 }

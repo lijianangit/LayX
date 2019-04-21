@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var EventHelper = require("../../utils/EventHelper");
+var TypeHelper = require("../../utils/TypeHelper");
 var DragEvent = (function () {
     function DragEvent(dragElement) {
         var _this = this;
@@ -9,20 +11,20 @@ var DragEvent = (function () {
         this.startY = 0;
         this.mousedown = function (ev) {
             _this.mouseStar(ev);
-            if (ev.button === 0) {
-                _this.startX = ev.pageX;
-                _this.startY = ev.pageY;
+            if ((ev instanceof MouseEvent && ev.button === 0) || (ev instanceof TouchEvent && ev.touches.length > 0)) {
+                _this.startX = TypeHelper.isMoveEvent(ev) ? ev.pageX : ev.touches[0].pageX;
+                _this.startY = TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY;
                 if (_this.dragStart(ev, _this.startX, _this.startY) !== false) {
-                    document.addEventListener("mousemove", _this.mousemove);
-                    document.addEventListener("mouseup", _this.mouseup);
+                    EventHelper.addTouchMoveEvent(document, _this.mousemove);
+                    EventHelper.addTouchEndEvent(document, _this.mouseup);
                 }
                 ;
             }
         };
         this.mousemove = function (ev) {
             _this.mouseMove(ev);
-            var currentX = ev.pageX;
-            var currentY = ev.pageY;
+            var currentX = TypeHelper.isMoveEvent(ev) ? ev.pageX : ev.touches[0].pageX;
+            var currentY = TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY;
             var distanceX = currentX - _this.startX;
             var distanceY = currentY - _this.startY;
             if (distanceX !== 0 || distanceY !== 0) {
@@ -36,13 +38,13 @@ var DragEvent = (function () {
         };
         this.mouseup = function (ev) {
             _this.mouseEnd(ev);
-            document.removeEventListener("mousemove", _this.mousemove);
-            document.removeEventListener("mouseup", _this.mouseup);
-            _this.dragEnd(ev, ev.pageX, ev.pageY);
+            EventHelper.removeTouchMoveEvent(document, _this.mousemove);
+            EventHelper.removeTouchEndEvent(document, _this.mouseup);
+            _this.dragEnd(ev);
             _this.isFirstDragging = true;
             _this.isDragging = false;
         };
-        dragElement.addEventListener("mousedown", this.mousedown);
+        EventHelper.addTouchStartEvent(dragElement, this.mousedown);
     }
     DragEvent.prototype.draggingFirst = function (ev, x, y, distanceX, distanceY) { };
     return DragEvent;

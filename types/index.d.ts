@@ -7,8 +7,6 @@ export type JsonObject = {
     [key: string]: any;
 };
 
-export type TouchEvent = MouseEvent;
-
 export type CSSStyleObject = CSSStyleDeclaration & { [key: string]: string | null };
 
 export type WindowCoord = number[];
@@ -27,14 +25,14 @@ export type ParcloseOption = {
 export type ContextMenuButtonOption = {
     id: string;
     label: string;
-    handler?: (ev: MouseEvent, window: UIWindow) => void;
+    handler?: (ev: MouseEvent | TouchEvent, window: UIWindow) => void;
     items?: Array<ContextMenuButtonOption> | false
 } & JsonObject;
 
 export type ActionButtonOption = {
     id: string;
     label: string;
-    handler?: (ev: MouseEvent, window: UIWindow) => void;
+    handler?: (ev: MouseEvent | TouchEvent, window: UIWindow) => void;
 } & JsonObject;
 
 export type ResizeOption = {

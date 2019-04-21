@@ -19,7 +19,7 @@ export default class WindowResizeDragEvent extends DragEvent {
         super(dragElement);
     }
 
-    dragStart(ev: MouseEvent, x: number, y: number): void | false {
+    dragStart(ev: MouseEvent | TouchEvent, x: number, y: number): void | false {
         if (this.window.status !== Enums.WindowStatus.NORMAL) {
             return false;
         }
@@ -30,7 +30,7 @@ export default class WindowResizeDragEvent extends DragEvent {
         this._height = this.window.height;
     }
 
-    dragging(ev: MouseEvent, x: number, y: number, distanceX: number, distanceY: number): void {
+    dragging(ev: MouseEvent | TouchEvent, x: number, y: number, distanceX: number, distanceY: number): void {
         switch (this.direction) {
             case Enums.Direction.LEFT:
                 this.resizeHandler(distanceX, distanceY, false, true, false, true);
@@ -59,7 +59,7 @@ export default class WindowResizeDragEvent extends DragEvent {
         }
     }
 
-    dragEnd(ev: MouseEvent, x: number, y: number): void {
+    dragEnd(ev: MouseEvent | TouchEvent): void {
         this.window.top = this._top;
         this.window.left = this._left;
         this.window.width = this._width;
@@ -144,12 +144,13 @@ export default class WindowResizeDragEvent extends DragEvent {
         }
     }
 
-    mouseStar(ev: MouseEvent): void {
+    mouseStar(ev: MouseEvent | TouchEvent): void {
+        ev.preventDefault();
         if (this.content) this.content.showPenetrate();
     }
-    mouseMove(ev: MouseEvent): void {
+    mouseMove(ev: MouseEvent | TouchEvent): void {
     }
-    mouseEnd(ev: MouseEvent): void {
+    mouseEnd(ev: MouseEvent | TouchEvent): void {
         if (this.content) this.content.showPenetrate(false);
     }
 }

@@ -8,6 +8,7 @@ import * as ElementHelper from "../utils/ElementHelper";
 import * as Types from "../../types";
 import * as CastHelper from "../utils/CastHelper";
 import * as Enums from "../basic/enums";
+import * as EventHelper from "../utils/EventHelper";
 
 export default class UIActionBar extends UIWindowComponent implements UIControl {
     public static actionButtonZoomWidth: number = 300;
@@ -48,7 +49,7 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
                 "flex-row"
             );
 
-            actionBarElement.addEventListener("mousedown", (ev: MouseEvent) => {
+            EventHelper.addTouchStartEvent(actionBarElement, (ev: MouseEvent | TouchEvent) => {
                 ev.preventDefault();
                 ev.stopPropagation();
             });
@@ -99,7 +100,7 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
                 const moreContextMenuBarElement = moreContextMenuBar.present();
                 document.body.appendChild(moreContextMenuBarElement);
 
-                moreActionButton.handler = function (ev: MouseEvent, window: UIWindow) {
+                moreActionButton.handler = function (ev: MouseEvent | TouchEvent, window: UIWindow) {
                     moreContextMenuBar.updateOffset(ev, this.window.zIndex);
                 }
 
@@ -132,7 +133,7 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
             parentActionBarElemnt.appendChild(actionButtonElement);
             actionButtons.push(actionButton);
         }
-        
+
         this.setComponent(Enums.ComponentType.ACTION_BUTTONS, actionButtons);
     }
 }

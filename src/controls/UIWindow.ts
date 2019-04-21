@@ -17,6 +17,7 @@ import * as CastHelper from "../utils/CastHelper";
 import * as TypeHelper from "../utils/TypeHelper";
 import * as ExceptionHelper from "../utils/ExceptionHelper";
 import * as StringHelper from "../utils/StringHelper";
+import * as EventHelper from "../utils/EventHelper";
 
 export default class UIWindow extends UIComponent implements UIControl {
     public readonly elementId: string;
@@ -134,7 +135,7 @@ export default class UIWindow extends UIComponent implements UIControl {
             webkitBoxShadow: this.shadow
         });
 
-        windowElement.addEventListener("mousedown", (ev: MouseEvent) => {
+        EventHelper.addTouchStartEvent(windowElement, (ev: MouseEvent | TouchEvent) => {
             this.updateZIndex();
         }, true);
 
@@ -229,7 +230,7 @@ export default class UIWindow extends UIComponent implements UIControl {
 
         windowElement.addEventListener("animationend", (ev: AnimationEvent) => {
             const element = this.element;
-            
+
             ElementHelper.removeClasses(element, this.app.prefix,
                 `animate-${this.animate}-show`,
                 `animate-${this.animate}-drag-to-normal`

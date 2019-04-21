@@ -17,6 +17,7 @@ var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var UIIcon_1 = require("./UIIcon");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
+var EventHelper = require("../utils/EventHelper");
 var UIActionButton = (function (_super) {
     __extends(UIActionButton, _super);
     function UIActionButton(app, window, options) {
@@ -46,8 +47,8 @@ var UIActionButton = (function (_super) {
         ElementHelper.addStyles(actionButtonElement, {
             width: UIActionButton.width + "px"
         });
-        actionButtonElement.addEventListener("mousedown", function (ev) {
-            if (ev.button === 0 && typeof _this.handler === "function") {
+        EventHelper.addTouchStartEvent(actionButtonElement, function (ev) {
+            if (((ev instanceof MouseEvent && ev.button === 0) || (ev instanceof TouchEvent && ev.touches.length === 1)) && typeof _this.handler === "function") {
                 _this.handler(ev, _this.window);
             }
         }, true);

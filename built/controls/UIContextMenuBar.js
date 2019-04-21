@@ -17,6 +17,7 @@ var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var UIContextMenuButton_1 = require("./UIContextMenuButton");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
+var TypeHelper = require("../utils/TypeHelper");
 var UIContextMenuBar = (function (_super) {
     __extends(UIContextMenuBar, _super);
     function UIContextMenuBar(app, window, uniqueId, contextMenuItems, isTopMenu) {
@@ -67,7 +68,7 @@ var UIContextMenuBar = (function (_super) {
             || this.contextMenuButtons.length === 0)
             return;
         var computedStyle = getComputedStyle(this.element);
-        var contextMenuBarWidth = Number(computedStyle.width.replace('px', '')), contextMenuBarHeight = this.contextMenuButtons.length * UIContextMenuButton_1.default.height, x = ev.pageX, y = ev.pageY;
+        var contextMenuBarWidth = Number(computedStyle.width.replace('px', '')), contextMenuBarHeight = this.contextMenuButtons.length * UIContextMenuButton_1.default.height, x = TypeHelper.isMoveEvent(ev) ? ev.pageX : ev.touches[0].pageX, y = TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY;
         var left = x, top = y;
         if (fixLeft !== undefined)
             left = fixLeft;

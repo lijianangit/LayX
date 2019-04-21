@@ -18,6 +18,7 @@ var UIIcon_1 = require("./UIIcon");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
 var TimeHelper = require("../utils/TimeHelper");
+var EventHelper = require("../utils/EventHelper");
 var UINotice = (function (_super) {
     __extends(UINotice, _super);
     function UINotice(app, options) {
@@ -77,7 +78,7 @@ var UINotice = (function (_super) {
         var icon = new UIIcon_1.default(this.app, 'destroy');
         var iconElement = icon.present();
         closeElement.appendChild(iconElement);
-        closeElement.addEventListener("mousedown", function (ev) {
+        EventHelper.addTouchStartEvent(closeElement, function (ev) {
             _this.destroy();
         });
         noticeElement.appendChild(closeElement);
@@ -126,17 +127,21 @@ var UINotice = (function (_super) {
             if (ElementHelper.containClass(element, _this.app.prefix, "animate-fade-in-right-reverse")) {
                 _this.remove();
             }
-            if (ElementHelper.containClass(element, _this.app.prefix, "animate-fade-in-right")) {
-                _this.processAnimate();
+            if (_this.timeout !== 0) {
+                if (ElementHelper.containClass(element, _this.app.prefix, "animate-fade-in-right")) {
+                    _this.processAnimate();
+                }
             }
             ElementHelper.removeClasses(element, _this.app.prefix, "animate-fade-in-right-reverse", "animate-fade-in-right", "animate-slide-to-top");
         });
-        noticeElement.addEventListener("mouseenter", function (ev) {
-            clearInterval(_this.timer);
-        });
-        noticeElement.addEventListener("mouseleave", function (ev) {
-            _this.processAnimate();
-        });
+        if (this.timeout !== 0) {
+            noticeElement.addEventListener("mouseenter", function (ev) {
+                clearInterval(_this.timer);
+            });
+            noticeElement.addEventListener("mouseleave", function (ev) {
+                _this.processAnimate();
+            });
+        }
     };
     UINotice.prototype.destroy = function () {
         ElementHelper.addClasses(this.element, this.app.prefix, "animate-fade-in-right-reverse");

@@ -16,6 +16,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
+var TypeHelper = require("../utils/TypeHelper");
+var EventHelper = require("../utils/EventHelper");
 var UIFrameContent = (function (_super) {
     __extends(UIFrameContent, _super);
     function UIFrameContent(app, window, url) {
@@ -23,6 +25,27 @@ var UIFrameContent = (function (_super) {
         _this.elementId = _this.window.elementId + "-" + "url-content";
         _this._element = null;
         _this._contentWindow = null;
+        _this.mousedown = function (ev) {
+            var event = document.createEvent('Event');
+            event.initEvent(ev instanceof MouseEvent ? "mousedown" : "touchstart", true);
+            _this.window.element.dispatchEvent(event);
+        };
+        _this.mousemove = function (ev) {
+            var clientRect = _this.element.getBoundingClientRect();
+            var pageY = (TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY) + clientRect.top;
+            if (_this.app.salver && _this.app.salver.element) {
+                if (pageY >= parent.innerHeight - 50) {
+                    if (ElementHelper.containClass(_this.app.salver.element, _this.app.prefix, "salver-bar-keep"))
+                        return;
+                    _this.app.salver.show();
+                }
+                else {
+                    if (!ElementHelper.containClass(_this.app.salver.element, _this.app.prefix, "salver-bar-keep"))
+                        return;
+                    _this.app.salver.show(false);
+                }
+            }
+        };
         _this.url = CastHelper.stringCast(url);
         return _this;
     }
@@ -76,27 +99,8 @@ var UIFrameContent = (function (_super) {
                     return false;
                 });
             }
-            contentWindow.document.addEventListener("mousedown", function (ev) {
-                var event = document.createEvent('Event');
-                event.initEvent("mousedown", true);
-                _this.window.element.dispatchEvent(event);
-            });
-            contentWindow.addEventListener("mousemove", function (ev) {
-                var clientRect = _this.element.getBoundingClientRect();
-                var pageY = ev.pageY + clientRect.top;
-                if (_this.app.salver && _this.app.salver.element) {
-                    if (pageY >= parent.innerHeight - 50) {
-                        if (ElementHelper.containClass(_this.app.salver.element, _this.app.prefix, "salver-bar-keep"))
-                            return;
-                        _this.app.salver.show();
-                    }
-                    else {
-                        if (!ElementHelper.containClass(_this.app.salver.element, _this.app.prefix, "salver-bar-keep"))
-                            return;
-                        _this.app.salver.show(false);
-                    }
-                }
-            });
+            EventHelper.addTouchStartEvent(contentWindow.document, _this.mousedown);
+            EventHelper.addTouchMoveEvent(contentWindow.document, _this.mousemove);
         });
     };
     return UIFrameContent;

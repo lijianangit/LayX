@@ -122,3 +122,8 @@ function isNoticeType(obj) {
     }
 }
 exports.isNoticeType = isNoticeType;
+function isMoveEvent(obj) {
+    return obj.button !== undefined
+        && obj.touches === undefined;
+}
+exports.isMoveEvent = isMoveEvent;

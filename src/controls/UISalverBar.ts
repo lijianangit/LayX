@@ -45,10 +45,6 @@ export default class UISalverBar extends UIComponent implements UIControl {
             bottom: `-${UISalverButton.size - UISalverButton.talentHeight}px`
         });
 
-        salverBarElement.addEventListener("mousedown", (ev: MouseEvent) => { 
-            
-        }, true);
-
         fragment.appendChild(salverBarElement);
 
         return fragment;

@@ -16,16 +16,16 @@ export default class WindowMoveDragEvent extends DragEvent {
         super(dragElement);
     }
 
-    dragStart(ev: MouseEvent, x: number, y: number): void | false {
+    dragStart(ev: MouseEvent | TouchEvent, x: number, y: number): void | false {
         this._top = this.window.top;
         this._left = this.window.left;
     }
 
-    dragging(ev: MouseEvent, x: number, y: number, distanceX: number, distanceY: number): void {
+    dragging(ev: MouseEvent | TouchEvent, x: number, y: number, distanceX: number, distanceY: number): void {
         this.moveHandler(distanceX, distanceY);
     }
 
-    dragEnd(ev: MouseEvent, x: number, y: number): void {
+    dragEnd(ev: MouseEvent | TouchEvent): void {
         if (this.isDragging == true && this._top === 0) {
             this.window.max();
             this.window.top = this._originTop;
@@ -60,7 +60,7 @@ export default class WindowMoveDragEvent extends DragEvent {
         });
     }
 
-    draggingFirst(ev: MouseEvent, x: number, y: number, distanceX: number, distanceY: number): void {
+    draggingFirst(ev: MouseEvent | TouchEvent, x: number, y: number, distanceX: number, distanceY: number): void {
         this._originTop = this.window.top;
         this._originLeft = this.window.left;
 
@@ -83,10 +83,11 @@ export default class WindowMoveDragEvent extends DragEvent {
         }
     }
 
-    mouseStar(ev: MouseEvent): void {
+    mouseStar(ev: MouseEvent | TouchEvent): void {
+        ev.preventDefault();
     }
-    mouseMove(ev: MouseEvent): void {
+    mouseMove(ev: MouseEvent | TouchEvent): void {
     }
-    mouseEnd(ev: MouseEvent): void {
+    mouseEnd(ev: MouseEvent | TouchEvent): void {
     }
 }

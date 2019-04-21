@@ -6,6 +6,7 @@ import UIContextMenuButton from "./UIContextMenuButton";
 import * as Types from "../../types";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as CastHelper from "../utils/CastHelper";
+import * as TypeHelper from "../utils/TypeHelper";
 import * as Enums from "../basic/enums";
 
 export default class UIContextMenuBar extends UIWindowComponent implements UIControl {
@@ -63,7 +64,7 @@ export default class UIContextMenuBar extends UIWindowComponent implements UICon
         );
     }
 
-    updateOffset(ev: MouseEvent, zIndex: number, fixLeft?: number, fixTop?: number): void {
+    updateOffset(ev: MouseEvent | TouchEvent, zIndex: number, fixLeft?: number, fixTop?: number): void {
         if (!this.isTopMenu
             || !this.element
             || this.contextMenuButtons === false
@@ -72,8 +73,8 @@ export default class UIContextMenuBar extends UIWindowComponent implements UICon
         const computedStyle = getComputedStyle(this.element);
         const contextMenuBarWidth = Number(computedStyle.width!.replace('px', '')),
             contextMenuBarHeight = this.contextMenuButtons.length * UIContextMenuButton.height,
-            x = ev.pageX,
-            y = ev.pageY;
+            x =  TypeHelper.isMoveEvent(ev) ? ev.pageX : ev.touches[0].pageX,
+            y = TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY;
 
         let left = x,
             top = y;

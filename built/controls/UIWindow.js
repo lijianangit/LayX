@@ -27,6 +27,7 @@ var CastHelper = require("../utils/CastHelper");
 var TypeHelper = require("../utils/TypeHelper");
 var ExceptionHelper = require("../utils/ExceptionHelper");
 var StringHelper = require("../utils/StringHelper");
+var EventHelper = require("../utils/EventHelper");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
     function UIWindow(app, options) {
@@ -129,7 +130,7 @@ var UIWindow = (function (_super) {
             boxShadow: this.shadow,
             webkitBoxShadow: this.shadow
         });
-        windowElement.addEventListener("mousedown", function (ev) {
+        EventHelper.addTouchStartEvent(windowElement, function (ev) {
             _this.updateZIndex();
         }, true);
         if (this.toolBar !== false) {

@@ -52,8 +52,6 @@ var UISalverBar = (function (_super) {
             height: UISalverButton_1.default.size + "px",
             bottom: "-" + (UISalverButton_1.default.size - UISalverButton_1.default.talentHeight) + "px"
         });
-        salverBarElement.addEventListener("mousedown", function (ev) {
-        }, true);
         fragment.appendChild(salverBarElement);
         return fragment;
     };

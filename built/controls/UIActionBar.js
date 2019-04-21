@@ -18,6 +18,7 @@ var UIContextMenuBar_1 = require("./UIContextMenuBar");
 var UIActionButton_1 = require("./UIActionButton");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
+var EventHelper = require("../utils/EventHelper");
 var UIActionBar = (function (_super) {
     __extends(UIActionBar, _super);
     function UIActionBar(app, window, options) {
@@ -49,7 +50,7 @@ var UIActionBar = (function (_super) {
             actionBarElement.setAttribute("data-window-id", this.window.id);
             actionBarElement.id = this.elementId;
             ElementHelper.addClasses(actionBarElement, this.app.prefix, "action-bar", "flexbox", "flex-row");
-            actionBarElement.addEventListener("mousedown", function (ev) {
+            EventHelper.addTouchStartEvent(actionBarElement, function (ev) {
                 ev.preventDefault();
                 ev.stopPropagation();
             });

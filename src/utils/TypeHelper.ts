@@ -123,3 +123,8 @@ export function isNoticeType(obj: any): obj is Enums.NoticeType {
             return ExceptionHelper.assertNever(<never>obj);
     }
 }
+
+export function isMoveEvent(obj: any): obj is MouseEvent {
+    return obj.button !== undefined
+        && obj.touches === undefined;
+}

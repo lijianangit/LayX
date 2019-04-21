@@ -6,6 +6,7 @@ import * as Types from "../../types";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as CastHelper from "../utils/CastHelper";
 import * as Enums from "../basic/enums";
+import * as EventHelper from "../utils/EventHelper";
 
 export default class UIParclose extends UIWindowComponent implements UIControl {
     public readonly elementId: string = `${this.window.elementId}-${Enums.ComponentType.PARCLOSE}`;
@@ -52,7 +53,8 @@ export default class UIParclose extends UIWindowComponent implements UIControl {
     }
 
     private bindEvent(parcloseElement: HTMLElement): void {
-        parcloseElement.addEventListener("mousedown", (ev: MouseEvent) => {
+
+        EventHelper.addTouchStartEvent(parcloseElement, (ev: MouseEvent | TouchEvent) => {
             this.window.flicker();
         }, true);
 

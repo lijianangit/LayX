@@ -67,7 +67,7 @@ var WindowResizeDragEvent = (function (_super) {
                 break;
         }
     };
-    WindowResizeDragEvent.prototype.dragEnd = function (ev, x, y) {
+    WindowResizeDragEvent.prototype.dragEnd = function (ev) {
         this.window.top = this._top;
         this.window.left = this._left;
         this.window.width = this._width;
@@ -148,6 +148,7 @@ var WindowResizeDragEvent = (function (_super) {
         }
     };
     WindowResizeDragEvent.prototype.mouseStar = function (ev) {
+        ev.preventDefault();
         if (this.content)
             this.content.showPenetrate();
     };

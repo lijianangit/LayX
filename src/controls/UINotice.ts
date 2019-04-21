@@ -7,6 +7,7 @@ import * as ElementHelper from "../utils/ElementHelper";
 import * as CastHelper from "../utils/CastHelper";
 import * as Enums from "../basic/enums";
 import * as TimeHelper from "../utils/TimeHelper";
+import * as EventHelper from "../utils/EventHelper";
 
 export default class UINotice extends UIComponent implements UIControl {
     private timer: number = 0;
@@ -88,7 +89,8 @@ export default class UINotice extends UIComponent implements UIControl {
         const icon = new UIIcon(this.app, 'destroy');
         const iconElement = icon.present();
         closeElement.appendChild(iconElement);
-        closeElement.addEventListener("mousedown", (ev: MouseEvent) => {
+
+        EventHelper.addTouchStartEvent(closeElement, (ev: MouseEvent | TouchEvent) => {
             this.destroy();
         });
 
@@ -160,8 +162,10 @@ export default class UINotice extends UIComponent implements UIControl {
                 this.remove();
             }
 
-            if (ElementHelper.containClass(element, this.app.prefix, "animate-fade-in-right")) {
-                this.processAnimate();
+            if (this.timeout !== 0) {
+                if (ElementHelper.containClass(element, this.app.prefix, "animate-fade-in-right")) {
+                    this.processAnimate();
+                }
             }
 
             ElementHelper.removeClasses(element, this.app.prefix,
@@ -171,13 +175,15 @@ export default class UINotice extends UIComponent implements UIControl {
             );
         });
 
-        noticeElement.addEventListener("mouseenter", (ev: MouseEvent) => {
-            clearInterval(this.timer);
-        });
+        if (this.timeout !== 0) {
+            noticeElement.addEventListener("mouseenter", (ev: MouseEvent) => {
+                clearInterval(this.timer);
+            });
 
-        noticeElement.addEventListener("mouseleave", (ev: MouseEvent) => {
-            this.processAnimate();
-        });
+            noticeElement.addEventListener("mouseleave", (ev: MouseEvent) => {
+                this.processAnimate();
+            });
+        }
     }
 
     public destroy(): void {

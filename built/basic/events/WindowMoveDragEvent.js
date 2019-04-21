@@ -36,7 +36,7 @@ var WindowMoveDragEvent = (function (_super) {
     WindowMoveDragEvent.prototype.dragging = function (ev, x, y, distanceX, distanceY) {
         this.moveHandler(distanceX, distanceY);
     };
-    WindowMoveDragEvent.prototype.dragEnd = function (ev, x, y) {
+    WindowMoveDragEvent.prototype.dragEnd = function (ev) {
         if (this.isDragging == true && this._top === 0) {
             this.window.max();
             this.window.top = this._originTop;
@@ -88,6 +88,7 @@ var WindowMoveDragEvent = (function (_super) {
         }
     };
     WindowMoveDragEvent.prototype.mouseStar = function (ev) {
+        ev.preventDefault();
     };
     WindowMoveDragEvent.prototype.mouseMove = function (ev) {
     };

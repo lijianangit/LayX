@@ -17,6 +17,7 @@ var UIComponent_1 = require("../basic/models/UIComponent");
 var UIIcon_1 = require("./UIIcon");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
+var EventHelper = require("../utils/EventHelper");
 var UISalverButton = (function (_super) {
     __extends(UISalverButton, _super);
     function UISalverButton(app, windowId) {
@@ -45,7 +46,7 @@ var UISalverButton = (function (_super) {
             height: UISalverButton.size + "px"
         });
         var window = this.app.getWindow(this.windowId);
-        salverButtonElement.addEventListener("mousedown", function (ev) {
+        EventHelper.addTouchStartEvent(salverButtonElement, function (ev) {
             if (!window)
                 return;
             if (window === _this.app.window && window.status !== "min") {

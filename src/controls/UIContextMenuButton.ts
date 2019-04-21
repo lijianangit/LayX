@@ -8,13 +8,14 @@ import * as Types from "../../types";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as Enums from "../basic/enums";
 import * as CastHelper from "../utils/CastHelper";
+import * as EventHelper from "../utils/EventHelper";
 
 export default class UIContextMenuButton extends UIWindowComponent implements UIControl {
     public static readonly height: number = 30;
 
     public id: string;
     public label: string;
-    public handler?: (ev: MouseEvent, window: UIWindow) => void;
+    public handler?: (ev: MouseEvent | TouchEvent, window: UIWindow) => void;
     public items: Array<Types.ContextMenuButtonOption> | false;
 
     constructor(app: App, window: UIWindow, options: Types.ContextMenuButtonOption, private readonly index = 0) {
@@ -44,10 +45,9 @@ export default class UIContextMenuButton extends UIWindowComponent implements UI
             lineHeight: `${UIContextMenuButton.height}px`
         });
 
-        contextMenuButtonElement.addEventListener("mousedown", (ev: MouseEvent) => {
+        EventHelper.addTouchStartEvent(contextMenuButtonElement, (ev: MouseEvent | TouchEvent) => {
             ev.stopPropagation();
-
-            if (ev.button === 0 && typeof this.handler === "function") {
+            if (((ev instanceof MouseEvent && ev.button === 0) || (ev instanceof TouchEvent && ev.touches.length === 1)) && typeof this.handler === "function") {
                 this.handler(ev, this.window);
             }
         });
@@ -93,7 +93,7 @@ export default class UIContextMenuButton extends UIWindowComponent implements UI
                 "flex-center"
             );
 
-            const icon = new UIIcon(this.app,"right");
+            const icon = new UIIcon(this.app, "right");
             const iconElement = icon.present();
             rightIconElement.appendChild(iconElement);
 

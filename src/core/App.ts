@@ -9,6 +9,7 @@ import * as ExceptionHelper from "../utils/ExceptionHelper";
 import * as Enums from "../basic/enums";
 import * as TypeHelper from "../utils/TypeHelper";
 import * as ElementHelper from "../utils/ElementHelper";
+import * as EventHelper from "../utils/EventHelper";
 
 export default class App {
     public readonly version: string = "3.0.0";
@@ -131,41 +132,44 @@ export default class App {
             if (!document.body.id) document.body.id = `${this.prefix}body`;
         });
 
-        document.addEventListener("mousedown", (ev: MouseEvent) => {
-            if (this.window) {
-                const contextMenuBar = this.window.getComponent<UIContextMenuBar>(Enums.ComponentType.CONTEXT_MENU_BAR)
-                contextMenuBar && contextMenuBar.hide();
+        EventHelper.addTouchStartEvent(document, this.mousedown, true);
+        EventHelper.addTouchMoveEvent(document, this.mousemove, true);
+    }
 
-                this.window.hideMoreActionContextMenu();
+    private readonly mousedown: (this: HTMLElement | Document, ev: MouseEvent | TouchEvent) => any = (ev: MouseEvent | TouchEvent) => {
+        if (this.window) {
+            const contextMenuBar = this.window.getComponent<UIContextMenuBar>(Enums.ComponentType.CONTEXT_MENU_BAR)
+            contextMenuBar && contextMenuBar.hide();
 
-                const topMenuBar = this.window.getComponent<UITopMenuBar>(Enums.ComponentType.TOP_MENU_BAR);
-                topMenuBar && topMenuBar.hide(ev);
+            this.window.hideMoreActionContextMenu();
 
-                const windowIconContextMenuBar = this.window.getComponent<UIContextMenuBar>(`
-                ${Enums.ComponentType.TOOL_BAR}
-                /${Enums.ComponentType.TITLE_BAR}
-                /${Enums.ComponentType.WINDOW_ICON_CONTEXT_MENU_BAR}`);
+            const topMenuBar = this.window.getComponent<UITopMenuBar>(Enums.ComponentType.TOP_MENU_BAR);
+            topMenuBar && topMenuBar.hide(ev);
 
-                windowIconContextMenuBar && windowIconContextMenuBar.hide();
+            const windowIconContextMenuBar = this.window.getComponent<UIContextMenuBar>(`
+            ${Enums.ComponentType.TOOL_BAR}
+            /${Enums.ComponentType.TITLE_BAR}
+            /${Enums.ComponentType.WINDOW_ICON_CONTEXT_MENU_BAR}`);
+
+            windowIconContextMenuBar && windowIconContextMenuBar.hide();
+        }
+
+        if (this.lastWindow) {
+            const topMenuBar = this.lastWindow.getComponent<UITopMenuBar>(Enums.ComponentType.TOP_MENU_BAR);
+            topMenuBar && topMenuBar.hide(ev);
+        }
+    }
+
+    private readonly mousemove: (this: HTMLElement | Document, ev: MouseEvent | TouchEvent) => any = (ev: MouseEvent | TouchEvent) => {
+        if (this.salver && this.salver.element) {
+            if ((TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY) >= innerHeight - 50) {
+                if (ElementHelper.containClass(this.salver.element, this.prefix, "salver-bar-keep")) return;
+                this.salver.show();
             }
-
-            if (this.lastWindow) {
-                const topMenuBar = this.lastWindow.getComponent<UITopMenuBar>(Enums.ComponentType.TOP_MENU_BAR);
-                topMenuBar && topMenuBar.hide(ev);
+            else {
+                if (!ElementHelper.containClass(this.salver.element, this.prefix, "salver-bar-keep")) return;
+                this.salver.show(false);
             }
-        }, true);
-
-        document.addEventListener("mousemove", (ev: MouseEvent) => {
-            if (this.salver && this.salver.element) {
-                if (ev.pageY >= innerHeight - 50) {
-                    if (ElementHelper.containClass(this.salver.element, this.prefix, "salver-bar-keep")) return;
-                    this.salver.show();
-                }
-                else {
-                    if (!ElementHelper.containClass(this.salver.element, this.prefix, "salver-bar-keep")) return;
-                    this.salver.show(false);
-                }
-            }
-        }, true);
+        }
     }
 }

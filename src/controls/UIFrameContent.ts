@@ -8,6 +8,7 @@ import * as ElementHelper from "../utils/ElementHelper";
 import * as CastHelper from "../utils/CastHelper";
 import * as Enums from "../basic/enums";
 import * as TypeHelper from "../utils/TypeHelper";
+import * as EventHelper from "../utils/EventHelper";
 
 export default class UIFrameContent extends UIWindowComponent implements UIControl {
     public readonly elementId: string = `${this.window.elementId}-${Enums.ComponentType.URL_CONTENT}`;
@@ -77,27 +78,29 @@ export default class UIFrameContent extends UIWindowComponent implements UIContr
                 });
             }
 
-            contentWindow.document.addEventListener("mousedown", (ev: MouseEvent) => {
-                const event = document.createEvent('Event');
-                event.initEvent("mousedown", true);
-                this.window.element!.dispatchEvent(event);
-            });
-
-            contentWindow.addEventListener("mousemove", (ev: MouseEvent) => {
-                const clientRect = this.element!.getBoundingClientRect();
-                const pageY = ev.pageY + clientRect.top;
-
-                if (this.app.salver && this.app.salver.element) {
-                    if (pageY >= parent.innerHeight - 50) {
-                        if (ElementHelper.containClass(this.app.salver.element, this.app.prefix, "salver-bar-keep")) return;
-                        this.app.salver.show();
-                    }
-                    else {
-                        if (!ElementHelper.containClass(this.app.salver.element, this.app.prefix, "salver-bar-keep")) return;
-                        this.app.salver.show(false);
-                    }
-                }
-            });
+            EventHelper.addTouchStartEvent(contentWindow.document, this.mousedown);
+            EventHelper.addTouchMoveEvent(contentWindow.document, this.mousemove);
         });
+    }
+
+    private readonly mousedown: (this: HTMLElement | Document, ev: MouseEvent | TouchEvent) => any = (ev: MouseEvent | TouchEvent) => {
+        const event = document.createEvent('Event');
+        event.initEvent(ev instanceof MouseEvent ? "mousedown" : "touchstart", true);
+        this.window.element!.dispatchEvent(event);
+    }
+
+    private readonly mousemove: (this: HTMLElement | Document, ev: MouseEvent | TouchEvent) => any = (ev: MouseEvent | TouchEvent) => {
+        const clientRect = this.element!.getBoundingClientRect();
+        const pageY = (TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY) + clientRect.top;
+        if (this.app.salver && this.app.salver.element) {
+            if (pageY >= parent.innerHeight - 50) {
+                if (ElementHelper.containClass(this.app.salver.element, this.app.prefix, "salver-bar-keep")) return;
+                this.app.salver.show();
+            }
+            else {
+                if (!ElementHelper.containClass(this.app.salver.element, this.app.prefix, "salver-bar-keep")) return;
+                this.app.salver.show(false);
+            }
+        }
     }
 }

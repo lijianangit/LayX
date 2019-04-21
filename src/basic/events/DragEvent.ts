@@ -1,3 +1,6 @@
+import * as EventHelper from "../../utils/EventHelper";
+import * as TypeHelper from "../../utils/TypeHelper";
+
 export default abstract class DragEvent {
     public isDragging: boolean = false;
     public isFirstDragging: boolean = true;
@@ -5,27 +8,28 @@ export default abstract class DragEvent {
     private startY: number = 0;
 
     constructor(dragElement: HTMLElement) {
-        dragElement.addEventListener("mousedown", this.mousedown);
+        EventHelper.addTouchStartEvent(dragElement, this.mousedown);
     }
 
-    private readonly mousedown: (this: HTMLElement, ev: MouseEvent) => any = (ev: MouseEvent) => {
+    private readonly mousedown: (this: HTMLElement | Document, ev: MouseEvent | TouchEvent) => any = (ev: MouseEvent | TouchEvent) => {        
         this.mouseStar(ev);
 
-        if (ev.button === 0) {
-            this.startX = ev.pageX;
-            this.startY = ev.pageY;
+        if ((ev instanceof MouseEvent && ev.button === 0) || (ev instanceof TouchEvent && ev.touches.length > 0)) {
+            this.startX = TypeHelper.isMoveEvent(ev) ? ev.pageX : ev.touches[0].pageX;
+            this.startY = TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY;
             if (this.dragStart(ev, this.startX, this.startY) !== false) {
-                document.addEventListener("mousemove", this.mousemove);
-                document.addEventListener("mouseup", this.mouseup);
+
+                EventHelper.addTouchMoveEvent(document, this.mousemove);
+                EventHelper.addTouchEndEvent(document, this.mouseup);
             };
         }
     };
 
-    private readonly mousemove: (this: Document, ev: MouseEvent) => any = (ev: MouseEvent) => {
+    private readonly mousemove: (this: HTMLElement | Document, ev: MouseEvent | TouchEvent) => any = (ev: MouseEvent | TouchEvent) => {
         this.mouseMove(ev);
 
-        const currentX = ev.pageX;
-        const currentY = ev.pageY;
+        const currentX = TypeHelper.isMoveEvent(ev) ? ev.pageX : ev.touches[0].pageX;
+        const currentY = TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY;
         const distanceX = currentX - this.startX;
         const distanceY = currentY - this.startY;
         if (distanceX !== 0 || distanceY !== 0) {
@@ -40,25 +44,27 @@ export default abstract class DragEvent {
         }
     };
 
-    private readonly mouseup: (this: Document, ev: MouseEvent) => any = (ev: MouseEvent) => {
+    private readonly mouseup: (this: HTMLElement | Document, ev: MouseEvent | TouchEvent) => any = (ev: MouseEvent | TouchEvent) => {
         this.mouseEnd(ev);
-        document.removeEventListener("mousemove", this.mousemove);
-        document.removeEventListener("mouseup", this.mouseup);
-        this.dragEnd(ev, ev.pageX, ev.pageY);
+
+        EventHelper.removeTouchMoveEvent(document, this.mousemove);
+        EventHelper.removeTouchEndEvent(document, this.mouseup);
+
+        this.dragEnd(ev);
         this.isFirstDragging = true;
         this.isDragging = false;
     };
 
 
-    abstract dragStart(ev: MouseEvent, x: number, y: number): void | false;
+    abstract dragStart(ev: MouseEvent | TouchEvent, x: number, y: number): void | false;
 
-    abstract dragging(ev: MouseEvent, x: number, y: number, distanceX: number, distanceY: number): void;
+    abstract dragging(ev: MouseEvent | TouchEvent, x: number, y: number, distanceX: number, distanceY: number): void;
 
-    abstract dragEnd(ev: MouseEvent, x: number, y: number): void;
+    abstract dragEnd(ev: MouseEvent | TouchEvent): void;
 
-    abstract mouseStar(ev: MouseEvent): void;
-    abstract mouseMove(ev: MouseEvent): void;
-    abstract mouseEnd(ev: MouseEvent): void;
+    abstract mouseStar(ev: MouseEvent | TouchEvent): void;
+    abstract mouseMove(ev: MouseEvent | TouchEvent): void;
+    abstract mouseEnd(ev: MouseEvent | TouchEvent): void;
 
-    draggingFirst(ev: MouseEvent, x: number, y: number, distanceX: number, distanceY: number): void { }
+    draggingFirst(ev: MouseEvent | TouchEvent, x: number, y: number, distanceX: number, distanceY: number): void { }
 }
