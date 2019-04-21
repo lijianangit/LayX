@@ -5,6 +5,7 @@ import DragEvent from "./DragEvent";
 import * as Enums from "../enums";
 import * as Types from "../../../types";
 import * as ElementHelper from "../../utils/ElementHelper";
+import * as TypeHelper from "../../utils/TypeHelper";
 
 export default class WindowResizeDragEvent extends DragEvent {
     private isShowMoreActionButton: boolean = false;
@@ -145,7 +146,13 @@ export default class WindowResizeDragEvent extends DragEvent {
     }
 
     mouseStar(ev: MouseEvent | TouchEvent): void {
-        ev.preventDefault();
+        if (TypeHelper.isMoveEvent(ev)) {
+            ev.preventDefault();
+        }
+        else {
+            ev.stopPropagation();
+        }
+
         if (this.content) this.content.showPenetrate();
     }
     mouseMove(ev: MouseEvent | TouchEvent): void {

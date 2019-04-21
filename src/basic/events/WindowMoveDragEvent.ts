@@ -4,6 +4,7 @@ import DragEvent from "./DragEvent";
 import * as Types from "../../../types";
 import * as Enums from "../enums";
 import * as ElementHelper from "../../utils/ElementHelper";
+import * as TypeHelper from "../../utils/TypeHelper";
 
 export default class WindowMoveDragEvent extends DragEvent {
     private readonly emerge: number = 10;
@@ -11,6 +12,7 @@ export default class WindowMoveDragEvent extends DragEvent {
     private _left: number = 0;
     private _originTop: number = 0;
     private _originLeft: number = 0;
+    private _lastTime: Date | null = null;
 
     constructor(public app: App, public window: UIWindow, dragElement: HTMLElement, private readonly dragMoveOptions: Types.DragMoveOption) {
         super(dragElement);
@@ -89,5 +91,20 @@ export default class WindowMoveDragEvent extends DragEvent {
     mouseMove(ev: MouseEvent | TouchEvent): void {
     }
     mouseEnd(ev: MouseEvent | TouchEvent): void {
+        if (!this._lastTime) this._lastTime = new Date();
+        else {
+            const currentDate = new Date();
+            if (currentDate.getTime() - this._lastTime.getTime() <= 200) {
+                if (this.window.status === Enums.WindowStatus.MAX) {
+                    this.window.normal();
+                    return;
+                }
+                if (this.window.status === Enums.WindowStatus.NORMAL) {
+                    this.window.max();
+                    return;
+                }
+            }
+            this._lastTime = new Date();
+        }
     }
 }

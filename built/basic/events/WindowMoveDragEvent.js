@@ -27,6 +27,7 @@ var WindowMoveDragEvent = (function (_super) {
         _this._left = 0;
         _this._originTop = 0;
         _this._originLeft = 0;
+        _this._lastTime = null;
         return _this;
     }
     WindowMoveDragEvent.prototype.dragStart = function (ev, x, y) {
@@ -93,6 +94,22 @@ var WindowMoveDragEvent = (function (_super) {
     WindowMoveDragEvent.prototype.mouseMove = function (ev) {
     };
     WindowMoveDragEvent.prototype.mouseEnd = function (ev) {
+        if (!this._lastTime)
+            this._lastTime = new Date();
+        else {
+            var currentDate = new Date();
+            if (currentDate.getTime() - this._lastTime.getTime() <= 200) {
+                if (this.window.status === "max") {
+                    this.window.normal();
+                    return;
+                }
+                if (this.window.status === "normal") {
+                    this.window.max();
+                    return;
+                }
+            }
+            this._lastTime = new Date();
+        }
     };
     return WindowMoveDragEvent;
 }(DragEvent_1.default));

@@ -9,8 +9,10 @@ var DragEvent = (function () {
         this.isFirstDragging = true;
         this.startX = 0;
         this.startY = 0;
+        this.touchStartTime = null;
         this.mousedown = function (ev) {
             _this.mouseStar(ev);
+            _this.touchStartTime = new Date();
             if ((ev instanceof MouseEvent && ev.button === 0) || (ev instanceof TouchEvent && ev.touches.length > 0)) {
                 _this.startX = TypeHelper.isMoveEvent(ev) ? ev.pageX : ev.touches[0].pageX;
                 _this.startY = TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY;
@@ -27,7 +29,7 @@ var DragEvent = (function () {
             var currentY = TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY;
             var distanceX = currentX - _this.startX;
             var distanceY = currentY - _this.startY;
-            if (distanceX !== 0 || distanceY !== 0) {
+            if ((TypeHelper.isMoveEvent(ev) && (distanceX !== 0 || distanceY !== 0)) || (!TypeHelper.isMoveEvent(ev) && (new Date().getTime() - _this.touchStartTime.getTime() > 100))) {
                 _this.isDragging = true;
                 if (_this.isFirstDragging === true) {
                     _this.isFirstDragging = false;

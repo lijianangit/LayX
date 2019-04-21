@@ -6,13 +6,15 @@ export default abstract class DragEvent {
     public isFirstDragging: boolean = true;
     private startX: number = 0;
     private startY: number = 0;
+    private touchStartTime: Date | null = null;
 
     constructor(dragElement: HTMLElement) {
         EventHelper.addTouchStartEvent(dragElement, this.mousedown);
     }
 
-    private readonly mousedown: (this: HTMLElement | Document, ev: MouseEvent | TouchEvent) => any = (ev: MouseEvent | TouchEvent) => {        
+    private readonly mousedown: (this: HTMLElement | Document, ev: MouseEvent | TouchEvent) => any = (ev: MouseEvent | TouchEvent) => {
         this.mouseStar(ev);
+        this.touchStartTime = new Date();
 
         if ((ev instanceof MouseEvent && ev.button === 0) || (ev instanceof TouchEvent && ev.touches.length > 0)) {
             this.startX = TypeHelper.isMoveEvent(ev) ? ev.pageX : ev.touches[0].pageX;
@@ -32,7 +34,7 @@ export default abstract class DragEvent {
         const currentY = TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY;
         const distanceX = currentX - this.startX;
         const distanceY = currentY - this.startY;
-        if (distanceX !== 0 || distanceY !== 0) {
+        if ((TypeHelper.isMoveEvent(ev) && (distanceX !== 0 || distanceY !== 0)) || (!TypeHelper.isMoveEvent(ev) && (new Date().getTime() - this.touchStartTime!.getTime() > 100))) {
             this.isDragging = true;
 
             if (this.isFirstDragging === true) {
