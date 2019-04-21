@@ -17,7 +17,6 @@ import * as CastHelper from "../utils/CastHelper";
 import * as TypeHelper from "../utils/TypeHelper";
 import * as ExceptionHelper from "../utils/ExceptionHelper";
 import * as StringHelper from "../utils/StringHelper";
-import * as EventHelper from "../utils/EventHelper";
 
 export default class UIWindow extends UIComponent implements UIControl {
     public readonly elementId: string;
@@ -135,7 +134,7 @@ export default class UIWindow extends UIComponent implements UIControl {
             webkitBoxShadow: this.shadow
         });
 
-        EventHelper.addTouchStartEvent(windowElement, (ev: MouseEvent | TouchEvent) => {
+        windowElement.addEventListener("mousedown", (ev: MouseEvent) => {
             this.updateZIndex();
         }, true);
 
@@ -172,6 +171,9 @@ export default class UIWindow extends UIComponent implements UIControl {
             const parcloseElement = parclose.present();
             fragment.appendChild(parcloseElement);
             this.setComponent(Enums.ComponentType.PARCLOSE, parclose);
+            if (this.app.salver) {
+                this.app.salver.parsecloseCount++;
+            }
         }
 
         if (this.contextMenu !== false) {
@@ -269,6 +271,14 @@ export default class UIWindow extends UIComponent implements UIControl {
             ElementHelper.removeClasses(document.body, `z${this.app.prefix}`,
                 "body-noscroll"
             );
+        }
+
+        const parclose = this.getComponent<UIParclose>(Enums.ComponentType.PARCLOSE);
+        if (parclose) {
+            ElementHelper.removeElement(parclose.element);
+            if (this.app.salver) {
+                this.app.salver.parsecloseCount--;
+            }
         }
 
         if (this.app.salver) this.app.salver.removeItem();
@@ -397,12 +407,17 @@ export default class UIWindow extends UIComponent implements UIControl {
         const windowElement = this.element;
         if (!windowElement || this.status === Enums.WindowStatus.MIN) return;
 
-        if (this.enableAnimated) {
-            ElementHelper.addClasses(this.element, this.app.prefix,
-                `animate-${this.animate}-to-min`
-            );
+        if (this.parclose !== false) {
+            this.flicker();
         }
-        else this.minimize();
+        else {
+            if (this.enableAnimated) {
+                ElementHelper.addClasses(this.element, this.app.prefix,
+                    `animate-${this.animate}-to-min`
+                );
+            }
+            else this.minimize();
+        }
     }
 
     private minimize(): void {

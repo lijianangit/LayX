@@ -8,7 +8,6 @@ import * as ElementHelper from "../utils/ElementHelper";
 import * as Types from "../../types";
 import * as CastHelper from "../utils/CastHelper";
 import * as Enums from "../basic/enums";
-import * as EventHelper from "../utils/EventHelper";
 
 export default class UITopMenuButton extends UIWindowComponent implements UIControl {
     public id: string;
@@ -61,7 +60,7 @@ export default class UITopMenuButton extends UIWindowComponent implements UICont
     }
 
     private bindEvent(element: HTMLElement): void {
-        EventHelper.addTouchStartEvent(element, (ev: MouseEvent | TouchEvent) => {
+        element.addEventListener("mousedown", (ev: MouseEvent) => {
             if (this.topMenuBar.currentTopMenuButtonElement) {
                 ElementHelper.removeClasses(this.topMenuBar.currentTopMenuButtonElement, this.app.prefix,
                     Enums.ComponentType.TOP_MENU_BUTTON + "-active"

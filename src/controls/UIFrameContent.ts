@@ -78,18 +78,19 @@ export default class UIFrameContent extends UIWindowComponent implements UIContr
                 });
             }
 
-            EventHelper.addTouchStartEvent(contentWindow.document, this.mousedown);
+            contentWindow.document.addEventListener("mousedown", this.mousedown);
             EventHelper.addTouchMoveEvent(contentWindow.document, this.mousemove);
         });
     }
 
-    private readonly mousedown: (this: HTMLElement | Document, ev: MouseEvent | TouchEvent) => any = (ev: MouseEvent | TouchEvent) => {
+    private readonly mousedown: (this: HTMLElement | Document, ev: MouseEvent) => any = (ev: MouseEvent) => {
         const event = document.createEvent('Event');
-        event.initEvent(TypeHelper.isMoveEvent(ev) ? "mousedown" : "touchstart", true);
+        event.initEvent("mousedown", true);
         this.window.element!.dispatchEvent(event);
     }
 
     private readonly mousemove: (this: HTMLElement | Document, ev: MouseEvent | TouchEvent) => any = (ev: MouseEvent | TouchEvent) => {
+        ev.preventDefault();
         const clientRect = this.element!.getBoundingClientRect();
         const pageY = (TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY) + clientRect.top;
         if (this.app.salver && this.app.salver.element) {

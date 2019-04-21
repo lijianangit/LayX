@@ -8,6 +8,7 @@ import * as Enums from "../basic/enums";
 
 export default class UISalverBar extends UIComponent implements UIControl {
     public readonly elementId: string = `${this.app.prefix + Enums.ComponentType.SALVER_BAR}`;
+    public parsecloseCount: number=0;
 
     private _element: HTMLElement | null = null;
     get element() {

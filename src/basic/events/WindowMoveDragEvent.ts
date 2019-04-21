@@ -86,7 +86,9 @@ export default class WindowMoveDragEvent extends DragEvent {
     }
 
     mouseStar(ev: MouseEvent | TouchEvent): void {
-        ev.preventDefault();
+        if (TypeHelper.isMoveEvent(ev)) {
+            ev.preventDefault();
+        }
     }
     mouseMove(ev: MouseEvent | TouchEvent): void {
     }
@@ -97,14 +99,15 @@ export default class WindowMoveDragEvent extends DragEvent {
             if (currentDate.getTime() - this._lastTime.getTime() <= 200) {
                 if (this.window.status === Enums.WindowStatus.MAX) {
                     this.window.normal();
+                    this._lastTime = new Date();
                     return;
                 }
                 if (this.window.status === Enums.WindowStatus.NORMAL) {
                     this.window.max();
+                    this._lastTime = new Date();
                     return;
                 }
             }
-            this._lastTime = new Date();
         }
     }
 }

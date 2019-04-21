@@ -27,7 +27,6 @@ var CastHelper = require("../utils/CastHelper");
 var TypeHelper = require("../utils/TypeHelper");
 var ExceptionHelper = require("../utils/ExceptionHelper");
 var StringHelper = require("../utils/StringHelper");
-var EventHelper = require("../utils/EventHelper");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
     function UIWindow(app, options) {
@@ -130,7 +129,7 @@ var UIWindow = (function (_super) {
             boxShadow: this.shadow,
             webkitBoxShadow: this.shadow
         });
-        EventHelper.addTouchStartEvent(windowElement, function (ev) {
+        windowElement.addEventListener("mousedown", function (ev) {
             _this.updateZIndex();
         }, true);
         if (this.toolBar !== false) {
@@ -162,6 +161,9 @@ var UIWindow = (function (_super) {
             var parcloseElement = parclose.present();
             fragment.appendChild(parcloseElement);
             this.setComponent("parclose", parclose);
+            if (this.app.salver) {
+                this.app.salver.parsecloseCount++;
+            }
         }
         if (this.contextMenu !== false) {
             var contextMenuBar = new UIContextMenuBar_1.default(this.app, this, "window", this.contextMenu);
@@ -229,6 +231,13 @@ var UIWindow = (function (_super) {
     UIWindow.prototype.remove = function () {
         if (this.status === "max") {
             ElementHelper.removeClasses(document.body, "z" + this.app.prefix, "body-noscroll");
+        }
+        var parclose = this.getComponent("parclose");
+        if (parclose) {
+            ElementHelper.removeElement(parclose.element);
+            if (this.app.salver) {
+                this.app.salver.parsecloseCount--;
+            }
         }
         if (this.app.salver)
             this.app.salver.removeItem();
@@ -317,11 +326,16 @@ var UIWindow = (function (_super) {
         var windowElement = this.element;
         if (!windowElement || this.status === "min")
             return;
-        if (this.enableAnimated) {
-            ElementHelper.addClasses(this.element, this.app.prefix, "animate-" + this.animate + "-to-min");
+        if (this.parclose !== false) {
+            this.flicker();
         }
-        else
-            this.minimize();
+        else {
+            if (this.enableAnimated) {
+                ElementHelper.addClasses(this.element, this.app.prefix, "animate-" + this.animate + "-to-min");
+            }
+            else
+                this.minimize();
+        }
     };
     UIWindow.prototype.minimize = function () {
         var windowElement = this.element;

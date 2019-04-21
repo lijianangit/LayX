@@ -49,7 +49,7 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
                 "flex-row"
             );
 
-            EventHelper.addTouchStartEvent(actionBarElement, (ev: MouseEvent | TouchEvent) => {
+            actionBarElement.addEventListener("mousedown", (ev: MouseEvent) => {
                 ev.preventDefault();
                 ev.stopPropagation();
             });
@@ -100,7 +100,7 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
                 const moreContextMenuBarElement = moreContextMenuBar.present();
                 document.body.appendChild(moreContextMenuBarElement);
 
-                moreActionButton.handler = function (ev: MouseEvent | TouchEvent, window: UIWindow) {
+                moreActionButton.handler = function (ev: MouseEvent, window: UIWindow) {
                     moreContextMenuBar.updateOffset(ev, this.window.zIndex);
                 }
 

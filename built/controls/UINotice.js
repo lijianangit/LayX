@@ -18,7 +18,6 @@ var UIIcon_1 = require("./UIIcon");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
 var TimeHelper = require("../utils/TimeHelper");
-var EventHelper = require("../utils/EventHelper");
 var UINotice = (function (_super) {
     __extends(UINotice, _super);
     function UINotice(app, options) {
@@ -46,6 +45,8 @@ var UINotice = (function (_super) {
     });
     Object.defineProperty(UINotice.prototype, "processElement", {
         get: function () {
+            if (!this.element)
+                return null;
             return this.element.querySelector("." + (this.app.prefix + "notice") + "-process");
         },
         enumerable: true,
@@ -78,7 +79,7 @@ var UINotice = (function (_super) {
         var icon = new UIIcon_1.default(this.app, 'destroy');
         var iconElement = icon.present();
         closeElement.appendChild(iconElement);
-        EventHelper.addTouchStartEvent(closeElement, function (ev) {
+        closeElement.addEventListener("mousedown", function (ev) {
             _this.destroy();
         });
         noticeElement.appendChild(closeElement);

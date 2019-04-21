@@ -21,6 +21,7 @@ var UISalverBar = (function (_super) {
     function UISalverBar(app) {
         var _this = _super.call(this, app) || this;
         _this.elementId = "" + (_this.app.prefix + "salver-bar");
+        _this.parsecloseCount = 0;
         _this._element = null;
         _this._items = [];
         return _this;

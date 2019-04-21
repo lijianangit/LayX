@@ -325,7 +325,7 @@
                         label: '刷新IFrame',
                         handler: function (ev, win) {
                             var frameContent = win.getComponent("content-container/content");
-                            if(frameContent.contentWindow){
+                            if (frameContent.contentWindow) {
                                 frameContent.contentWindow.location.reload();
                             }
                         }
@@ -353,6 +353,7 @@
                     type: 'html',
                     value: '一个神奇的UI窗口'
                 },
+                parclose: true,
                 toolBar: {
                     titleBar: {
                         title: "Layx - Create3."
@@ -391,10 +392,10 @@
                 offset: "leftTop"
             });
         }
-        document.getElementById("notice").onclick=function(){
+        document.getElementById("notice").onclick = function () {
             layx.notice({
-                title:'消息提示',
-                message:'我是消息提示消息提示消息提示消息提示消息提示'
+                title: '消息提示',
+                message: '我是消息提示消息提示消息提示消息提示消息提示'
             });
         }
     </script>

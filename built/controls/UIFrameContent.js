@@ -27,10 +27,11 @@ var UIFrameContent = (function (_super) {
         _this._contentWindow = null;
         _this.mousedown = function (ev) {
             var event = document.createEvent('Event');
-            event.initEvent(TypeHelper.isMoveEvent(ev) ? "mousedown" : "touchstart", true);
+            event.initEvent("mousedown", true);
             _this.window.element.dispatchEvent(event);
         };
         _this.mousemove = function (ev) {
+            ev.preventDefault();
             var clientRect = _this.element.getBoundingClientRect();
             var pageY = (TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY) + clientRect.top;
             if (_this.app.salver && _this.app.salver.element) {
@@ -99,7 +100,7 @@ var UIFrameContent = (function (_super) {
                     return false;
                 });
             }
-            EventHelper.addTouchStartEvent(contentWindow.document, _this.mousedown);
+            contentWindow.document.addEventListener("mousedown", _this.mousedown);
             EventHelper.addTouchMoveEvent(contentWindow.document, _this.mousemove);
         });
     };

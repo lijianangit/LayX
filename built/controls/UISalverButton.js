@@ -17,7 +17,6 @@ var UIComponent_1 = require("../basic/models/UIComponent");
 var UIIcon_1 = require("./UIIcon");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
-var EventHelper = require("../utils/EventHelper");
 var UISalverButton = (function (_super) {
     __extends(UISalverButton, _super);
     function UISalverButton(app, windowId) {
@@ -40,20 +39,33 @@ var UISalverButton = (function (_super) {
         var salverButtonElement = ElementHelper.createElement("div");
         salverButtonElement.id = this.elementId;
         salverButtonElement.setAttribute("data-window-id", this.windowId);
-        ElementHelper.addClasses(salverButtonElement, this.app.prefix, "salver-button", "flexbox", "flex-center", "salver-button-active");
+        ElementHelper.addClasses(salverButtonElement, this.app.prefix, "salver-button", "flexbox", "flex-center", "salver-button" + "-active");
         ElementHelper.addStyles(salverButtonElement, {
             width: UISalverButton.size + "px",
             height: UISalverButton.size + "px"
         });
         var window = this.app.getWindow(this.windowId);
-        EventHelper.addTouchStartEvent(salverButtonElement, function (ev) {
+        salverButtonElement.addEventListener("mousedown", function (ev) {
             if (!window)
                 return;
-            if (window === _this.app.window && window.status !== "min") {
-                window.min();
+            if (!_this.app.salver || !_this.app.salver.element)
+                return;
+            if (_this.app.salver.parsecloseCount > 0) {
+                var activeSalverButtonElement = _this.app.salver.element.querySelector("." + (_this.app.prefix + "salver-button") + "." + (_this.app.prefix + "salver-button") + "-active");
+                if (activeSalverButtonElement) {
+                    var currentWindow = _this.app.getWindow(activeSalverButtonElement.getAttribute("data-window-id"));
+                    if (currentWindow) {
+                        currentWindow.flicker();
+                    }
+                }
             }
             else {
-                window.updateZIndex();
+                if (window === _this.app.window && window.status !== "min") {
+                    window.min();
+                }
+                else {
+                    window.updateZIndex();
+                }
             }
         });
         var titleBar = window.getComponent("\n            " + "tool-bar" + "\n            /" + "title-bar");

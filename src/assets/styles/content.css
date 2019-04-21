@@ -6,6 +6,10 @@
     opacity: 1;
 }
 
+.layx-html-content {
+    user-select: text;
+}
+
 .layx-content-penetrate {
     position: absolute;
     top: 0;

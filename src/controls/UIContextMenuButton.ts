@@ -8,7 +8,6 @@ import * as Types from "../../types";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as Enums from "../basic/enums";
 import * as CastHelper from "../utils/CastHelper";
-import * as EventHelper from "../utils/EventHelper";
 import * as TypeHelper from "../utils/TypeHelper";
 
 export default class UIContextMenuButton extends UIWindowComponent implements UIControl {
@@ -16,7 +15,7 @@ export default class UIContextMenuButton extends UIWindowComponent implements UI
 
     public id: string;
     public label: string;
-    public handler?: (ev: MouseEvent | TouchEvent, window: UIWindow) => void;
+    public handler?: (ev: MouseEvent, window: UIWindow) => void;
     public items: Array<Types.ContextMenuButtonOption> | false;
 
     constructor(app: App, window: UIWindow, options: Types.ContextMenuButtonOption, private readonly index = 0) {
@@ -46,9 +45,9 @@ export default class UIContextMenuButton extends UIWindowComponent implements UI
             lineHeight: `${UIContextMenuButton.height}px`
         });
 
-        EventHelper.addTouchStartEvent(contextMenuButtonElement, (ev: MouseEvent | TouchEvent) => {
+        contextMenuButtonElement.addEventListener("mousedown", (ev: MouseEvent) => {
             ev.stopPropagation();
-            if (((TypeHelper.isMoveEvent(ev) && ev.button === 0) || (!TypeHelper.isMoveEvent(ev) && ev.touches.length > 0)) && typeof this.handler === "function") {
+            if (ev.button === 0 && typeof this.handler === "function") {
                 this.handler(ev, this.window);
             }
         });

@@ -54,7 +54,7 @@ export default class UIParclose extends UIWindowComponent implements UIControl {
 
     private bindEvent(parcloseElement: HTMLElement): void {
 
-        EventHelper.addTouchStartEvent(parcloseElement, (ev: MouseEvent | TouchEvent) => {
+        parcloseElement.addEventListener("mousedown", (ev: MouseEvent) => {
             this.window.flicker();
         }, true);
 

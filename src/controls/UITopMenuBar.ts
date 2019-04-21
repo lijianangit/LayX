@@ -55,7 +55,7 @@ export default class UITopMenuBar extends UIWindowComponent implements UIControl
         return fragment;
     }
 
-    hide(ev: MouseEvent | TouchEvent): void {
+    hide(ev: MouseEvent): void {
         if (this.currentTopMenuButtonElement) {
             ElementHelper.removeClasses(this.currentTopMenuButtonElement, this.app.prefix,
                 Enums.ComponentType.TOP_MENU_BUTTON + "-active"

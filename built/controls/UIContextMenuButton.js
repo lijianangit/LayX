@@ -18,8 +18,6 @@ var UIContextMenuBar_1 = require("./UIContextMenuBar");
 var UIIcon_1 = require("./UIIcon");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
-var EventHelper = require("../utils/EventHelper");
-var TypeHelper = require("../utils/TypeHelper");
 var UIContextMenuButton = (function (_super) {
     __extends(UIContextMenuButton, _super);
     function UIContextMenuButton(app, window, options, index) {
@@ -43,9 +41,9 @@ var UIContextMenuButton = (function (_super) {
             height: UIContextMenuButton.height + "px",
             lineHeight: UIContextMenuButton.height + "px"
         });
-        EventHelper.addTouchStartEvent(contextMenuButtonElement, function (ev) {
+        contextMenuButtonElement.addEventListener("mousedown", function (ev) {
             ev.stopPropagation();
-            if (((TypeHelper.isMoveEvent(ev) && ev.button === 0) || (!TypeHelper.isMoveEvent(ev) && ev.touches.length > 0)) && typeof _this.handler === "function") {
+            if (ev.button === 0 && typeof _this.handler === "function") {
                 _this.handler(ev, _this.window);
             }
         });

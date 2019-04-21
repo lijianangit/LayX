@@ -44,7 +44,7 @@ export default class UISalverButton extends UIComponent implements UIControl {
             Enums.ComponentType.SALVER_BUTTON,
             "flexbox",
             "flex-center",
-            "salver-button-active"
+            `${Enums.ComponentType.SALVER_BUTTON}-active`
         );
 
         ElementHelper.addStyles(salverButtonElement, <Types.CSSStyleObject>{
@@ -54,14 +54,26 @@ export default class UISalverButton extends UIComponent implements UIControl {
 
         const window = this.app.getWindow(this.windowId);
 
-        EventHelper.addTouchStartEvent(salverButtonElement, (ev: MouseEvent | TouchEvent) => {
+        salverButtonElement.addEventListener("mousedown", (ev: MouseEvent) => {
             if (!window) return;
+            if (!this.app.salver || !this.app.salver.element) return;
 
-            if (window === this.app.window && window.status !== Enums.WindowStatus.MIN) {
-                window.min();
+            if (this.app.salver.parsecloseCount > 0) {
+                const activeSalverButtonElement = this.app.salver.element.querySelector<HTMLElement>(`.${this.app.prefix + Enums.ComponentType.SALVER_BUTTON}.${this.app.prefix + Enums.ComponentType.SALVER_BUTTON}-active`);
+                if (activeSalverButtonElement) {
+                    const currentWindow = this.app.getWindow(<string>activeSalverButtonElement.getAttribute("data-window-id"));
+                    if (currentWindow) {
+                        currentWindow.flicker();
+                    }
+                }
             }
             else {
-                window.updateZIndex();
+                if (window === this.app.window && window.status !== Enums.WindowStatus.MIN) {
+                    window.min();
+                }
+                else {
+                    window.updateZIndex();
+                }
             }
         });
 

@@ -5,7 +5,6 @@ var UINotice_1 = require("../controls/UINotice");
 var ExceptionHelper = require("../utils/ExceptionHelper");
 var TypeHelper = require("../utils/TypeHelper");
 var ElementHelper = require("../utils/ElementHelper");
-var EventHelper = require("../utils/EventHelper");
 var App = (function () {
     function App(layx) {
         var _this = this;
@@ -38,7 +37,7 @@ var App = (function () {
         };
         this.mousemove = function (ev) {
             if (_this.salver && _this.salver.element) {
-                if ((TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY) >= innerHeight - 50) {
+                if (ev.pageY >= innerHeight - 50) {
                     if (ElementHelper.containClass(_this.salver.element, _this.prefix, "salver-bar-keep"))
                         return;
                     _this.salver.show();
@@ -181,8 +180,8 @@ var App = (function () {
             if (!document.body.id)
                 document.body.id = _this.prefix + "body";
         });
-        EventHelper.addTouchStartEvent(document, this.mousedown, true);
-        EventHelper.addTouchMoveEvent(document, this.mousemove, true);
+        document.addEventListener("mousedown", this.mousedown, true);
+        document.addEventListener("mousemove", this.mousemove, true);
     };
     return App;
 }());

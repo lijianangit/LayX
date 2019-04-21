@@ -64,7 +64,8 @@ export default class UIContextMenuBar extends UIWindowComponent implements UICon
         );
     }
 
-    updateOffset(ev: MouseEvent | TouchEvent, zIndex: number, fixLeft?: number, fixTop?: number): void {
+    updateOffset(ev: MouseEvent, zIndex: number, fixLeft?: number, fixTop?: number): void {
+        console.log(ev);
         if (!this.isTopMenu
             || !this.element
             || this.contextMenuButtons === false
@@ -73,8 +74,8 @@ export default class UIContextMenuBar extends UIWindowComponent implements UICon
         const computedStyle = getComputedStyle(this.element);
         const contextMenuBarWidth = Number(computedStyle.width!.replace('px', '')),
             contextMenuBarHeight = this.contextMenuButtons.length * UIContextMenuButton.height,
-            x =  TypeHelper.isMoveEvent(ev) ? ev.pageX : ev.touches[0].pageX,
-            y = TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY;
+            x = ev.pageX,
+            y = ev.pageY;
 
         let left = x,
             top = y;

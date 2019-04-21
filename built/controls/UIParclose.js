@@ -16,7 +16,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
-var EventHelper = require("../utils/EventHelper");
 var UIParclose = (function (_super) {
     __extends(UIParclose, _super);
     function UIParclose(app, window, options) {
@@ -55,7 +54,7 @@ var UIParclose = (function (_super) {
     };
     UIParclose.prototype.bindEvent = function (parcloseElement) {
         var _this = this;
-        EventHelper.addTouchStartEvent(parcloseElement, function (ev) {
+        parcloseElement.addEventListener("mousedown", function (ev) {
             _this.window.flicker();
         }, true);
         parcloseElement.addEventListener("contextmenu", function (ev) {

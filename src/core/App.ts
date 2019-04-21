@@ -9,7 +9,6 @@ import * as ExceptionHelper from "../utils/ExceptionHelper";
 import * as Enums from "../basic/enums";
 import * as TypeHelper from "../utils/TypeHelper";
 import * as ElementHelper from "../utils/ElementHelper";
-import * as EventHelper from "../utils/EventHelper";
 
 export default class App {
     public readonly version: string = "3.0.0";
@@ -132,11 +131,11 @@ export default class App {
             if (!document.body.id) document.body.id = `${this.prefix}body`;
         });
 
-        EventHelper.addTouchStartEvent(document, this.mousedown, true);
-        EventHelper.addTouchMoveEvent(document, this.mousemove, true);
+        document.addEventListener("mousedown", this.mousedown, true);
+        document.addEventListener("mousemove", this.mousemove, true)
     }
 
-    private readonly mousedown: (this: HTMLElement | Document, ev: MouseEvent | TouchEvent) => any = (ev: MouseEvent | TouchEvent) => {
+    private readonly mousedown: (this: HTMLElement | Document, ev: MouseEvent) => any = (ev: MouseEvent) => {
         if (this.window) {
             const contextMenuBar = this.window.getComponent<UIContextMenuBar>(Enums.ComponentType.CONTEXT_MENU_BAR)
             contextMenuBar && contextMenuBar.hide();
@@ -160,9 +159,9 @@ export default class App {
         }
     }
 
-    private readonly mousemove: (this: HTMLElement | Document, ev: MouseEvent | TouchEvent) => any = (ev: MouseEvent | TouchEvent) => {
+    private readonly mousemove: (this: HTMLElement | Document, ev: MouseEvent) => any = (ev: MouseEvent) => {
         if (this.salver && this.salver.element) {
-            if ((TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY) >= innerHeight - 50) {
+            if (ev.pageY >= innerHeight - 50) {
                 if (ElementHelper.containClass(this.salver.element, this.prefix, "salver-bar-keep")) return;
                 this.salver.show();
             }

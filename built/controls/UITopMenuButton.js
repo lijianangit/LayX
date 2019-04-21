@@ -17,7 +17,6 @@ var UIWindowComponent_1 = require("../basic/models/UIWindowComponent");
 var UIContextMenuBar_1 = require("./UIContextMenuBar");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
-var EventHelper = require("../utils/EventHelper");
 var UITopMenuButton = (function (_super) {
     __extends(UITopMenuButton, _super);
     function UITopMenuButton(app, window, topMenuBar, options) {
@@ -51,7 +50,7 @@ var UITopMenuButton = (function (_super) {
     };
     UITopMenuButton.prototype.bindEvent = function (element) {
         var _this = this;
-        EventHelper.addTouchStartEvent(element, function (ev) {
+        element.addEventListener("mousedown", function (ev) {
             if (_this.topMenuBar.currentTopMenuButtonElement) {
                 ElementHelper.removeClasses(_this.topMenuBar.currentTopMenuButtonElement, _this.app.prefix, "top-menu-button" + "-active");
             }

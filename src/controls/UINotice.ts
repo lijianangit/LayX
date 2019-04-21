@@ -30,7 +30,8 @@ export default class UINotice extends UIComponent implements UIControl {
 
     private _processElement: HTMLElement | null = null;
     get processElement() {
-        return this.element!.querySelector<HTMLElement>(`.${this.app.prefix + Enums.ComponentType.NOTICE}-process`);
+        if (!this.element) return null;
+        return this.element.querySelector<HTMLElement>(`.${this.app.prefix + Enums.ComponentType.NOTICE}-process`);
     }
 
     constructor(app: App, options: Types.NoticeOption) {
@@ -90,7 +91,7 @@ export default class UINotice extends UIComponent implements UIControl {
         const iconElement = icon.present();
         closeElement.appendChild(iconElement);
 
-        EventHelper.addTouchStartEvent(closeElement, (ev: MouseEvent | TouchEvent) => {
+        closeElement.addEventListener("mousedown", (ev: MouseEvent) => {
             this.destroy();
         });
 

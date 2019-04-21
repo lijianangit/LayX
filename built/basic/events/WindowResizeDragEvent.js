@@ -152,9 +152,6 @@ var WindowResizeDragEvent = (function (_super) {
         if (TypeHelper.isMoveEvent(ev)) {
             ev.preventDefault();
         }
-        else {
-            ev.stopPropagation();
-        }
         if (this.content)
             this.content.showPenetrate();
     };

@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var DragEvent_1 = require("./DragEvent");
 var ElementHelper = require("../../utils/ElementHelper");
+var TypeHelper = require("../../utils/TypeHelper");
 var WindowMoveDragEvent = (function (_super) {
     __extends(WindowMoveDragEvent, _super);
     function WindowMoveDragEvent(app, window, dragElement, dragMoveOptions) {
@@ -89,7 +90,9 @@ var WindowMoveDragEvent = (function (_super) {
         }
     };
     WindowMoveDragEvent.prototype.mouseStar = function (ev) {
-        ev.preventDefault();
+        if (TypeHelper.isMoveEvent(ev)) {
+            ev.preventDefault();
+        }
     };
     WindowMoveDragEvent.prototype.mouseMove = function (ev) {
     };
@@ -101,14 +104,15 @@ var WindowMoveDragEvent = (function (_super) {
             if (currentDate.getTime() - this._lastTime.getTime() <= 200) {
                 if (this.window.status === "max") {
                     this.window.normal();
+                    this._lastTime = new Date();
                     return;
                 }
                 if (this.window.status === "normal") {
                     this.window.max();
+                    this._lastTime = new Date();
                     return;
                 }
             }
-            this._lastTime = new Date();
         }
     };
     return WindowMoveDragEvent;

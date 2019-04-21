@@ -4,7 +4,6 @@ import UIWindowComponent from "../basic/models/UIWindowComponent";
 import UIWindow from "./UIWindow";
 import * as Types from "../../types";
 import * as ElementHelper from "../utils/ElementHelper";
-import * as CastHelper from "../utils/CastHelper";
 import * as Enums from "../basic/enums";
 import * as TypeHelper from "../utils/TypeHelper";
 
