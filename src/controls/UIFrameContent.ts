@@ -85,7 +85,7 @@ export default class UIFrameContent extends UIWindowComponent implements UIContr
 
     private readonly mousedown: (this: HTMLElement | Document, ev: MouseEvent | TouchEvent) => any = (ev: MouseEvent | TouchEvent) => {
         const event = document.createEvent('Event');
-        event.initEvent(ev instanceof MouseEvent ? "mousedown" : "touchstart", true);
+        event.initEvent(TypeHelper.isMoveEvent(ev) ? "mousedown" : "touchstart", true);
         this.window.element!.dispatchEvent(event);
     }
 

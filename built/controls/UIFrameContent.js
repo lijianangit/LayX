@@ -27,7 +27,7 @@ var UIFrameContent = (function (_super) {
         _this._contentWindow = null;
         _this.mousedown = function (ev) {
             var event = document.createEvent('Event');
-            event.initEvent(ev instanceof MouseEvent ? "mousedown" : "touchstart", true);
+            event.initEvent(TypeHelper.isMoveEvent(ev) ? "mousedown" : "touchstart", true);
             _this.window.element.dispatchEvent(event);
         };
         _this.mousemove = function (ev) {

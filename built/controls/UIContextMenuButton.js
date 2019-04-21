@@ -19,6 +19,7 @@ var UIIcon_1 = require("./UIIcon");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
 var EventHelper = require("../utils/EventHelper");
+var TypeHelper = require("../utils/TypeHelper");
 var UIContextMenuButton = (function (_super) {
     __extends(UIContextMenuButton, _super);
     function UIContextMenuButton(app, window, options, index) {
@@ -44,7 +45,7 @@ var UIContextMenuButton = (function (_super) {
         });
         EventHelper.addTouchStartEvent(contextMenuButtonElement, function (ev) {
             ev.stopPropagation();
-            if (((ev instanceof MouseEvent && ev.button === 0) || (ev instanceof TouchEvent && ev.touches.length === 1)) && typeof _this.handler === "function") {
+            if (((TypeHelper.isMoveEvent(ev) && ev.button === 0) || (!TypeHelper.isMoveEvent(ev) && ev.touches.length > 0)) && typeof _this.handler === "function") {
                 _this.handler(ev, _this.window);
             }
         });

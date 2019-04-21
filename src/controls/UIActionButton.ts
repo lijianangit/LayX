@@ -8,6 +8,7 @@ import * as ElementHelper from "../utils/ElementHelper";
 import * as CastHelper from "../utils/CastHelper";
 import * as Enums from "../basic/enums";
 import * as EventHelper from "../utils/EventHelper";
+import * as TypeHelper from "../utils/TypeHelper";
 
 export default class UIActionButton extends UIWindowComponent implements UIControl {
     public static readonly width: number = 45;
@@ -52,7 +53,7 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
         });
 
         EventHelper.addTouchStartEvent(actionButtonElement, (ev: MouseEvent | TouchEvent) => {
-            if (((ev instanceof MouseEvent && ev.button === 0) || (ev instanceof TouchEvent && ev.touches.length === 1)) && typeof this.handler === "function") {
+            if (((TypeHelper.isMoveEvent(ev) && ev.button === 0) || (!TypeHelper.isMoveEvent(ev) && ev.touches.length > 0)) && typeof this.handler === "function") {
                 this.handler(ev, this.window);
             }
         }, true);

@@ -9,6 +9,7 @@ import * as ElementHelper from "../utils/ElementHelper";
 import * as Enums from "../basic/enums";
 import * as CastHelper from "../utils/CastHelper";
 import * as EventHelper from "../utils/EventHelper";
+import * as TypeHelper from "../utils/TypeHelper";
 
 export default class UIContextMenuButton extends UIWindowComponent implements UIControl {
     public static readonly height: number = 30;
@@ -47,7 +48,7 @@ export default class UIContextMenuButton extends UIWindowComponent implements UI
 
         EventHelper.addTouchStartEvent(contextMenuButtonElement, (ev: MouseEvent | TouchEvent) => {
             ev.stopPropagation();
-            if (((ev instanceof MouseEvent && ev.button === 0) || (ev instanceof TouchEvent && ev.touches.length === 1)) && typeof this.handler === "function") {
+            if (((TypeHelper.isMoveEvent(ev) && ev.button === 0) || (!TypeHelper.isMoveEvent(ev) && ev.touches.length > 0)) && typeof this.handler === "function") {
                 this.handler(ev, this.window);
             }
         });

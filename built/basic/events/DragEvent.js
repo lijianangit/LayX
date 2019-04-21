@@ -13,7 +13,7 @@ var DragEvent = (function () {
         this.mousedown = function (ev) {
             _this.mouseStar(ev);
             _this.touchStartTime = new Date();
-            if ((ev instanceof MouseEvent && ev.button === 0) || (ev instanceof TouchEvent && ev.touches.length > 0)) {
+            if ((TypeHelper.isMoveEvent(ev) && ev.button === 0) || (!TypeHelper.isMoveEvent(ev) && ev.touches.length > 0)) {
                 _this.startX = TypeHelper.isMoveEvent(ev) ? ev.pageX : ev.touches[0].pageX;
                 _this.startY = TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY;
                 if (_this.dragStart(ev, _this.startX, _this.startY) !== false) {

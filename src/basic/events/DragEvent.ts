@@ -15,12 +15,10 @@ export default abstract class DragEvent {
     private readonly mousedown: (this: HTMLElement | Document, ev: MouseEvent | TouchEvent) => any = (ev: MouseEvent | TouchEvent) => {
         this.mouseStar(ev);
         this.touchStartTime = new Date();
-
-        if ((ev instanceof MouseEvent && ev.button === 0) || (ev instanceof TouchEvent && ev.touches.length > 0)) {
+        if ((TypeHelper.isMoveEvent(ev) && ev.button === 0) || (!TypeHelper.isMoveEvent(ev) && ev.touches.length > 0)) {
             this.startX = TypeHelper.isMoveEvent(ev) ? ev.pageX : ev.touches[0].pageX;
             this.startY = TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY;
             if (this.dragStart(ev, this.startX, this.startY) !== false) {
-
                 EventHelper.addTouchMoveEvent(document, this.mousemove);
                 EventHelper.addTouchEndEvent(document, this.mouseup);
             };
