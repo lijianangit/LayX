@@ -5,9 +5,9 @@
 }
 
 .layx-resize-item-top, .layx-resize-item-bottom {
-    height: 3px;
-    left: 3px;
-    right: 3px;
+    height: 4px;
+    left: 4px;
+    right: 4px;
 }
 
 .layx-resize-item-top {
@@ -21,9 +21,9 @@
 }
 
 .layx-resize-item-left, .layx-resize-item-right {
-    width: 3px;
-    top: 3px;
-    bottom: 3px;
+    width: 4px;
+    top: 4px;
+    bottom: 4px;
 }
 
 .layx-resize-item-left {
@@ -37,8 +37,8 @@
 }
 
 .layx-resize-item-left-top, .layx-resize-item-right-top, .layx-resize-item-left-bottom, .layx-resize-item-right-bottom {
-    width: 3px;
-    height: 3px;
+    width: 4px;
+    height: 4px;
 }
 
 .layx-resize-item-left-top {
