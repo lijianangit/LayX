@@ -75,6 +75,7 @@ export type ToolBarOption = {
     titleBar?: TitleBarOption | boolean;
     tabBar?: TabBarOption | boolean;
     actionBar?: ActionBarOption | boolean;
+    background?: string | boolean;
 } & JsonObject;
 
 export type ContentOption = {

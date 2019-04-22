@@ -1,7 +1,8 @@
 .layx-resize-bar>[class^="layx-resize-item-"] {
     position: absolute;
     z-index: 3;
-    touch-action: none;
+    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
 }
 
 .layx-resize-item-top, .layx-resize-item-bottom {

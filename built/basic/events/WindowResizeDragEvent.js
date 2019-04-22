@@ -15,7 +15,6 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var DragEvent_1 = require("./DragEvent");
 var ElementHelper = require("../../utils/ElementHelper");
-var TypeHelper = require("../../utils/TypeHelper");
 var WindowResizeDragEvent = (function (_super) {
     __extends(WindowResizeDragEvent, _super);
     function WindowResizeDragEvent(app, window, dragElement, direction) {
@@ -149,9 +148,7 @@ var WindowResizeDragEvent = (function (_super) {
         }
     };
     WindowResizeDragEvent.prototype.mouseStar = function (ev) {
-        if (TypeHelper.isMoveEvent(ev)) {
-            ev.preventDefault();
-        }
+        ev.preventDefault();
         this.app.drayLayer.updateZIndex(this.window.zIndex - 1);
         this.content = this.window.getComponent("content-container");
         if (this.content)

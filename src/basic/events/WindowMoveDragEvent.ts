@@ -89,9 +89,8 @@ export default class WindowMoveDragEvent extends DragEvent {
     }
 
     mouseStar(ev: MouseEvent | TouchEvent): void {
-        if (TypeHelper.isMoveEvent(ev)) {
-            ev.preventDefault();
-        }
+        ev.preventDefault();
+
         this.app.drayLayer!.updateZIndex(this.window.zIndex - 1);
 
         this.content = this.window.getComponent<UIContent>(Enums.ComponentType.CONTENT_CONTAINER);

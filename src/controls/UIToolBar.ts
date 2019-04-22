@@ -26,6 +26,7 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
     public titleBar: Types.TitleBarOption | false = {};
     public tabBar: Types.TabBarOption | false = {};
     public actionBar: Types.ActionBarOption | false = {};
+    public background: string | null = "#ffffff";
 
     private _element: HTMLElement | null = null;
     get element() {
@@ -40,6 +41,7 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
         this.titleBar = CastHelper.jsonOrBooleanCast(options.titleBar, this.titleBar);
         this.tabBar = CastHelper.jsonOrBooleanCast(options.tabBar, this.tabBar);
         this.actionBar = CastHelper.jsonOrBooleanCast(options.actionBar, this.actionBar);
+        this.background = CastHelper.stringOrBooleanStyleCast(options.background, this.background);
     }
 
     present(): DocumentFragment {
@@ -56,7 +58,8 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
         );
 
         ElementHelper.addStyles(toolBarElement, <Types.CSSStyleObject>{
-            height: `${this.height}px`
+            height: `${this.height}px`,
+            background: this.background
         });
 
         toolBarElement.addEventListener("dblclick", (ev: MouseEvent) => {

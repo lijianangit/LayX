@@ -37,12 +37,14 @@ var UIToolBar = (function (_super) {
         _this.titleBar = {};
         _this.tabBar = {};
         _this.actionBar = {};
+        _this.background = "#ffffff";
         _this._element = null;
         _this.height = CastHelper.numberCast(options.height, _this.height);
         _this.drag = CastHelper.jsonOrBooleanCast(options.drag, _this.drag);
         _this.titleBar = CastHelper.jsonOrBooleanCast(options.titleBar, _this.titleBar);
         _this.tabBar = CastHelper.jsonOrBooleanCast(options.tabBar, _this.tabBar);
         _this.actionBar = CastHelper.jsonOrBooleanCast(options.actionBar, _this.actionBar);
+        _this.background = CastHelper.stringOrBooleanStyleCast(options.background, _this.background);
         return _this;
     }
     Object.defineProperty(UIToolBar.prototype, "element", {
@@ -60,7 +62,8 @@ var UIToolBar = (function (_super) {
         toolBarElement.id = this.elementId;
         ElementHelper.addClasses(toolBarElement, this.app.prefix, "tool-bar", "flexbox", "flex-row");
         ElementHelper.addStyles(toolBarElement, {
-            height: this.height + "px"
+            height: this.height + "px",
+            background: this.background
         });
         toolBarElement.addEventListener("dblclick", function (ev) {
             if (_this.window.status === "max") {
