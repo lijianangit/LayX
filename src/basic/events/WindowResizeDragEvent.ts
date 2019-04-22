@@ -146,14 +146,13 @@ export default class WindowResizeDragEvent extends DragEvent {
     }
 
     mouseStar(ev: MouseEvent | TouchEvent): void {
-        ev.preventDefault();
-
         this.app.drayLayer!.updateZIndex(this.window.zIndex - 1);
 
         this.content = this.window.getComponent<UIContent>(Enums.ComponentType.CONTENT_CONTAINER);
         if (this.content) this.content.showPenetrate();
     }
     mouseMove(ev: MouseEvent | TouchEvent): void {
+        ev.preventDefault();
     }
     mouseEnd(ev: MouseEvent | TouchEvent): void {
         this.app.drayLayer!.hide();

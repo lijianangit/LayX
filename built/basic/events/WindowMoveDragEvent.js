@@ -90,13 +90,13 @@ var WindowMoveDragEvent = (function (_super) {
         }
     };
     WindowMoveDragEvent.prototype.mouseStar = function (ev) {
-        ev.preventDefault();
         this.app.drayLayer.updateZIndex(this.window.zIndex - 1);
         this.content = this.window.getComponent("content-container");
         if (this.content)
             this.content.showPenetrate();
     };
     WindowMoveDragEvent.prototype.mouseMove = function (ev) {
+        ev.preventDefault();
     };
     WindowMoveDragEvent.prototype.mouseEnd = function (ev) {
         this.app.drayLayer.hide();

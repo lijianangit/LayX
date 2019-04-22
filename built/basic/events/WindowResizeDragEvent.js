@@ -148,13 +148,13 @@ var WindowResizeDragEvent = (function (_super) {
         }
     };
     WindowResizeDragEvent.prototype.mouseStar = function (ev) {
-        ev.preventDefault();
         this.app.drayLayer.updateZIndex(this.window.zIndex - 1);
         this.content = this.window.getComponent("content-container");
         if (this.content)
             this.content.showPenetrate();
     };
     WindowResizeDragEvent.prototype.mouseMove = function (ev) {
+        ev.preventDefault();
     };
     WindowResizeDragEvent.prototype.mouseEnd = function (ev) {
         this.app.drayLayer.hide();
