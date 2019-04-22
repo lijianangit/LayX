@@ -41,7 +41,7 @@ var UIParclose = (function (_super) {
         ElementHelper.addClasses(parcloseElement, this.app.prefix, "parclose");
         ElementHelper.addStyles(parcloseElement, {
             backgroundColor: "rgba(0,0,0," + this.opacity + ")",
-            zIndex: "" + (this.window.zIndex - 1)
+            zIndex: "" + (this.window.zIndex - 2)
         });
         this.bindEvent(parcloseElement);
         fragment.appendChild(parcloseElement);

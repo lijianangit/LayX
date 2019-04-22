@@ -1,6 +1,7 @@
 import App from "../../core/App";
 import UIWindow from "../../controls/UIWindow";
 import DragEvent from "./DragEvent";
+import UIContent from "../../controls/UIContent";
 import * as Types from "../../../types";
 import * as Enums from "../enums";
 import * as ElementHelper from "../../utils/ElementHelper";
@@ -13,6 +14,8 @@ export default class WindowMoveDragEvent extends DragEvent {
     private _originTop: number = 0;
     private _originLeft: number = 0;
     private _lastTime: Date | null = null;
+
+    private content: UIContent | null = null;
 
     constructor(public app: App, public window: UIWindow, dragElement: HTMLElement, private readonly dragMoveOptions: Types.DragMoveOption) {
         super(dragElement);
@@ -89,10 +92,18 @@ export default class WindowMoveDragEvent extends DragEvent {
         if (TypeHelper.isMoveEvent(ev)) {
             ev.preventDefault();
         }
+        this.app.drayLayer!.updateZIndex(this.window.zIndex - 1);
+
+        this.content = this.window.getComponent<UIContent>(Enums.ComponentType.CONTENT_CONTAINER);
+        if (this.content) this.content.showPenetrate();
     }
     mouseMove(ev: MouseEvent | TouchEvent): void {
     }
     mouseEnd(ev: MouseEvent | TouchEvent): void {
+        this.app.drayLayer!.hide();
+
+        if (this.content) this.content.showPenetrate(false);
+
         if (!this._lastTime) this._lastTime = new Date();
         else {
             const currentDate = new Date();

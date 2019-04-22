@@ -33,3 +33,17 @@
     transition-duration: 0.1s;
     transition-timing-function: ease-in-out;
 }
+
+.layx-drag-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: transparent;
+    display: none;
+}
+
+.layx-drag-layer.layx-drag-layer-active {
+    display: block;
+}

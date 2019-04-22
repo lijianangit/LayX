@@ -70,6 +70,7 @@ var ComponentType;
     ComponentType["HTML_CONTENT"] = "html-content";
     ComponentType["URL_CONTENT"] = "url-content";
     ComponentType["NOTICE"] = "notice";
+    ComponentType["DRAG_LAYER"] = "drag-layer";
 })(ComponentType = exports.ComponentType || (exports.ComponentType = {}));
 var WindowContentType;
 (function (WindowContentType) {

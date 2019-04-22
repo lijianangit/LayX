@@ -28,7 +28,7 @@ var WindowResizeDragEvent = (function (_super) {
         _this._left = 0;
         _this._width = 0;
         _this._height = 0;
-        _this.content = _this.window.getComponent("content-container");
+        _this.content = null;
         return _this;
     }
     WindowResizeDragEvent.prototype.dragStart = function (ev, x, y) {
@@ -152,12 +152,15 @@ var WindowResizeDragEvent = (function (_super) {
         if (TypeHelper.isMoveEvent(ev)) {
             ev.preventDefault();
         }
+        this.app.drayLayer.updateZIndex(this.window.zIndex - 1);
+        this.content = this.window.getComponent("content-container");
         if (this.content)
             this.content.showPenetrate();
     };
     WindowResizeDragEvent.prototype.mouseMove = function (ev) {
     };
     WindowResizeDragEvent.prototype.mouseEnd = function (ev) {
+        this.app.drayLayer.hide();
         if (this.content)
             this.content.showPenetrate(false);
     };

@@ -29,6 +29,7 @@ var WindowMoveDragEvent = (function (_super) {
         _this._originTop = 0;
         _this._originLeft = 0;
         _this._lastTime = null;
+        _this.content = null;
         return _this;
     }
     WindowMoveDragEvent.prototype.dragStart = function (ev, x, y) {
@@ -93,10 +94,17 @@ var WindowMoveDragEvent = (function (_super) {
         if (TypeHelper.isMoveEvent(ev)) {
             ev.preventDefault();
         }
+        this.app.drayLayer.updateZIndex(this.window.zIndex - 1);
+        this.content = this.window.getComponent("content-container");
+        if (this.content)
+            this.content.showPenetrate();
     };
     WindowMoveDragEvent.prototype.mouseMove = function (ev) {
     };
     WindowMoveDragEvent.prototype.mouseEnd = function (ev) {
+        this.app.drayLayer.hide();
+        if (this.content)
+            this.content.showPenetrate(false);
         if (!this._lastTime)
             this._lastTime = new Date();
         else {

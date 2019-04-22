@@ -5,6 +5,7 @@ var UINotice_1 = require("../controls/UINotice");
 var ExceptionHelper = require("../utils/ExceptionHelper");
 var TypeHelper = require("../utils/TypeHelper");
 var ElementHelper = require("../utils/ElementHelper");
+var UIDragLayer_1 = require("../controls/UIDragLayer");
 var App = (function () {
     function App(layx) {
         var _this = this;
@@ -20,6 +21,7 @@ var App = (function () {
         this._noticeZIndex = 20000000;
         this._windows = [];
         this._notices = [];
+        this._drayLayer = null;
         this.mousedown = function (ev) {
             if (_this.window) {
                 var contextMenuBar = _this.window.getComponent("context-menu-bar");
@@ -83,14 +85,14 @@ var App = (function () {
     });
     Object.defineProperty(App.prototype, "zIndex", {
         get: function () {
-            return this._zIndex = this._zIndex + 2;
+            return this._zIndex = this._zIndex + 3;
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(App.prototype, "aboveZIndex", {
         get: function () {
-            return this._aboveZIndex = this._aboveZIndex + 2;
+            return this._aboveZIndex = this._aboveZIndex + 3;
         },
         enumerable: true,
         configurable: true
@@ -119,6 +121,16 @@ var App = (function () {
     Object.defineProperty(App.prototype, "notices", {
         get: function () {
             return this._notices;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(App.prototype, "drayLayer", {
+        get: function () {
+            return this._drayLayer;
+        },
+        set: function (value) {
+            this._drayLayer = value;
         },
         enumerable: true,
         configurable: true
@@ -174,11 +186,20 @@ var App = (function () {
     App.prototype.init = function () {
         this.bindEvent();
     };
+    App.prototype.createDragLayer = function () {
+        if (!this.drayLayer) {
+            var dragLayer = new UIDragLayer_1.default(this);
+            var dragLayerElement = dragLayer.present();
+            document.body.appendChild(dragLayerElement);
+            this.drayLayer = dragLayer;
+        }
+    };
     App.prototype.bindEvent = function () {
         var _this = this;
         document.addEventListener("DOMContentLoaded", function () {
             if (!document.body.id)
                 document.body.id = _this.prefix + "body";
+            _this.createDragLayer();
         });
         document.addEventListener("mousedown", this.mousedown, true);
         document.addEventListener("mousemove", this.mousemove, true);

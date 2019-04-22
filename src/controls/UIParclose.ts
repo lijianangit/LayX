@@ -37,7 +37,7 @@ export default class UIParclose extends UIWindowComponent implements UIControl {
 
         ElementHelper.addStyles(parcloseElement, <Types.CSSStyleObject>{
             backgroundColor: `rgba(0,0,0,${this.opacity})`,
-            zIndex: `${this.window.zIndex - 1}`
+            zIndex: `${this.window.zIndex - 2}`
         });
 
         this.bindEvent(parcloseElement);

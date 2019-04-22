@@ -9,6 +9,7 @@ import * as ExceptionHelper from "../utils/ExceptionHelper";
 import * as Enums from "../basic/enums";
 import * as TypeHelper from "../utils/TypeHelper";
 import * as ElementHelper from "../utils/ElementHelper";
+import UIDragLayer from "../controls/UIDragLayer";
 
 export default class App {
     public readonly version: string = "3.0.0";
@@ -40,12 +41,12 @@ export default class App {
 
     private _zIndex: number = 10000000;
     get zIndex() {
-        return this._zIndex = this._zIndex + 2;
+        return this._zIndex = this._zIndex + 3;
     }
 
     private _aboveZIndex: number = 20000000;
     get aboveZIndex() {
-        return this._aboveZIndex = this._aboveZIndex + 2;
+        return this._aboveZIndex = this._aboveZIndex + 3;
     }
 
     private _salverZIndex: number = 30000000;
@@ -66,6 +67,14 @@ export default class App {
     private _notices: Array<UINotice> = [];
     get notices() {
         return this._notices;
+    }
+
+    private _drayLayer: UIDragLayer | null = null;
+    get drayLayer() {
+        return this._drayLayer;
+    }
+    set drayLayer(value: UIDragLayer | null) {
+        this._drayLayer = value;
     }
 
     constructor(private readonly layx: Layx) {
@@ -126,9 +135,19 @@ export default class App {
         this.bindEvent();
     }
 
+    private createDragLayer() {
+        if (!this.drayLayer) {
+            const dragLayer = new UIDragLayer(this);
+            const dragLayerElement = dragLayer.present();
+            document.body.appendChild(dragLayerElement);
+            this.drayLayer = dragLayer;
+        }
+    }
+
     private bindEvent(): void {
         document.addEventListener("DOMContentLoaded", () => {
             if (!document.body.id) document.body.id = `${this.prefix}body`;
+            this.createDragLayer();
         });
 
         document.addEventListener("mousedown", this.mousedown, true);

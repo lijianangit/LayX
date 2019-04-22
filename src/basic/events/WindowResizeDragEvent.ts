@@ -14,7 +14,7 @@ export default class WindowResizeDragEvent extends DragEvent {
     private _width: number = 0;
     private _height: number = 0;
 
-    private content: UIContent | null = this.window.getComponent<UIContent>(Enums.ComponentType.CONTENT_CONTAINER);
+    private content: UIContent | null = null;
 
     constructor(public app: App, public window: UIWindow, dragElement: HTMLElement, public direction: Enums.Direction) {
         super(dragElement);
@@ -150,11 +150,16 @@ export default class WindowResizeDragEvent extends DragEvent {
             ev.preventDefault();
         }
 
+        this.app.drayLayer!.updateZIndex(this.window.zIndex - 1);
+
+        this.content = this.window.getComponent<UIContent>(Enums.ComponentType.CONTENT_CONTAINER);
         if (this.content) this.content.showPenetrate();
     }
     mouseMove(ev: MouseEvent | TouchEvent): void {
     }
     mouseEnd(ev: MouseEvent | TouchEvent): void {
+        this.app.drayLayer!.hide();
+
         if (this.content) this.content.showPenetrate(false);
     }
 }
