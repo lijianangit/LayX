@@ -1,3 +1,4 @@
 .layx-tool-bar {
+    touch-action: none;
     -webkit-overflow-scrolling: touch;
 }

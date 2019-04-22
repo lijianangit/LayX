@@ -65,7 +65,6 @@ export default class UIContextMenuBar extends UIWindowComponent implements UICon
     }
 
     updateOffset(ev: MouseEvent, zIndex: number, fixLeft?: number, fixTop?: number): void {
-        console.log(ev);
         if (!this.isTopMenu
             || !this.element
             || this.contextMenuButtons === false

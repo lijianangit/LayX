@@ -2,7 +2,7 @@
     position: absolute;
     z-index: 3;
     -webkit-overflow-scrolling: touch;
-    overflow: hidden;
+    touch-action: none;
 }
 
 .layx-resize-item-top, .layx-resize-item-bottom {

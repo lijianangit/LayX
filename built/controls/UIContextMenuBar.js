@@ -61,7 +61,6 @@ var UIContextMenuBar = (function (_super) {
         ElementHelper.removeClasses(this.element, this.app.prefix, "context-menu-bar-active");
     };
     UIContextMenuBar.prototype.updateOffset = function (ev, zIndex, fixLeft, fixTop) {
-        console.log(ev);
         if (!this.isTopMenu
             || !this.element
             || this.contextMenuButtons === false
