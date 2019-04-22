@@ -1,14 +1,14 @@
 .layx-resize-bar>[class^="layx-resize-item-"] {
     position: absolute;
     z-index: 3;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
     touch-action: none;
 }
 
 .layx-resize-item-top, .layx-resize-item-bottom {
-    height: 4px;
-    left: 4px;
-    right: 4px;
+    height: 6px;
+    left: 6px;
+    right: 6px;
 }
 
 .layx-resize-item-top {
@@ -22,9 +22,9 @@
 }
 
 .layx-resize-item-left, .layx-resize-item-right {
-    width: 4px;
-    top: 4px;
-    bottom: 4px;
+    width: 6px;
+    top: 6px;
+    bottom: 6px;
 }
 
 .layx-resize-item-left {
@@ -38,8 +38,8 @@
 }
 
 .layx-resize-item-left-top, .layx-resize-item-right-top, .layx-resize-item-left-bottom, .layx-resize-item-right-bottom {
-    width: 4px;
-    height: 4px;
+    width: 6px;
+    height: 6px;
 }
 
 .layx-resize-item-left-top {
