@@ -9,3 +9,7 @@ require("./above.svg");
 require("./more.svg");
 require("./icon.svg");
 require("./right.svg");
+require("./about.svg");
+require("./success.svg");
+require("./warning.svg");
+require("./error.svg");

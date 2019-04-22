@@ -88,7 +88,7 @@ var UIActionButton = (function (_super) {
         }
     };
     UIActionButton.info = {
-        id: "info",
+        id: "about",
         label: "关于",
         handler: function (ev, window) {
         }

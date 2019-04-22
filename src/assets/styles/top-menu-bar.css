@@ -1,11 +1,12 @@
 .layx-top-menu-bar {
-    height: 25px;
-    line-height: 25px;
+    min-height: 25px;
+    background: #fff;
 }
 
 .layx-top-menu-button {
     float: left;
     padding: 0 8px;
+    line-height: 25px;
 }
 
 .layx-top-menu-button-label {

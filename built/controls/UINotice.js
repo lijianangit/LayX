@@ -63,9 +63,18 @@ var UINotice = (function (_super) {
         this.bindEvent(noticeElement);
         this.createClose(noticeElement);
         var noticeContainerElement = ElementHelper.createElement("div");
-        ElementHelper.addClasses(noticeContainerElement, this.app.prefix, "notice" + "-container");
-        this.createTitle(noticeContainerElement);
-        this.createContent(noticeContainerElement);
+        ElementHelper.addClasses(noticeContainerElement, this.app.prefix, "notice" + "-container", "flexbox", "flex-row");
+        var noticeIconElement = ElementHelper.createElement("div");
+        ElementHelper.addClasses(noticeIconElement, this.app.prefix, "notice" + "-icon", "notice" + "-" + this.type);
+        var icon = new UIIcon_1.default(this.app, "" + this.type);
+        var iconElement = icon.present();
+        noticeIconElement.appendChild(iconElement);
+        noticeContainerElement.appendChild(noticeIconElement);
+        var noticeMessageElement = ElementHelper.createElement("div");
+        ElementHelper.addClasses(noticeMessageElement, this.app.prefix, "notice" + "-message", "flex-item");
+        this.createTitle(noticeMessageElement);
+        this.createContent(noticeMessageElement);
+        noticeContainerElement.appendChild(noticeMessageElement);
         noticeElement.appendChild(noticeContainerElement);
         this.createNoticeTime(noticeElement);
         this.createProcess(noticeElement);
@@ -87,7 +96,7 @@ var UINotice = (function (_super) {
     UINotice.prototype.createTitle = function (noticeElement) {
         if (this.title !== undefined) {
             var titleElement = ElementHelper.createElement("div");
-            ElementHelper.addClasses(titleElement, this.app.prefix, "notice" + "-title");
+            ElementHelper.addClasses(titleElement, this.app.prefix, "notice" + "-title", "notice" + "-" + this.type);
             titleElement.innerText = this.title;
             noticeElement.appendChild(titleElement);
         }

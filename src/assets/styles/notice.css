@@ -44,6 +44,14 @@
     color: #fff;
 }
 
+.layx-notice-icon {
+    margin-right: 16px;
+}
+
+.layx-notice-icon .layx-icon {
+    font-size: 26px;
+}
+
 .layx-notice-title {
     font-weight: 700;
     margin-bottom: 8px;
@@ -74,4 +82,20 @@
     z-index: 1;
     background: #dedede;
     width: 0%;
+}
+
+.layx-notice-info {
+    color: #009688;
+}
+
+.layx-notice-success {
+    color: #01aaed;
+}
+
+.layx-notice-warning {
+    color: #ffb800;
+}
+
+.layx-notice-error {
+    color: #ff0000;
 }

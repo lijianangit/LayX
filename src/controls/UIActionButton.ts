@@ -102,7 +102,7 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
     };
 
     public static readonly info: Types.ActionButtonOption = <Types.ActionButtonOption>{
-        id: "info",
+        id: "about",
         label: "关于",
         handler: function (ev: MouseEvent, window: UIWindow) {
         }

@@ -15,7 +15,10 @@
     <button id="create3">Create3</button>
     <button id="create4">Create4</button>
     <button id="create5">Create5</button>
-    <button id="notice">Notice</button>
+    <button id="notice">Info</button>
+    <button id="notice2">Success</button>
+    <button id="notice3">Warning</button>
+    <button id="notice4">Error</button>
     <div id="about-layx" style="display:none;padding: 10px;line-height: 1.5;">
         <h2>Layx 一个神奇的UI窗口</h2>
         <p>Layx
@@ -396,7 +399,28 @@
         document.getElementById("notice").onclick = function () {
             layx.notice({
                 title: '消息提示',
-                message: '我是消息提示消息提示消息提示消息提示消息提示'
+                message: '我是消息提示消息提示消息提示消息提示'
+            });
+        }
+        document.getElementById("notice2").onclick = function () {
+            layx.notice({
+                title: '成功提示',
+                type: 'success',
+                message: '我是消息提示消息提示消息提示消息提示'
+            });
+        }
+        document.getElementById("notice3").onclick = function () {
+            layx.notice({
+                title: '警告提示',
+                type: 'warning',
+                message: '我是消息提示消息提示消息提示消息提示'
+            });
+        }
+        document.getElementById("notice4").onclick = function () {
+            layx.notice({
+                title: '错误提示',
+                type: 'error',
+                message: '我是消息提示消息提示消息提示消息提示'
             });
         }
     </script>

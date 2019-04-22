@@ -66,9 +66,32 @@ export default class UINotice extends UIComponent implements UIControl {
         const noticeContainerElement = ElementHelper.createElement("div");
         ElementHelper.addClasses(noticeContainerElement, this.app.prefix,
             `${Enums.ComponentType.NOTICE}-container`,
+            "flexbox",
+            "flex-row"
         );
-        this.createTitle(noticeContainerElement);
-        this.createContent(noticeContainerElement);
+
+        const noticeIconElement = ElementHelper.createElement("div");
+        ElementHelper.addClasses(noticeIconElement, this.app.prefix,
+            `${Enums.ComponentType.NOTICE}-icon`,
+            `${Enums.ComponentType.NOTICE}-${this.type}`
+        );
+
+        const icon = new UIIcon(this.app, `${this.type}`);
+        const iconElement = icon.present();
+        noticeIconElement.appendChild(iconElement);
+
+        noticeContainerElement.appendChild(noticeIconElement);
+
+        const noticeMessageElement = ElementHelper.createElement("div");
+        ElementHelper.addClasses(noticeMessageElement, this.app.prefix,
+            `${Enums.ComponentType.NOTICE}-message`,
+            "flex-item"
+        );
+
+        this.createTitle(noticeMessageElement);
+        this.createContent(noticeMessageElement);
+
+        noticeContainerElement.appendChild(noticeMessageElement);
 
         noticeElement.appendChild(noticeContainerElement);
 
@@ -103,7 +126,8 @@ export default class UINotice extends UIComponent implements UIControl {
             const titleElement = ElementHelper.createElement("div");
 
             ElementHelper.addClasses(titleElement, this.app.prefix,
-                `${Enums.ComponentType.NOTICE}-title`
+                `${Enums.ComponentType.NOTICE}-title`,
+                `${Enums.ComponentType.NOTICE}-${this.type}`
             );
 
             titleElement.innerText = this.title;
