@@ -102,7 +102,6 @@ export default class WindowMoveDragEvent extends DragEvent {
     }
 
     mouseStar(ev: MouseEvent | TouchEvent): void {
-
         this.app.drayLayer!.updateZIndex(this.window.zIndex - 1);
 
         this.content = this.window.getComponent<UIContent>(Enums.ComponentType.CONTENT_CONTAINER);
@@ -112,21 +111,6 @@ export default class WindowMoveDragEvent extends DragEvent {
         ev.preventDefault();
     }
     mouseEnd(ev: MouseEvent | TouchEvent): void {
-        if (!this._lastTime) this._lastTime = new Date();
-        else {
-            const currentDate = new Date();
-            if (currentDate.getTime() - this._lastTime.getTime() <= 30) {
-                if (this.window.status === Enums.WindowStatus.MAX) {
-                    this.window.normal();
-                    this._lastTime = new Date();
-                    return;
-                }
-                if (this.window.status === Enums.WindowStatus.NORMAL) {
-                    this.window.max();
-                    this._lastTime = new Date();
-                    return;
-                }
-            }
-        }
+        
     }
 }

@@ -51,6 +51,9 @@ var UIActionButton = (function (_super) {
                 _this.handler(ev, _this.window);
             }
         }, true);
+        actionButtonElement.addEventListener("dblclick", function (ev) {
+            ev.stopPropagation();
+        });
         var icon = new UIIcon_1.default(this.app, this.id);
         var iconElement = icon.present();
         actionButtonElement.appendChild(iconElement);

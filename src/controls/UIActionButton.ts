@@ -59,6 +59,10 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
             }
         }, true);
 
+        actionButtonElement.addEventListener("dblclick", (ev: MouseEvent) => {
+            ev.stopPropagation();
+        });
+
         const icon = new UIIcon(this.app, this.id);
         const iconElement = icon.present();
         actionButtonElement.appendChild(iconElement);

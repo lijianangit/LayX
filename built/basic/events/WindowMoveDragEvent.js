@@ -110,23 +110,6 @@ var WindowMoveDragEvent = (function (_super) {
         ev.preventDefault();
     };
     WindowMoveDragEvent.prototype.mouseEnd = function (ev) {
-        if (!this._lastTime)
-            this._lastTime = new Date();
-        else {
-            var currentDate = new Date();
-            if (currentDate.getTime() - this._lastTime.getTime() <= 30) {
-                if (this.window.status === "max") {
-                    this.window.normal();
-                    this._lastTime = new Date();
-                    return;
-                }
-                if (this.window.status === "normal") {
-                    this.window.max();
-                    this._lastTime = new Date();
-                    return;
-                }
-            }
-        }
     };
     return WindowMoveDragEvent;
 }(DragEvent_1.default));

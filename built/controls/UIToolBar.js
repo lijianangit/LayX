@@ -74,7 +74,7 @@ var UIToolBar = (function (_super) {
                 _this.window.max();
                 return;
             }
-        }, true);
+        });
         if (this.titleBar !== false) {
             var titleBar = new UITitleBar_1.default(this.app, this.window, this.titleBar);
             var titleBarElement = titleBar.present();

@@ -71,7 +71,7 @@ export default class UIToolBar extends UIWindowComponent implements UIControl {
                 this.window.max();
                 return;
             }
-        }, true);
+        });
 
         if (this.titleBar !== false) {
             const titleBar = new UITitleBar(this.app, this.window, this.titleBar);
