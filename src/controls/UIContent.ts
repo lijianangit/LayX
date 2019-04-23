@@ -93,4 +93,16 @@ export default class UIContent extends UIWindowComponent implements UIControl {
             );
         }
     }
+
+    refreshContent(): void {
+        if (this.type === Enums.WindowContentType.LOCAL_URL) {
+            const frameContent = this.window.getComponent<UIFrameContent>(`
+            ${Enums.ComponentType.CONTENT_CONTAINER}
+            /${Enums.ComponentType.CONTENT}`);
+
+            if (frameContent && frameContent.contentWindow) {
+                frameContent.contentWindow.location.reload();
+            }
+        }
+    }
 }

@@ -13,3 +13,4 @@ require("./about.svg");
 require("./success.svg");
 require("./warning.svg");
 require("./error.svg");
+require("./refresh.svg");

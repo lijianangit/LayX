@@ -9,6 +9,7 @@ import * as CastHelper from "../utils/CastHelper";
 import * as Enums from "../basic/enums";
 import * as EventHelper from "../utils/EventHelper";
 import * as TypeHelper from "../utils/TypeHelper";
+import UIContent from "./UIContent";
 
 export default class UIActionButton extends UIWindowComponent implements UIControl {
     public static readonly width: number = 45;
@@ -68,7 +69,6 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
         return fragment;
     }
 
-
     public static readonly destroy: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "destroy",
         label: "关闭",
@@ -101,10 +101,19 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
         }
     };
 
-    public static readonly info: Types.ActionButtonOption = <Types.ActionButtonOption>{
+    public static readonly about: Types.ActionButtonOption = <Types.ActionButtonOption>{
         id: "about",
         label: "关于",
         handler: function (ev: MouseEvent, window: UIWindow) {
+        }
+    };
+
+    public static readonly refresh: Types.ActionButtonOption = <Types.ActionButtonOption>{
+        id: "refresh",
+        label: "刷新内容",
+        handler: function (ev: MouseEvent, window: UIWindow) {
+            const content = window.getComponent<UIContent>(`${Enums.ComponentType.CONTENT_CONTAINER}`);
+            if (content) content.refreshContent();
         }
     };
 

@@ -17,7 +17,7 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
 
     public enable: boolean = true;
     public items: Array<Types.ActionButtonOption> | false = [
-        UIActionButton.info,
+        UIActionButton.refresh,
         UIActionButton.min,
         UIActionButton.max,
         UIActionButton.destroy
@@ -101,7 +101,7 @@ export default class UIActionBar extends UIWindowComponent implements UIControl 
                 document.body.appendChild(moreContextMenuBarElement);
 
                 moreActionButton.handler = function (ev: MouseEvent, window: UIWindow) {
-                    moreContextMenuBar.updateOffset(ev, this.window.zIndex);
+                    moreContextMenuBar.updateOffset(ev, this.window.zIndex + 1);
                 }
 
                 const moreActionButtonElement = moreActionButton.present();

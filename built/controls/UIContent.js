@@ -84,6 +84,14 @@ var UIContent = (function (_super) {
             ElementHelper.removeClasses(this.penetrateElement, this.app.prefix, "content-penetrate" + "-active");
         }
     };
+    UIContent.prototype.refreshContent = function () {
+        if (this.type === "local-url") {
+            var frameContent = this.window.getComponent("\n            " + "content-container" + "\n            /" + "content");
+            if (frameContent && frameContent.contentWindow) {
+                frameContent.contentWindow.location.reload();
+            }
+        }
+    };
     return UIContent;
 }(UIWindowComponent_1.default));
 exports.default = UIContent;

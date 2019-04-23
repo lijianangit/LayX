@@ -87,10 +87,19 @@ var UIActionButton = (function (_super) {
             window.min();
         }
     };
-    UIActionButton.info = {
+    UIActionButton.about = {
         id: "about",
         label: "关于",
         handler: function (ev, window) {
+        }
+    };
+    UIActionButton.refresh = {
+        id: "refresh",
+        label: "刷新内容",
+        handler: function (ev, window) {
+            var content = window.getComponent("" + "content-container");
+            if (content)
+                content.refreshContent();
         }
     };
     UIActionButton.more = {

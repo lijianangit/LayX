@@ -82,19 +82,20 @@ export default class App {
     }
 
     open(options: Types.WindowOption): void {
-        const window = this.getWindow(options.id);
+        let window = this.getWindow(options.id);
         if (window) window.updateZIndex();
         else {
-            const uiWindow = new UIWindow(this, options);
-            const windowPresent = uiWindow.present();
+            window = new UIWindow(this, options);
+            const windowPresent = window.present();
             document.body.appendChild(windowPresent);
 
             this.lastWindow = this.window;
-            this.window = uiWindow;
-            this.windows.push(uiWindow);
+            this.window = window;
+            this.windows.push(window);
 
             if (this.salver) this.salver.addOrUpdateItem();
         }
+        window.zoomActionButtons(window.width);
     }
 
     destroy(id: string): void {

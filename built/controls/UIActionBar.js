@@ -25,7 +25,7 @@ var UIActionBar = (function (_super) {
         _this.elementId = _this.window.elementId + "-" + "action-bar";
         _this.enable = true;
         _this.items = [
-            UIActionButton_1.default.info,
+            UIActionButton_1.default.refresh,
             UIActionButton_1.default.min,
             UIActionButton_1.default.max,
             UIActionButton_1.default.destroy
@@ -88,7 +88,7 @@ var UIActionBar = (function (_super) {
                 var moreContextMenuBarElement = moreContextMenuBar_1.present();
                 document.body.appendChild(moreContextMenuBarElement);
                 moreActionButton.handler = function (ev, window) {
-                    moreContextMenuBar_1.updateOffset(ev, this.window.zIndex);
+                    moreContextMenuBar_1.updateOffset(ev, this.window.zIndex + 1);
                 };
                 var moreActionButtonElement = moreActionButton.present();
                 moreActionButtonElement.firstElementChild

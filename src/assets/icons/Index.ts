@@ -11,3 +11,4 @@ import "./about.svg";
 import "./success.svg";
 import "./warning.svg";
 import "./error.svg";
+import "./refresh.svg";

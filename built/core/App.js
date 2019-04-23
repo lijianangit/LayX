@@ -140,15 +140,16 @@ var App = (function () {
         if (window)
             window.updateZIndex();
         else {
-            var uiWindow = new UIWindow_1.default(this, options);
-            var windowPresent = uiWindow.present();
+            window = new UIWindow_1.default(this, options);
+            var windowPresent = window.present();
             document.body.appendChild(windowPresent);
             this.lastWindow = this.window;
-            this.window = uiWindow;
-            this.windows.push(uiWindow);
+            this.window = window;
+            this.windows.push(window);
             if (this.salver)
                 this.salver.addOrUpdateItem();
         }
+        window.zoomActionButtons(window.width);
     };
     App.prototype.destroy = function (id) {
         if (!TypeHelper.isStringWithNotEmpty(id))
