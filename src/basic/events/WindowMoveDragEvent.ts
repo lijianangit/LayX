@@ -115,7 +115,7 @@ export default class WindowMoveDragEvent extends DragEvent {
         if (!this._lastTime) this._lastTime = new Date();
         else {
             const currentDate = new Date();
-            if (currentDate.getTime() - this._lastTime.getTime() <= 200) {
+            if (currentDate.getTime() - this._lastTime.getTime() <= 30) {
                 if (this.window.status === Enums.WindowStatus.MAX) {
                     this.window.normal();
                     this._lastTime = new Date();

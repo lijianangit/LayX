@@ -114,7 +114,7 @@ var WindowMoveDragEvent = (function (_super) {
             this._lastTime = new Date();
         else {
             var currentDate = new Date();
-            if (currentDate.getTime() - this._lastTime.getTime() <= 200) {
+            if (currentDate.getTime() - this._lastTime.getTime() <= 30) {
                 if (this.window.status === "max") {
                     this.window.normal();
                     this._lastTime = new Date();

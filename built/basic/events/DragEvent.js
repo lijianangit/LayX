@@ -29,7 +29,7 @@ var DragEvent = (function () {
             var currentY = TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY;
             var distanceX = currentX - _this.startX;
             var distanceY = currentY - _this.startY;
-            if ((TypeHelper.isMoveEvent(ev) && (distanceX !== 0 || distanceY !== 0)) || (!TypeHelper.isMoveEvent(ev) && (new Date().getTime() - _this.touchStartTime.getTime() > 100))) {
+            if ((TypeHelper.isMoveEvent(ev) && (distanceX !== 0 || distanceY !== 0)) || (!TypeHelper.isMoveEvent(ev) && (new Date().getTime() - _this.touchStartTime.getTime() > 30))) {
                 _this.isDragging = true;
                 if (_this.isFirstDragging === true) {
                     _this.isFirstDragging = false;

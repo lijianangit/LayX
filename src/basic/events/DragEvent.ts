@@ -32,7 +32,7 @@ export default abstract class DragEvent {
         const currentY = TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY;
         const distanceX = currentX - this.startX;
         const distanceY = currentY - this.startY;
-        if ((TypeHelper.isMoveEvent(ev) && (distanceX !== 0 || distanceY !== 0)) || (!TypeHelper.isMoveEvent(ev) && (new Date().getTime() - this.touchStartTime!.getTime() > 100))) {
+        if ((TypeHelper.isMoveEvent(ev) && (distanceX !== 0 || distanceY !== 0)) || (!TypeHelper.isMoveEvent(ev) && (new Date().getTime() - this.touchStartTime!.getTime() > 30))) {
             this.isDragging = true;
 
             if (this.isFirstDragging === true) {
