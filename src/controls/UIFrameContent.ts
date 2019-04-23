@@ -9,6 +9,7 @@ import * as CastHelper from "../utils/CastHelper";
 import * as Enums from "../basic/enums";
 import * as TypeHelper from "../utils/TypeHelper";
 import * as EventHelper from "../utils/EventHelper";
+import UITitleBar from "./UITitleBar";
 
 export default class UIFrameContent extends UIWindowComponent implements UIControl {
     public readonly elementId: string = `${this.window.elementId}-${Enums.ComponentType.URL_CONTENT}`;
@@ -60,6 +61,17 @@ export default class UIFrameContent extends UIWindowComponent implements UIContr
         frameContentElement.addEventListener("load", (ev: Event) => {
             const contentWindow = frameContentElement.contentWindow;
             if (!contentWindow) return;
+
+            const titleBar = this.window.getComponent<UITitleBar>(`
+            ${Enums.ComponentType.TOOL_BAR}
+            /${Enums.ComponentType.TITLE_BAR}`);
+
+            if (titleBar && titleBar.useSubTitle) {
+                const subTitleElement = contentWindow.document.querySelector("title");
+                if (subTitleElement) {
+                    titleBar.updateTitle(subTitleElement.innerText || "未命名标题");
+                }
+            }
 
             if (this.window.contextMenu !== false) {
                 contentWindow.document.addEventListener("contextmenu", (ev: MouseEvent) => {

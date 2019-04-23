@@ -20,7 +20,9 @@ export function stringCast(option: any): string {
 }
 
 export function booleanCast(option: boolean | undefined, defaultValue: boolean): boolean {
-    return option === undefined ? defaultValue : option;
+    if (option === undefined) return defaultValue;
+    if (typeof option !== "boolean") ExceptionHelper.assertBoolean(option);
+    return option;
 }
 
 export function stringOrBooleanStyleCast(option: string | boolean | undefined, defaultValue: string | null, trueValue?: string | null): string | null {

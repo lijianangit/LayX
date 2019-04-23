@@ -15,6 +15,7 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
 
     public icon: string | false = "icon";
     public title?: string;
+    public useSubTitle: boolean = false;
 
     private _element: HTMLElement | null = null;
     get element() {
@@ -26,6 +27,7 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
 
         this.icon = CastHelper.typeOrBooleanCast(options.icon, this.icon);
         this.title = options.title;
+        this.useSubTitle = CastHelper.booleanCast(options.useSubTitle, this.useSubTitle);
     }
 
     present(): DocumentFragment {
@@ -81,6 +83,7 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
                 "window-title-label"
             );
             labelElement.innerText = this.title;
+            labelElement.setAttribute("title", this.title);
 
             titleElement.appendChild(labelElement);
             titleBarElement.appendChild(titleElement);
@@ -88,5 +91,24 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
 
         fragment.appendChild(titleBarElement);
         return fragment;
+    }
+
+    public updateTitle(title: string): void {
+        const element = this.element;
+        if (!element) return;
+
+        const titleElement = element.querySelector<HTMLElement>(`.${this.app.prefix}window-title-label`);
+        if (!titleElement) return;
+        titleElement.innerText = title;
+        titleElement.setAttribute("title", title);
+
+        if (this.app.salver && this.app.salver.element) {
+            const salverButtonElement = this.app.salver.element.querySelector<HTMLElement>(`.${this.app.prefix}salver-button[data-window-id='${this.window.id}']`);
+            if (salverButtonElement) {
+                salverButtonElement.setAttribute("title", title);
+            }
+        }
+
+        this.title = title;
     }
 }

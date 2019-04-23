@@ -67,6 +67,7 @@ export type TabBarOption = {
 export type TitleBarOption = {
     icon?: string | boolean;
     title?: string;
+    useSubTitle?: boolean;
 } & JsonObject;
 
 export type ToolBarOption = {

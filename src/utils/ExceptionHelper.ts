@@ -17,3 +17,7 @@ export function assertNever(x: any): never {
 export function assertUnique(x: any): never {
     throw new Error("The element contains '" + <never>x + "' is exists.");
 }
+
+export function assertBoolean(x: any): never {
+    throw new Error("Unexpected boolean: " + <never>x);
+}
