@@ -55,8 +55,10 @@ var UIWindow = (function (_super) {
         _this.contextMenu = false;
         _this.topMenu = false;
         _this.content = {};
+        _this.storeStatus = true;
         _this._element = null;
         _this._flickerShadow = null;
+        _this._lastStoreStatus = null;
         if (!TypeHelper.isStringWithNotEmpty(options.id))
             ExceptionHelper.assertId();
         _this.id = options.id;
@@ -89,6 +91,7 @@ var UIWindow = (function (_super) {
         _this.contextMenu = CastHelper.contextMenuButtonsCast(options.contextMenu);
         _this.topMenu = CastHelper.contextMenuButtonsCast(options.topMenu);
         _this.content = CastHelper.jsonOrBooleanCast(options.content, _this.content);
+        _this.storeStatus = CastHelper.booleanCast(options.storeStatus, _this.storeStatus);
         return _this;
     }
     Object.defineProperty(UIWindow.prototype, "element", {
@@ -105,6 +108,19 @@ var UIWindow = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(UIWindow.prototype, "lastStoreStatus", {
+        get: function () {
+            var storeStatus = localStorage.getItem(this.app.prefix + this.id);
+            if (!storeStatus)
+                return null;
+            return eval("(" + storeStatus + ")");
+        },
+        set: function (value) {
+            localStorage.setItem(this.app.prefix + this.id, JSON.stringify(value));
+        },
+        enumerable: true,
+        configurable: true
+    });
     UIWindow.prototype.present = function () {
         var _this = this;
         var fragment = ElementHelper.createFragment();
@@ -112,6 +128,7 @@ var UIWindow = (function (_super) {
         windowElement.id = this.elementId;
         windowElement.setAttribute("data-window-id", this.id);
         ElementHelper.addClasses(windowElement, this.app.prefix, "window", "window-" + this.mode, "flexbox", "flex-column", this.enableAnimated ? "animate" : "", this.enableAnimated ? "animate-" + this.animate + "-show" : "");
+        this.readStoreStatus();
         ElementHelper.addStyles(windowElement, {
             zIndex: this.mode === "layer" ? "" + this.zIndex : null,
             maxWidth: this.maxWidth + "px",
@@ -180,6 +197,25 @@ var UIWindow = (function (_super) {
         }
         fragment.appendChild(windowElement);
         return fragment;
+    };
+    UIWindow.prototype.readStoreStatus = function () {
+        var lastStoreStatus = this.lastStoreStatus;
+        if (this.storeStatus) {
+            if (lastStoreStatus) {
+                this.width = lastStoreStatus.width;
+                this.height = lastStoreStatus.height;
+                this.top = lastStoreStatus.top;
+                this.left = lastStoreStatus.left;
+            }
+            else {
+                this.lastStoreStatus = {
+                    top: this.top,
+                    left: this.left,
+                    width: this.width,
+                    height: this.height
+                };
+            }
+        }
     };
     UIWindow.prototype.handlerContentByAnimate = function (isFadeOut) {
         if (isFadeOut === void 0) { isFadeOut = true; }

@@ -14,7 +14,7 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
     public readonly elementId: string = `${this.window.elementId}-${Enums.ComponentType.TITLE_BAR}`;
 
     public icon: string | false = "icon";
-    public title?: string;
+    public title: string | undefined = undefined;
     public useSubTitle: boolean = false;
 
     private _element: HTMLElement | null = null;

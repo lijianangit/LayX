@@ -47,6 +47,7 @@ export default class UIWindow extends UIComponent implements UIControl {
     public contextMenu: Array<Types.ContextMenuButtonOption> | false = false;
     public topMenu: Array<Types.ContextMenuButtonOption> | false = false;
     public content: Types.ContentOption | false = {};
+    public storeStatus: boolean = true;
 
     private _element: HTMLElement | null = null;
     get element() {
@@ -56,6 +57,16 @@ export default class UIWindow extends UIComponent implements UIControl {
     private _flickerShadow: string | null = null;
     get flickerShadow() {
         return this.getFlickerShadow();
+    }
+
+    private _lastStoreStatus: Types.StoreStatus | null = null;
+    get lastStoreStatus() {
+        const storeStatus = localStorage.getItem(this.app.prefix + this.id);
+        if (!storeStatus) return null;
+        return eval("(" + storeStatus + ")");
+    }
+    set lastStoreStatus(value: Types.StoreStatus | null) {
+        localStorage.setItem(this.app.prefix + this.id, JSON.stringify(value));
     }
 
     constructor(app: App, options: Types.WindowOption) {
@@ -98,6 +109,7 @@ export default class UIWindow extends UIComponent implements UIControl {
         this.contextMenu = CastHelper.contextMenuButtonsCast(options.contextMenu);
         this.topMenu = CastHelper.contextMenuButtonsCast(options.topMenu);
         this.content = CastHelper.jsonOrBooleanCast(options.content, this.content);
+        this.storeStatus = CastHelper.booleanCast(options.storeStatus, this.storeStatus);
     }
 
     present(): DocumentFragment {
@@ -115,6 +127,8 @@ export default class UIWindow extends UIComponent implements UIControl {
             this.enableAnimated ? "animate" : "",
             this.enableAnimated ? `animate-${this.animate}-show` : ""
         );
+
+        this.readStoreStatus();
 
         ElementHelper.addStyles(windowElement, <Types.CSSStyleObject>{
             zIndex: this.mode === Enums.WindowMode.LAYER ? `${this.zIndex}` : null,
@@ -195,6 +209,26 @@ export default class UIWindow extends UIComponent implements UIControl {
 
         fragment.appendChild(windowElement);
         return fragment;
+    }
+
+    private readStoreStatus(): void {
+        const lastStoreStatus = this.lastStoreStatus;
+        if (this.storeStatus) {
+            if (lastStoreStatus) {
+                this.width = lastStoreStatus.width;
+                this.height = lastStoreStatus.height;
+                this.top = lastStoreStatus.top;
+                this.left = lastStoreStatus.left;
+            }
+            else {
+                this.lastStoreStatus = <Types.StoreStatus>{
+                    top: this.top,
+                    left: this.left,
+                    width: this.width,
+                    height: this.height
+                };
+            }
+        }
     }
 
     private handlerContentByAnimate(isFadeOut: boolean = true) {

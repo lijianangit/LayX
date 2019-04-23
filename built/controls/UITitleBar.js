@@ -23,6 +23,7 @@ var UITitleBar = (function (_super) {
         var _this = _super.call(this, app, window) || this;
         _this.elementId = _this.window.elementId + "-" + "title-bar";
         _this.icon = "icon";
+        _this.title = undefined;
         _this.useSubTitle = false;
         _this._element = null;
         _this.icon = CastHelper.typeOrBooleanCast(options.icon, _this.icon);

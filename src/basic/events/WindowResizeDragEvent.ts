@@ -65,6 +65,18 @@ export default class WindowResizeDragEvent extends DragEvent {
         this.window.left = this._left;
         this.window.width = this._width;
         this.window.height = this._height;
+
+        if (this.window.storeStatus) {
+            this.window.lastStoreStatus = <Types.StoreStatus>{
+                top: this.window.top,
+                left: this.window.left,
+                width: this.window.width,
+                height: this.window.height
+            };
+        }
+
+        this.app.drayLayer!.hide();
+        if (this.content) this.content.showPenetrate(false);
     }
 
     private resizeHandler(distanceX: number, distanceY: number, isTop: boolean, isLeft: boolean, lockX: boolean, lockY: boolean) {
@@ -155,8 +167,6 @@ export default class WindowResizeDragEvent extends DragEvent {
         ev.preventDefault();
     }
     mouseEnd(ev: MouseEvent | TouchEvent): void {
-        this.app.drayLayer!.hide();
 
-        if (this.content) this.content.showPenetrate(false);
     }
 }

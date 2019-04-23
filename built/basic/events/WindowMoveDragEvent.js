@@ -47,6 +47,17 @@ var WindowMoveDragEvent = (function (_super) {
         }
         this.window.top = this._top;
         this.window.left = this._left;
+        if (this.window.storeStatus) {
+            this.window.lastStoreStatus = {
+                top: this.window.top,
+                left: this.window.left,
+                width: this.window.width,
+                height: this.window.height
+            };
+        }
+        this.app.drayLayer.hide();
+        if (this.content)
+            this.content.showPenetrate(false);
     };
     WindowMoveDragEvent.prototype.moveHandler = function (distanceX, distanceY) {
         var top = this.window.top;
@@ -99,9 +110,6 @@ var WindowMoveDragEvent = (function (_super) {
         ev.preventDefault();
     };
     WindowMoveDragEvent.prototype.mouseEnd = function (ev) {
-        this.app.drayLayer.hide();
-        if (this.content)
-            this.content.showPenetrate(false);
         if (!this._lastTime)
             this._lastTime = new Date();
         else {

@@ -72,6 +72,17 @@ var WindowResizeDragEvent = (function (_super) {
         this.window.left = this._left;
         this.window.width = this._width;
         this.window.height = this._height;
+        if (this.window.storeStatus) {
+            this.window.lastStoreStatus = {
+                top: this.window.top,
+                left: this.window.left,
+                width: this.window.width,
+                height: this.window.height
+            };
+        }
+        this.app.drayLayer.hide();
+        if (this.content)
+            this.content.showPenetrate(false);
     };
     WindowResizeDragEvent.prototype.resizeHandler = function (distanceX, distanceY, isTop, isLeft, lockX, lockY) {
         var top = this.window.top + distanceY;
@@ -157,9 +168,6 @@ var WindowResizeDragEvent = (function (_super) {
         ev.preventDefault();
     };
     WindowResizeDragEvent.prototype.mouseEnd = function (ev) {
-        this.app.drayLayer.hide();
-        if (this.content)
-            this.content.showPenetrate(false);
     };
     return WindowResizeDragEvent;
 }(DragEvent_1.default));

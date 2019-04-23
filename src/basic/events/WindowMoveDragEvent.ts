@@ -40,6 +40,19 @@ export default class WindowMoveDragEvent extends DragEvent {
 
         this.window.top = this._top;
         this.window.left = this._left;
+
+        if (this.window.storeStatus) {
+            this.window.lastStoreStatus = <Types.StoreStatus>{
+                top: this.window.top,
+                left: this.window.left,
+                width: this.window.width,
+                height: this.window.height
+            };
+        }
+
+        this.app.drayLayer!.hide();
+
+        if (this.content) this.content.showPenetrate(false);
     }
 
     private moveHandler(distanceX: number, distanceY: number) {
@@ -99,10 +112,6 @@ export default class WindowMoveDragEvent extends DragEvent {
         ev.preventDefault();
     }
     mouseEnd(ev: MouseEvent | TouchEvent): void {
-        this.app.drayLayer!.hide();
-
-        if (this.content) this.content.showPenetrate(false);
-
         if (!this._lastTime) this._lastTime = new Date();
         else {
             const currentDate = new Date();

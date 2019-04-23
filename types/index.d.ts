@@ -103,19 +103,27 @@ export type WindowOption = {
     toolBar?: ToolBarOption | boolean;
     contextMenu?: Array<ContextMenuButtonOption> | false;
     topMenu?: Array<ContextMenuButtonOption> | false;
-    content?: ContentOption
+    content?: ContentOption;
+    storeStatus?: boolean;
 } & JsonObject;
 
 export type Component = {
     constructor: UIComponent | Array<UIComponent>;
     [key: string]: UIComponent | Array<UIComponent>;
-}
+} & JsonObject;
 
 export type NoticeOption = {
     type?: Enums.NoticeType;
     title?: string;
     message: string;
     timeout?: number;
-};
+} & JsonObject;
+
+export type StoreStatus = {
+    width: number;
+    height: number;
+    top: number;
+    left: number;
+} & JsonObject;
 
 export type ConfigOptions = {};
