@@ -68,7 +68,7 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
             this.setComponent(Enums.ComponentType.WINDOW_ICON, icon);
         }
 
-        if (this.title) {
+        if (this.title || this.useSubTitle) {
             const titleElement = ElementHelper.createElement("div");
             titleElement.setAttribute("data-window-id", this.window.id);
 
@@ -82,8 +82,10 @@ export default class UITitleBar extends UIWindowComponent implements UIControl {
             ElementHelper.addClasses(labelElement, this.app.prefix,
                 "window-title-label"
             );
-            labelElement.innerText = this.title;
-            labelElement.setAttribute("title", this.title);
+            if (this.title) {
+                labelElement.innerText = this.title;
+                labelElement.setAttribute("title", this.title);
+            }
 
             titleElement.appendChild(labelElement);
             titleBarElement.appendChild(titleElement);

@@ -23,9 +23,11 @@ var UITitleBar = (function (_super) {
         var _this = _super.call(this, app, window) || this;
         _this.elementId = _this.window.elementId + "-" + "title-bar";
         _this.icon = "icon";
+        _this.useSubTitle = false;
         _this._element = null;
         _this.icon = CastHelper.typeOrBooleanCast(options.icon, _this.icon);
         _this.title = options.title;
+        _this.useSubTitle = CastHelper.booleanCast(options.useSubTitle, _this.useSubTitle);
         return _this;
     }
     Object.defineProperty(UITitleBar.prototype, "element", {
@@ -56,19 +58,39 @@ var UITitleBar = (function (_super) {
             windowIconElement.appendChild(iconElement);
             this.setComponent("window-icon", icon);
         }
-        if (this.title) {
+        if (this.title || this.useSubTitle) {
             var titleElement = ElementHelper.createElement("div");
             titleElement.setAttribute("data-window-id", this.window.id);
             ElementHelper.addClasses(titleElement, this.app.prefix, "window-title");
             var labelElement = document.createElement("label");
             labelElement.setAttribute("data-window-id", this.window.id);
             ElementHelper.addClasses(labelElement, this.app.prefix, "window-title-label");
-            labelElement.innerText = this.title;
+            if (this.title) {
+                labelElement.innerText = this.title;
+                labelElement.setAttribute("title", this.title);
+            }
             titleElement.appendChild(labelElement);
             titleBarElement.appendChild(titleElement);
         }
         fragment.appendChild(titleBarElement);
         return fragment;
+    };
+    UITitleBar.prototype.updateTitle = function (title) {
+        var element = this.element;
+        if (!element)
+            return;
+        var titleElement = element.querySelector("." + this.app.prefix + "window-title-label");
+        if (!titleElement)
+            return;
+        titleElement.innerText = title;
+        titleElement.setAttribute("title", title);
+        if (this.app.salver && this.app.salver.element) {
+            var salverButtonElement = this.app.salver.element.querySelector("." + this.app.prefix + "salver-button[data-window-id='" + this.window.id + "']");
+            if (salverButtonElement) {
+                salverButtonElement.setAttribute("title", title);
+            }
+        }
+        this.title = title;
     };
     return UITitleBar;
 }(UIWindowComponent_1.default));

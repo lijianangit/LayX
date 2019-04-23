@@ -20,3 +20,7 @@ function assertUnique(x) {
     throw new Error("The element contains '" + x + "' is exists.");
 }
 exports.assertUnique = assertUnique;
+function assertBoolean(x) {
+    throw new Error("Unexpected boolean: " + x);
+}
+exports.assertBoolean = assertBoolean;

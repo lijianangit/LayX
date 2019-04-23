@@ -21,7 +21,11 @@ function stringCast(option) {
 }
 exports.stringCast = stringCast;
 function booleanCast(option, defaultValue) {
-    return option === undefined ? defaultValue : option;
+    if (option === undefined)
+        return defaultValue;
+    if (typeof option !== "boolean")
+        ExceptionHelper.assertBoolean(option);
+    return option;
 }
 exports.booleanCast = booleanCast;
 function stringOrBooleanStyleCast(option, defaultValue, trueValue) {

@@ -87,6 +87,13 @@ var UIFrameContent = (function (_super) {
             var contentWindow = frameContentElement.contentWindow;
             if (!contentWindow)
                 return;
+            var titleBar = _this.window.getComponent("\n            " + "tool-bar" + "\n            /" + "title-bar");
+            if (titleBar && titleBar.useSubTitle) {
+                var subTitleElement = contentWindow.document.querySelector("title");
+                if (subTitleElement) {
+                    titleBar.updateTitle(subTitleElement.innerText || "未命名标题");
+                }
+            }
             if (_this.window.contextMenu !== false) {
                 contentWindow.document.addEventListener("contextmenu", function (ev) {
                     ev.preventDefault();
