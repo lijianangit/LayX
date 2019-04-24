@@ -137,8 +137,10 @@ var App = (function () {
     });
     App.prototype.open = function (options) {
         var window = this.getWindow(options.id);
-        if (window)
+        if (window) {
             window.updateZIndex();
+            window.flicker();
+        }
         else {
             window = new UIWindow_1.default(this, options);
             var windowPresent = window.present();

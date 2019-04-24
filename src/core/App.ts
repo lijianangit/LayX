@@ -83,7 +83,10 @@ export default class App {
 
     open(options: Types.WindowOption): void {
         let window = this.getWindow(options.id);
-        if (window) window.updateZIndex();
+        if (window) {
+            window.updateZIndex();
+            window.flicker();
+        }
         else {
             window = new UIWindow(this, options);
             const windowPresent = window.present();
