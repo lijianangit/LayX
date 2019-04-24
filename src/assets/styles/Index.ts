@@ -12,3 +12,4 @@ import "./title-bar.css";
 import "./top-menu-bar.css";
 import "./content.css";
 import "./notice.css";
+import "./statu-bar.css";

@@ -22,6 +22,7 @@ var UIContextMenuBar_1 = require("./UIContextMenuBar");
 var UITopMenuBar_1 = require("./UITopMenuBar");
 var UISalverBar_1 = require("./UISalverBar");
 var UIContent_1 = require("./UIContent");
+var UIStatuBar_1 = require("./UIStatuBar");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
 var TypeHelper = require("../utils/TypeHelper");
@@ -55,6 +56,7 @@ var UIWindow = (function (_super) {
         _this.contextMenu = false;
         _this.topMenu = false;
         _this.content = {};
+        _this.statuBar = false;
         _this.storeStatus = true;
         _this._element = null;
         _this._flickerShadow = null;
@@ -91,6 +93,7 @@ var UIWindow = (function (_super) {
         _this.contextMenu = CastHelper.contextMenuButtonsCast(options.contextMenu);
         _this.topMenu = CastHelper.contextMenuButtonsCast(options.topMenu);
         _this.content = CastHelper.jsonOrBooleanCast(options.content, _this.content);
+        _this.statuBar = CastHelper.jsonOrBooleanCast(options.statuBar, _this.statuBar);
         _this.storeStatus = CastHelper.booleanCast(options.storeStatus, _this.storeStatus);
         return _this;
     }
@@ -172,6 +175,12 @@ var UIWindow = (function (_super) {
             var resizeElement = resizeBar.present();
             windowElement.appendChild(resizeElement);
             this.setComponent("resize-bar", resizeBar);
+        }
+        if (this.statuBar !== false) {
+            var statuBar = new UIStatuBar_1.default(this.app, this, this.statuBar);
+            var statuBarElement = statuBar.present();
+            windowElement.appendChild(statuBarElement);
+            this.setComponent("statu-bar", statuBar);
         }
         if (this.parclose !== false) {
             var parclose = new UIParclose_1.default(this.app, this, { opacity: this.parclose });

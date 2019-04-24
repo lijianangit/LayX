@@ -84,6 +84,12 @@ export type ContentOption = {
     value?: string | Element
 };
 
+export type StatuBarOption = {
+    height?: number;
+    background?: string | boolean;
+    content?: string | Element;
+} & JsonObject;
+
 export type WindowOption = {
     id: string;
     mode?: Enums.WindowMode;
@@ -104,6 +110,7 @@ export type WindowOption = {
     contextMenu?: Array<ContextMenuButtonOption> | false;
     topMenu?: Array<ContextMenuButtonOption> | false;
     content?: ContentOption;
+    statuBar?: StatuBarOption | boolean;
     storeStatus?: boolean;
 } & JsonObject;
 
@@ -125,5 +132,6 @@ export type StoreStatus = {
     top: number;
     left: number;
 } & JsonObject;
+
 
 export type ConfigOptions = {};

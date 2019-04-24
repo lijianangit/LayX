@@ -54,7 +54,7 @@ export default class App {
         return this._salverZIndex;
     }
 
-    private _noticeZIndex: number = 20000000;
+    private _noticeZIndex: number = 40000000;
     get noticeZIndex() {
         return this._noticeZIndex = this._noticeZIndex + 1;
     }

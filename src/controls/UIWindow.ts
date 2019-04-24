@@ -10,6 +10,7 @@ import UIActionBar from "./UIActionBar";
 import UITopMenuBar from "./UITopMenuBar";
 import UISalverBar from "./UISalverBar";
 import UIContent from "./UIContent";
+import UIStatuBar from "./UIStatuBar";
 import * as Types from "../../types";
 import * as Enums from "../basic/enums";
 import * as ElementHelper from "../utils/ElementHelper";
@@ -47,6 +48,7 @@ export default class UIWindow extends UIComponent implements UIControl {
     public contextMenu: Array<Types.ContextMenuButtonOption> | false = false;
     public topMenu: Array<Types.ContextMenuButtonOption> | false = false;
     public content: Types.ContentOption | false = {};
+    public statuBar: Types.StatuBarOption | false = false;
     public storeStatus: boolean = true;
 
     private _element: HTMLElement | null = null;
@@ -109,6 +111,7 @@ export default class UIWindow extends UIComponent implements UIControl {
         this.contextMenu = CastHelper.contextMenuButtonsCast(options.contextMenu);
         this.topMenu = CastHelper.contextMenuButtonsCast(options.topMenu);
         this.content = CastHelper.jsonOrBooleanCast(options.content, this.content);
+        this.statuBar = CastHelper.jsonOrBooleanCast(options.statuBar, this.statuBar);
         this.storeStatus = CastHelper.booleanCast(options.storeStatus, this.storeStatus);
     }
 
@@ -178,6 +181,13 @@ export default class UIWindow extends UIComponent implements UIControl {
             const resizeElement = resizeBar.present();
             windowElement.appendChild(resizeElement);
             this.setComponent(Enums.ComponentType.RESIZE_BAR, resizeBar);
+        }
+
+        if (this.statuBar !== false) {
+            const statuBar = new UIStatuBar(this.app, this, this.statuBar);
+            const statuBarElement = statuBar.present();
+            windowElement.appendChild(statuBarElement);
+            this.setComponent(Enums.ComponentType.STATU_BAR, statuBar);
         }
 
         if (this.parclose !== false) {

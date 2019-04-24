@@ -71,6 +71,7 @@ var ComponentType;
     ComponentType["URL_CONTENT"] = "url-content";
     ComponentType["NOTICE"] = "notice";
     ComponentType["DRAG_LAYER"] = "drag-layer";
+    ComponentType["STATU_BAR"] = "statu-bar";
 })(ComponentType = exports.ComponentType || (exports.ComponentType = {}));
 var WindowContentType;
 (function (WindowContentType) {

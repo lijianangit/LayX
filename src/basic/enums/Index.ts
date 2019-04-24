@@ -67,7 +67,8 @@ export const enum ComponentType {
     HTML_CONTENT = "html-content",
     URL_CONTENT = "url-content",
     NOTICE = "notice",
-    DRAG_LAYER = "drag-layer"
+    DRAG_LAYER = "drag-layer",
+    STATU_BAR = "statu-bar"
 }
 
 export const enum WindowContentType {

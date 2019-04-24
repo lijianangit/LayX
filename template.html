@@ -15,6 +15,7 @@
     <button id="create3">Create3</button>
     <button id="create4">Create4</button>
     <button id="create5">Create5</button>
+    <button id="create6">Create6</button>
     <button id="notice">Info</button>
     <button id="notice2">Success</button>
     <button id="notice3">Warning</button>
@@ -395,6 +396,24 @@
                     }
                 },
                 offset: "leftTop"
+            });
+        }
+        document.getElementById("create6").onclick = function () {
+            layx.open({
+                id: "hello-world6",
+                content: {
+                    type: 'html',
+                    value: '一个神奇的UI窗口'
+                },
+                toolBar: {
+                    titleBar: {
+                        title: "Layx - Create6."
+                    }
+                },
+                statuBar: {
+                    content: '状态栏'
+                },
+                offset: "rightTop"
             });
         }
         document.getElementById("notice").onclick = function () {
