@@ -12,28 +12,6 @@
     display: none;
 }
 
-.layx-window.layx-animate-zoom-show {
-    animation-name: layx-animate-zoom-show;
-}
-
-.layx-window.layx-animate-zoom-destroy {
-    animation-name: layx-animate-zoom-destroy;
-}
-
-.layx-window.layx-animate-zoom-to-min {
-    animation-name: layx-animate-zoom-to-min;
-}
-
-.layx-window.layx-animate-zoom-drag-to-normal {
-    animation-name: layx-animate-zoom-drag-to-normal;
-}
-
-.layx-window.layx-animate-zoom-to-max, .layx-window.layx-animate-zoom-to-normal {
-    transition-property: left, top, width, height;
-    transition-duration: 0.1s;
-    transition-timing-function: ease-in-out;
-}
-
 .layx-drag-layer {
     position: fixed;
     top: 0;
