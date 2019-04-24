@@ -136,6 +136,7 @@ var App = (function () {
         configurable: true
     });
     App.prototype.open = function (options) {
+        var _this = this;
         var window = this.getWindow(options.id);
         if (window) {
             window.updateZIndex();
@@ -148,8 +149,15 @@ var App = (function () {
             this.lastWindow = this.window;
             this.window = window;
             this.windows.push(window);
-            if (this.salver)
+            if (this.salver) {
+                if (this.salver.items.length === 0) {
+                    this.salver.show();
+                    setTimeout(function () {
+                        _this.salver.show(false);
+                    }, 300);
+                }
                 this.salver.addOrUpdateItem();
+            }
         }
         window.zoomActionButtons(window.width);
     };

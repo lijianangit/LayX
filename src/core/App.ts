@@ -96,7 +96,15 @@ export default class App {
             this.window = window;
             this.windows.push(window);
 
-            if (this.salver) this.salver.addOrUpdateItem();
+            if (this.salver) {
+                if (this.salver.items.length === 0) {
+                    this.salver.show();
+                    setTimeout(() => {
+                        this.salver!.show(false);
+                    }, 300);
+                }
+                this.salver.addOrUpdateItem();
+            }
         }
         window.zoomActionButtons(window.width);
     }
