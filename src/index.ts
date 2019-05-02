@@ -15,6 +15,7 @@ export default (function layx(): Layx {
     }
     layx.windows = app.windows;
     layx.window = app.window;
+    layx.lastWindow = app.lastWindow;
     layx.getWindow = function (id: string) {
         return app.getWindow(id);
     }
