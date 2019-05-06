@@ -42,7 +42,7 @@ var UIActionButton = (function (_super) {
         actionButtonElement.setAttribute("data-window-id", this.window.id);
         actionButtonElement.id = this.elementId;
         actionButtonElement.setAttribute("title", this.label);
-        ElementHelper.addClasses(actionButtonElement, this.app.prefix, "action-button", "flexbox", "flex-center");
+        ElementHelper.addClasses(actionButtonElement, this.app.prefix, "action-button", this.id === "destroy" ? "action-button" + "-destroy" : "", "flexbox", "flex-center");
         ElementHelper.addStyles(actionButtonElement, {
             width: UIActionButton.width + "px"
         });

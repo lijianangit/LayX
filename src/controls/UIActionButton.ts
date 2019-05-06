@@ -3,13 +3,11 @@ import App from "../core/App";
 import UIWindow from "./UIWindow";
 import UIWindowComponent from "../basic/models/UIWindowComponent";
 import UIIcon from "./UIIcon";
+import UIContent from "./UIContent";
 import * as Types from "../../types";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as CastHelper from "../utils/CastHelper";
 import * as Enums from "../basic/enums";
-import * as EventHelper from "../utils/EventHelper";
-import * as TypeHelper from "../utils/TypeHelper";
-import UIContent from "./UIContent";
 
 export default class UIActionButton extends UIWindowComponent implements UIControl {
     public static readonly width: number = 45;
@@ -45,6 +43,7 @@ export default class UIActionButton extends UIWindowComponent implements UIContr
 
         ElementHelper.addClasses(actionButtonElement, this.app.prefix,
             Enums.ComponentType.ACTION_BUTTON,
+            this.id === "destroy" ? `${Enums.ComponentType.ACTION_BUTTON}-destroy` : "",
             "flexbox",
             "flex-center"
         );
