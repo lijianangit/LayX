@@ -31,7 +31,6 @@ var UIFrameContent = (function (_super) {
             _this.window.element.dispatchEvent(event);
         };
         _this.mousemove = function (ev) {
-            ev.preventDefault();
             var clientRect = _this.element.getBoundingClientRect();
             var pageY = (TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY) + clientRect.top;
             if (_this.app.salver && _this.app.salver.element) {

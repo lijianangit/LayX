@@ -102,7 +102,6 @@ export default class UIFrameContent extends UIWindowComponent implements UIContr
     }
 
     private readonly mousemove: (this: HTMLElement | Document, ev: MouseEvent | TouchEvent) => any = (ev: MouseEvent | TouchEvent) => {
-        ev.preventDefault();
         const clientRect = this.element!.getBoundingClientRect();
         const pageY = (TypeHelper.isMoveEvent(ev) ? ev.pageY : ev.touches[0].pageY) + clientRect.top;
         if (this.app.salver && this.app.salver.element) {
