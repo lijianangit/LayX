@@ -70,4 +70,4 @@ layx.html('str','字符串文本','Hello Layx!');
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/0929/130813_69a61025_974299.png "layx2.png")
 
-[查看更多示例](http://layx.baiqian.ltd)
+[查看更多示例](https://layx.baiqian.ltd/)
