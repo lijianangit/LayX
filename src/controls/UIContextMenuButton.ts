@@ -72,9 +72,10 @@ export default class UIContextMenuButton extends UIWindowComponent implements UI
 
             let waiting: number;
             contextMenuButtonElement.addEventListener("mouseenter", (ev: MouseEvent) => {
-                waiting = setTimeout(() => {
+                const handler: TimerHandler = () => {
                     contextMenuBar.updateChildrenOffset(ev, childContextMenuBarElement, this.index);
-                }, 200);
+                };
+                waiting = setTimeout(handler, 200);
             });
 
             contextMenuButtonElement.addEventListener("mouseleave", (ev: MouseEvent) => {

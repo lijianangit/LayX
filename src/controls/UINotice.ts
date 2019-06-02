@@ -227,7 +227,7 @@ export default class UINotice extends UIComponent implements UIControl {
     }
 
     private processAnimate() {
-        this.timer = setInterval(() => {
+        const handler: TimerHandler = () => {
             if (this.fps <= this.timeout) {
                 ElementHelper.addStyles(this.processElement, <Types.CSSStyleObject>{
                     width: `${(this.fps / this.timeout) * 100}%`
@@ -239,7 +239,9 @@ export default class UINotice extends UIComponent implements UIControl {
             }
 
             this.fps += 10;
-        }, 10);
+        };
+
+        this.timer = setInterval(handler, 10);
     }
 
     public updateOffset(index: number, isCreate: boolean = false): void {

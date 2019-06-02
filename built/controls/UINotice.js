@@ -164,7 +164,7 @@ var UINotice = (function (_super) {
     };
     UINotice.prototype.processAnimate = function () {
         var _this = this;
-        this.timer = setInterval(function () {
+        var handler = function () {
             if (_this.fps <= _this.timeout) {
                 ElementHelper.addStyles(_this.processElement, {
                     width: (_this.fps / _this.timeout) * 100 + "%"
@@ -175,7 +175,8 @@ var UINotice = (function (_super) {
                 _this.destroy();
             }
             _this.fps += 10;
-        }, 10);
+        };
+        this.timer = setInterval(handler, 10);
     };
     UINotice.prototype.updateOffset = function (index, isCreate) {
         if (isCreate === void 0) { isCreate = false; }
