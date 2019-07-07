@@ -1,7 +1,7 @@
 import UIComponent from "../core/ui/UIComponent";
 import UIControl from "../core/ui/UIControl";
 import * as ElementHelper from "../utils/ElementHelper";
-import * as Const from "../core/enum/Const";
+import * as Consts from "../core/enum/Consts";
 import StoreState from "../core/store/StoreState";
 import * as CastHelper from "../utils/CastHelper";
 
@@ -10,9 +10,15 @@ import * as CastHelper from "../utils/CastHelper";
  */
 export default class UIIconButton extends UIComponent implements UIControl {
     /**
-     * svg 图标名称
+     * SVG 图标名称
      */
-    public readonly icon: string;
+    private _icon: string;
+    get icon(): string {
+        return this._icon;
+    }
+    set icon(value: string) {
+        this._icon = CastHelper.stringCast(value);
+    }
 
     /**
      * 构造函数
@@ -21,7 +27,7 @@ export default class UIIconButton extends UIComponent implements UIControl {
     constructor(icon: string) {
         super();
 
-        this.icon = CastHelper.stringCast(icon);
+        this._icon = icon;
     }
 
     /**
@@ -33,11 +39,11 @@ export default class UIIconButton extends UIComponent implements UIControl {
         element.setAttribute("data-id", this.uniqueId);
 
         ElementHelper.addClasses(element, StoreState.instance.prefix,
-            Const.Component.ICON_BUTTON
+            Consts.Component.ICON_BUTTON
         );
 
         const svgElement = ElementHelper.createElementNS("svg");
-        svgElement.setAttribute("class", StoreState.instance.prefix + Const.Component.SVG);
+        svgElement.setAttribute("class", StoreState.instance.prefix + Consts.Component.SVG);
 
         const useElement = ElementHelper.createElementNS("use");
         useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", `#${this.icon}`);

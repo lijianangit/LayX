@@ -10,4 +10,6 @@ export type ComponentType = {
     [key: string]: UIComponent | Array<UIComponent>;
 } & JsonType;
 
-export type CSSStyleObject = CSSStyleDeclaration & { [key: string]: string | null };
+export type CSSStyleObject = CSSStyleDeclaration & {
+    [key: string]: string | null | undefined
+};

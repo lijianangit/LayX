@@ -20,5 +20,8 @@ export default class StoreState {
         return globalTop["LayxStoreState"];
     }
 
+    /**
+     * 默认class前缀
+     */
     public readonly prefix: string = "layx-";
 }

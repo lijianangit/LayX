@@ -60,3 +60,11 @@
     line-height: normal;
     pointer-events: none;
 }
+
+.layx-mode-float {
+    position: fixed;
+}
+
+.layx-mode-embed {
+    position: relative;
+}

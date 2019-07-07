@@ -1,5 +1,5 @@
 import * as NumberHelper from "./NumberHelper";
-import { stringCast } from "./CastHelper";
+import * as CastHelper from "./CastHelper";
 
 /**
  * 生成唯一Id
@@ -23,7 +23,7 @@ export function generateUniqueId(length: number = 5): string {
  * @returns 预期字符串 
  */
 export function removeInvalidCharacter(str: string): string {
-    let strCast = stringCast(str).replace(/[\r\n\t\s]/g, "");
+    let strCast = CastHelper.stringCast(str).replace(/[\r\n\t\s]/g, "");
 
     return strCast;
 }

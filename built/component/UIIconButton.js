@@ -21,9 +21,19 @@ var UIIconButton = (function (_super) {
     __extends(UIIconButton, _super);
     function UIIconButton(icon) {
         var _this = _super.call(this) || this;
-        _this.icon = CastHelper.stringCast(icon);
+        _this._icon = icon;
         return _this;
     }
+    Object.defineProperty(UIIconButton.prototype, "icon", {
+        get: function () {
+            return this._icon;
+        },
+        set: function (value) {
+            this._icon = CastHelper.stringCast(value);
+        },
+        enumerable: true,
+        configurable: true
+    });
     UIIconButton.prototype.createView = function () {
         var element = ElementHelper.createElement("div");
         element.setAttribute("data-id", this.uniqueId);

@@ -49,7 +49,7 @@ export function addStyles(element: HTMLElement | null, styles: Types.CSSStyleObj
     if (!element) return null;
 
     for (const key in styles) {
-        (<Types.CSSStyleObject>element.style)[key] = styles[key];
+        (<Types.CSSStyleObject>element.style)[key] = styles[key] === undefined ? null : styles[key];
     }
     return element;
 }
@@ -62,7 +62,7 @@ export function addStyles(element: HTMLElement | null, styles: Types.CSSStyleObj
  * @param classes class数组
  * @returns 当前元素 
  */
-export function updateClasses(element: HTMLElement, handler: (currentClasses: string[], index: number, itemClass: string) => void, prefix: string = "layx-", ...classes: string[]): HTMLElement | null {
+export function updateClasses(element: HTMLElement, handler: (currentClasses: string[], index: number, itemClass: string) => void, prefix: string = "layx-", ...classes: Array<string | undefined>): HTMLElement | null {
     if (!element) return null;
 
     const currentClasses = element.className.split(/\s+/g);
@@ -94,7 +94,7 @@ export function updateClasses(element: HTMLElement, handler: (currentClasses: st
  * @param classes class数组
  * @returns 当前元素 
  */
-export function addClasses(element: HTMLElement | null, prefix: string = "layx-", ...classes: string[]): HTMLElement | null {
+export function addClasses(element: HTMLElement | null, prefix: string = "layx-", ...classes: Array<string | undefined>): HTMLElement | null {
     if (!element) return null;
 
     return updateClasses(element, function (currentClasses: string[], index: number, itemClass: string): void {

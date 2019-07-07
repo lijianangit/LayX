@@ -13,4 +13,6 @@ export default interface Layx {
      * 全局公共存储状态
      */
     store: StoreState;
+
+    test(): Element;
 }
