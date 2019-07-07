@@ -67,7 +67,7 @@ module.exports = {
             canPrint: true
         }),
         new HtmlWebPackPlugin({
-            title: "A magical window. - Layx",
+            title: "入口即窗口，窗口即天地 - Layx",
             template: "./template.html",
             inject: "head",
             hash: true

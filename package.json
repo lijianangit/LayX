@@ -1,9 +1,8 @@
 {
   "name": "layx",
-  "version": "3.0.0",
-  "description": "A magical window.",
+  "version": "4.0.0",
+  "description": "入口即窗口，窗口即天地 - Layx",
   "main": "./built/index.js",
-  "types": "./types/index.d.ts",
   "scripts": {
     "build": "tsc",
     "webpack": "webpack --mode production"
