@@ -1,0 +1,62 @@
+[class^="layx-"] {
+    user-select: none;
+    box-sizing: border-box;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+.layx-flex-box {
+    display: flex;
+}
+
+.layx-flex-row {
+    display: flex;
+    flex-flow: row;
+}
+
+.layx-flex-row-reverse {
+    display: flex;
+    flex-flow: row-reverse;
+}
+
+.layx-flex-column {
+    display: flex;
+    flex-flow: column;
+}
+
+.layx-flex-vertical-center {
+    display: flex;
+    align-items: center;
+}
+
+.layx-flex-vertical-center {
+    display: flex;
+    align-items: center;
+}
+
+.layx-flex-horizontal-center {
+    display: flex;
+    justify-content: center;
+}
+
+.layx-flex-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.layx-flex-item {
+    flex: 1;
+}
+
+.layx-svg {
+    width: 1em;
+    height: 1em;
+    vertical-align: -.15em;
+    fill: currentColor;
+    overflow: hidden;
+    font-size: 14px;
+    display: inline-block;
+    line-height: normal;
+    pointer-events: none;
+}
