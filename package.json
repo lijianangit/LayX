@@ -1,7 +1,7 @@
 {
   "name": "layx",
   "version": "4.0.0",
-  "description": "入口即窗口，窗口即天地 - Layx",
+  "description": "窗口即入口，入口即天地 - Layx",
   "main": "./built/index.js",
   "scripts": {
     "build": "tsc",
