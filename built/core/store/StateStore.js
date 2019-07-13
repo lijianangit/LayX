@@ -4,6 +4,7 @@ var StateStore = (function () {
     function StateStore() {
         this.prefix = "layx-";
         this.components = {};
+        this._zIndex = 10000000;
     }
     Object.defineProperty(StateStore, "instance", {
         get: function () {
@@ -13,6 +14,13 @@ var StateStore = (function () {
                 globalTop[globalKey] = new StateStore();
             }
             return globalTop[globalKey];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(StateStore.prototype, "zIndex", {
+        get: function () {
+            return this._zIndex++;
         },
         enumerable: true,
         configurable: true

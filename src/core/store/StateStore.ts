@@ -32,4 +32,12 @@ export default class StateStore {
      * 组件信息集合
      */
     public readonly components: ComponentProfile = <ComponentProfile>{};
+
+    /**
+     * 默认起始层级
+     */
+    private _zIndex: number = 10000000;
+    public get zIndex(): number {
+        return this._zIndex++;
+    }
 }

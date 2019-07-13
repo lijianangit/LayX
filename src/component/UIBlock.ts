@@ -190,10 +190,11 @@ export default class UIBlock extends UIComponent implements UIControl {
      * @returns 页面元素 
      */
     createView(): Element {
+        const stateStore = StateStore.instance;
         const element = ElementHelper.createElement("div");
         element.setAttribute("data-id", this.uniqueId);
 
-        ElementHelper.addClasses(element, StateStore.instance.prefix,
+        ElementHelper.addClasses(element, stateStore.prefix,
             Consts.Component.BLOCK,
             this.animatable ? "animate" : undefined,
             this.animatable ? `animate-${this.animate}-to-in` : undefined,

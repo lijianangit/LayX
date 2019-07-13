@@ -183,9 +183,10 @@ var UIBlock = (function (_super) {
         configurable: true
     });
     UIBlock.prototype.createView = function () {
+        var stateStore = StateStore_1.default.instance;
         var element = ElementHelper.createElement("div");
         element.setAttribute("data-id", this.uniqueId);
-        ElementHelper.addClasses(element, StateStore_1.default.instance.prefix, "block", this.animatable ? "animate" : undefined, this.animatable ? "animate-" + this.animate + "-to-in" : undefined, "mode-" + this.mode);
+        ElementHelper.addClasses(element, stateStore.prefix, "block", this.animatable ? "animate" : undefined, this.animatable ? "animate-" + this.animate + "-to-in" : undefined, "mode-" + this.mode);
         ElementHelper.addStyles(element, {
             width: this.width ? this.width + "px" : undefined,
             height: this.height ? this.height + "px" : undefined,

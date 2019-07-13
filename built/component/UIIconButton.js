@@ -35,11 +35,12 @@ var UIIconButton = (function (_super) {
         configurable: true
     });
     UIIconButton.prototype.createView = function () {
+        var stateStore = StateStore_1.default.instance;
         var element = ElementHelper.createElement("div");
         element.setAttribute("data-id", this.uniqueId);
-        ElementHelper.addClasses(element, StateStore_1.default.instance.prefix, "icon-button");
+        ElementHelper.addClasses(element, stateStore.prefix, "icon-button");
         var svgElement = ElementHelper.createElementNS("svg");
-        svgElement.setAttribute("class", StateStore_1.default.instance.prefix + "svg");
+        svgElement.setAttribute("class", stateStore.prefix + "svg");
         var useElement = ElementHelper.createElementNS("use");
         useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + this.icon);
         svgElement.appendChild(useElement);

@@ -35,15 +35,16 @@ export default class UIIconButton extends UIComponent implements UIControl {
      * @returns 元素
      */
     createView(): Element {
+        const stateStore = StateStore.instance;
         const element = ElementHelper.createElement("div");
         element.setAttribute("data-id", this.uniqueId);
 
-        ElementHelper.addClasses(element, StateStore.instance.prefix,
+        ElementHelper.addClasses(element, stateStore.prefix,
             Consts.Component.ICON_BUTTON
         );
 
         const svgElement = ElementHelper.createElementNS("svg");
-        svgElement.setAttribute("class", StateStore.instance.prefix + Consts.Component.SVG);
+        svgElement.setAttribute("class", stateStore.prefix + Consts.Component.SVG);
 
         const useElement = ElementHelper.createElementNS("use");
         useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", `#${this.icon}`);
