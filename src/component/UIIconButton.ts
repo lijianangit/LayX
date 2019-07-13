@@ -10,6 +10,16 @@ import * as CastHelper from "../utils/CastHelper";
  */
 export default class UIIconButton extends UIComponent implements UIControl {
     /**
+     * 构造函数
+     * @param icon svg 图标名称
+     */
+    constructor(icon: string) {
+        super();
+
+        this._icon = icon;
+    }
+
+    /**
      * SVG 图标名称
      */
     private _icon: string;
@@ -21,20 +31,10 @@ export default class UIIconButton extends UIComponent implements UIControl {
     }
 
     /**
-     * 构造函数
-     * @param icon svg 图标名称
+     * 创建DOM元素
+     * @param inject 注入器，支持外部拓展元素
      */
-    constructor(icon: string) {
-        super();
-
-        this._icon = icon;
-    }
-
-    /**
-     * 创建页面DOM元素
-     * @returns 元素
-     */
-    createView(): Element {
+    createView(inject?: (element: Element) => Element): Element {
         const stateStore = StateStore.instance;
         const element = ElementHelper.createElement("div");
         element.setAttribute("data-id", this.uniqueId);
@@ -51,6 +51,8 @@ export default class UIIconButton extends UIComponent implements UIControl {
         svgElement.appendChild(useElement);
 
         element.appendChild(svgElement);
+
+        if (inject) inject(element);
         return element;
     }
 }

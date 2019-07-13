@@ -8,7 +8,11 @@ import StateStore from "../core/store/StateStore";
 import * as Types from "../core/Types";
 
 export default class UIBlock extends UIComponent implements UIControl {
-    constructor() {
+    /**
+     * 构造函数
+     * @param type 层类型
+     */
+    constructor(public type: Consts.BlockType = Consts.BlockType.DEFAULT) {
         super();
     }
 
@@ -186,13 +190,14 @@ export default class UIBlock extends UIComponent implements UIControl {
     private animatable: boolean = false;
 
     /**
-     * 创建页面DOM元素
-     * @returns 页面元素 
+     * 创建DOM元素
+     * @param inject 注入器，支持外部拓展元素
      */
-    createView(): Element {
+    createView(inject?: (element: Element) => Element): Element {
         const stateStore = StateStore.instance;
         const element = ElementHelper.createElement("div");
         element.setAttribute("data-id", this.uniqueId);
+        element.setAttribute("data-type", this.type);
 
         ElementHelper.addClasses(element, stateStore.prefix,
             Consts.Component.BLOCK,
@@ -219,6 +224,10 @@ export default class UIBlock extends UIComponent implements UIControl {
             webkitBoxShadow: this.shadow
         });
 
+        // 注册事件
+        this.registerEvent(element);
+
+        if (inject) inject(element);
         return element;
     }
 
@@ -230,6 +239,65 @@ export default class UIBlock extends UIComponent implements UIControl {
 
         ElementHelper.addStyles(<HTMLElement | null>this.element, <Types.CSSStyleObject>{
             zIndex: this.mode === Consts.PresentMode.FLOAT ? `${stateStore.zIndex}` : undefined,
+        });
+    }
+
+    /**
+     * 删除层
+     */
+    destroy() {
+        if (this.animatable) {
+            const element = <HTMLElement | null>this.element;
+            if (!element) return;
+            const stateStore = StateStore.instance;
+
+            ElementHelper.addClasses(element, stateStore.prefix,
+                `animate-${this.animate}-to-out`
+            );
+        }
+        else {
+            this.dispose();
+        }
+    }
+
+    /**
+     * 销毁层并释放内存
+     */
+    private dispose() {
+        const stateStore = StateStore.instance;
+
+        ElementHelper.removeElement(<HTMLElement | null>this.element);
+        delete (<any>stateStore.components)[this.uniqueId];
+    }
+
+    /**
+     * 注册事件
+     * @param element DOM元素
+     */
+    private registerEvent(element: HTMLElement): void {
+        if (!element) return;
+
+        const stateStore = StateStore.instance;
+        // 动画起始
+        element.addEventListener("animationstart", (ev: AnimationEvent) => {
+        });
+
+        // 动画结束
+        element.addEventListener("animationend", (ev: AnimationEvent) => {
+            var animateToInClass = `animate-${this.animate}-to-in`;
+            var animateToOutClass = `animate-${this.animate}-to-out`;
+
+            if (this.animatable) {
+                if (ElementHelper.hasClass(element, stateStore.prefix, animateToInClass)) {
+                    ElementHelper.removeClasses(element, stateStore.prefix, animateToInClass);
+                }
+
+                // 删除层
+                if (ElementHelper.hasClass(element, stateStore.prefix, animateToOutClass)) {
+                    ElementHelper.removeClasses(element, stateStore.prefix, animateToOutClass);
+                    this.dispose();
+                }
+            }
         });
     }
 }

@@ -34,7 +34,7 @@ var UIIconButton = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    UIIconButton.prototype.createView = function () {
+    UIIconButton.prototype.createView = function (inject) {
         var stateStore = StateStore_1.default.instance;
         var element = ElementHelper.createElement("div");
         element.setAttribute("data-id", this.uniqueId);
@@ -45,6 +45,8 @@ var UIIconButton = (function (_super) {
         useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + this.icon);
         svgElement.appendChild(useElement);
         element.appendChild(svgElement);
+        if (inject)
+            inject(element);
         return element;
     };
     return UIIconButton;

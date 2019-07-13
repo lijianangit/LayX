@@ -6,6 +6,14 @@ var Component;
     Component["ICON_BUTTON"] = "icon-button";
     Component["BLOCK"] = "block";
 })(Component = exports.Component || (exports.Component = {}));
+var BlockType;
+(function (BlockType) {
+    BlockType["DEFAULT"] = "default";
+    BlockType["CONTEXT_MENU"] = "context-menu";
+    BlockType["WINDOW"] = "window";
+    BlockType["NOTICE"] = "notice";
+    BlockType["DIALOG"] = "dialog";
+})(BlockType = exports.BlockType || (exports.BlockType = {}));
 var PresentMode;
 (function (PresentMode) {
     PresentMode["EMBED"] = "embed";

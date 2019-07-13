@@ -20,8 +20,10 @@ var TypeHelper = require("../utils/TypeHelper");
 var StateStore_1 = require("../core/store/StateStore");
 var UIBlock = (function (_super) {
     __extends(UIBlock, _super);
-    function UIBlock() {
+    function UIBlock(type) {
+        if (type === void 0) { type = "default"; }
         var _this = _super.call(this) || this;
+        _this.type = type;
         _this._background = false;
         _this._shadow = false;
         _this._border = false;
@@ -182,10 +184,11 @@ var UIBlock = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    UIBlock.prototype.createView = function () {
+    UIBlock.prototype.createView = function (inject) {
         var stateStore = StateStore_1.default.instance;
         var element = ElementHelper.createElement("div");
         element.setAttribute("data-id", this.uniqueId);
+        element.setAttribute("data-type", this.type);
         ElementHelper.addClasses(element, stateStore.prefix, "block", this.animatable ? "animate" : undefined, this.animatable ? "animate-" + this.animate + "-to-in" : undefined, "mode-" + this.mode);
         ElementHelper.addStyles(element, {
             width: this.width ? this.width + "px" : undefined,
@@ -204,12 +207,53 @@ var UIBlock = (function (_super) {
             boxShadow: this.shadow,
             webkitBoxShadow: this.shadow
         });
+        this.registerEvent(element);
+        if (inject)
+            inject(element);
         return element;
     };
     UIBlock.prototype.updateZIndex = function () {
         var stateStore = StateStore_1.default.instance;
         ElementHelper.addStyles(this.element, {
             zIndex: this.mode === "float" ? "" + stateStore.zIndex : undefined,
+        });
+    };
+    UIBlock.prototype.destroy = function () {
+        if (this.animatable) {
+            var element = this.element;
+            if (!element)
+                return;
+            var stateStore = StateStore_1.default.instance;
+            ElementHelper.addClasses(element, stateStore.prefix, "animate-" + this.animate + "-to-out");
+        }
+        else {
+            this.dispose();
+        }
+    };
+    UIBlock.prototype.dispose = function () {
+        var stateStore = StateStore_1.default.instance;
+        ElementHelper.removeElement(this.element);
+        delete stateStore.components[this.uniqueId];
+    };
+    UIBlock.prototype.registerEvent = function (element) {
+        var _this = this;
+        if (!element)
+            return;
+        var stateStore = StateStore_1.default.instance;
+        element.addEventListener("animationstart", function (ev) {
+        });
+        element.addEventListener("animationend", function (ev) {
+            var animateToInClass = "animate-" + _this.animate + "-to-in";
+            var animateToOutClass = "animate-" + _this.animate + "-to-out";
+            if (_this.animatable) {
+                if (ElementHelper.hasClass(element, stateStore.prefix, animateToInClass)) {
+                    ElementHelper.removeClasses(element, stateStore.prefix, animateToInClass);
+                }
+                if (ElementHelper.hasClass(element, stateStore.prefix, animateToOutClass)) {
+                    ElementHelper.removeClasses(element, stateStore.prefix, animateToOutClass);
+                    _this.dispose();
+                }
+            }
         });
     };
     return UIBlock;
