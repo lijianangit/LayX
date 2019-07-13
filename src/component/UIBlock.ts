@@ -6,6 +6,7 @@ import * as CastHelper from "../utils/CastHelper";
 import * as TypeHelper from "../utils/TypeHelper";
 import StateStore from "../core/store/StateStore";
 import * as Types from "../core/Types";
+import CoordinateProfile from "../core/type/CoordinateProfile";
 
 export default class UIBlock extends UIComponent implements UIControl {
     /**
@@ -25,6 +26,15 @@ export default class UIBlock extends UIComponent implements UIControl {
     }
     set width(value: number | undefined) {
         this._width = CastHelper.numberOrUndefinedCast(value);
+
+        // 处理最大、最小值问题
+        const newSize = this.handlerWidthOrHeight("width");
+        if (newSize) {
+            this._width = newSize;
+            this.updateOffset({
+                width: newSize
+            });
+        };
     }
 
     /**
@@ -36,6 +46,15 @@ export default class UIBlock extends UIComponent implements UIControl {
     }
     set height(value: number | undefined) {
         this._height = CastHelper.numberOrUndefinedCast(value);
+
+        // 处理最大、最小值问题
+        const newSize = this.handlerWidthOrHeight("height");
+        if (newSize) {
+            this._height = newSize;
+            this.updateOffset({
+                height: newSize
+            });
+        }
     }
 
     /**
@@ -47,6 +66,14 @@ export default class UIBlock extends UIComponent implements UIControl {
     }
     set maxWidth(value: number | undefined) {
         this._maxWidth = CastHelper.numberOrUndefinedCast(value);
+
+        // 处理最大、最小值问题
+        if (this._maxWidth && this.width && this.width > this._maxWidth) {
+            this.width = this._maxWidth;
+            this.updateOffset({
+                width: this._maxWidth
+            });
+        }
     }
 
     /**
@@ -58,6 +85,14 @@ export default class UIBlock extends UIComponent implements UIControl {
     }
     set maxHeight(value: number | undefined) {
         this._maxHeight = CastHelper.numberOrUndefinedCast(value);
+
+        // 处理最大、最小值问题
+        if (this._maxHeight && this.height && this.height > this._maxHeight) {
+            this.height = this._maxHeight;
+            this.updateOffset({
+                height: this._maxHeight
+            });
+        }
     }
 
     /**
@@ -69,6 +104,14 @@ export default class UIBlock extends UIComponent implements UIControl {
     }
     set minWidth(value: number | undefined) {
         this._minWidth = CastHelper.numberOrUndefinedCast(value);
+
+        // 处理最大、最小值问题
+        if (this._minWidth && this.width && this.width < this._minWidth) {
+            this.width = this._minWidth;
+            this.updateOffset({
+                width: this._minWidth
+            });
+        }
     }
 
     /**
@@ -80,6 +123,14 @@ export default class UIBlock extends UIComponent implements UIControl {
     }
     set minHeight(value: number | undefined) {
         this._minHeight = CastHelper.numberOrUndefinedCast(value);
+
+        // 处理最大、最小值问题
+        if (this._minHeight && this.height && this.height < this._minHeight) {
+            this.height = this.minHeight;
+            this.updateOffset({
+                height: this.minHeight
+            });
+        }
     }
 
     /**
@@ -261,6 +312,37 @@ export default class UIBlock extends UIComponent implements UIControl {
     }
 
     /**
+     * 更新坐标
+     * @param coordinate 坐标信息
+     */
+    updateOffset(coordinate: CoordinateProfile) {
+        const element = <HTMLElement | null>this.element;
+        if (!element) return;
+        const stateStore = StateStore.instance;
+
+        ElementHelper.addStyles(element, <Types.CSSStyleObject>{
+            width: coordinate.width ? `${coordinate.width}px` : undefined,
+            height: coordinate.height ? `${coordinate.height}px` : undefined,
+            maxWidth: coordinate.maxWidth ? `${coordinate.maxWidth}px` : undefined,
+            maxHeight: coordinate.maxHeight ? `${coordinate.maxHeight}px` : undefined,
+            minWidth: coordinate.maxHeight ? `${coordinate.minWidth}px` : undefined,
+            minHeight: coordinate.minHeight ? `${coordinate.minHeight}px` : undefined,
+            left: this.mode === Consts.PresentMode.FLOAT && coordinate.left ? `${coordinate.left}px` : undefined,
+            top: this.mode === Consts.PresentMode.FLOAT && coordinate.top ? `${coordinate.top}px` : undefined,
+        });
+
+        // 更新组件信息
+        if (coordinate.width) this.width = coordinate.width;
+        if (coordinate.height) this.height = coordinate.height;
+        if (coordinate.maxWidth) this.maxWidth = coordinate.maxWidth;
+        if (coordinate.maxHeight) this.maxHeight = coordinate.maxHeight;
+        if (coordinate.minWidth) this.minWidth = coordinate.minWidth;
+        if (coordinate.minHeight) this.minHeight = coordinate.minHeight;
+        if (coordinate.left) this.left = coordinate.left;
+        if (coordinate.top) this.top = coordinate.top;
+    }
+
+    /**
      * 销毁层并释放内存
      */
     private dispose() {
@@ -299,5 +381,23 @@ export default class UIBlock extends UIComponent implements UIControl {
                 }
             }
         });
+    }
+
+    /**
+     * 处理宽度、高度相对于最小宽高、最大宽高计算问题
+     * @param type 处理类型
+     */
+    private handlerWidthOrHeight(type: "width" | "height"): number | null {
+        var newSize = null;
+
+        if (type === "width") {
+            if (this.minWidth && this.width) newSize = Math.max(this.minWidth, this.width);
+            if (this.maxWidth && this.width) newSize = Math.min(this.maxWidth, this.width);
+        }
+        else if (type === "height") {
+            if (this.minHeight && this.height) newSize = Math.max(this.minHeight, this.height);
+            if (this.maxHeight && this.height) newSize = Math.min(this.maxHeight, this.height);
+        }
+        return newSize;
     }
 }

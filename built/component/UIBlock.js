@@ -38,6 +38,14 @@ var UIBlock = (function (_super) {
         },
         set: function (value) {
             this._width = CastHelper.numberOrUndefinedCast(value);
+            var newSize = this.handlerWidthOrHeight("width");
+            if (newSize) {
+                this._width = newSize;
+                this.updateOffset({
+                    width: newSize
+                });
+            }
+            ;
         },
         enumerable: true,
         configurable: true
@@ -48,6 +56,13 @@ var UIBlock = (function (_super) {
         },
         set: function (value) {
             this._height = CastHelper.numberOrUndefinedCast(value);
+            var newSize = this.handlerWidthOrHeight("height");
+            if (newSize) {
+                this._height = newSize;
+                this.updateOffset({
+                    height: newSize
+                });
+            }
         },
         enumerable: true,
         configurable: true
@@ -58,6 +73,12 @@ var UIBlock = (function (_super) {
         },
         set: function (value) {
             this._maxWidth = CastHelper.numberOrUndefinedCast(value);
+            if (this._maxWidth && this.width && this.width > this._maxWidth) {
+                this.width = this._maxWidth;
+                this.updateOffset({
+                    width: this._maxWidth
+                });
+            }
         },
         enumerable: true,
         configurable: true
@@ -68,6 +89,12 @@ var UIBlock = (function (_super) {
         },
         set: function (value) {
             this._maxHeight = CastHelper.numberOrUndefinedCast(value);
+            if (this._maxHeight && this.height && this.height > this._maxHeight) {
+                this.height = this._maxHeight;
+                this.updateOffset({
+                    height: this._maxHeight
+                });
+            }
         },
         enumerable: true,
         configurable: true
@@ -78,6 +105,12 @@ var UIBlock = (function (_super) {
         },
         set: function (value) {
             this._minWidth = CastHelper.numberOrUndefinedCast(value);
+            if (this._minWidth && this.width && this.width < this._minWidth) {
+                this.width = this._minWidth;
+                this.updateOffset({
+                    width: this._minWidth
+                });
+            }
         },
         enumerable: true,
         configurable: true
@@ -88,6 +121,12 @@ var UIBlock = (function (_super) {
         },
         set: function (value) {
             this._minHeight = CastHelper.numberOrUndefinedCast(value);
+            if (this._minHeight && this.height && this.height < this._minHeight) {
+                this.height = this.minHeight;
+                this.updateOffset({
+                    height: this.minHeight
+                });
+            }
         },
         enumerable: true,
         configurable: true
@@ -230,6 +269,38 @@ var UIBlock = (function (_super) {
             this.dispose();
         }
     };
+    UIBlock.prototype.updateOffset = function (coordinate) {
+        var element = this.element;
+        if (!element)
+            return;
+        var stateStore = StateStore_1.default.instance;
+        ElementHelper.addStyles(element, {
+            width: coordinate.width ? coordinate.width + "px" : undefined,
+            height: coordinate.height ? coordinate.height + "px" : undefined,
+            maxWidth: coordinate.maxWidth ? coordinate.maxWidth + "px" : undefined,
+            maxHeight: coordinate.maxHeight ? coordinate.maxHeight + "px" : undefined,
+            minWidth: coordinate.maxHeight ? coordinate.minWidth + "px" : undefined,
+            minHeight: coordinate.minHeight ? coordinate.minHeight + "px" : undefined,
+            left: this.mode === "float" && coordinate.left ? coordinate.left + "px" : undefined,
+            top: this.mode === "float" && coordinate.top ? coordinate.top + "px" : undefined,
+        });
+        if (coordinate.width)
+            this.width = coordinate.width;
+        if (coordinate.height)
+            this.height = coordinate.height;
+        if (coordinate.maxWidth)
+            this.maxWidth = coordinate.maxWidth;
+        if (coordinate.maxHeight)
+            this.maxHeight = coordinate.maxHeight;
+        if (coordinate.minWidth)
+            this.minWidth = coordinate.minWidth;
+        if (coordinate.minHeight)
+            this.minHeight = coordinate.minHeight;
+        if (coordinate.left)
+            this.left = coordinate.left;
+        if (coordinate.top)
+            this.top = coordinate.top;
+    };
     UIBlock.prototype.dispose = function () {
         var stateStore = StateStore_1.default.instance;
         ElementHelper.removeElement(this.element);
@@ -255,6 +326,22 @@ var UIBlock = (function (_super) {
                 }
             }
         });
+    };
+    UIBlock.prototype.handlerWidthOrHeight = function (type) {
+        var newSize = null;
+        if (type === "width") {
+            if (this.minWidth && this.width)
+                newSize = Math.max(this.minWidth, this.width);
+            if (this.maxWidth && this.width)
+                newSize = Math.min(this.maxWidth, this.width);
+        }
+        else if (type === "height") {
+            if (this.minHeight && this.height)
+                newSize = Math.max(this.minHeight, this.height);
+            if (this.maxHeight && this.height)
+                newSize = Math.min(this.maxHeight, this.height);
+        }
+        return newSize;
     };
     return UIBlock;
 }(UIComponent_1.default));

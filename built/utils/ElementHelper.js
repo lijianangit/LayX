@@ -22,7 +22,9 @@ function addStyles(element, styles) {
     if (!element)
         return null;
     for (var key in styles) {
-        element.style[key] = styles[key] === undefined ? null : styles[key];
+        if (styles[key]) {
+            element.style[key] = styles[key];
+        }
     }
     return element;
 }

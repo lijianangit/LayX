@@ -49,7 +49,9 @@ export function addStyles(element: HTMLElement | null, styles: Types.CSSStyleObj
     if (!element) return null;
 
     for (const key in styles) {
-        (<Types.CSSStyleObject>element.style)[key] = styles[key] === undefined ? null : styles[key];
+        if (styles[key]) {
+            (<Types.CSSStyleObject>element.style)[key] = styles[key];
+        }
     }
     return element;
 }
