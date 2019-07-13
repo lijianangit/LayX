@@ -6,16 +6,16 @@ var ElementHelper = require("../../utils/ElementHelper");
 var StateStore_1 = require("../store/StateStore");
 var UIComponent = (function () {
     function UIComponent() {
+        this._uniqueId = StringHelper.generateUniqueId();
         this.components = {};
     }
     Object.defineProperty(UIComponent.prototype, "uniqueId", {
         get: function () {
-            var generateUniqueId = StringHelper.generateUniqueId();
             var components = StateStore_1.default.instance.components;
-            if (!components.hasOwnProperty(generateUniqueId)) {
-                components[generateUniqueId] = this;
+            if (!components.hasOwnProperty(this._uniqueId)) {
+                components[this._uniqueId] = this;
             }
-            return generateUniqueId;
+            return this._uniqueId;
         },
         enumerable: true,
         configurable: true

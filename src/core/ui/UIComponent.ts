@@ -16,16 +16,16 @@ export default abstract class UIComponent {
     /**
      * 唯一Id
      */
+    private _uniqueId: string = StringHelper.generateUniqueId();
     public get uniqueId(): string {
-        const generateUniqueId = StringHelper.generateUniqueId();
         const components = StateStore.instance.components;
 
         // 将创建的组建Id添加到组件Id集合中
-        if (!components.hasOwnProperty(generateUniqueId)) {
-            (<any>components)[generateUniqueId] = this;
+        if (!components.hasOwnProperty(this._uniqueId)) {
+            (<any>components)[this._uniqueId] = this;
         }
 
-        return generateUniqueId;
+        return this._uniqueId;
     }
 
     /**

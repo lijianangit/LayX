@@ -210,6 +210,7 @@ export default class UIBlock extends UIComponent implements UIControl {
             minHeight: this.minHeight ? `${this.minHeight}px` : undefined,
             left: this.mode === Consts.PresentMode.FLOAT && this.left ? `${this.left}px` : undefined,
             top: this.mode === Consts.PresentMode.FLOAT && this.top ? `${this.top}px` : undefined,
+            zIndex: this.mode === Consts.PresentMode.FLOAT ? `${stateStore.zIndex}` : undefined,
             background: this.background,
             border: this.border,
             borderRadius: this.borderRadius ? `${this.borderRadius}px` : undefined,
@@ -219,5 +220,16 @@ export default class UIBlock extends UIComponent implements UIControl {
         });
 
         return element;
+    }
+
+    /**
+     * 更新层级
+     */
+    updateZIndex() {
+        const stateStore = StateStore.instance;
+
+        ElementHelper.addStyles(<HTMLElement | null>this.element, <Types.CSSStyleObject>{
+            zIndex: this.mode === Consts.PresentMode.FLOAT ? `${stateStore.zIndex}` : undefined,
+        });
     }
 }

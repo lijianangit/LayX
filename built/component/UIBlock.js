@@ -196,6 +196,7 @@ var UIBlock = (function (_super) {
             minHeight: this.minHeight ? this.minHeight + "px" : undefined,
             left: this.mode === "float" && this.left ? this.left + "px" : undefined,
             top: this.mode === "float" && this.top ? this.top + "px" : undefined,
+            zIndex: this.mode === "float" ? "" + stateStore.zIndex : undefined,
             background: this.background,
             border: this.border,
             borderRadius: this.borderRadius ? this.borderRadius + "px" : undefined,
@@ -204,6 +205,12 @@ var UIBlock = (function (_super) {
             webkitBoxShadow: this.shadow
         });
         return element;
+    };
+    UIBlock.prototype.updateZIndex = function () {
+        var stateStore = StateStore_1.default.instance;
+        ElementHelper.addStyles(this.element, {
+            zIndex: this.mode === "float" ? "" + stateStore.zIndex : undefined,
+        });
     };
     return UIBlock;
 }(UIComponent_1.default));
