@@ -3,11 +3,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var StringHelper = require("../../utils/StringHelper");
 var CastHelper = require("../../utils/CastHelper");
 var ElementHelper = require("../../utils/ElementHelper");
+var StateStore_1 = require("../store/StateStore");
 var UIComponent = (function () {
     function UIComponent() {
-        this.uniqueId = StringHelper.generateUniqueId();
         this.components = {};
     }
+    Object.defineProperty(UIComponent.prototype, "uniqueId", {
+        get: function () {
+            var generateUniqueId = StringHelper.generateUniqueId();
+            var components = StateStore_1.default.instance.components;
+            if (!components.hasOwnProperty(generateUniqueId)) {
+                components[generateUniqueId] = this;
+            }
+            return generateUniqueId;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(UIComponent.prototype, "element", {
         get: function () {
             return document.querySelector("[data-id='" + this.uniqueId + "']");

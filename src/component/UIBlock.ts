@@ -4,10 +4,10 @@ import * as ElementHelper from "../utils/ElementHelper";
 import * as Consts from "../core/enum/Consts";
 import * as CastHelper from "../utils/CastHelper";
 import * as TypeHelper from "../utils/TypeHelper";
-import StoreState from "../core/store/StoreState";
+import StateStore from "../core/store/StateStore";
 import * as Types from "../core/Types";
 
-export default class UILayer extends UIComponent implements UIControl {
+export default class UIBlock extends UIComponent implements UIControl {
     constructor() {
         super();
     }
@@ -193,8 +193,8 @@ export default class UILayer extends UIComponent implements UIControl {
         const element = ElementHelper.createElement("div");
         element.setAttribute("data-id", this.uniqueId);
 
-        ElementHelper.addClasses(element, StoreState.instance.prefix,
-            Consts.Component.LAYER,
+        ElementHelper.addClasses(element, StateStore.instance.prefix,
+            Consts.Component.BLOCK,
             this.animatable ? "animate" : undefined,
             this.animatable ? `animate-${this.animate}-to-in` : undefined,
             `mode-${this.mode}`

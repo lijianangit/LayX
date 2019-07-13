@@ -15,7 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var UIComponent_1 = require("../core/ui/UIComponent");
 var ElementHelper = require("../utils/ElementHelper");
-var StoreState_1 = require("../core/store/StoreState");
+var StateStore_1 = require("../core/store/StateStore");
 var CastHelper = require("../utils/CastHelper");
 var UIIconButton = (function (_super) {
     __extends(UIIconButton, _super);
@@ -37,9 +37,9 @@ var UIIconButton = (function (_super) {
     UIIconButton.prototype.createView = function () {
         var element = ElementHelper.createElement("div");
         element.setAttribute("data-id", this.uniqueId);
-        ElementHelper.addClasses(element, StoreState_1.default.instance.prefix, "icon-button");
+        ElementHelper.addClasses(element, StateStore_1.default.instance.prefix, "icon-button");
         var svgElement = ElementHelper.createElementNS("svg");
-        svgElement.setAttribute("class", StoreState_1.default.instance.prefix + "svg");
+        svgElement.setAttribute("class", StateStore_1.default.instance.prefix + "svg");
         var useElement = ElementHelper.createElementNS("use");
         useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + this.icon);
         svgElement.appendChild(useElement);

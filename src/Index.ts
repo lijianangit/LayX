@@ -1,6 +1,6 @@
 import Layx from "./Layx";
-import StoreState from "./core/store/StoreState";
-import UILayer from "./component/UILayer";
+import StoreState from "./core/store/StateStore";
+import UIBlock from "./component/UIBlock";
 import * as Consts from "./core/enum/Consts";
 
 import "./asset/style";
@@ -10,21 +10,21 @@ export default (function layx(): Layx {
 
     layx.v = "4.0.0";
 
-    layx.store = StoreState.instance;
+    layx.stateStore = StoreState.instance;
 
     layx.test = function (): Element {
-        const layer = new UILayer();
-        layer.width = 800;
-        layer.height = 600;
-        layer.border = "1px solid #3baced";
-        layer.shadow = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
-        layer.borderRadius = 4;
-        layer.animate = Consts.Animate.ZOOM;
+        const block = new UIBlock();
+        block.width = 800;
+        block.height = 600;
+        block.border = "1px solid #3baced";
+        block.shadow = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
+        block.borderRadius = 4;
+        block.animate = Consts.Animate.ZOOM;
 
-        const element = layer.createView();
-        console.log(element);
+        const element = block.createView();
         document.body.appendChild(element);
         return element;
     }
+
     return layx;
 })();

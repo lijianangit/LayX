@@ -2,7 +2,7 @@ import UIComponent from "../core/ui/UIComponent";
 import UIControl from "../core/ui/UIControl";
 import * as ElementHelper from "../utils/ElementHelper";
 import * as Consts from "../core/enum/Consts";
-import StoreState from "../core/store/StoreState";
+import StateStore from "../core/store/StateStore";
 import * as CastHelper from "../utils/CastHelper";
 
 /**
@@ -38,12 +38,12 @@ export default class UIIconButton extends UIComponent implements UIControl {
         const element = ElementHelper.createElement("div");
         element.setAttribute("data-id", this.uniqueId);
 
-        ElementHelper.addClasses(element, StoreState.instance.prefix,
+        ElementHelper.addClasses(element, StateStore.instance.prefix,
             Consts.Component.ICON_BUTTON
         );
 
         const svgElement = ElementHelper.createElementNS("svg");
-        svgElement.setAttribute("class", StoreState.instance.prefix + Consts.Component.SVG);
+        svgElement.setAttribute("class", StateStore.instance.prefix + Consts.Component.SVG);
 
         const useElement = ElementHelper.createElementNS("use");
         useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", `#${this.icon}`);

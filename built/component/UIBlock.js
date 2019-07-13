@@ -17,10 +17,10 @@ var UIComponent_1 = require("../core/ui/UIComponent");
 var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
 var TypeHelper = require("../utils/TypeHelper");
-var StoreState_1 = require("../core/store/StoreState");
-var UILayer = (function (_super) {
-    __extends(UILayer, _super);
-    function UILayer() {
+var StateStore_1 = require("../core/store/StateStore");
+var UIBlock = (function (_super) {
+    __extends(UIBlock, _super);
+    function UIBlock() {
         var _this = _super.call(this) || this;
         _this._background = false;
         _this._shadow = false;
@@ -30,7 +30,7 @@ var UILayer = (function (_super) {
         _this.animatable = false;
         return _this;
     }
-    Object.defineProperty(UILayer.prototype, "width", {
+    Object.defineProperty(UIBlock.prototype, "width", {
         get: function () {
             return this._width;
         },
@@ -40,7 +40,7 @@ var UILayer = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UILayer.prototype, "height", {
+    Object.defineProperty(UIBlock.prototype, "height", {
         get: function () {
             return this._height;
         },
@@ -50,7 +50,7 @@ var UILayer = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UILayer.prototype, "maxWidth", {
+    Object.defineProperty(UIBlock.prototype, "maxWidth", {
         get: function () {
             return this._maxWidth;
         },
@@ -60,7 +60,7 @@ var UILayer = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UILayer.prototype, "maxHeight", {
+    Object.defineProperty(UIBlock.prototype, "maxHeight", {
         get: function () {
             return this._maxHeight;
         },
@@ -70,7 +70,7 @@ var UILayer = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UILayer.prototype, "minWidth", {
+    Object.defineProperty(UIBlock.prototype, "minWidth", {
         get: function () {
             return this._minWidth;
         },
@@ -80,7 +80,7 @@ var UILayer = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UILayer.prototype, "minHeight", {
+    Object.defineProperty(UIBlock.prototype, "minHeight", {
         get: function () {
             return this._minHeight;
         },
@@ -90,7 +90,7 @@ var UILayer = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UILayer.prototype, "left", {
+    Object.defineProperty(UIBlock.prototype, "left", {
         get: function () {
             return this._left;
         },
@@ -100,7 +100,7 @@ var UILayer = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UILayer.prototype, "top", {
+    Object.defineProperty(UIBlock.prototype, "top", {
         get: function () {
             return this._top;
         },
@@ -110,7 +110,7 @@ var UILayer = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UILayer.prototype, "background", {
+    Object.defineProperty(UIBlock.prototype, "background", {
         get: function () {
             return this._background;
         },
@@ -120,7 +120,7 @@ var UILayer = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UILayer.prototype, "shadow", {
+    Object.defineProperty(UIBlock.prototype, "shadow", {
         get: function () {
             return this._shadow;
         },
@@ -130,7 +130,7 @@ var UILayer = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UILayer.prototype, "border", {
+    Object.defineProperty(UIBlock.prototype, "border", {
         get: function () {
             return this._border;
         },
@@ -140,7 +140,7 @@ var UILayer = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UILayer.prototype, "borderRadius", {
+    Object.defineProperty(UIBlock.prototype, "borderRadius", {
         get: function () {
             return this._borderRadius;
         },
@@ -150,7 +150,7 @@ var UILayer = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UILayer.prototype, "animate", {
+    Object.defineProperty(UIBlock.prototype, "animate", {
         get: function () {
             return this._animate;
         },
@@ -168,7 +168,7 @@ var UILayer = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(UILayer.prototype, "mode", {
+    Object.defineProperty(UIBlock.prototype, "mode", {
         get: function () {
             return this._mode;
         },
@@ -182,10 +182,10 @@ var UILayer = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    UILayer.prototype.createView = function () {
+    UIBlock.prototype.createView = function () {
         var element = ElementHelper.createElement("div");
         element.setAttribute("data-id", this.uniqueId);
-        ElementHelper.addClasses(element, StoreState_1.default.instance.prefix, "layer", this.animatable ? "animate" : undefined, this.animatable ? "animate-" + this.animate + "-to-in" : undefined, "mode-" + this.mode);
+        ElementHelper.addClasses(element, StateStore_1.default.instance.prefix, "block", this.animatable ? "animate" : undefined, this.animatable ? "animate-" + this.animate + "-to-in" : undefined, "mode-" + this.mode);
         ElementHelper.addStyles(element, {
             width: this.width ? this.width + "px" : undefined,
             height: this.height ? this.height + "px" : undefined,
@@ -204,6 +204,6 @@ var UILayer = (function (_super) {
         });
         return element;
     };
-    return UILayer;
+    return UIBlock;
 }(UIComponent_1.default));
-exports.default = UILayer;
+exports.default = UIBlock;

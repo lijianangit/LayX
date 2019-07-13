@@ -1,4 +1,4 @@
-import StoreState from "./core/store/StoreState";
+import StateStore from "./core/store/StateStore";
 
 /**
  * Layx 对外公开接口约束
@@ -12,7 +12,7 @@ export default interface Layx {
     /**
      * 全局公共存储状态
      */
-    store: StoreState;
+    stateStore: StateStore;
 
     test(): Element;
 }

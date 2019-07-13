@@ -4,7 +4,7 @@ var Component;
 (function (Component) {
     Component["SVG"] = "svg";
     Component["ICON_BUTTON"] = "icon-button";
-    Component["LAYER"] = "layer";
+    Component["BLOCK"] = "block";
 })(Component = exports.Component || (exports.Component = {}));
 var PresentMode;
 (function (PresentMode) {

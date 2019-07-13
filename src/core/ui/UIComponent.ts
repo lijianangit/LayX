@@ -2,6 +2,7 @@ import * as StringHelper from "../../utils/StringHelper";
 import * as CastHelper from "../../utils/CastHelper";
 import * as Types from "../Types";
 import * as ElementHelper from "../../utils/ElementHelper";
+import StateStore from "../store/StateStore";
 
 /**
  * 组件基类，所有组件都需继承该组件
@@ -11,10 +12,21 @@ export default abstract class UIComponent {
      * 内置组件类型，主要用于约束组件规范
      */
     private _type_: any;
+
     /**
      * 唯一Id
      */
-    public readonly uniqueId: string = StringHelper.generateUniqueId();
+    public get uniqueId(): string {
+        const generateUniqueId = StringHelper.generateUniqueId();
+        const components = StateStore.instance.components;
+
+        // 将创建的组建Id添加到组件Id集合中
+        if (!components.hasOwnProperty(generateUniqueId)) {
+            (<any>components)[generateUniqueId] = this;
+        }
+
+        return generateUniqueId;
+    }
 
     /**
      * 子组件
