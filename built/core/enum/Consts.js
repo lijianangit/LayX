@@ -24,3 +24,15 @@ var Animate;
     Animate["NONE"] = "none";
     Animate["ZOOM"] = "zoom";
 })(Animate = exports.Animate || (exports.Animate = {}));
+var Position;
+(function (Position) {
+    Position["LEFT_TOP"] = "left-top";
+    Position["LEFT_CENTER"] = "left-center";
+    Position["LEFT_BOTTOM"] = "left-bottom";
+    Position["TOP_CENTER"] = "top-center";
+    Position["BOTTOM_CENTER"] = "bottom-center";
+    Position["CENTER"] = "center";
+    Position["RIGHT_TOP"] = "right-top";
+    Position["RIGHT_CENTER"] = "right-center";
+    Position["RIGHT_BOTTOM"] = "right-bottom";
+})(Position = exports.Position || (exports.Position = {}));

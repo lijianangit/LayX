@@ -1,7 +1,9 @@
+import OffsetProfile from "./OffsetProfile";
+
 /**
  * 坐标信息
  */
-export default interface CoordinateProfile {
+export default interface CoordinateProfile extends OffsetProfile {
     /**
      * 宽度
      */
@@ -11,16 +13,6 @@ export default interface CoordinateProfile {
      * 高度
      */
     height?: number;
-
-    /**
-     * X 坐标
-     */
-    left?: number;
-
-    /**
-     * Y 坐标
-     */
-    top?: number;
 
     /**
      * 最大宽度

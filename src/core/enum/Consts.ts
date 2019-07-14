@@ -33,3 +33,18 @@ export const enum Animate {
     NONE = "none",
     ZOOM = "zoom"
 }
+
+/**
+ * 位置
+ */
+export const enum Position {
+    LEFT_TOP = "left-top",
+    LEFT_CENTER = "left-center",
+    LEFT_BOTTOM = "left-bottom",
+    TOP_CENTER = "top-center",
+    BOTTOM_CENTER = "bottom-center",
+    CENTER = "center",
+    RIGHT_TOP = "right-top",
+    RIGHT_CENTER = "right-center",
+    RIGHT_BOTTOM = "right-bottom"
+}

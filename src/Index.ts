@@ -16,6 +16,7 @@ export default (function layx(): Layx {
         const block = new UIBlock();
         block.width = 800;
         block.height = 600;
+        block.position = Consts.Position.CENTER;
         block.border = "1px solid #3baced";
         block.shadow = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
         block.borderRadius = 4;

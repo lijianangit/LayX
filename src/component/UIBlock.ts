@@ -7,13 +7,12 @@ import * as TypeHelper from "../utils/TypeHelper";
 import StateStore from "../core/store/StateStore";
 import * as Types from "../core/Types";
 import CoordinateProfile from "../core/type/CoordinateProfile";
-import * as ExceptionHelper from "../utils/ExceptionHelper";
 import * as NumberHelper from "../utils/NumberHelper";
 
 export default class UIBlock extends UIComponent implements UIControl {
     /**
-     * 构造函数
-     * @param type 层类型
+     * Creates an instance of uiblock.
+     * @param [type] 层类型
      */
     constructor(public type: Consts.BlockType = Consts.BlockType.DEFAULT) {
         super();
@@ -147,6 +146,26 @@ export default class UIBlock extends UIComponent implements UIControl {
         }
 
         this._minHeight = minHeight;
+    }
+
+    /**
+     * 位置
+     */
+    private _position?: Consts.Position | [number, number] = Consts.Position.CENTER;
+    get position(): Consts.Position | [number, number] | undefined {
+        return this._position;
+    }
+    set position(value: Consts.Position | [number, number] | undefined) {
+        if (!value || TypeHelper.isOffsetArray(value) || TypeHelper.isPositionType(value)) {
+            this._position = value;
+        }
+
+        if (this.width && this.height) {
+            const [left, top] = CastHelper.positionCast(this._position, this.width, this.height);
+            // 直接设置 left/top属性优先级最大
+            if (!this.left) this.left = left;
+            if (!this.top) this.top = top;
+        }
     }
 
     /**
@@ -331,7 +350,7 @@ export default class UIBlock extends UIComponent implements UIControl {
      * 更新坐标
      * @param coordinate 坐标信息
      */
-    updateOffset(coordinate: CoordinateProfile) {
+    updateCoordinate(coordinate: CoordinateProfile) {
         const element = <HTMLElement | null>this.element;
         if (!element) return;
 
@@ -366,6 +385,30 @@ export default class UIBlock extends UIComponent implements UIControl {
         if (coordinate.minHeight) this.minHeight = coordinate.minHeight;
         if (coordinate.left) this.left = coordinate.left;
         if (coordinate.top) this.top = coordinate.top;
+    }
+
+    /**
+     * 更新位置
+     * @param position 位置信息
+     * @returns  
+     */
+    updatePosition(position: Consts.Position | [number, number]) {
+        const element = <HTMLElement | null>this.element;
+        if (!element) return;
+
+        //this.position = position;
+
+        if (!this.width || !this.height) return;
+        const [left, top] = CastHelper.positionCast(position, this.width, this.height);
+
+        ElementHelper.addStyles(element, <Types.CSSStyleObject>{
+            left: this.mode === Consts.PresentMode.FLOAT ? `${left}px` : undefined,
+            top: this.mode === Consts.PresentMode.FLOAT ? `${top}px` : undefined,
+        });
+
+        // 更新组件信息
+        this.left = left;
+        this.top = top;
     }
 
     /**

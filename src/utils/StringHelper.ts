@@ -11,7 +11,7 @@ export function generateUniqueId(length: number = 5): string {
 
     let uniqueId = "#";
     for (let i = 0; i < length; i++) {
-        uniqueId += characters[NumberHelper.randomNumber(0, characters.length)];
+        uniqueId += characters[NumberHelper.randomNumber(0, characters.length - 1)];
     }
 
     return uniqueId;

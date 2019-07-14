@@ -25,6 +25,7 @@ var UIBlock = (function (_super) {
         if (type === void 0) { type = "default"; }
         var _this = _super.call(this) || this;
         _this.type = type;
+        _this._position = "center";
         _this._background = false;
         _this._shadow = false;
         _this._border = false;
@@ -132,6 +133,25 @@ var UIBlock = (function (_super) {
                 throw new Error("The min height can't be greater to max height.");
             }
             this._minHeight = minHeight;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIBlock.prototype, "position", {
+        get: function () {
+            return this._position;
+        },
+        set: function (value) {
+            if (!value || TypeHelper.isOffsetArray(value) || TypeHelper.isPositionType(value)) {
+                this._position = value;
+            }
+            if (this.width && this.height) {
+                var _a = CastHelper.positionCast(this._position, this.width, this.height), left = _a[0], top_1 = _a[1];
+                if (!this.left)
+                    this.left = left;
+                if (!this.top)
+                    this.top = top_1;
+            }
         },
         enumerable: true,
         configurable: true
@@ -274,7 +294,7 @@ var UIBlock = (function (_super) {
             this.dispose();
         }
     };
-    UIBlock.prototype.updateOffset = function (coordinate) {
+    UIBlock.prototype.updateCoordinate = function (coordinate) {
         var element = this.element;
         if (!element)
             return;
@@ -312,6 +332,20 @@ var UIBlock = (function (_super) {
             this.left = coordinate.left;
         if (coordinate.top)
             this.top = coordinate.top;
+    };
+    UIBlock.prototype.updatePosition = function (position) {
+        var element = this.element;
+        if (!element)
+            return;
+        if (!this.width || !this.height)
+            return;
+        var _a = CastHelper.positionCast(position, this.width, this.height), left = _a[0], top = _a[1];
+        ElementHelper.addStyles(element, {
+            left: this.mode === "float" ? left + "px" : undefined,
+            top: this.mode === "float" ? top + "px" : undefined,
+        });
+        this.left = left;
+        this.top = top;
     };
     UIBlock.prototype.dispose = function () {
         var stateStore = StateStore_1.default.instance;
