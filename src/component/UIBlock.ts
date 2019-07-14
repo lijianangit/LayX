@@ -7,6 +7,8 @@ import * as TypeHelper from "../utils/TypeHelper";
 import StateStore from "../core/store/StateStore";
 import * as Types from "../core/Types";
 import CoordinateProfile from "../core/type/CoordinateProfile";
+import * as ExceptionHelper from "../utils/ExceptionHelper";
+import * as NumberHelper from "../utils/NumberHelper";
 
 export default class UIBlock extends UIComponent implements UIControl {
     /**
@@ -25,16 +27,15 @@ export default class UIBlock extends UIComponent implements UIControl {
         return this._width;
     }
     set width(value: number | undefined) {
-        this._width = CastHelper.numberOrUndefinedCast(value);
+        let width = CastHelper.numberOrUndefinedCast(value);
 
         // 处理最大、最小值问题
-        const newSize = this.handlerWidthOrHeight("width");
-        if (newSize) {
-            this._width = newSize;
-            this.updateOffset({
-                width: newSize
-            });
+        const newValue = NumberHelper.handlerMaxAndMinValue("all", width, this.maxWidth, this.minWidth);
+        if (newValue) {
+            width = newValue;
         };
+
+        this._width = width;
     }
 
     /**
@@ -45,16 +46,15 @@ export default class UIBlock extends UIComponent implements UIControl {
         return this._height;
     }
     set height(value: number | undefined) {
-        this._height = CastHelper.numberOrUndefinedCast(value);
+        let height = CastHelper.numberOrUndefinedCast(value);
 
         // 处理最大、最小值问题
-        const newSize = this.handlerWidthOrHeight("height");
-        if (newSize) {
-            this._height = newSize;
-            this.updateOffset({
-                height: newSize
-            });
+        const newValue = NumberHelper.handlerMaxAndMinValue("all", height, this.maxHeight, this.minHeight);
+        if (newValue) {
+            height = newValue;
         }
+
+        this._height = height;
     }
 
     /**
@@ -65,15 +65,19 @@ export default class UIBlock extends UIComponent implements UIControl {
         return this._maxWidth;
     }
     set maxWidth(value: number | undefined) {
-        this._maxWidth = CastHelper.numberOrUndefinedCast(value);
+        let maxWidth = CastHelper.numberOrUndefinedCast(value);
 
         // 处理最大、最小值问题
-        if (this._maxWidth && this.width && this.width > this._maxWidth) {
-            this.width = this._maxWidth;
-            this.updateOffset({
-                width: this._maxWidth
-            });
+        const newValue = NumberHelper.handlerMaxAndMinValue("max", this.width, maxWidth);
+        if (newValue) {
+            this._width = newValue;
         }
+
+        if (NumberHelper.compareValue(this.minWidth, maxWidth)) {
+            throw new Error("The max width can't be letter to min width.");
+        }
+
+        this._maxWidth = maxWidth;
     }
 
     /**
@@ -84,15 +88,19 @@ export default class UIBlock extends UIComponent implements UIControl {
         return this._maxHeight;
     }
     set maxHeight(value: number | undefined) {
-        this._maxHeight = CastHelper.numberOrUndefinedCast(value);
+        let maxHeight = CastHelper.numberOrUndefinedCast(value);
 
         // 处理最大、最小值问题
-        if (this._maxHeight && this.height && this.height > this._maxHeight) {
-            this.height = this._maxHeight;
-            this.updateOffset({
-                height: this._maxHeight
-            });
+        const newValue = NumberHelper.handlerMaxAndMinValue("max", this.height, maxHeight);
+        if (newValue) {
+            this._height = newValue;
         }
+
+        if (NumberHelper.compareValue(this.minHeight, maxHeight)) {
+            throw new Error("The max height can't be letter to min height.");
+        }
+
+        this._maxHeight = maxHeight;
     }
 
     /**
@@ -103,15 +111,19 @@ export default class UIBlock extends UIComponent implements UIControl {
         return this._minWidth;
     }
     set minWidth(value: number | undefined) {
-        this._minWidth = CastHelper.numberOrUndefinedCast(value);
+        let minWidth = CastHelper.numberOrUndefinedCast(value);
 
         // 处理最大、最小值问题
-        if (this._minWidth && this.width && this.width < this._minWidth) {
-            this.width = this._minWidth;
-            this.updateOffset({
-                width: this._minWidth
-            });
+        const newValue = NumberHelper.handlerMaxAndMinValue("min", this.width, minWidth);
+        if (newValue) {
+            this._width = newValue;
         }
+
+        if (NumberHelper.compareValue(minWidth, this.maxWidth)) {
+            throw new Error("The min width can't be greater to max width.");
+        }
+
+        this._minWidth = minWidth;
     }
 
     /**
@@ -122,15 +134,19 @@ export default class UIBlock extends UIComponent implements UIControl {
         return this._minHeight;
     }
     set minHeight(value: number | undefined) {
-        this._minHeight = CastHelper.numberOrUndefinedCast(value);
+        let minHeight = CastHelper.numberOrUndefinedCast(value);
 
         // 处理最大、最小值问题
-        if (this._minHeight && this.height && this.height < this._minHeight) {
-            this.height = this.minHeight;
-            this.updateOffset({
-                height: this.minHeight
-            });
+        const newValue = NumberHelper.handlerMaxAndMinValue("min", this.height, minHeight);
+        if (newValue) {
+            this._height = newValue;
         }
+
+        if (NumberHelper.compareValue(minHeight, this.maxHeight)) {
+            throw new Error("The min height can't be greater to max height.");
+        }
+
+        this._minHeight = minHeight;
     }
 
     /**
@@ -318,7 +334,17 @@ export default class UIBlock extends UIComponent implements UIControl {
     updateOffset(coordinate: CoordinateProfile) {
         const element = <HTMLElement | null>this.element;
         if (!element) return;
-        const stateStore = StateStore.instance;
+
+        if (NumberHelper.compareValue(coordinate.minWidth, coordinate.maxWidth)) {
+            throw new Error("The max width can't be letter to min width.");
+        }
+
+        if (NumberHelper.compareValue(coordinate.minHeight, coordinate.maxHeight)) {
+            throw new Error("The max height can't be letter to min height.");
+        }
+
+        coordinate.width = NumberHelper.handlerMaxAndMinValue("all", coordinate.width, coordinate.maxWidth, coordinate.minWidth);
+        coordinate.height = NumberHelper.handlerMaxAndMinValue("all", coordinate.height, coordinate.maxHeight, coordinate.minHeight);
 
         ElementHelper.addStyles(element, <Types.CSSStyleObject>{
             width: coordinate.width ? `${coordinate.width}px` : undefined,
@@ -381,23 +407,5 @@ export default class UIBlock extends UIComponent implements UIControl {
                 }
             }
         });
-    }
-
-    /**
-     * 处理宽度、高度相对于最小宽高、最大宽高计算问题
-     * @param type 处理类型
-     */
-    private handlerWidthOrHeight(type: "width" | "height"): number | null {
-        var newSize = null;
-
-        if (type === "width") {
-            if (this.minWidth && this.width) newSize = Math.max(this.minWidth, this.width);
-            if (this.maxWidth && this.width) newSize = Math.min(this.maxWidth, this.width);
-        }
-        else if (type === "height") {
-            if (this.minHeight && this.height) newSize = Math.max(this.minHeight, this.height);
-            if (this.maxHeight && this.height) newSize = Math.min(this.maxHeight, this.height);
-        }
-        return newSize;
     }
 }

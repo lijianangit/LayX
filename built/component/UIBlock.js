@@ -18,6 +18,7 @@ var ElementHelper = require("../utils/ElementHelper");
 var CastHelper = require("../utils/CastHelper");
 var TypeHelper = require("../utils/TypeHelper");
 var StateStore_1 = require("../core/store/StateStore");
+var NumberHelper = require("../utils/NumberHelper");
 var UIBlock = (function (_super) {
     __extends(UIBlock, _super);
     function UIBlock(type) {
@@ -37,15 +38,13 @@ var UIBlock = (function (_super) {
             return this._width;
         },
         set: function (value) {
-            this._width = CastHelper.numberOrUndefinedCast(value);
-            var newSize = this.handlerWidthOrHeight("width");
-            if (newSize) {
-                this._width = newSize;
-                this.updateOffset({
-                    width: newSize
-                });
+            var width = CastHelper.numberOrUndefinedCast(value);
+            var newValue = NumberHelper.handlerMaxAndMinValue("all", width, this.maxWidth, this.minWidth);
+            if (newValue) {
+                width = newValue;
             }
             ;
+            this._width = width;
         },
         enumerable: true,
         configurable: true
@@ -55,14 +54,12 @@ var UIBlock = (function (_super) {
             return this._height;
         },
         set: function (value) {
-            this._height = CastHelper.numberOrUndefinedCast(value);
-            var newSize = this.handlerWidthOrHeight("height");
-            if (newSize) {
-                this._height = newSize;
-                this.updateOffset({
-                    height: newSize
-                });
+            var height = CastHelper.numberOrUndefinedCast(value);
+            var newValue = NumberHelper.handlerMaxAndMinValue("all", height, this.maxHeight, this.minHeight);
+            if (newValue) {
+                height = newValue;
             }
+            this._height = height;
         },
         enumerable: true,
         configurable: true
@@ -72,13 +69,15 @@ var UIBlock = (function (_super) {
             return this._maxWidth;
         },
         set: function (value) {
-            this._maxWidth = CastHelper.numberOrUndefinedCast(value);
-            if (this._maxWidth && this.width && this.width > this._maxWidth) {
-                this.width = this._maxWidth;
-                this.updateOffset({
-                    width: this._maxWidth
-                });
+            var maxWidth = CastHelper.numberOrUndefinedCast(value);
+            var newValue = NumberHelper.handlerMaxAndMinValue("max", this.width, maxWidth);
+            if (newValue) {
+                this._width = newValue;
             }
+            if (NumberHelper.compareValue(this.minWidth, maxWidth)) {
+                throw new Error("The max width can't be letter to min width.");
+            }
+            this._maxWidth = maxWidth;
         },
         enumerable: true,
         configurable: true
@@ -88,13 +87,15 @@ var UIBlock = (function (_super) {
             return this._maxHeight;
         },
         set: function (value) {
-            this._maxHeight = CastHelper.numberOrUndefinedCast(value);
-            if (this._maxHeight && this.height && this.height > this._maxHeight) {
-                this.height = this._maxHeight;
-                this.updateOffset({
-                    height: this._maxHeight
-                });
+            var maxHeight = CastHelper.numberOrUndefinedCast(value);
+            var newValue = NumberHelper.handlerMaxAndMinValue("max", this.height, maxHeight);
+            if (newValue) {
+                this._height = newValue;
             }
+            if (NumberHelper.compareValue(this.minHeight, maxHeight)) {
+                throw new Error("The max height can't be letter to min height.");
+            }
+            this._maxHeight = maxHeight;
         },
         enumerable: true,
         configurable: true
@@ -104,13 +105,15 @@ var UIBlock = (function (_super) {
             return this._minWidth;
         },
         set: function (value) {
-            this._minWidth = CastHelper.numberOrUndefinedCast(value);
-            if (this._minWidth && this.width && this.width < this._minWidth) {
-                this.width = this._minWidth;
-                this.updateOffset({
-                    width: this._minWidth
-                });
+            var minWidth = CastHelper.numberOrUndefinedCast(value);
+            var newValue = NumberHelper.handlerMaxAndMinValue("min", this.width, minWidth);
+            if (newValue) {
+                this._width = newValue;
             }
+            if (NumberHelper.compareValue(minWidth, this.maxWidth)) {
+                throw new Error("The min width can't be greater to max width.");
+            }
+            this._minWidth = minWidth;
         },
         enumerable: true,
         configurable: true
@@ -120,13 +123,15 @@ var UIBlock = (function (_super) {
             return this._minHeight;
         },
         set: function (value) {
-            this._minHeight = CastHelper.numberOrUndefinedCast(value);
-            if (this._minHeight && this.height && this.height < this._minHeight) {
-                this.height = this.minHeight;
-                this.updateOffset({
-                    height: this.minHeight
-                });
+            var minHeight = CastHelper.numberOrUndefinedCast(value);
+            var newValue = NumberHelper.handlerMaxAndMinValue("min", this.height, minHeight);
+            if (newValue) {
+                this._height = newValue;
             }
+            if (NumberHelper.compareValue(minHeight, this.maxHeight)) {
+                throw new Error("The min height can't be greater to max height.");
+            }
+            this._minHeight = minHeight;
         },
         enumerable: true,
         configurable: true
@@ -273,7 +278,14 @@ var UIBlock = (function (_super) {
         var element = this.element;
         if (!element)
             return;
-        var stateStore = StateStore_1.default.instance;
+        if (NumberHelper.compareValue(coordinate.minWidth, coordinate.maxWidth)) {
+            throw new Error("The max width can't be letter to min width.");
+        }
+        if (NumberHelper.compareValue(coordinate.minHeight, coordinate.maxHeight)) {
+            throw new Error("The max height can't be letter to min height.");
+        }
+        coordinate.width = NumberHelper.handlerMaxAndMinValue("all", coordinate.width, coordinate.maxWidth, coordinate.minWidth);
+        coordinate.height = NumberHelper.handlerMaxAndMinValue("all", coordinate.height, coordinate.maxHeight, coordinate.minHeight);
         ElementHelper.addStyles(element, {
             width: coordinate.width ? coordinate.width + "px" : undefined,
             height: coordinate.height ? coordinate.height + "px" : undefined,
@@ -326,22 +338,6 @@ var UIBlock = (function (_super) {
                 }
             }
         });
-    };
-    UIBlock.prototype.handlerWidthOrHeight = function (type) {
-        var newSize = null;
-        if (type === "width") {
-            if (this.minWidth && this.width)
-                newSize = Math.max(this.minWidth, this.width);
-            if (this.maxWidth && this.width)
-                newSize = Math.min(this.maxWidth, this.width);
-        }
-        else if (type === "height") {
-            if (this.minHeight && this.height)
-                newSize = Math.max(this.minHeight, this.height);
-            if (this.maxHeight && this.height)
-                newSize = Math.min(this.maxHeight, this.height);
-        }
-        return newSize;
     };
     return UIBlock;
 }(UIComponent_1.default));
