@@ -1,5 +1,5 @@
 
-import { isNumber, max, min, match, length } from "./app/core/validator/ValidatorDecorator";
+import { isNumber, max, min, match, length } from "./app/core/validator/PropertyValidator";
 
 export default class Control {
     // 现在的代码

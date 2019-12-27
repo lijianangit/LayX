@@ -2,11 +2,11 @@ import { validateFail } from "../exception/Exception"
 import { baseTypeValidator } from "./BaseValidator";
 
 /**
- * 验证统一处理
+ * 属性验证统一处理
  * @param setHandler 验证委托，验证成功返回新值
  * @param typeValidator 默认类型验证器
  */
-function validator(setHandler: (newValue: any) => any, typeValidator?: (newValue: any) => void) {
+function propertyValidator(setHandler: (newValue: any) => any, typeValidator?: (newValue: any) => void) {
     return function (target: any, propertyKey: string | number | symbol) {
         let value = target[propertyKey];
         Object.defineProperty(target, propertyKey, {
@@ -25,7 +25,7 @@ function validator(setHandler: (newValue: any) => any, typeValidator?: (newValue
  * @param allowMinus 允许负数？默认：true
  */
 export function isNumber(allowMinus: boolean = true) {
-    return validator(newValue => {
+    return propertyValidator(newValue => {
         if (allowMinus) return newValue;
         else {
             if (newValue === Math.abs(newValue)) return newValue;
@@ -39,7 +39,7 @@ export function isNumber(allowMinus: boolean = true) {
  * @param minValue 最小值
  */
 export function min(minValue: number) {
-    return validator(newValue => {
+    return propertyValidator(newValue => {
         if (newValue >= minValue) return newValue;
         else validateFail(`\`${newValue}\` 不能小于 \`${minValue}\``);
     }, newValue => baseTypeValidator(newValue, "number"));
@@ -50,7 +50,7 @@ export function min(minValue: number) {
  * @param minValue 最大值
  */
 export function max(maxValue: number) {
-    return validator(newValue => {
+    return propertyValidator(newValue => {
         if (newValue <= maxValue) return newValue;
         else validateFail(`\`${newValue}\` 不能大于 \`${maxValue}\``);
     }, newValue => baseTypeValidator(newValue, "number"));
@@ -62,7 +62,7 @@ export function max(maxValue: number) {
  * @param maxValue 最大值
  */
 export function length(minValue: number, maxValue: number) {
-    return validator(newValue => {
+    return propertyValidator(newValue => {
         let valueLength = newValue.length;
         if (valueLength >= minValue && valueLength <= maxValue) return newValue;
         else validateFail(`\`${newValue}\` 长度不在 \`[${minValue},${maxValue}]\` 区间`);
@@ -74,7 +74,7 @@ export function length(minValue: number, maxValue: number) {
  * @param reg 正则表达式
  */
 export function match(reg: RegExp) {
-    return validator(newValue => {
+    return propertyValidator(newValue => {
         if (reg.test(newValue)) return newValue;
         else validateFail(`\`${newValue}\` 不能匹配正则表达式 \`${reg}\``);
     }, newValue => baseTypeValidator(newValue, "string"));

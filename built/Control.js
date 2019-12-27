@@ -6,13 +6,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var ValidatorDecorator_1 = require("./app/core/validator/ValidatorDecorator");
+var PropertyValidator_1 = require("./app/core/validator/PropertyValidator");
 var Control = (function () {
     function Control(theName) {
         this.name = theName;
     }
     __decorate([
-        ValidatorDecorator_1.length(3, 10)
+        PropertyValidator_1.length(3, 10)
     ], Control.prototype, "name", void 0);
     return Control;
 }());
