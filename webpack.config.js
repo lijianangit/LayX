@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    mode: "development",    // 编译环境：development|production
+    mode: "development",    // 编译环境：development | production
     devtool: "inline-source-map",
     entry: path.join(__dirname, "src", "Index.ts"),
     output: {
