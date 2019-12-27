@@ -1,0 +1,43 @@
+{
+  "name": "layx",
+  "version": "3.0.0",
+  "description": "Layx 窗口即入口，入口即天地。",
+  "main": "./built/index.js",
+  "scripts": {
+    "built": "tsc",
+    "webpack": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitee.com:monksoul/LayX.git"
+  },
+  "keywords": [
+    "layx",
+    "layer",
+    "window",
+    "dialog",
+    "弹窗",
+    "弹层",
+    "窗口",
+    "iframe",
+    "tab",
+    "monk",
+    "monksoul",
+    "baiqian",
+    "百小僧",
+    "百签"
+  ],
+  "author": "MonkSoul/百小僧",
+  "license": "MIT",
+  "devDependencies": {
+    "autoprefixer": "^9.7.3",
+    "css-loader": "^3.4.0",
+    "postcss-loader": "^3.0.0",
+    "style-loader": "^1.1.2",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.4",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1"
+  }
+}
