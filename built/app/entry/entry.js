@@ -19,7 +19,10 @@ var Entry = (function () {
     }
     Entry.prototype.open = function (options) {
         var uiWindow = new ui_window_1.default(options);
-        return uiWindow.present();
+        var uiWindowElement = uiWindow.present();
+        var fragment = document.createDocumentFragment();
+        fragment.appendChild(uiWindowElement);
+        document.body.appendChild(uiWindowElement);
     };
     Entry.getInstance = function (options) {
         if (options === void 0) { options = {}; }

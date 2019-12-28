@@ -4,7 +4,10 @@ function addStyles(element, styles) {
     if (!element)
         return;
     for (var key in styles) {
-        element.style[key] = styles[key];
+        var styleValue = styles[key];
+        if (styleValue) {
+            element.style[key] = styles[key];
+        }
     }
 }
 exports.addStyles = addStyles;

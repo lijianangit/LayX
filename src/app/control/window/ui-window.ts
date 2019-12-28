@@ -27,6 +27,30 @@ export default class UIWindow extends Control<UIWindowOption> implements UIContr
     public height: number = this.entry.height;
 
     /**
+     * 最小宽度
+     */
+    @isNumber(false)
+    public minWidth: number = 200;
+
+    /**
+     * 最小高度
+     */
+    @isNumber(false)
+    public minHeight: number = 200;
+
+    /**
+     * 最大宽度
+     */
+    @isNumber(false)
+    public maxWidth: number = innerWidth;
+
+    /**
+     * 最大高度
+     */
+    @isNumber(false)
+    public maxHeight: number = innerHeight;
+
+    /**
      * 构造函数初始化
      */
     constructor(options: UIWindowOption) {
@@ -43,6 +67,10 @@ export default class UIWindow extends Control<UIWindowOption> implements UIContr
         element.id = `${this.entry.prefix + this.id}`;
 
         addStyles(element, <CSSStyleDeclaration>{
+            maxWidth: `${this.maxWidth}px`,
+            maxHeight: `${this.maxHeight}px`,
+            minWidth: `${this.minWidth}px`,
+            minHeight: `${this.minHeight}px`,
             width: `${this.width}px`,
             height: `${this.height}px`
         });
@@ -57,5 +85,13 @@ export default class UIWindow extends Control<UIWindowOption> implements UIContr
     handlerOptions(options: UIWindowOption) {
         this.width = options?.width ?? this.width;
         this.height = options?.height ?? this.height;
+        this.maxWidth = options?.maxWidth ?? this.maxWidth;
+        this.maxHeight = options?.maxHeight ?? this.maxHeight;
+        this.minWidth = options?.minWidth ?? this.minWidth;
+        this.minHeight = options?.minHeight ?? this.minHeight;
+        this.width = Math.max(this.minWidth, this.width);
+        this.width = Math.min(this.maxWidth, this.width);
+        this.height = Math.max(this.minHeight, this.height);
+        this.height = Math.min(this.maxHeight, this.height);
     }
 }

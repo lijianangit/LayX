@@ -47,9 +47,13 @@ export default class Entry {
      * 打开新窗口
      * @param options 可选参数
      */
-    open(options: UIWindowOption): HTMLElement {
+    open(options: UIWindowOption): void {
         const uiWindow = new UIWindow(options);
-        return uiWindow.present();
+        const uiWindowElement = uiWindow.present();
+        const fragment = document.createDocumentFragment();
+        fragment.appendChild(uiWindowElement);
+
+        document.body.appendChild(uiWindowElement);
     }
 
     /**

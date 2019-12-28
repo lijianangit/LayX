@@ -39,5 +39,5 @@ export interface EntryOvert {
      * 打开新窗口
      * @param options 可选参数
      */
-    open(options: UIWindowOption): HTMLElement;
+    open(options: UIWindowOption): void;
 }

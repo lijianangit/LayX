@@ -29,6 +29,10 @@ var UIWindow = (function (_super) {
         var _this = _super.call(this) || this;
         _this.width = _this.entry.width;
         _this.height = _this.entry.height;
+        _this.minWidth = 200;
+        _this.minHeight = 200;
+        _this.maxWidth = innerWidth;
+        _this.maxHeight = innerHeight;
         _this.id = (_b = (_a = options) === null || _a === void 0 ? void 0 : _a.id, (_b !== null && _b !== void 0 ? _b : ""));
         _this.handlerOptions(options);
         return _this;
@@ -37,15 +41,27 @@ var UIWindow = (function (_super) {
         var element = document.createElement("div");
         element.id = "" + (this.entry.prefix + this.id);
         element_helper_1.addStyles(element, {
+            maxWidth: this.maxWidth + "px",
+            maxHeight: this.maxHeight + "px",
+            minWidth: this.minWidth + "px",
+            minHeight: this.minHeight + "px",
             width: this.width + "px",
             height: this.height + "px"
         });
         return element;
     };
     UIWindow.prototype.handlerOptions = function (options) {
-        var _a, _b, _c, _d;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
         this.width = (_b = (_a = options) === null || _a === void 0 ? void 0 : _a.width, (_b !== null && _b !== void 0 ? _b : this.width));
         this.height = (_d = (_c = options) === null || _c === void 0 ? void 0 : _c.height, (_d !== null && _d !== void 0 ? _d : this.height));
+        this.maxWidth = (_f = (_e = options) === null || _e === void 0 ? void 0 : _e.maxWidth, (_f !== null && _f !== void 0 ? _f : this.maxWidth));
+        this.maxHeight = (_h = (_g = options) === null || _g === void 0 ? void 0 : _g.maxHeight, (_h !== null && _h !== void 0 ? _h : this.maxHeight));
+        this.minWidth = (_k = (_j = options) === null || _j === void 0 ? void 0 : _j.minWidth, (_k !== null && _k !== void 0 ? _k : this.minWidth));
+        this.minHeight = (_m = (_l = options) === null || _l === void 0 ? void 0 : _l.minHeight, (_m !== null && _m !== void 0 ? _m : this.minHeight));
+        this.width = Math.max(this.minWidth, this.width);
+        this.width = Math.min(this.maxWidth, this.width);
+        this.height = Math.max(this.minHeight, this.height);
+        this.height = Math.min(this.maxHeight, this.height);
     };
     __decorate([
         property_validator_1.noEmptyOrNull()
@@ -56,6 +72,18 @@ var UIWindow = (function (_super) {
     __decorate([
         property_validator_1.isNumber(false)
     ], UIWindow.prototype, "height", void 0);
+    __decorate([
+        property_validator_1.isNumber(false)
+    ], UIWindow.prototype, "minWidth", void 0);
+    __decorate([
+        property_validator_1.isNumber(false)
+    ], UIWindow.prototype, "minHeight", void 0);
+    __decorate([
+        property_validator_1.isNumber(false)
+    ], UIWindow.prototype, "maxWidth", void 0);
+    __decorate([
+        property_validator_1.isNumber(false)
+    ], UIWindow.prototype, "maxHeight", void 0);
     return UIWindow;
 }(control_1.default));
 exports.default = UIWindow;

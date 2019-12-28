@@ -7,6 +7,9 @@ export function addStyles(element: HTMLElement, styles: CSSStyleDeclaration) {
     if (!element) return;
 
     for (const key in styles) {
-        element.style[key] = styles[key];
+        const styleValue = styles[key];
+        if (styleValue) {
+            element.style[key] = styles[key];
+        }
     }
 }
