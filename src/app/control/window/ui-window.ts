@@ -53,7 +53,12 @@ export default class UIWindow extends Control<UIWindowOption> implements UIContr
     /**
      * 边框样式
      */
-    @jsonObjectOrBooleanMerge()
+    @jsonObjectOrBooleanMerge({
+        width: isNumber,
+        style: ["none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "outset", "inherit"],
+        color: noEmptyOrNull,
+        radius: isNumber
+    })
     public border: BorderOption | false = <BorderOption>{
         width: 1,
         style: "solid",

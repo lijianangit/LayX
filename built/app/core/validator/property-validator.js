@@ -89,7 +89,8 @@ function noEmptyOrNull() {
     }, function (newValue) { return base_validator_1.baseTypeValidator(newValue, "string"); });
 }
 exports.noEmptyOrNull = noEmptyOrNull;
-function jsonObjectOrBooleanMerge() {
+function jsonObjectOrBooleanMerge(keyValidator) {
+    if (keyValidator === void 0) { keyValidator = {}; }
     return propertyValidator(function (newValue, propertyKey, oldValue) {
         if (newValue === undefined || newValue === true)
             return oldValue;

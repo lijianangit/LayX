@@ -100,7 +100,12 @@ var UIWindow = (function (_super) {
         property_validator_1.isNumber(false)
     ], UIWindow.prototype, "maxHeight", void 0);
     __decorate([
-        property_validator_1.jsonObjectOrBooleanMerge()
+        property_validator_1.jsonObjectOrBooleanMerge({
+            width: property_validator_1.isNumber,
+            style: ["none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "outset", "inherit"],
+            color: property_validator_1.noEmptyOrNull,
+            radius: property_validator_1.isNumber
+        })
     ], UIWindow.prototype, "border", void 0);
     return UIWindow;
 }(control_1.default));

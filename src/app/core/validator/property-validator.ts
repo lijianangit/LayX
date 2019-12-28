@@ -105,7 +105,7 @@ export function noEmptyOrNull() {
 /**
  * json对象或布尔类型验证并合并
  */
-export function jsonObjectOrBooleanMerge() {
+export function jsonObjectOrBooleanMerge(keyValidator: { [key: string]: Function | Array<string | number>; } = {}) {
     return propertyValidator((newValue, propertyKey, oldValue) => {
         if (newValue === undefined || newValue === true) return oldValue;
         if (newValue === false) return false;
