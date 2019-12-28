@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 var property_validator_1 = require("../core/validator/property-validator");
 var ui_window_1 = require("../control/window/ui-window");
+require("../asset/style/style");
 var Entry = (function () {
     function Entry(options) {
         this.prefix = "layx-";

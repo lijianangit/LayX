@@ -4,6 +4,8 @@ import { options, isNumber } from "../core/validator/property-validator";
 import UIWindow from "../control/window/ui-window";
 import { UIWindowOption } from "../control/window/constraint";
 
+import "../asset/style/style";
+
 /**
  * 入口单例类，承载着全局数据存储
  */
