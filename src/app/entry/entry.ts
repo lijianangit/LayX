@@ -1,6 +1,6 @@
 import { GlobalOption } from "./constraint";
 import { SupportLanguage } from "./enum";
-import { options } from "../core/validator/property-validator";
+import { options, isNumber } from "../core/validator/property-validator";
 import UIWindow from "../control/window/ui-window";
 import { UIWindowOption } from "../control/window/constraint";
 
@@ -8,6 +8,11 @@ import { UIWindowOption } from "../control/window/constraint";
  * 入口单例类，承载着全局数据存储
  */
 export default class Entry {
+    /**
+     * 前缀符
+     */
+    public readonly prefix: string = "layx-";
+
     /**
      * 版本号
      */
@@ -18,6 +23,18 @@ export default class Entry {
      */
     @options(SupportLanguage.ZH_CN, SupportLanguage.EN_US)
     public lang: SupportLanguage = SupportLanguage.ZH_CN;
+
+    /**
+     * 默认窗口初始化宽度
+     */
+    @isNumber(false)
+    public width: number = 800;
+
+    /**
+     * 默认窗口初始化高度
+     */
+    @isNumber(false)
+    public height: number = 600;
 
     /**
      * 私有化构造函数，实现单例
@@ -58,6 +75,8 @@ export default class Entry {
      * @param options 入口参数
      */
     private handlerOptions(options: GlobalOption) {
-        this.lang = options.lang || SupportLanguage.ZH_CN;
+        this.lang = options?.lang ?? SupportLanguage.ZH_CN;
+        this.width = options?.width ?? this.width;
+        this.height = options?.height ?? this.height;
     }
 }

@@ -34,9 +34,14 @@ var UIWindow = (function (_super) {
     UIWindow.prototype.present = function () {
         var element = document.createElement("div");
         element.id = this.id;
+        element.style.width = this.width + "px";
+        element.style.height = this.height + "px";
         return element;
     };
     UIWindow.prototype.handlerOptions = function (options) {
+        var _a, _b, _c, _d;
+        this.width = (_b = (_a = options) === null || _a === void 0 ? void 0 : _a.width, (_b !== null && _b !== void 0 ? _b : this.width));
+        this.height = (_d = (_c = options) === null || _c === void 0 ? void 0 : _c.height, (_d !== null && _d !== void 0 ? _d : this.height));
     };
     __decorate([
         property_validator_1.noEmptyOrNull()

@@ -2,6 +2,7 @@ import Control from "../control";
 import UIControl from "../ui-control";
 import { UIWindowOption } from "./constraint";
 import { isNumber, noEmptyOrNull } from "../../core/validator/property-validator";
+import { addStyles } from "../../core/util/element-helper";
 
 /**
  * 窗口控件类，也就是整个控件的核心窗口类
@@ -16,21 +17,21 @@ export default class UIWindow extends Control<UIWindowOption> implements UIContr
      * 宽度
      */
     @isNumber(false)
-    public width: number = 800;
+    public width: number = this.entry.width;
 
     /**
      * 高度
      */
     @isNumber(false)
-    public height: number = 600;
+    public height: number = this.entry.height;
 
     /**
      * 构造函数初始化
      */
     constructor(options: UIWindowOption) {
-        super(options);
-
+        super();
         this.id = options?.id ?? "";
+        this.handlerOptions(options);
     }
 
     /**
@@ -38,7 +39,12 @@ export default class UIWindow extends Control<UIWindowOption> implements UIContr
      */
     present(): HTMLElement {
         const element = document.createElement("div");
-        element.id = this.id;
+        element.id = `${this.entry.prefix + this.id}`;
+
+        addStyles(element, <CSSStyleDeclaration>{
+            width: `${this.width}px`,
+            height: `${this.height}px`
+        });
 
         return element;
     }
@@ -48,5 +54,7 @@ export default class UIWindow extends Control<UIWindowOption> implements UIContr
      * @param options 控件支持传入可选参数
      */
     handlerOptions(options: UIWindowOption) {
+        this.width = options?.width ?? this.width;
+        this.height = options?.height ?? this.height;
     }
 }

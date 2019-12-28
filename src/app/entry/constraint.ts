@@ -9,6 +9,16 @@ export interface GlobalOption {
      * 支持语言
      */
     lang: SupportLanguage;
+
+    /**
+     * 默认窗口宽度
+     */
+    width: number;
+
+    /**
+     * 默认窗口高度
+     */
+    height: number;
 }
 
 /**

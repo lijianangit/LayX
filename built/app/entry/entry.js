@@ -29,7 +29,8 @@ var Entry = (function () {
         return this.instance;
     };
     Entry.prototype.handlerOptions = function (options) {
-        this.lang = options.lang || "ZH_CN";
+        var _a, _b;
+        this.lang = (_b = (_a = options) === null || _a === void 0 ? void 0 : _a.lang, (_b !== null && _b !== void 0 ? _b : "ZH_CN"));
     };
     __decorate([
         property_validator_1.options("ZH_CN", "EN_US")
