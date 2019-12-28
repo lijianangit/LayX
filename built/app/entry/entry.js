@@ -10,8 +10,11 @@ var property_validator_1 = require("../core/validator/property-validator");
 var ui_window_1 = require("../control/window/ui-window");
 var Entry = (function () {
     function Entry(options) {
+        this.prefix = "layx-";
         this.version = "3.0.0";
         this.lang = "ZH_CN";
+        this.width = 800;
+        this.height = 600;
         this.handlerOptions(options);
     }
     Entry.prototype.open = function (options) {
@@ -29,12 +32,20 @@ var Entry = (function () {
         return this.instance;
     };
     Entry.prototype.handlerOptions = function (options) {
-        var _a, _b;
+        var _a, _b, _c, _d, _e, _f;
         this.lang = (_b = (_a = options) === null || _a === void 0 ? void 0 : _a.lang, (_b !== null && _b !== void 0 ? _b : "ZH_CN"));
+        this.width = (_d = (_c = options) === null || _c === void 0 ? void 0 : _c.width, (_d !== null && _d !== void 0 ? _d : this.width));
+        this.height = (_f = (_e = options) === null || _e === void 0 ? void 0 : _e.height, (_f !== null && _f !== void 0 ? _f : this.height));
     };
     __decorate([
         property_validator_1.options("ZH_CN", "EN_US")
     ], Entry.prototype, "lang", void 0);
+    __decorate([
+        property_validator_1.isNumber(false)
+    ], Entry.prototype, "width", void 0);
+    __decorate([
+        property_validator_1.isNumber(false)
+    ], Entry.prototype, "height", void 0);
     return Entry;
 }());
 exports.default = Entry;

@@ -13,6 +13,7 @@ export default class UIWindow extends Control<UIWindowOption> implements UIContr
      */
     @noEmptyOrNull()
     public readonly id: string;
+
     /**
      * 宽度
      */

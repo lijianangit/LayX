@@ -21,21 +21,25 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 var control_1 = require("../control");
 var property_validator_1 = require("../../core/validator/property-validator");
+var element_helper_1 = require("../../core/util/element-helper");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
     function UIWindow(options) {
         var _a, _b;
-        var _this = _super.call(this, options) || this;
-        _this.width = 800;
-        _this.height = 600;
+        var _this = _super.call(this) || this;
+        _this.width = _this.entry.width;
+        _this.height = _this.entry.height;
         _this.id = (_b = (_a = options) === null || _a === void 0 ? void 0 : _a.id, (_b !== null && _b !== void 0 ? _b : ""));
+        _this.handlerOptions(options);
         return _this;
     }
     UIWindow.prototype.present = function () {
         var element = document.createElement("div");
-        element.id = this.id;
-        element.style.width = this.width + "px";
-        element.style.height = this.height + "px";
+        element.id = "" + (this.entry.prefix + this.id);
+        element_helper_1.addStyles(element, {
+            width: this.width + "px",
+            height: this.height + "px"
+        });
         return element;
     };
     UIWindow.prototype.handlerOptions = function (options) {

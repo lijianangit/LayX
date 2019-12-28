@@ -1,11 +1,12 @@
 {
   "name": "layx",
   "version": "3.0.0",
-  "description": "Layx 窗口即入口，入口即天地。",
+  "description": "Layx 窗口即入口，入口即天地",
   "main": "./built/index.js",
   "scripts": {
     "built": "tsc",
-    "webpack": "webpack"
+    "dev": "webpack",
+    "prod": "webpack --mode production"
   },
   "repository": {
     "type": "git",
