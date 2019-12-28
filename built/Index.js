@@ -1,9 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Control_1 = require("./Control");
-function app(name) {
-    var control = new Control_1.default(name);
-    return control.name;
+var entry_1 = require("./app/entry/entry");
+function overt() {
+    var entryOvert = function (options) {
+        entry_1.default.getInstance(options);
+    };
+    var entry = entry_1.default.getInstance();
+    entryOvert.version = entry.version;
+    return entryOvert;
 }
-exports.default = app;
-//# sourceMappingURL=Index.js.map
+exports.default = overt();
+//# sourceMappingURL=index.js.map

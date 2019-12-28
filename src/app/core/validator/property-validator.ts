@@ -1,5 +1,5 @@
-import { validateFail } from "../exception/Exception"
-import { baseTypeValidator } from "./BaseValidator";
+import { validateFail } from "../exception/exception"
+import { baseTypeValidator } from "./base-validator";
 
 /**
  * 属性验证统一处理
@@ -78,4 +78,15 @@ export function match(reg: RegExp) {
         if (reg.test(newValue)) return newValue;
         else validateFail(`\`${newValue}\` 不能匹配正则表达式 \`${reg}\``);
     }, newValue => baseTypeValidator(newValue, "string"));
+}
+
+/**
+ * 枚举可选值验证
+ * @param enumValues 可变枚举值
+ */
+export function options(...enumValues: Array<number | string>) {
+    return propertyValidator(newValue => {
+        if (enumValues.indexOf(newValue) > -1) return newValue;
+        else validateFail(`\`${newValue}\` 不在可选值 \`[${enumValues.toString()}]\` 内`);
+    });
 }

@@ -8,4 +8,4 @@ function validateFail(message) {
     throw new Error("\n\u7C7B\u578B\uFF1A\u9A8C\u8BC1\u9519\u8BEF\n\u9519\u8BEF\u4FE1\u606F\uFF1A" + message + "\n\u5806\u6808\u4FE1\u606F\uFF1A");
 }
 exports.validateFail = validateFail;
-//# sourceMappingURL=Exception.js.map
+//# sourceMappingURL=exception.js.map

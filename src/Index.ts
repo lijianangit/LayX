@@ -1,8 +1,18 @@
-import Control from "./Control";
+import { EntryOvert, GlobalOption } from "./app/entry/constraint";
+import Entry from "./app/entry/entry";
 
-function app(name: string) {
-    var control = new Control(name);
-    return control.name;
+/**
+ * 对外公开方法
+ */
+function overt(): EntryOvert {
+    const entryOvert = <EntryOvert>function (options: GlobalOption): void {
+        Entry.getInstance(options);
+    };
+
+    const entry = Entry.getInstance();
+    entryOvert.version = entry.version;
+
+    return entryOvert;
 }
 
-export default app;
+export default overt();

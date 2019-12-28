@@ -1,5 +1,5 @@
 /**
- * 抛出异常
+ * 抛出异常提示
  * @param message 
  */
 export function error(message: string) {
