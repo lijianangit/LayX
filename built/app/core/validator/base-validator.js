@@ -1,6 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var exception_1 = require("../exception/exception");
+function isJsonObject(value) {
+    return typeof (value) == "object" &&
+        Object.prototype.toString.call(value).toLowerCase() == "[object object]" &&
+        !value.length;
+}
+exports.isJsonObject = isJsonObject;
 function baseTypeValidator(value, type) {
     var cnType = "";
     switch (type) {
@@ -24,4 +30,9 @@ function baseTypeValidator(value, type) {
     }
 }
 exports.baseTypeValidator = baseTypeValidator;
+function jsonObjectValidator(value) {
+    if (!isJsonObject(value))
+        exception_1.validateFail("`" + value + "` \u4E0D\u662F\u4E00\u4E2A\u6B63\u786E\u7684JSON\u7C7B\u578B");
+}
+exports.jsonObjectValidator = jsonObjectValidator;
 //# sourceMappingURL=base-validator.js.map

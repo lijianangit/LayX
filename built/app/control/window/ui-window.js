@@ -33,6 +33,14 @@ var UIWindow = (function (_super) {
         _this.minHeight = 200;
         _this.maxWidth = innerWidth;
         _this.maxHeight = innerHeight;
+        _this.border = {
+            width: 1,
+            style: "solid",
+            color: "#3baced",
+            radius: 4
+        };
+        _this.boxShadow = true;
+        _this.shadowStyle = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
         _this.id = (_b = (_a = options) === null || _a === void 0 ? void 0 : _a.id, (_b !== null && _b !== void 0 ? _b : ""));
         _this.handlerOptions(options);
         return _this;
@@ -46,12 +54,17 @@ var UIWindow = (function (_super) {
             minWidth: this.minWidth + "px",
             minHeight: this.minHeight + "px",
             width: this.width + "px",
-            height: this.height + "px"
+            height: this.height + "px",
+            border: this.border == false ? undefined :
+                this.border.width + "px " + this.border.style + " " + this.border.color,
+            borderRadius: this.border == false ? undefined :
+                this.border.radius + "px",
+            boxShadow: this.boxShadow ? this.shadowStyle : undefined
         });
         return element;
     };
     UIWindow.prototype.handlerOptions = function (options) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r;
         this.width = (_b = (_a = options) === null || _a === void 0 ? void 0 : _a.width, (_b !== null && _b !== void 0 ? _b : this.width));
         this.height = (_d = (_c = options) === null || _c === void 0 ? void 0 : _c.height, (_d !== null && _d !== void 0 ? _d : this.height));
         this.maxWidth = (_f = (_e = options) === null || _e === void 0 ? void 0 : _e.maxWidth, (_f !== null && _f !== void 0 ? _f : this.maxWidth));
@@ -62,6 +75,8 @@ var UIWindow = (function (_super) {
         this.width = Math.min(this.maxWidth, this.width);
         this.height = Math.max(this.minHeight, this.height);
         this.height = Math.min(this.maxHeight, this.height);
+        this.border = (_p = (_o = options) === null || _o === void 0 ? void 0 : _o.border, (_p !== null && _p !== void 0 ? _p : this.border));
+        this.boxShadow = (_r = (_q = options) === null || _q === void 0 ? void 0 : _q.boxShadow, (_r !== null && _r !== void 0 ? _r : this.boxShadow));
     };
     __decorate([
         property_validator_1.noEmptyOrNull()
@@ -84,6 +99,9 @@ var UIWindow = (function (_super) {
     __decorate([
         property_validator_1.isNumber(false)
     ], UIWindow.prototype, "maxHeight", void 0);
+    __decorate([
+        property_validator_1.jsonObjectOrBooleanMerge()
+    ], UIWindow.prototype, "border", void 0);
     return UIWindow;
 }(control_1.default));
 exports.default = UIWindow;

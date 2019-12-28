@@ -1,12 +1,13 @@
 import { validateFail } from "../exception/exception"
-import { baseTypeValidator } from "./base-validator";
+import { baseTypeValidator, jsonObjectValidator } from "./base-validator";
+import { merge } from "../util/object-helper";
 
 /**
  * 属性验证统一处理
  * @param setHandler 验证委托，验证成功返回新值
  * @param typeValidator 默认类型验证器
  */
-function propertyValidator(setHandler: (newValue: any, propertyKey: string | number | symbol) => any, typeValidator?: (newValue: any, propertyKey: string | number | symbol) => void) {
+function propertyValidator(setHandler: (newValue: any, propertyKey: string | number | symbol, oldValue: any) => any, typeValidator?: (newValue: any, propertyKey: string | number | symbol) => void) {
     return function (target: any, propertyKey: string | number | symbol) {
         let value = target[propertyKey];
         Object.defineProperty(target, propertyKey, {
@@ -14,7 +15,7 @@ function propertyValidator(setHandler: (newValue: any, propertyKey: string | num
             set: (newValue) => {
                 if (typeValidator) typeValidator(newValue, propertyKey);
 
-                value = setHandler(newValue, propertyKey);
+                value = setHandler(newValue, propertyKey, value);
             }
         });
     }
@@ -99,4 +100,17 @@ export function noEmptyOrNull() {
         if (newValue.trim().length > 0) return newValue;
         else validateFail(`\`${propertyKey.toString()}\` 不允许为空字符或null`);
     }, newValue => baseTypeValidator(newValue, "string"));
+}
+
+/**
+ * json对象或布尔类型验证并合并
+ */
+export function jsonObjectOrBooleanMerge() {
+    return propertyValidator((newValue, propertyKey, oldValue) => {
+        if (newValue === undefined || newValue === true) return oldValue;
+        if (newValue === false) return false;
+
+        jsonObjectValidator(newValue);
+        return merge(oldValue ?? {}, newValue);
+    });
 }

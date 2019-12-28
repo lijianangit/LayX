@@ -1,7 +1,7 @@
 import Control from "../control";
 import UIControl from "../ui-control";
-import { UIWindowOption } from "./constraint";
-import { isNumber, noEmptyOrNull } from "../../core/validator/property-validator";
+import { UIWindowOption, BorderOption } from "./constraint";
+import { isNumber, noEmptyOrNull, jsonObjectOrBooleanMerge } from "../../core/validator/property-validator";
 import { addStyles } from "../../core/util/element-helper";
 
 /**
@@ -51,6 +51,23 @@ export default class UIWindow extends Control<UIWindowOption> implements UIContr
     public maxHeight: number = innerHeight;
 
     /**
+     * 边框样式
+     */
+    @jsonObjectOrBooleanMerge()
+    public border: BorderOption | false = <BorderOption>{
+        width: 1,
+        style: "solid",
+        color: "#3baced",
+        radius: 4
+    };
+
+    /**
+     * 阴影
+     */
+    public boxShadow: boolean = true;
+    private shadowStyle: string = "rgba(0, 0, 0, 0.3) 1px 1px 24px";    // 内置阴影
+
+    /**
      * 构造函数初始化
      */
     constructor(options: UIWindowOption) {
@@ -72,7 +89,12 @@ export default class UIWindow extends Control<UIWindowOption> implements UIContr
             minWidth: `${this.minWidth}px`,
             minHeight: `${this.minHeight}px`,
             width: `${this.width}px`,
-            height: `${this.height}px`
+            height: `${this.height}px`,
+            border: this.border == false ? undefined :
+                `${this.border.width}px ${this.border.style} ${this.border.color}`,
+            borderRadius: this.border == false ? undefined :
+                `${this.border.radius}px`,
+            boxShadow: this.boxShadow ? this.shadowStyle : undefined
         });
 
         return element;
@@ -93,5 +115,7 @@ export default class UIWindow extends Control<UIWindowOption> implements UIContr
         this.width = Math.min(this.maxWidth, this.width);
         this.height = Math.max(this.minHeight, this.height);
         this.height = Math.min(this.maxHeight, this.height);
+        this.border = <BorderOption>options?.border ?? this.border;
+        this.boxShadow = options?.boxShadow ?? this.boxShadow;
     }
 }

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var exception_1 = require("../exception/exception");
 var base_validator_1 = require("./base-validator");
+var object_helper_1 = require("../util/object-helper");
 function propertyValidator(setHandler, typeValidator) {
     return function (target, propertyKey) {
         var value = target[propertyKey];
@@ -10,7 +11,7 @@ function propertyValidator(setHandler, typeValidator) {
             set: function (newValue) {
                 if (typeValidator)
                     typeValidator(newValue, propertyKey);
-                value = setHandler(newValue, propertyKey);
+                value = setHandler(newValue, propertyKey, value);
             }
         });
     };
@@ -88,4 +89,15 @@ function noEmptyOrNull() {
     }, function (newValue) { return base_validator_1.baseTypeValidator(newValue, "string"); });
 }
 exports.noEmptyOrNull = noEmptyOrNull;
+function jsonObjectOrBooleanMerge() {
+    return propertyValidator(function (newValue, propertyKey, oldValue) {
+        if (newValue === undefined || newValue === true)
+            return oldValue;
+        if (newValue === false)
+            return false;
+        base_validator_1.jsonObjectValidator(newValue);
+        return object_helper_1.merge((oldValue !== null && oldValue !== void 0 ? oldValue : {}), newValue);
+    });
+}
+exports.jsonObjectOrBooleanMerge = jsonObjectOrBooleanMerge;
 //# sourceMappingURL=property-validator.js.map
