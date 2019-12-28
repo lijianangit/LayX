@@ -9,7 +9,7 @@ function propertyValidator(setHandler, typeValidator) {
             get: function () { return value; },
             set: function (newValue) {
                 if (typeValidator)
-                    typeValidator(newValue);
+                    typeValidator(newValue, propertyKey);
                 value = setHandler(newValue, propertyKey);
             }
         });

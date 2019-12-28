@@ -6,13 +6,13 @@ import { baseTypeValidator } from "./base-validator";
  * @param setHandler 验证委托，验证成功返回新值
  * @param typeValidator 默认类型验证器
  */
-function propertyValidator(setHandler: (newValue: any, propertyKey: string | number | symbol) => any, typeValidator?: (newValue: any) => void) {
+function propertyValidator(setHandler: (newValue: any, propertyKey: string | number | symbol) => any, typeValidator?: (newValue: any, propertyKey: string | number | symbol) => void) {
     return function (target: any, propertyKey: string | number | symbol) {
         let value = target[propertyKey];
         Object.defineProperty(target, propertyKey, {
             get: () => value,
             set: (newValue) => {
-                if (typeValidator) typeValidator(newValue);
+                if (typeValidator) typeValidator(newValue, propertyKey);
 
                 value = setHandler(newValue, propertyKey);
             }
