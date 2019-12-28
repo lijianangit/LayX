@@ -7,12 +7,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var property_validator_1 = require("../core/validator/property-validator");
+var ui_window_1 = require("../control/window/ui-window");
 var Entry = (function () {
     function Entry(options) {
         this.version = "3.0.0";
         this.lang = "ZH_CN";
         this.handlerOptions(options);
     }
+    Entry.prototype.open = function (options) {
+        var uiWindow = new ui_window_1.default(options);
+        return uiWindow.present();
+    };
     Entry.getInstance = function (options) {
         if (options === void 0) { options = {}; }
         if (!this.instance) {

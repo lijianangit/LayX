@@ -10,7 +10,7 @@ function propertyValidator(setHandler, typeValidator) {
             set: function (newValue) {
                 if (typeValidator)
                     typeValidator(newValue);
-                value = setHandler(newValue);
+                value = setHandler(newValue, propertyKey);
             }
         });
     };
@@ -79,4 +79,13 @@ function options() {
     });
 }
 exports.options = options;
+function noEmptyOrNull() {
+    return propertyValidator(function (newValue, propertyKey) {
+        if (newValue.trim().length > 0)
+            return newValue;
+        else
+            exception_1.validateFail("`" + propertyKey.toString() + "` \u4E0D\u5141\u8BB8\u4E3A\u7A7A\u5B57\u7B26\u6216null");
+    }, function (newValue) { return base_validator_1.baseTypeValidator(newValue, "string"); });
+}
+exports.noEmptyOrNull = noEmptyOrNull;
 //# sourceMappingURL=property-validator.js.map

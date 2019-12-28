@@ -1,4 +1,5 @@
-import { SupportLanguage } from "./enum"
+import { SupportLanguage } from "./enum";
+import { UIWindowOption } from "../control/window/constraint";
 
 /**
  * 全局配置选项
@@ -23,4 +24,10 @@ export interface EntryOvert {
      * 全局配置
      */
     (options: GlobalOption): void;
+
+    /**
+     * 打开新窗口
+     * @param options 可选参数
+     */
+    open(options: UIWindowOption): HTMLElement;
 }

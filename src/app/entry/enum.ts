@@ -1,3 +1,6 @@
+/**
+ * 内置支持语言
+ */
 export const enum SupportLanguage {
     /**
      * 中文

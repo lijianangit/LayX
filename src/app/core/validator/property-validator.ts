@@ -6,7 +6,7 @@ import { baseTypeValidator } from "./base-validator";
  * @param setHandler 验证委托，验证成功返回新值
  * @param typeValidator 默认类型验证器
  */
-function propertyValidator(setHandler: (newValue: any) => any, typeValidator?: (newValue: any) => void) {
+function propertyValidator(setHandler: (newValue: any, propertyKey: string | number | symbol) => any, typeValidator?: (newValue: any) => void) {
     return function (target: any, propertyKey: string | number | symbol) {
         let value = target[propertyKey];
         Object.defineProperty(target, propertyKey, {
@@ -14,7 +14,7 @@ function propertyValidator(setHandler: (newValue: any) => any, typeValidator?: (
             set: (newValue) => {
                 if (typeValidator) typeValidator(newValue);
 
-                value = setHandler(newValue)
+                value = setHandler(newValue, propertyKey);
             }
         });
     }
@@ -89,4 +89,14 @@ export function options(...enumValues: Array<number | string>) {
         if (enumValues.indexOf(newValue) > -1) return newValue;
         else validateFail(`\`${newValue}\` 不在可选值 \`[${enumValues.toString()}]\` 内`);
     });
+}
+
+/**
+ * 空字符串和null验证
+ */
+export function noEmptyOrNull() {
+    return propertyValidator((newValue, propertyKey) => {
+        if (newValue.trim().length > 0) return newValue;
+        else validateFail(`\`${propertyKey.toString()}\` 不允许为空字符或null`);
+    }, newValue => baseTypeValidator(newValue, "string"));
 }

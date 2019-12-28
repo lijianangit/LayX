@@ -1,7 +1,12 @@
 import { GlobalOption } from "./constraint";
 import { SupportLanguage } from "./enum";
 import { options } from "../core/validator/property-validator";
+import UIWindow from "../control/window/ui-window";
+import { UIWindowOption } from "../control/window/constraint";
 
+/**
+ * 入口单例类，承载着全局数据存储
+ */
 export default class Entry {
     /**
      * 版本号
@@ -19,6 +24,15 @@ export default class Entry {
      */
     private constructor(options: GlobalOption) {
         this.handlerOptions(options);
+    }
+
+    /**
+     * 打开新窗口
+     * @param options 可选参数
+     */
+    open(options: UIWindowOption): HTMLElement {
+        const uiWindow = new UIWindow(options);
+        return uiWindow.present();
     }
 
     /**
