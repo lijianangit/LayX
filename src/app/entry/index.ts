@@ -4,7 +4,7 @@ import { isPstNumber, inValueOptions } from "../core/decorator/property-decorato
 import { UIWindowOption } from "../component/ui-window/type";
 import UIWindow from "../component/ui-window";
 
-import "../asset/style/style";
+import "../asset/style";
 
 /**
  * 入口单例类，承载着全局数据存储

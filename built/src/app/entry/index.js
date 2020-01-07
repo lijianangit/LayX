@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 var property_decorator_1 = require("../core/decorator/property-decorator");
 var ui_window_1 = require("../component/ui-window");
-require("../asset/style/style");
+require("../asset/style");
 var Entry = (function () {
     function Entry(options) {
         this.prefix = "layx-";
