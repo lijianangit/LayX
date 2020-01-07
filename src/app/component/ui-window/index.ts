@@ -1,0 +1,120 @@
+import Component from "..";
+import UIComponent from "../ui-component";
+import { UIWindowOption, BorderOption } from "./type";
+import { isPstNumber, isNoEmptyOrNull } from "../../core/decorator/property-decorator";
+import { addCSSStyles } from "../../core/util/element-helper";
+
+/**
+ * 窗口控件类，也就是整个控件的核心窗口类
+ */
+export default class UIWindow extends Component<UIWindowOption> implements UIComponent<UIWindowOption> {
+    /**
+     * 唯一Id
+     */
+    @isNoEmptyOrNull()
+    public readonly id: string;
+
+    /**
+     * 宽度
+     */
+    @isPstNumber()
+    public width: number = this.entry.width;
+
+    /**
+     * 高度
+     */
+    @isPstNumber()
+    public height: number = this.entry.height;
+
+    /**
+     * 最小宽度
+     */
+    @isPstNumber()
+    public minWidth: number = 200;
+
+    /**
+     * 最小高度
+     */
+    @isPstNumber()
+    public minHeight: number = 200;
+
+    /**
+     * 最大宽度
+     */
+    @isPstNumber()
+    public maxWidth: number = innerWidth;
+
+    /**
+     * 最大高度
+     */
+    @isPstNumber()
+    public maxHeight: number = innerHeight;
+
+    /**
+     * 边框样式
+     */
+    public border: BorderOption | false = <BorderOption>{
+        width: 1,
+        style: "solid",
+        color: "#3baced",
+        radius: 4
+    };
+
+    /**
+     * 阴影
+     */
+    public boxShadow: boolean = true;
+    private shadowStyle: string = "rgba(0, 0, 0, 0.3) 1px 1px 24px";    // 内置阴影
+
+    /**
+     * 构造函数初始化
+     */
+    constructor(options: UIWindowOption) {
+        super();
+        this.id = options?.id ?? "";
+        this.handlerOptions(options);
+    }
+
+    /**
+     * 创建控件元素对象
+     */
+    present(): HTMLElement {
+        const element = document.createElement("div");
+        element.id = `${this.entry.prefix + this.id}`;
+
+        addCSSStyles(element, <CSSStyleDeclaration>{
+            maxWidth: `${this.maxWidth}px`,
+            maxHeight: `${this.maxHeight}px`,
+            minWidth: `${this.minWidth}px`,
+            minHeight: `${this.minHeight}px`,
+            width: `${this.width}px`,
+            height: `${this.height}px`,
+            border: this.border == false ? null :
+                `${this.border.width}px ${this.border.style} ${this.border.color}`,
+            borderRadius: this.border == false ? null :
+                `${this.border.radius}px`,
+            boxShadow: this.boxShadow ? this.shadowStyle : null
+        });
+
+        return element;
+    }
+
+    /**
+     * 处理初始传入参数
+     * @param options 控件支持传入可选参数
+     */
+    handlerOptions(options: UIWindowOption) {
+        this.width = options?.width ?? this.width;
+        this.height = options?.height ?? this.height;
+        this.maxWidth = options?.maxWidth ?? this.maxWidth;
+        this.maxHeight = options?.maxHeight ?? this.maxHeight;
+        this.minWidth = options?.minWidth ?? this.minWidth;
+        this.minHeight = options?.minHeight ?? this.minHeight;
+        this.width = Math.max(this.minWidth, this.width);
+        this.width = Math.min(this.maxWidth, this.width);
+        this.height = Math.max(this.minHeight, this.height);
+        this.height = Math.min(this.maxHeight, this.height);
+        this.border = <BorderOption>options?.border ?? this.border;
+        this.boxShadow = options?.boxShadow ?? this.boxShadow;
+    }
+}

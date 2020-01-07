@@ -1,15 +1,13 @@
 /**
- * 为元素添加样式
- * @param element 元素
- * @param styles 样式列表
+ * 批量添加元素样式
+ * @param element 元素对象
+ * @param cssStyles 样式表对象
+ * @returns void 
  */
-export function addStyles(element: HTMLElement, styles: CSSStyleDeclaration) {
+export function addCSSStyles(element: HTMLElement | null, cssStyles: CSSStyleDeclaration): void {
     if (!element) return;
 
-    for (const key in styles) {
-        const styleValue = styles[key];
-        if (styleValue) {
-            element.style[key] = styles[key];
-        }
+    for (const cssProp in cssStyles) {
+        element.style[cssProp] = cssStyles[cssProp] ?? null;
     }
 }

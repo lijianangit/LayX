@@ -1,35 +1,36 @@
-import { isJsonObject } from "../validator/base-validator";
+import { checkJSONObject } from "../validator";
+import { JSONObject } from "./type";
 
 /**
- * JSON 类型对象
+ * 克隆JSON对象
+ * @param source 原JSON类型对象
+ * @returns 克隆后的JSON类型对象
  */
-type JsonObjectType = { constructor: Object;[key: string]: any; };
+export function cloneJSONObject<T extends JSONObject>(source: T): T {
+    const newObject = <any>{};
 
-/**
- * 克隆对象
- * @param source 源对象
- */
-export function clone<T extends JsonObjectType>(source: T): T {
-    const newObject: T = <T>{};
     for (const key of Object.keys(source)) {
-        (<any>newObject)[key] = isJsonObject(source[key]) ? clone(source[key]) : source[key];
+        newObject[key] = checkJSONObject(source[key]) ? cloneJSONObject(source[key]) : source[key];
     }
-    return newObject;
+    return newObject as T;
 }
 
 /**
- * 合并对象
- * @param source 源对象
- * @param dest 目标对象
+ * 合并JSON对象
+ * @param source 源JSON类型对象
+ * @param dest 目标JSON类型对象
+ * @returns 合并后的JSON类型对象
  */
-export function merge<T extends JsonObjectType>(source: T, dest: T): T {
-    const newObject: T = clone(source);
+export function mergeJSONObject<T extends JSONObject>(source: T, dest: T): T {
+    const newObject = <any>cloneJSONObject(source);
+
     for (const key of Object.keys(dest)) {
-        if (newObject[key] === undefined || !isJsonObject(dest[key])) {
-            (<any>newObject)[key] = dest[key];
+        if (newObject[key] === undefined || !checkJSONObject(dest[key])) {
+            newObject[key] = dest[key];
+
             continue;
         }
-        (<any>newObject)[key] = merge(newObject[key], dest[key]);
+        newObject[key] = mergeJSONObject(newObject[key], dest[key]);
     }
-    return newObject;
+    return newObject as T;
 }

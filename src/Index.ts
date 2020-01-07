@@ -1,5 +1,5 @@
-import { EntryOvert, GlobalOption } from "./app/entry/constraint";
-import Entry from "./app/entry/entry";
+import { EntryOvert, EntryOption } from "./app/entry/type";
+import Entry from "./app/entry";
 
 /**
  * 对外公开方法
@@ -7,7 +7,7 @@ import Entry from "./app/entry/entry";
 function overt(): EntryOvert {
     const entry = Entry.getInstance();
 
-    const entryOvert = <EntryOvert>function (options: GlobalOption): void {
+    const entryOvert = <EntryOvert>function (options: EntryOption): void {
         Entry.getInstance(options);
     };
 

@@ -1,13 +1,16 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
+        "rootDir": ".",
+        "baseUrl": ".",
+        "outDir": "built",
         "target": "ES5",
         "lib": [
             "ES2015",
             "DOM"
         ],
-        "module": "commonjs",
-        "outDir": "./built",
+        "module": "CommonJS",
+        // "noUnusedLocals": true,
         "strict": true,
         "removeComments": true,
         "preserveConstEnums": true,
