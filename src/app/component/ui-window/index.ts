@@ -66,10 +66,10 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
      * 边框样式
      */
     @combine({
-        width: checkPstInt,
-        style: [BorderStyle.SOLID, BorderStyle.DOUBLE, BorderStyle.DOTTED, BorderStyle.DASHED],
-        color: checkNoEmptyOrNull,
-        radius: checkPstInt
+        width: checkPstInt, /** 正整数 */
+        style: [BorderStyle.SOLID, BorderStyle.DOUBLE, BorderStyle.DOTTED, BorderStyle.DASHED], /** 可选值 */
+        color: checkNoEmptyOrNull,  /** 非空字符串 */
+        radius: checkPstInt /** 正整数 */
     }, false)
     public border: BorderOption | false = <BorderOption>{
         width: DEFAULT_BORDER_WIDTH,
