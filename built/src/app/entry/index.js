@@ -6,14 +6,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var const_1 = require("./const");
 var property_decorator_1 = require("../core/decorator/property-decorator");
 var ui_window_1 = require("../component/ui-window");
 require("../asset/style");
 var Entry = (function () {
     function Entry(options) {
-        this.prefix = "layx-";
-        this.version = "3.0.0";
-        this.lang = "ZH_CN";
+        this.version = const_1.VERSION;
+        this.prefix = const_1.PREFIX;
+        this.lang = const_1.SupportLanguage.ZH_CN;
         this.width = 800;
         this.height = 600;
         this.handlerOptions(options);
@@ -37,12 +38,12 @@ var Entry = (function () {
     };
     Entry.prototype.handlerOptions = function (options) {
         var _a, _b, _c, _d, _e, _f;
-        this.lang = (_b = (_a = options) === null || _a === void 0 ? void 0 : _a.lang, (_b !== null && _b !== void 0 ? _b : "ZH_CN"));
+        this.lang = (_b = (_a = options) === null || _a === void 0 ? void 0 : _a.lang, (_b !== null && _b !== void 0 ? _b : const_1.SupportLanguage.ZH_CN));
         this.width = (_d = (_c = options) === null || _c === void 0 ? void 0 : _c.width, (_d !== null && _d !== void 0 ? _d : this.width));
         this.height = (_f = (_e = options) === null || _e === void 0 ? void 0 : _e.height, (_f !== null && _f !== void 0 ? _f : this.height));
     };
     __decorate([
-        property_decorator_1.inValueOptions("ZH_CN", "EN_US")
+        property_decorator_1.inValueOptions(const_1.SupportLanguage.ZH_CN, const_1.SupportLanguage.EN_US)
     ], Entry.prototype, "lang", void 0);
     __decorate([
         property_decorator_1.isPstNumber()

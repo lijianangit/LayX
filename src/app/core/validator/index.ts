@@ -177,3 +177,12 @@ export function checkEmptyOrNull(data: any): boolean {
 export function checkNoEmptyOrNull(data: any): boolean {
     return checkOfType(data, "string") && data.length > 0;
 }
+
+/**
+ * 检查是否是正则表达式
+ * @param data 数值
+ * @returns boolean 
+ */
+export function checkRegExp(data: any): boolean {
+    return data instanceof RegExp;
+}

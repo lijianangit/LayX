@@ -1,13 +1,25 @@
-import Component from "..";
+import Component from "../";
 import UIComponent from "../ui-component";
 import { UIWindowOption, BorderOption } from "./type";
-import { isPstNumber, isNoEmptyOrNull } from "../../core/decorator/property-decorator";
-import { addCSSStyles } from "../../core/util/element-helper";
+import { isPstNumber, isNoEmptyOrNull, isBoolean, combine } from "../../core/decorator/property-decorator";
+import { addCSSStyles } from "../../core/helper/element-helper";
+import { DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT, DEFAULT_MAX_WIDTH, DEFAULT_MAX_HEIGHT, DEFAULT_BORDER_WIDTH, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_STYLE, DEFAULT_BORDER_RADIUS, DEFAULT_BOX_SHADOW, BorderStyle } from "./const";
+import { checkPstInt, checkInValueOptions, checkNoEmptyOrNull } from "../../core/validator";
 
 /**
- * 窗口控件类，也就是整个控件的核心窗口类
+ * 窗口组件类
  */
 export default class UIWindow extends Component<UIWindowOption> implements UIComponent<UIWindowOption> {
+    /**
+     * 构造函数初始化
+     */
+    public constructor(options: UIWindowOption) {
+        super();
+
+        this.id = options?.id;
+        this.handlerOptions(options);
+    }
+
     /**
      * 唯一Id
      */
@@ -30,50 +42,47 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
      * 最小宽度
      */
     @isPstNumber()
-    public minWidth: number = 200;
+    public minWidth: number = DEFAULT_MIN_WIDTH;
 
     /**
      * 最小高度
      */
     @isPstNumber()
-    public minHeight: number = 200;
+    public minHeight: number = DEFAULT_MIN_HEIGHT;
 
     /**
      * 最大宽度
      */
     @isPstNumber()
-    public maxWidth: number = innerWidth;
+    public maxWidth: number = DEFAULT_MAX_WIDTH;
 
     /**
      * 最大高度
      */
     @isPstNumber()
-    public maxHeight: number = innerHeight;
+    public maxHeight: number = DEFAULT_MAX_HEIGHT;
 
     /**
      * 边框样式
      */
+    @combine({
+        width: checkPstInt,
+        style: [BorderStyle.SOLID, BorderStyle.DOUBLE, BorderStyle.DOTTED, BorderStyle.DASHED],
+        color: checkNoEmptyOrNull,
+        radius: checkPstInt
+    }, false)
     public border: BorderOption | false = <BorderOption>{
-        width: 1,
-        style: "solid",
-        color: "#3baced",
-        radius: 4
+        width: DEFAULT_BORDER_WIDTH,
+        style: DEFAULT_BORDER_STYLE,
+        color: DEFAULT_BORDER_COLOR,
+        radius: DEFAULT_BORDER_RADIUS
     };
 
     /**
      * 阴影
      */
+    @isBoolean()
     public boxShadow: boolean = true;
-    private shadowStyle: string = "rgba(0, 0, 0, 0.3) 1px 1px 24px";    // 内置阴影
-
-    /**
-     * 构造函数初始化
-     */
-    constructor(options: UIWindowOption) {
-        super();
-        this.id = options?.id ?? "";
-        this.handlerOptions(options);
-    }
 
     /**
      * 创建控件元素对象
@@ -89,11 +98,11 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
             minHeight: `${this.minHeight}px`,
             width: `${this.width}px`,
             height: `${this.height}px`,
-            border: this.border == false ? null :
+            border: this.border === false ? null :
                 `${this.border.width}px ${this.border.style} ${this.border.color}`,
-            borderRadius: this.border == false ? null :
+            borderRadius: this.border === false ? null :
                 `${this.border.radius}px`,
-            boxShadow: this.boxShadow ? this.shadowStyle : null
+            boxShadow: this.boxShadow ? DEFAULT_BOX_SHADOW : null
         });
 
         return element;
@@ -114,7 +123,7 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
         this.width = Math.min(this.maxWidth, this.width);
         this.height = Math.max(this.minHeight, this.height);
         this.height = Math.min(this.maxHeight, this.height);
-        this.border = <BorderOption>options?.border ?? this.border;
+        this.border = <BorderOption | false>options?.border ?? this.border;
         this.boxShadow = options?.boxShadow ?? this.boxShadow;
     }
 }

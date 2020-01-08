@@ -1,7 +1,4 @@
-/**
- * 边框样式
- */
-export type borderStyle = "none" | "hidden" | "dotted" | "dashed" | "solid" | "double" | "groove" | "ridge" | "inset" | "outset";
+import { BorderStyle } from "./const";
 
 /**
  * 边框参数
@@ -15,7 +12,7 @@ export interface BorderOption {
     /**
      * 边框样式
      */
-    style?: borderStyle;
+    style?: BorderStyle;
 
     /**
      * 边框颜色
@@ -70,7 +67,7 @@ export interface UIWindowOption {
     /**
      * 边框
      */
-    border?: BorderOption | boolean;
+    border?: boolean | BorderOption;
 
     /**
      * 阴影

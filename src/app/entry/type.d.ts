@@ -1,4 +1,4 @@
-import { SupportLanguage } from "./enum";
+import { SupportLanguage } from "./const";
 import { UIWindowOption } from "../component/ui-window/type";
 
 /**
@@ -37,7 +37,7 @@ export interface EntryOvert {
 
     /**
      * 打开新窗口
-     * @param options 可选参数
+     * @param options 窗口参数
      */
     open(options: UIWindowOption): void;
 }

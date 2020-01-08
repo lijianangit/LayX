@@ -19,29 +19,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var __1 = require("..");
+var __1 = require("../");
 var property_decorator_1 = require("../../core/decorator/property-decorator");
-var element_helper_1 = require("../../core/util/element-helper");
+var element_helper_1 = require("../../core/helper/element-helper");
+var const_1 = require("./const");
+var validator_1 = require("../../core/validator");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
     function UIWindow(options) {
-        var _a, _b;
+        var _a;
         var _this = _super.call(this) || this;
         _this.width = _this.entry.width;
         _this.height = _this.entry.height;
-        _this.minWidth = 200;
-        _this.minHeight = 200;
-        _this.maxWidth = innerWidth;
-        _this.maxHeight = innerHeight;
+        _this.minWidth = const_1.DEFAULT_MIN_WIDTH;
+        _this.minHeight = const_1.DEFAULT_MIN_HEIGHT;
+        _this.maxWidth = const_1.DEFAULT_MAX_WIDTH;
+        _this.maxHeight = const_1.DEFAULT_MAX_HEIGHT;
         _this.border = {
-            width: 1,
-            style: "solid",
-            color: "#3baced",
-            radius: 4
+            width: const_1.DEFAULT_BORDER_WIDTH,
+            style: const_1.DEFAULT_BORDER_STYLE,
+            color: const_1.DEFAULT_BORDER_COLOR,
+            radius: const_1.DEFAULT_BORDER_RADIUS
         };
         _this.boxShadow = true;
-        _this.shadowStyle = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
-        _this.id = (_b = (_a = options) === null || _a === void 0 ? void 0 : _a.id, (_b !== null && _b !== void 0 ? _b : ""));
+        _this.id = (_a = options) === null || _a === void 0 ? void 0 : _a.id;
         _this.handlerOptions(options);
         return _this;
     }
@@ -55,11 +56,11 @@ var UIWindow = (function (_super) {
             minHeight: this.minHeight + "px",
             width: this.width + "px",
             height: this.height + "px",
-            border: this.border == false ? null :
+            border: this.border === false ? null :
                 this.border.width + "px " + this.border.style + " " + this.border.color,
-            borderRadius: this.border == false ? null :
+            borderRadius: this.border === false ? null :
                 this.border.radius + "px",
-            boxShadow: this.boxShadow ? this.shadowStyle : null
+            boxShadow: this.boxShadow ? const_1.DEFAULT_BOX_SHADOW : null
         });
         return element;
     };
@@ -99,6 +100,17 @@ var UIWindow = (function (_super) {
     __decorate([
         property_decorator_1.isPstNumber()
     ], UIWindow.prototype, "maxHeight", void 0);
+    __decorate([
+        property_decorator_1.combine({
+            width: validator_1.checkPstInt,
+            style: [const_1.BorderStyle.SOLID, const_1.BorderStyle.DOUBLE, const_1.BorderStyle.DOTTED, const_1.BorderStyle.DASHED],
+            color: validator_1.checkNoEmptyOrNull,
+            radius: validator_1.checkPstInt
+        }, false)
+    ], UIWindow.prototype, "border", void 0);
+    __decorate([
+        property_decorator_1.isBoolean()
+    ], UIWindow.prototype, "boxShadow", void 0);
     return UIWindow;
 }(__1.default));
 exports.default = UIWindow;

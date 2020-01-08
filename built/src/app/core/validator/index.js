@@ -90,4 +90,8 @@ function checkNoEmptyOrNull(data) {
     return checkOfType(data, "string") && data.length > 0;
 }
 exports.checkNoEmptyOrNull = checkNoEmptyOrNull;
+function checkRegExp(data) {
+    return data instanceof RegExp;
+}
+exports.checkRegExp = checkRegExp;
 //# sourceMappingURL=index.js.map

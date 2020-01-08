@@ -1,5 +1,5 @@
 import { EntryOption } from "./type";
-import { SupportLanguage } from "./enum";
+import { VERSION, PREFIX, SupportLanguage } from "./const";
 import { isPstNumber, inValueOptions } from "../core/decorator/property-decorator";
 import { UIWindowOption } from "../component/ui-window/type";
 import UIWindow from "../component/ui-window";
@@ -11,14 +11,21 @@ import "../asset/style";
  */
 export default class Entry {
     /**
-     * 前缀符
+     * 私有化构造函数，实现单例
      */
-    public readonly prefix: string = "layx-";
+    private constructor(options: EntryOption) {
+        this.handlerOptions(options);
+    }
 
     /**
      * 版本号
      */
-    public readonly version: string = "3.0.0";
+    public readonly version: string = VERSION;
+
+    /**
+     * 前缀符
+     */
+    public readonly prefix: string = PREFIX;
 
     /**
      * 默认语言
@@ -39,15 +46,9 @@ export default class Entry {
     public height: number = 600;
 
     /**
-     * 私有化构造函数，实现单例
-     */
-    private constructor(options: EntryOption) {
-        this.handlerOptions(options);
-    }
-
-    /**
      * 打开新窗口
-     * @param options 可选参数
+     * @param options 窗口参数
+     * @returns void
      */
     open(options: UIWindowOption): void {
         const uiWindow = new UIWindow(options);
@@ -65,6 +66,8 @@ export default class Entry {
 
     /**
      * 获取唯一可用对象
+     * @param [options] 入口参数
+     * @returns Entry 
      */
     public static getInstance(options: EntryOption = <EntryOption>{}): Entry {
         if (!this.instance) {
@@ -79,8 +82,9 @@ export default class Entry {
     /**
      * 处理传入参数
      * @param options 入口参数
+     * @returns void
      */
-    private handlerOptions(options: EntryOption) {
+    private handlerOptions(options: EntryOption): void {
         this.lang = options?.lang ?? SupportLanguage.ZH_CN;
         this.width = options?.width ?? this.width;
         this.height = options?.height ?? this.height;

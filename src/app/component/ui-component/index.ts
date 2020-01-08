@@ -1,12 +1,13 @@
 import Component from "..";
 
 /**
- * UI控件类，所有的控件都必须实现该接口
- * @template TOption 控件支持传入可选参数
+ * UI组件类，所有的组件都必须实现该接口
+ * @template TOption 组件参数
  */
 export default interface UIComponent<TOption> extends Component<TOption> {
     /**
-     * 创建控件元素对象
+     * 创建组件元素对象
+     * @returns HTMLElement 
      */
     present(): HTMLElement;
 }

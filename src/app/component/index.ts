@@ -11,13 +11,14 @@ export default abstract class Component<TOption> {
     protected entry: Entry = Entry.getInstance();
 
     /**
-     * 控件唯一标识
+     * 组件唯一标识
      */
     private symbol: symbol = Symbol("monksoul");
 
     /**
      * 处理初始传入参数
      * @param options 可选参数
+     * @returns void
      */
     abstract handlerOptions(options: TOption): void;
 }

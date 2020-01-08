@@ -1,7 +1,9 @@
 import { PropertySetter, PropertyDecorator } from "./type";
-import { checkPstNumber, checkInValueOptions, checkNoEmptyOrNull } from "../validator";
+import { checkPstNumber, checkInValueOptions, checkNoEmptyOrNull, checkOfType, checkJSONObject, checkArray, checkRegExp } from "../validator";
 import { ValueOption } from "../validator/type";
 import { validateFail } from "../exception";
+import { JSONObject } from "../helper/type";
+import { mergeJSONObject } from "../helper/object-helper";
 
 /**
  * 检查是否是正数值类型
@@ -40,6 +42,52 @@ export function isNoEmptyOrNull(): PropertyDecorator {
     });
 }
 
+/**
+ * 检查布尔类型值
+ * @returns PropertyDecorator 
+ */
+export function isBoolean(): PropertyDecorator {
+    return generateDecorator((newValue) => {
+        if (!checkOfType(newValue, "boolean")) validateFail(`"${newValue}" 不是一个有效的布尔值`);
+
+        return newValue;
+    });
+}
+
+/**
+ * 组合检查验证
+ * @param jsonDecorator 参数每一项装饰器，支持Array|Function|RegExp
+ * @param items 其余可选值，只支持基本数据类型
+ */
+export function combine(jsonDecorator: JSONObject = {}, ...items: Array<any>): PropertyDecorator {
+    return generateDecorator((newValue, propertyKey, value) => {
+        if (!checkJSONObject(newValue) && items.indexOf(newValue) === -1) validateFail(`"${newValue}" 不是一个有效的参数值`);
+        if (items.indexOf(newValue) > -1) return newValue;
+
+        for (const key in newValue) {
+            const keyValue = newValue[key];
+            const decorator = jsonDecorator[key];
+            if (!decorator) continue;
+
+            if (checkArray(decorator) && decorator.indexOf(keyValue) === -1) {
+                validateFail(`"${keyValue}" 不在 [${decorator.toString()}] 值范围内`);
+                break;
+            }
+            if (checkOfType(decorator, "function") && !decorator(keyValue)) {
+                validateFail(`"${keyValue}" 不是一个有效的参数值`);
+                break;
+            }
+
+            if (checkRegExp(decorator) && !decorator.test(keyValue)) {
+                validateFail(`"${keyValue}" 不是一个有效的参数值`);
+                break;
+            }
+        }
+
+        newValue = mergeJSONObject(value ?? {}, newValue);
+        return newValue;
+    });
+}
 
 /**
  * 生成装饰器核心代码
