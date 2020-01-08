@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VERSION = "3.0.0";
 exports.PREFIX = "layx-";
+exports.DEFAULT_WINDOW_WIDTH = 800;
+exports.DEFAULT_WINDOW_HEIGHT = 600;
 var SupportLanguage;
 (function (SupportLanguage) {
     SupportLanguage["ZH_CN"] = "ZH_CN";

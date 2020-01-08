@@ -9,6 +9,16 @@ export const VERSION: string = "3.0.0";
 export const PREFIX: string = "layx-";
 
 /**
+ * 默认窗口宽度
+ */
+export const DEFAULT_WINDOW_WIDTH: number = 800;
+
+/**
+ * 默认窗口高度
+ */
+export const DEFAULT_WINDOW_HEIGHT: number = 600;
+
+/**
  * 内置支持语言
  */
 export enum SupportLanguage {

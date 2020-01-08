@@ -59,8 +59,3 @@ export const DEFAULT_BORDER_COLOR: string = "#3baced";
  * 默认边框圆角
  */
 export const DEFAULT_BORDER_RADIUS: number = 4;
-
-/**
- * 默认阴影样式
- */
-export const DEFAULT_BOX_SHADOW: string = "rgba(0, 0, 0, 0.3) 1px 1px 24px";

@@ -2,8 +2,8 @@ import Component from "../";
 import UIComponent from "../ui-component";
 import { UIWindowOption, BorderOption } from "./type";
 import { isPstNumber, isNoEmptyOrNull, isBoolean, combine } from "../../core/decorator/property-decorator";
-import { addCSSStyles } from "../../core/helper/element-helper";
-import { DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT, DEFAULT_MAX_WIDTH, DEFAULT_MAX_HEIGHT, DEFAULT_BORDER_WIDTH, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_STYLE, DEFAULT_BORDER_RADIUS, DEFAULT_BOX_SHADOW, BorderStyle } from "./const";
+import { addCSSStyles, addCSSClasses } from "../../core/helper/element-helper";
+import { DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT, DEFAULT_MAX_WIDTH, DEFAULT_MAX_HEIGHT, DEFAULT_BORDER_WIDTH, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_STYLE, DEFAULT_BORDER_RADIUS, BorderStyle } from "./const";
 import { checkPstInt, checkInValueOptions, checkNoEmptyOrNull } from "../../core/validator";
 
 /**
@@ -92,19 +92,25 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
         const element = document.createElement("div");
         element.id = `${this.entry.prefix + this.id}`;
 
-        addCSSStyles(element, <CSSStyleDeclaration>{
-            maxWidth: `${this.maxWidth}px`,
-            maxHeight: `${this.maxHeight}px`,
-            minWidth: `${this.minWidth}px`,
-            minHeight: `${this.minHeight}px`,
-            width: `${this.width}px`,
-            height: `${this.height}px`,
-            border: this.border === false ? null :
-                `${this.border.width}px ${this.border.style} ${this.border.color}`,
-            borderRadius: this.border === false ? null :
-                `${this.border.radius}px`,
-            boxShadow: this.boxShadow ? DEFAULT_BOX_SHADOW : null
-        });
+        addCSSClasses(element,
+            "window",
+            this.boxShadow ? "box-shadow" : undefined);
+
+        addCSSStyles(element,
+            <CSSStyleDeclaration>{
+                maxWidth: this.maxWidth !== innerWidth ? `${this.maxWidth}px` : null,
+                maxHeight: this.maxHeight !== innerHeight ? `${this.maxHeight}px` : null,
+                minWidth: `${this.minWidth}px`,
+                minHeight: `${this.minHeight}px`,
+                width: `${this.width}px`,
+                height: `${this.height}px`,
+                border: this.border === false ? null :
+                    `${this.border.width}px ${this.border.style} ${this.border.color}`,
+                borderRadius: this.border === false ? null :
+                    `${this.border.radius}px`,
+                webkitBorderRadius: this.border === false ? null :
+                    `${this.border.radius}px`,
+            });
 
         return element;
     }
@@ -112,8 +118,9 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
     /**
      * 处理初始传入参数
      * @param options 控件支持传入可选参数
+     * @returns void
      */
-    handlerOptions(options: UIWindowOption) {
+    handlerOptions(options: UIWindowOption): void {
         this.width = options?.width ?? this.width;
         this.height = options?.height ?? this.height;
         this.maxWidth = options?.maxWidth ?? this.maxWidth;

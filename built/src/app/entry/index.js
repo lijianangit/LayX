@@ -15,8 +15,8 @@ var Entry = (function () {
         this.version = const_1.VERSION;
         this.prefix = const_1.PREFIX;
         this.lang = const_1.SupportLanguage.ZH_CN;
-        this.width = 800;
-        this.height = 600;
+        this.width = const_1.DEFAULT_WINDOW_WIDTH;
+        this.height = const_1.DEFAULT_WINDOW_HEIGHT;
         this.handlerOptions(options);
     }
     Entry.prototype.open = function (options) {

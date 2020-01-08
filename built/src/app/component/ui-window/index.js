@@ -49,9 +49,10 @@ var UIWindow = (function (_super) {
     UIWindow.prototype.present = function () {
         var element = document.createElement("div");
         element.id = "" + (this.entry.prefix + this.id);
+        element_helper_1.addCSSClasses(element, "window", this.boxShadow ? "box-shadow" : undefined);
         element_helper_1.addCSSStyles(element, {
-            maxWidth: this.maxWidth + "px",
-            maxHeight: this.maxHeight + "px",
+            maxWidth: this.maxWidth !== innerWidth ? this.maxWidth + "px" : null,
+            maxHeight: this.maxHeight !== innerHeight ? this.maxHeight + "px" : null,
             minWidth: this.minWidth + "px",
             minHeight: this.minHeight + "px",
             width: this.width + "px",
@@ -60,7 +61,8 @@ var UIWindow = (function (_super) {
                 this.border.width + "px " + this.border.style + " " + this.border.color,
             borderRadius: this.border === false ? null :
                 this.border.radius + "px",
-            boxShadow: this.boxShadow ? const_1.DEFAULT_BOX_SHADOW : null
+            webkitBorderRadius: this.border === false ? null :
+                this.border.radius + "px",
         });
         return element;
     };

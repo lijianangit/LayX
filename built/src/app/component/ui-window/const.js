@@ -15,5 +15,4 @@ exports.DEFAULT_BORDER_WIDTH = 1;
 exports.DEFAULT_BORDER_STYLE = BorderStyle.SOLID;
 exports.DEFAULT_BORDER_COLOR = "#3baced";
 exports.DEFAULT_BORDER_RADIUS = 4;
-exports.DEFAULT_BOX_SHADOW = "rgba(0, 0, 0, 0.3) 1px 1px 24px";
 //# sourceMappingURL=const.js.map

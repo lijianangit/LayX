@@ -1,5 +1,5 @@
 import { EntryOption } from "./type";
-import { VERSION, PREFIX, SupportLanguage } from "./const";
+import { VERSION, PREFIX, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, SupportLanguage } from "./const";
 import { isPstNumber, inValueOptions } from "../core/decorator/property-decorator";
 import { UIWindowOption } from "../component/ui-window/type";
 import UIWindow from "../component/ui-window";
@@ -37,13 +37,13 @@ export default class Entry {
      * 默认窗口初始化宽度
      */
     @isPstNumber()
-    public width: number = 800;
+    public width: number = DEFAULT_WINDOW_WIDTH;
 
     /**
      * 默认窗口初始化高度
      */
     @isPstNumber()
-    public height: number = 600;
+    public height: number = DEFAULT_WINDOW_HEIGHT;
 
     /**
      * 打开新窗口
