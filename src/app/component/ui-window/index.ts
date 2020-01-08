@@ -86,6 +86,7 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
 
     /**
      * 创建控件元素对象
+     * @returns HTMLElement
      */
     present(): HTMLElement {
         const element = document.createElement("div");
