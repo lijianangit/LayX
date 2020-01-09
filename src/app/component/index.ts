@@ -12,7 +12,7 @@ export default abstract class Component<TOption> {
     protected entry: Entry = Entry.getInstance();
 
     /**
-     * 实现总线对象
+     * 事件总线对象
      */
     protected eventBus: EventBus = EventBus.getInstance();
 
