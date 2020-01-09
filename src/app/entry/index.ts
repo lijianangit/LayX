@@ -1,6 +1,6 @@
 import { EntryOption } from "./type";
-import { VERSION, PREFIX, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, SupportLanguage } from "./const";
-import { isPstNumber, inValueOptions } from "../core/decorator/property-decorator";
+import { VERSION, ZINDEX, PREFIX, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, SupportLanguage } from "./const";
+import { isPstNumber, inValueOptions, isPstInt, min } from "../core/decorator/property-decorator";
 import { UIWindowOption } from "../component/ui-window/type";
 import UIWindow from "../component/ui-window";
 
@@ -21,6 +21,13 @@ export default class Entry {
      * 版本号
      */
     public readonly version: string = VERSION;
+
+    /**
+     * 默认层数,不能小于1000
+     */
+    @isPstInt()
+    @min(1000)
+    public zIndex: number = ZINDEX;
 
     /**
      * 前缀符
@@ -88,5 +95,6 @@ export default class Entry {
         this.lang = options?.lang ?? SupportLanguage.ZH_CN;
         this.width = options?.width ?? this.width;
         this.height = options?.height ?? this.height;
+        this.zIndex = options?.zIndex ?? this.zIndex;
     }
 }

@@ -1,5 +1,5 @@
 import { PropertySetter, PropertyDecorator } from "./type";
-import { checkPstNumber, checkInValueOptions, checkNoEmptyOrNull, checkOfType, checkJSONObject, checkArray, checkRegExp } from "../validator";
+import { checkPstNumber, checkInValueOptions, checkNoEmptyOrNull, checkOfType, checkJSONObject, checkArray, checkRegExp, checkPstInt, checkMin } from "../validator";
 import { ValueOption } from "../validator/type";
 import { validateFail } from "../exception";
 import { JSONObject } from "../helper/type";
@@ -55,6 +55,31 @@ export function isBoolean(): PropertyDecorator {
 }
 
 /**
+ * 检查正整数
+ * @returns PropertyDecorator 
+ */
+export function isPstInt(): PropertyDecorator {
+    return generateDecorator((newValue) => {
+        if (!checkPstInt(newValue)) validateFail(`"${newValue}" 不是一个有效的正整数`);
+
+        return newValue;
+    });
+}
+
+/**
+ * 检查最小值
+ * @param threshold 最小阈值
+ * @returns PropertyDecorator
+ */
+export function min(threshold: number): PropertyDecorator {
+    return generateDecorator((newValue) => {
+        if (!checkMin(newValue, threshold)) validateFail(`"${newValue}" 必须是数值类型并且值不能小于 "${threshold}"`);
+
+        return newValue;
+    });
+}
+
+/**
  * 组合检查验证
  * @param jsonDecorator 参数每一项装饰器，支持Array|Function|RegExp
  * @param items 其余可选值，只支持基本数据类型
@@ -98,9 +123,15 @@ function generateDecorator(propertySetter: PropertySetter): PropertyDecorator {
     return function (target: any, propertyKey: string | number | symbol) {
         let value = target[propertyKey];
 
+        var descriptor = Object.getOwnPropertyDescriptor(target, propertyKey);
         Object.defineProperty(target, propertyKey, {
+            configurable: true,
+            enumerable: true,
             get: () => value,
             set: (newValue) => {
+                if (descriptor && descriptor.set) {
+                    descriptor.set(newValue);
+                }
                 value = propertySetter(newValue, propertyKey, value);
             }
         });

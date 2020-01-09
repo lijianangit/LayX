@@ -9,6 +9,11 @@ export const VERSION: string = "3.0.0";
 export const PREFIX: string = "layx-";
 
 /**
+ * 默认开始层数
+ */
+export const ZINDEX: number = 10000000;
+
+/**
  * 默认窗口宽度
  */
 export const DEFAULT_WINDOW_WIDTH: number = 800;

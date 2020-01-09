@@ -46,6 +46,22 @@ function isBoolean() {
     });
 }
 exports.isBoolean = isBoolean;
+function isPstInt() {
+    return generateDecorator(function (newValue) {
+        if (!validator_1.checkPstInt(newValue))
+            exception_1.validateFail("\"" + newValue + "\" \u4E0D\u662F\u4E00\u4E2A\u6709\u6548\u7684\u6B63\u6574\u6570");
+        return newValue;
+    });
+}
+exports.isPstInt = isPstInt;
+function min(threshold) {
+    return generateDecorator(function (newValue) {
+        if (!validator_1.checkMin(newValue, threshold))
+            exception_1.validateFail("\"" + newValue + "\" \u5FC5\u987B\u662F\u6570\u503C\u7C7B\u578B\u5E76\u4E14\u503C\u4E0D\u80FD\u5C0F\u4E8E \"" + threshold + "\"");
+        return newValue;
+    });
+}
+exports.min = min;
 function combine(jsonDecorator) {
     if (jsonDecorator === void 0) { jsonDecorator = {}; }
     var items = [];
@@ -83,9 +99,15 @@ exports.combine = combine;
 function generateDecorator(propertySetter) {
     return function (target, propertyKey) {
         var value = target[propertyKey];
+        var descriptor = Object.getOwnPropertyDescriptor(target, propertyKey);
         Object.defineProperty(target, propertyKey, {
+            configurable: true,
+            enumerable: true,
             get: function () { return value; },
             set: function (newValue) {
+                if (descriptor && descriptor.set) {
+                    descriptor.set(newValue);
+                }
                 value = propertySetter(newValue, propertyKey, value);
             }
         });

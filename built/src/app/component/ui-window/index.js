@@ -35,6 +35,8 @@ var UIWindow = (function (_super) {
         _this.minHeight = const_1.DEFAULT_MIN_HEIGHT;
         _this.maxWidth = const_1.DEFAULT_MAX_WIDTH;
         _this.maxHeight = const_1.DEFAULT_MAX_HEIGHT;
+        _this.left = (const_1.DEFAULT_MAX_WIDTH - _this.width) / 2;
+        _this.top = (const_1.DEFAULT_MAX_HEIGHT - _this.height) / 2;
         _this.border = {
             width: const_1.DEFAULT_BORDER_WIDTH,
             style: const_1.DEFAULT_BORDER_STYLE,
@@ -51,12 +53,15 @@ var UIWindow = (function (_super) {
         element.id = "" + (this.entry.prefix + this.id);
         element_helper_1.addCSSClasses(element, "window", this.boxShadow ? "box-shadow" : undefined);
         element_helper_1.addCSSStyles(element, {
+            zIndex: "" + this.entry.zIndex,
+            width: this.width + "px",
+            height: this.height + "px",
             maxWidth: this.maxWidth !== innerWidth ? this.maxWidth + "px" : null,
             maxHeight: this.maxHeight !== innerHeight ? this.maxHeight + "px" : null,
             minWidth: this.minWidth + "px",
             minHeight: this.minHeight + "px",
-            width: this.width + "px",
-            height: this.height + "px",
+            left: this.left + "px",
+            top: this.top + "px",
             border: this.border === false ? null :
                 this.border.width + "px " + this.border.style + " " + this.border.color,
             borderRadius: this.border === false ? null :
@@ -102,6 +107,12 @@ var UIWindow = (function (_super) {
     __decorate([
         property_decorator_1.isPstNumber()
     ], UIWindow.prototype, "maxHeight", void 0);
+    __decorate([
+        property_decorator_1.isPstNumber()
+    ], UIWindow.prototype, "left", void 0);
+    __decorate([
+        property_decorator_1.isPstNumber()
+    ], UIWindow.prototype, "top", void 0);
     __decorate([
         property_decorator_1.combine({
             width: validator_1.checkPstInt,

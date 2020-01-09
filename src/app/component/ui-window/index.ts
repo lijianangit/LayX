@@ -63,6 +63,18 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
     public maxHeight: number = DEFAULT_MAX_HEIGHT;
 
     /**
+     * 左边边距
+     */
+    @isPstNumber()
+    public left: number = (DEFAULT_MAX_WIDTH - this.width) / 2;
+
+    /**
+     * 右边编剧
+     */
+    @isPstNumber()
+    public top: number = (DEFAULT_MAX_HEIGHT - this.height) / 2;
+
+    /**
      * 边框样式
      */
     @combine({
@@ -98,12 +110,15 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
 
         addCSSStyles(element,
             <CSSStyleDeclaration>{
+                zIndex: `${this.entry.zIndex}`,
+                width: `${this.width}px`,
+                height: `${this.height}px`,
                 maxWidth: this.maxWidth !== innerWidth ? `${this.maxWidth}px` : null,
                 maxHeight: this.maxHeight !== innerHeight ? `${this.maxHeight}px` : null,
                 minWidth: `${this.minWidth}px`,
                 minHeight: `${this.minHeight}px`,
-                width: `${this.width}px`,
-                height: `${this.height}px`,
+                left: `${this.left}px`,
+                top: `${this.top}px`,
                 border: this.border === false ? null :
                     `${this.border.width}px ${this.border.style} ${this.border.color}`,
                 borderRadius: this.border === false ? null :

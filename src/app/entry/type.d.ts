@@ -11,6 +11,11 @@ export interface EntryOption {
     lang?: SupportLanguage;
 
     /**
+     * 默认层数
+     */
+    zIndex: number;
+
+    /**
      * 默认窗口宽度
      */
     width?: number;
