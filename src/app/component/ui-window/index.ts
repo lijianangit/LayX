@@ -69,7 +69,7 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
     public left: number = (DEFAULT_MAX_WIDTH - this.width) / 2;
 
     /**
-     * 右边编剧
+     * 右边边距
      */
     @isPstNumber()
     public top: number = (DEFAULT_MAX_HEIGHT - this.height) / 2;
