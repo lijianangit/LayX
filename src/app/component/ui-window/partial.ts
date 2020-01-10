@@ -84,15 +84,16 @@ function calcOffset(width: number, height: number, offset?: [number, number] | O
                 break;
         }
     }
-    else validateFail(`"${offset}" 不是有效的 "[number,number] 或 [${[Offset.CENTER,
-    Offset.TOP_CENTER,
-    Offset.BOTTOM_CENTER,
-    Offset.LEFT_TOP,
-    Offset.LEFT_MIDDLE,
-    Offset.LEFT_BOTTOM,
-    Offset.RIGHT_TOP,
-    Offset.RIGHT_MIDDLE,
-    Offset.RIGHT_BOTTOM]}]" 类型`);
+    else validateFail(`"${offset}" 不是有效的 "[number,number] 或 [${
+        [Offset.CENTER,
+        Offset.TOP_CENTER,
+        Offset.BOTTOM_CENTER,
+        Offset.LEFT_TOP,
+        Offset.LEFT_MIDDLE,
+        Offset.LEFT_BOTTOM,
+        Offset.RIGHT_TOP,
+        Offset.RIGHT_MIDDLE,
+        Offset.RIGHT_BOTTOM]}]" 类型`);
 
     return croods;
 }
