@@ -24,11 +24,13 @@ var property_decorator_1 = require("../../core/decorator/property-decorator");
 var element_helper_1 = require("../../core/helper/element-helper");
 var const_1 = require("./const");
 var validator_1 = require("../../core/validator");
+var partial_1 = require("./partial");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
     function UIWindow(options) {
         var _a;
         var _this = _super.call(this) || this;
+        _this.handlerOptions = partial_1.handlerOptions;
         _this.width = _this.entry.width;
         _this.height = _this.entry.height;
         _this.minWidth = const_1.DEFAULT_MIN_WIDTH;
@@ -89,22 +91,6 @@ var UIWindow = (function (_super) {
                 }
             });
         }
-    };
-    UIWindow.prototype.handlerOptions = function (options) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
-        this.width = (_b = (_a = options) === null || _a === void 0 ? void 0 : _a.width, (_b !== null && _b !== void 0 ? _b : this.width));
-        this.height = (_d = (_c = options) === null || _c === void 0 ? void 0 : _c.height, (_d !== null && _d !== void 0 ? _d : this.height));
-        this.maxWidth = (_f = (_e = options) === null || _e === void 0 ? void 0 : _e.maxWidth, (_f !== null && _f !== void 0 ? _f : this.maxWidth));
-        this.maxHeight = (_h = (_g = options) === null || _g === void 0 ? void 0 : _g.maxHeight, (_h !== null && _h !== void 0 ? _h : this.maxHeight));
-        this.minWidth = (_k = (_j = options) === null || _j === void 0 ? void 0 : _j.minWidth, (_k !== null && _k !== void 0 ? _k : this.minWidth));
-        this.minHeight = (_m = (_l = options) === null || _l === void 0 ? void 0 : _l.minHeight, (_m !== null && _m !== void 0 ? _m : this.minHeight));
-        this.width = Math.max(this.minWidth, this.width);
-        this.width = Math.min(this.maxWidth, this.width);
-        this.height = Math.max(this.minHeight, this.height);
-        this.height = Math.min(this.maxHeight, this.height);
-        this.border = (_p = (_o = options) === null || _o === void 0 ? void 0 : _o.border, (_p !== null && _p !== void 0 ? _p : this.border));
-        this.boxShadow = (_r = (_q = options) === null || _q === void 0 ? void 0 : _q.boxShadow, (_r !== null && _r !== void 0 ? _r : this.boxShadow));
-        this.animate = (_t = (_s = options) === null || _s === void 0 ? void 0 : _s.animate, (_t !== null && _t !== void 0 ? _t : this.animate));
     };
     __decorate([
         property_decorator_1.isNoEmptyOrNull()

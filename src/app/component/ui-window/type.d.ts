@@ -1,4 +1,4 @@
-import { BorderStyle, Animation } from "./const";
+import { BorderStyle, Animation, Offset } from "./const";
 
 /**
  * 边框参数
@@ -78,4 +78,9 @@ export interface UIWindowOption {
      * 动画
      */
     animate?: false | Animation;
+
+    /**
+     * 偏移量
+     */
+    offset?: [number, number] | Offset;
 }

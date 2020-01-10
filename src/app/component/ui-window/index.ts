@@ -3,8 +3,9 @@ import UIComponent from "../ui-component";
 import { UIWindowOption, BorderOption } from "./type";
 import { isPstNumber, isNoEmptyOrNull, isBoolean, combine, inValueOptions } from "../../core/decorator/property-decorator";
 import { addCSSStyles, addCSSClasses, removeCSSClasses, hasCSSClass } from "../../core/helper/element-helper";
-import { Animation, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT, DEFAULT_MAX_WIDTH, DEFAULT_MAX_HEIGHT, DEFAULT_BORDER_WIDTH, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_STYLE, DEFAULT_BORDER_RADIUS, BorderStyle } from "./const";
+import { Animation, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT, DEFAULT_MAX_WIDTH, DEFAULT_MAX_HEIGHT, DEFAULT_BORDER_WIDTH, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_STYLE, DEFAULT_BORDER_RADIUS, BorderStyle, Offset } from "./const";
 import { checkPstInt, checkNoEmptyOrNull } from "../../core/validator";
+import { handlerOptions } from "./partial";
 
 /**
  * 窗口组件类
@@ -19,6 +20,13 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
         this.id = options?.id;
         this.handlerOptions(options);
     }
+
+    /**
+     * 处理初始传入参数
+     * @param options 控件支持传入可选参数
+     * @returns void
+     */
+    handlerOptions: (options: UIWindowOption) => void = handlerOptions;
 
     /**
      * 唯一Id
@@ -166,26 +174,5 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
 
             });
         }
-    }
-
-    /**
-     * 处理初始传入参数
-     * @param options 控件支持传入可选参数
-     * @returns void
-     */
-    handlerOptions(options: UIWindowOption): void {
-        this.width = options?.width ?? this.width;
-        this.height = options?.height ?? this.height;
-        this.maxWidth = options?.maxWidth ?? this.maxWidth;
-        this.maxHeight = options?.maxHeight ?? this.maxHeight;
-        this.minWidth = options?.minWidth ?? this.minWidth;
-        this.minHeight = options?.minHeight ?? this.minHeight;
-        this.width = Math.max(this.minWidth, this.width);
-        this.width = Math.min(this.maxWidth, this.width);
-        this.height = Math.max(this.minHeight, this.height);
-        this.height = Math.min(this.maxHeight, this.height);
-        this.border = <BorderOption | false>options?.border ?? this.border;
-        this.boxShadow = options?.boxShadow ?? this.boxShadow;
-        this.animate = <Animation | false>options?.animate ?? this.animate;
     }
 }

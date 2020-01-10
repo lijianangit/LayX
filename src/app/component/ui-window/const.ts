@@ -31,6 +31,48 @@ export const enum Animation {
 }
 
 /**
+ * 偏移
+ */
+export const enum Offset {
+    /**
+     * 中间
+     */
+    CENTER = "center",
+    /**
+     * 顶部中间
+     */
+    TOP_CENTER = "top-center",
+    /**
+     * 底部中间
+     */
+    BOTTOM_CENTER = "bottom-center",
+    /**
+     * 左上角
+     */
+    LEFT_TOP = "left-top",
+    /**
+     * 左中间
+     */
+    LEFT_MIDDLE = "left-middle",
+    /**
+     * 左下角
+     */
+    LEFT_BOTTOM = "left-bottom",
+    /**
+     * 右上角
+     */
+    RIGHT_TOP = "right-top",
+    /**
+     * 右中间
+     */
+    RIGHT_MIDDLE = "right-middle",
+    /**
+     * 右下角
+     */
+    RIGHT_BOTTOM = "right-bottom"
+}
+
+/**
  * 默认最小宽度
  */
 export const DEFAULT_MIN_WIDTH: number = 200;
