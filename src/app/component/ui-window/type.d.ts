@@ -1,4 +1,4 @@
-import { BorderStyle } from "./const";
+import { BorderStyle, Animation } from "./const";
 
 /**
  * 边框参数
@@ -67,10 +67,15 @@ export interface UIWindowOption {
     /**
      * 边框
      */
-    border?: boolean | BorderOption;
+    border?: false | BorderOption;
 
     /**
      * 阴影
      */
     boxShadow?: boolean;
+
+    /**
+     * 动画
+     */
+    animate?: false | Animation;
 }

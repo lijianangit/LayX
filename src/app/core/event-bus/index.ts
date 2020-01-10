@@ -55,13 +55,18 @@ export default class EventBus {
      */
     public emit(eventKey: string, message: any): void {
         if (!this.messageQueues.hasOwnProperty(eventKey)) return;
+
         const eventValue = this.messageQueues[eventKey];
         if (checkOfType(eventValue, "function")) {
-            (<EventHandler>eventValue)(message);
+            setTimeout(() => {
+                (<EventHandler>eventValue)(message);
+            }, 0);
         }
         else if (checkArray(eventValue)) {
             (<Array<EventHandler>>eventValue).map(handler => {
-                handler(message);
+                setTimeout(() => {
+                    handler(message);
+                }, 0);
             });
         }
     }

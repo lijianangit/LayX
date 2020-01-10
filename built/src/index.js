@@ -6,6 +6,7 @@ function overt() {
     var entryOvert = function (options) {
         entry_1.default.getInstance(options);
     };
+    entryOvert.on = entry.on;
     entryOvert.version = entry.version;
     entryOvert.open = entry.open;
     return entryOvert;

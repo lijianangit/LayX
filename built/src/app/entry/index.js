@@ -9,6 +9,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var const_1 = require("./const");
 var property_decorator_1 = require("../core/decorator/property-decorator");
 var ui_window_1 = require("../component/ui-window");
+var event_bus_1 = require("../core/event-bus");
+var validator_1 = require("../core/validator");
 require("../asset/style");
 var Entry = (function () {
     function Entry(options) {
@@ -20,6 +22,15 @@ var Entry = (function () {
         this.height = const_1.DEFAULT_WINDOW_HEIGHT;
         this.handlerOptions(options);
     }
+    Entry.prototype.on = function (queues) {
+        if (queues === void 0) { queues = {}; }
+        for (var eventKey in queues) {
+            var handler = queues[eventKey];
+            if (validator_1.checkOfType(handler, "function")) {
+                event_bus_1.default.getInstance().on(eventKey, handler);
+            }
+        }
+    };
     Entry.prototype.open = function (options) {
         var uiWindow = new ui_window_1.default(options);
         var uiWindowElement = uiWindow.present();

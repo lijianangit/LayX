@@ -21,6 +21,16 @@ export enum BorderStyle {
 }
 
 /**
+ * 支持动画
+ */
+export enum Animation {
+    /**
+     * 缩放
+     */
+    ZOOM = "zoom"
+}
+
+/**
  * 默认最小宽度
  */
 export const DEFAULT_MIN_WIDTH: number = 200;

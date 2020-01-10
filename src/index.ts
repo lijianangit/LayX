@@ -11,6 +11,7 @@ function overt(): EntryOvert {
         Entry.getInstance(options);
     };
 
+    entryOvert.on = entry.on;
     entryOvert.version = entry.version;
     entryOvert.open = entry.open;
 

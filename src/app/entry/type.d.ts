@@ -1,5 +1,7 @@
 import { SupportLanguage } from "./const";
 import { UIWindowOption } from "../component/ui-window/type";
+import EventBus from "../core/event-bus";
+import { MessageQueues, EventSetter } from "../core/event-bus/type";
 
 /**
  * 入口配置选项
@@ -39,6 +41,11 @@ export interface EntryOvert {
      * 全局配置
      */
     (options: EntryOption): void;
+
+    /**
+     * 监听事件
+     */
+    on(queues: EventSetter): void;
 
     /**
      * 打开新窗口

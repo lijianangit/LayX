@@ -95,7 +95,7 @@ export function checkContains(data: any, character: string): boolean {
  * @returns boolean
  */
 export function checkInValueOptions(data: any, ...valueOptions: ValueOption): boolean {
-    return checkOfType(data, "number", "string", "undefined", "object") && valueOptions.indexOf(data) > -1;
+    return checkOfType(data, "boolean", "number", "string", "undefined", "object") && valueOptions.indexOf(data) > -1;
 }
 
 /**

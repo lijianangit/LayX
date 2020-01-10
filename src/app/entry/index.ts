@@ -3,8 +3,12 @@ import { VERSION, ZINDEX, PREFIX, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, S
 import { isPstNumber, inValueOptions, isPstInt, min } from "../core/decorator/property-decorator";
 import { UIWindowOption } from "../component/ui-window/type";
 import UIWindow from "../component/ui-window";
+import { EventSetter } from "../core/event-bus/type";
+import EventBus from "../core/event-bus";
+import { checkOfType } from "../core/validator";
 
 import "../asset/style";
+
 
 /**
  * 入口单例类，承载着全局数据存储
@@ -51,6 +55,19 @@ export default class Entry {
      */
     @isPstNumber()
     public height: number = DEFAULT_WINDOW_HEIGHT;
+
+    /**
+     * 监听事件
+     * @param queues 事件队列
+     */
+    on(queues: EventSetter = {}): void {
+        for (const eventKey in queues) {
+            const handler = queues[eventKey];
+            if (checkOfType(handler, "function")) {
+                EventBus.getInstance().on(eventKey, handler);
+            }
+        }
+    }
 
     /**
      * 打开新窗口

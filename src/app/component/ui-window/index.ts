@@ -1,10 +1,10 @@
 import Component from "../";
 import UIComponent from "../ui-component";
 import { UIWindowOption, BorderOption } from "./type";
-import { isPstNumber, isNoEmptyOrNull, isBoolean, combine } from "../../core/decorator/property-decorator";
-import { addCSSStyles, addCSSClasses } from "../../core/helper/element-helper";
-import { DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT, DEFAULT_MAX_WIDTH, DEFAULT_MAX_HEIGHT, DEFAULT_BORDER_WIDTH, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_STYLE, DEFAULT_BORDER_RADIUS, BorderStyle } from "./const";
-import { checkPstInt, checkInValueOptions, checkNoEmptyOrNull } from "../../core/validator";
+import { isPstNumber, isNoEmptyOrNull, isBoolean, combine, inValueOptions } from "../../core/decorator/property-decorator";
+import { addCSSStyles, addCSSClasses, removeCSSClasses, hasCSSClass } from "../../core/helper/element-helper";
+import { Animation, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT, DEFAULT_MAX_WIDTH, DEFAULT_MAX_HEIGHT, DEFAULT_BORDER_WIDTH, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_STYLE, DEFAULT_BORDER_RADIUS, BorderStyle } from "./const";
+import { checkPstInt, checkNoEmptyOrNull } from "../../core/validator";
 
 /**
  * 窗口组件类
@@ -97,16 +97,30 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
     public boxShadow: boolean = true;
 
     /**
+     * 动画
+     */
+    @inValueOptions(Animation.ZOOM, false)
+    public animate: false | Animation = Animation.ZOOM;
+
+    /**
+     * 窗口元素对象
+     */
+    public windowElement: HTMLDivElement | null = null;
+
+    /**
      * 创建控件元素对象
      * @returns HTMLElement
      */
     present(): HTMLElement {
         const element = document.createElement("div");
+        this.windowElement = element;
         element.id = `${this.entry.prefix + this.id}`;
 
         addCSSClasses(element,
             "window",
-            this.boxShadow ? "box-shadow" : undefined);
+            this.boxShadow ? "box-shadow" : undefined,
+            this.animate !== false ? "animate" : undefined,
+            this.animate !== false ? `animate-${this.animate}-show` : undefined);
 
         addCSSStyles(element,
             <CSSStyleDeclaration>{
@@ -127,7 +141,31 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
                     `${this.border.radius}px`,
             });
 
+        this.monitorEvent();
+
+        this.eventBus.emit(`window:create`, { eventName: "window:create", id: this.id });
         return element;
+    }
+
+    /**
+     * 监听事件
+     * @returns void 
+     */
+    monitorEvent(): void {
+        if (!this.windowElement) return;
+
+        if (this.animate !== false) {
+            this.windowElement.addEventListener("animationend", (ev: AnimationEvent) => {
+
+                // 新建或显示窗口
+                const animateShowName = `animate-${this.animate}-show`;
+                if (hasCSSClass(this.windowElement, animateShowName)) {
+                    removeCSSClasses(this.windowElement, animateShowName);
+                    this.eventBus.emit(`window:show`, { eventName: "window:show", id: this.id });
+                }
+
+            });
+        }
     }
 
     /**
@@ -148,5 +186,6 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
         this.height = Math.min(this.maxHeight, this.height);
         this.border = <BorderOption | false>options?.border ?? this.border;
         this.boxShadow = options?.boxShadow ?? this.boxShadow;
+        this.animate = <Animation | false>options?.animate ?? this.animate;
     }
 }

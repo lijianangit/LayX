@@ -55,7 +55,7 @@ function checkInValueOptions(data) {
     for (var _i = 1; _i < arguments.length; _i++) {
         valueOptions[_i - 1] = arguments[_i];
     }
-    return checkOfType(data, "number", "string", "undefined", "object") && valueOptions.indexOf(data) > -1;
+    return checkOfType(data, "boolean", "number", "string", "undefined", "object") && valueOptions.indexOf(data) > -1;
 }
 exports.checkInValueOptions = checkInValueOptions;
 function checkMinLength(data, threshold) {

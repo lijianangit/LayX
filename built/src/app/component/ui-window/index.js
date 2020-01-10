@@ -44,14 +44,17 @@ var UIWindow = (function (_super) {
             radius: const_1.DEFAULT_BORDER_RADIUS
         };
         _this.boxShadow = true;
+        _this.animate = const_1.Animation.ZOOM;
+        _this.windowElement = null;
         _this.id = (_a = options) === null || _a === void 0 ? void 0 : _a.id;
         _this.handlerOptions(options);
         return _this;
     }
     UIWindow.prototype.present = function () {
         var element = document.createElement("div");
+        this.windowElement = element;
         element.id = "" + (this.entry.prefix + this.id);
-        element_helper_1.addCSSClasses(element, "window", this.boxShadow ? "box-shadow" : undefined);
+        element_helper_1.addCSSClasses(element, "window", this.boxShadow ? "box-shadow" : undefined, this.animate !== false ? "animate" : undefined, this.animate !== false ? "animate-" + this.animate + "-show" : undefined);
         element_helper_1.addCSSStyles(element, {
             zIndex: "" + this.entry.zIndex,
             width: this.width + "px",
@@ -69,10 +72,26 @@ var UIWindow = (function (_super) {
             webkitBorderRadius: this.border === false ? null :
                 this.border.radius + "px",
         });
+        this.monitorEvent();
+        this.eventBus.emit("window:create", { eventName: "window:create", id: this.id });
         return element;
     };
+    UIWindow.prototype.monitorEvent = function () {
+        var _this = this;
+        if (!this.windowElement)
+            return;
+        if (this.animate !== false) {
+            this.windowElement.addEventListener("animationend", function (ev) {
+                var animateShowName = "animate-" + _this.animate + "-show";
+                if (element_helper_1.hasCSSClass(_this.windowElement, animateShowName)) {
+                    element_helper_1.removeCSSClasses(_this.windowElement, animateShowName);
+                    _this.eventBus.emit("window:show", { eventName: "window:show", id: _this.id });
+                }
+            });
+        }
+    };
     UIWindow.prototype.handlerOptions = function (options) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
         this.width = (_b = (_a = options) === null || _a === void 0 ? void 0 : _a.width, (_b !== null && _b !== void 0 ? _b : this.width));
         this.height = (_d = (_c = options) === null || _c === void 0 ? void 0 : _c.height, (_d !== null && _d !== void 0 ? _d : this.height));
         this.maxWidth = (_f = (_e = options) === null || _e === void 0 ? void 0 : _e.maxWidth, (_f !== null && _f !== void 0 ? _f : this.maxWidth));
@@ -85,6 +104,7 @@ var UIWindow = (function (_super) {
         this.height = Math.min(this.maxHeight, this.height);
         this.border = (_p = (_o = options) === null || _o === void 0 ? void 0 : _o.border, (_p !== null && _p !== void 0 ? _p : this.border));
         this.boxShadow = (_r = (_q = options) === null || _q === void 0 ? void 0 : _q.boxShadow, (_r !== null && _r !== void 0 ? _r : this.boxShadow));
+        this.animate = (_t = (_s = options) === null || _s === void 0 ? void 0 : _s.animate, (_t !== null && _t !== void 0 ? _t : this.animate));
     };
     __decorate([
         property_decorator_1.isNoEmptyOrNull()
@@ -124,6 +144,9 @@ var UIWindow = (function (_super) {
     __decorate([
         property_decorator_1.isBoolean()
     ], UIWindow.prototype, "boxShadow", void 0);
+    __decorate([
+        property_decorator_1.inValueOptions(const_1.Animation.ZOOM, false)
+    ], UIWindow.prototype, "animate", void 0);
     return UIWindow;
 }(__1.default));
 exports.default = UIWindow;

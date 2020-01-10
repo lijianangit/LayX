@@ -7,6 +7,10 @@ var BorderStyle;
     BorderStyle["SOLID"] = "solid";
     BorderStyle["DOUBLE"] = "double";
 })(BorderStyle = exports.BorderStyle || (exports.BorderStyle = {}));
+var Animation;
+(function (Animation) {
+    Animation["ZOOM"] = "zoom";
+})(Animation = exports.Animation || (exports.Animation = {}));
 exports.DEFAULT_MIN_WIDTH = 200;
 exports.DEFAULT_MIN_HEIGHT = 200;
 exports.DEFAULT_MAX_WIDTH = innerWidth;

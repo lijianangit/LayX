@@ -11,3 +11,10 @@ export interface EventHandler {
 export interface MessageQueues {
     [eventKey: string]: EventHandler | Array<EventHandler>;
 }
+
+/**
+ * 事件设置
+ */
+export interface EventSetter {
+    [eventKey: string]: EventHandler;
+}

@@ -11,6 +11,14 @@
 <body>
     <button id="create">打开窗口</button>
     <script type="text/javascript">
+        layx.on({
+            ["window:create"]: function (message) {
+                console.log(message);
+            },
+            ["window:show"]: function (message) {
+                console.log(message);
+            }
+        });
         document.getElementById("create").onclick = function () {
             layx.open({
                 id: "hello"

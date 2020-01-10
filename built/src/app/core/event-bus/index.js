@@ -34,11 +34,15 @@ var EventBus = (function () {
             return;
         var eventValue = this.messageQueues[eventKey];
         if (validator_1.checkOfType(eventValue, "function")) {
-            eventValue(message);
+            setTimeout(function () {
+                eventValue(message);
+            }, 0);
         }
         else if (validator_1.checkArray(eventValue)) {
             eventValue.map(function (handler) {
-                handler(message);
+                setTimeout(function () {
+                    handler(message);
+                }, 0);
             });
         }
     };
