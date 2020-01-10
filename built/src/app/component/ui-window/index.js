@@ -44,7 +44,7 @@ var UIWindow = (function (_super) {
             radius: const_1.DEFAULT_BORDER_RADIUS
         };
         _this.boxShadow = true;
-        _this.animate = const_1.Animation.ZOOM;
+        _this.animate = "zoom";
         _this.windowElement = null;
         _this.id = (_a = options) === null || _a === void 0 ? void 0 : _a.id;
         _this.handlerOptions(options);
@@ -136,7 +136,7 @@ var UIWindow = (function (_super) {
     __decorate([
         property_decorator_1.combine({
             width: validator_1.checkPstInt,
-            style: [const_1.BorderStyle.SOLID, const_1.BorderStyle.DOUBLE, const_1.BorderStyle.DOTTED, const_1.BorderStyle.DASHED],
+            style: ["solid", "double", "dotted", "dashed"],
             color: validator_1.checkNoEmptyOrNull,
             radius: validator_1.checkPstInt
         }, false)
@@ -145,7 +145,7 @@ var UIWindow = (function (_super) {
         property_decorator_1.isBoolean()
     ], UIWindow.prototype, "boxShadow", void 0);
     __decorate([
-        property_decorator_1.inValueOptions(const_1.Animation.ZOOM, false)
+        property_decorator_1.inValueOptions("zoom", false)
     ], UIWindow.prototype, "animate", void 0);
     return UIWindow;
 }(__1.default));

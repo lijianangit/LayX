@@ -26,7 +26,7 @@ export const DEFAULT_WINDOW_HEIGHT: number = 600;
 /**
  * 内置支持语言
  */
-export enum SupportLanguage {
+export const enum SupportLanguage {
     /**
      * 中文
      */

@@ -1,7 +1,7 @@
 /**
  * 边框样式
  */
-export enum BorderStyle {
+export const enum BorderStyle {
     /**
      * 点状
      */
@@ -23,7 +23,7 @@ export enum BorderStyle {
 /**
  * 支持动画
  */
-export enum Animation {
+export const enum Animation {
     /**
      * 缩放
      */
