@@ -94,4 +94,11 @@ function checkRegExp(data) {
     return data instanceof RegExp;
 }
 exports.checkRegExp = checkRegExp;
+function checkColor(data) {
+    var binaryReg = /^#([0-9a-f]{6}|[0-9a-f]{3})$/i;
+    var rgbRex = /^rgb\(([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\,([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\,([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\)$/i;
+    var rgbaRex = /^rgba\(([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\,([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\,([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\,(1|1.0|0.[0-9])\)$/i;
+    return binaryReg.test(data) || rgbRex.test(data) || rgbaRex.test(data);
+}
+exports.checkColor = checkColor;
 //# sourceMappingURL=index.js.map

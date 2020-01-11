@@ -47,6 +47,7 @@ var UIWindow = (function (_super) {
         };
         _this.boxShadow = true;
         _this.animate = "zoom";
+        _this.backgroundColor = _this.entry.backgroundColor;
         _this.windowElement = null;
         _this.id = (_a = options) === null || _a === void 0 ? void 0 : _a.id;
         _this.handlerOptions(options);
@@ -58,6 +59,7 @@ var UIWindow = (function (_super) {
         element.id = "" + (this.entry.prefix + this.id);
         element_helper_1.addCSSClasses(element, "window", this.boxShadow ? "box-shadow" : undefined, this.animate !== false ? "animate" : undefined, this.animate !== false ? "animate-" + this.animate + "-show" : undefined);
         element_helper_1.addCSSStyles(element, {
+            backgroundColor: "" + this.backgroundColor,
             zIndex: "" + this.entry.zIndex,
             width: this.width + "px",
             height: this.height + "px",
@@ -75,7 +77,7 @@ var UIWindow = (function (_super) {
                 this.border.radius + "px",
         });
         this.monitorEvent();
-        this.eventBus.emit("window:create", { eventName: "window:create", id: this.id });
+        this.sendEvent("window:create", { id: this.id });
         return element;
     };
     UIWindow.prototype.monitorEvent = function () {
@@ -87,7 +89,7 @@ var UIWindow = (function (_super) {
                 var animateShowName = "animate-" + _this.animate + "-show";
                 if (element_helper_1.hasCSSClass(_this.windowElement, animateShowName)) {
                     element_helper_1.removeCSSClasses(_this.windowElement, animateShowName);
-                    _this.eventBus.emit("window:show", { eventName: "window:show", id: _this.id });
+                    _this.sendEvent("window:show", { id: _this.id });
                 }
             });
         }
@@ -123,7 +125,7 @@ var UIWindow = (function (_super) {
         property_decorator_1.combine({
             width: validator_1.checkPstInt,
             style: ["solid", "double", "dotted", "dashed"],
-            color: validator_1.checkNoEmptyOrNull,
+            color: validator_1.checkColor,
             radius: validator_1.checkPstInt
         }, false)
     ], UIWindow.prototype, "border", void 0);
@@ -133,6 +135,9 @@ var UIWindow = (function (_super) {
     __decorate([
         property_decorator_1.inValueOptions("zoom", false)
     ], UIWindow.prototype, "animate", void 0);
+    __decorate([
+        property_decorator_1.isColor()
+    ], UIWindow.prototype, "backgroundColor", void 0);
     return UIWindow;
 }(__1.default));
 exports.default = UIWindow;

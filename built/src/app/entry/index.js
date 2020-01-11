@@ -11,15 +11,18 @@ var property_decorator_1 = require("../core/decorator/property-decorator");
 var ui_window_1 = require("../component/ui-window");
 var event_bus_1 = require("../core/event-bus");
 var validator_1 = require("../core/validator");
+var partial_1 = require("./partial");
 require("../asset/style");
 var Entry = (function () {
     function Entry(options) {
+        this.handlerOptions = partial_1.handlerOptions;
         this.version = const_1.VERSION;
         this.zIndex = const_1.ZINDEX;
         this.prefix = const_1.PREFIX;
         this.lang = "ZH_CN";
         this.width = const_1.DEFAULT_WINDOW_WIDTH;
         this.height = const_1.DEFAULT_WINDOW_HEIGHT;
+        this.backgroundColor = const_1.DEFAULT_WINDOW_BACKGROUND_COLOR;
         this.handlerOptions(options);
     }
     Entry.prototype.on = function (queues) {
@@ -48,13 +51,6 @@ var Entry = (function () {
         }
         return this.instance;
     };
-    Entry.prototype.handlerOptions = function (options) {
-        var _a, _b, _c, _d, _e, _f, _g, _h;
-        this.lang = (_b = (_a = options) === null || _a === void 0 ? void 0 : _a.lang, (_b !== null && _b !== void 0 ? _b : "ZH_CN"));
-        this.width = (_d = (_c = options) === null || _c === void 0 ? void 0 : _c.width, (_d !== null && _d !== void 0 ? _d : this.width));
-        this.height = (_f = (_e = options) === null || _e === void 0 ? void 0 : _e.height, (_f !== null && _f !== void 0 ? _f : this.height));
-        this.zIndex = (_h = (_g = options) === null || _g === void 0 ? void 0 : _g.zIndex, (_h !== null && _h !== void 0 ? _h : this.zIndex));
-    };
     __decorate([
         property_decorator_1.isPstInt(),
         property_decorator_1.min(1000)
@@ -68,6 +64,9 @@ var Entry = (function () {
     __decorate([
         property_decorator_1.isPstNumber()
     ], Entry.prototype, "height", void 0);
+    __decorate([
+        property_decorator_1.isColor()
+    ], Entry.prototype, "backgroundColor", void 0);
     return Entry;
 }());
 exports.default = Entry;

@@ -83,4 +83,9 @@ export interface UIWindowOption {
      * 偏移量
      */
     offset?: [number, number] | Offset;
+
+    /**
+     * 背景颜色
+     */
+    backgroundColor?: string;
 }

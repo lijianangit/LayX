@@ -26,6 +26,11 @@ export interface EntryOption {
      * 默认窗口高度
      */
     height?: number;
+
+    /**
+     * 默认背景颜色
+     */
+    backgroundColor?: string;
 }
 
 /**

@@ -1,5 +1,5 @@
 import { PropertySetter, PropertyDecorator } from "./type";
-import { checkPstNumber, checkInValueOptions, checkNoEmptyOrNull, checkOfType, checkJSONObject, checkArray, checkRegExp, checkPstInt, checkMin } from "../validator";
+import { checkPstNumber, checkInValueOptions, checkNoEmptyOrNull, checkOfType, checkJSONObject, checkArray, checkRegExp, checkPstInt, checkMin, checkColor } from "../validator";
 import { ValueOption } from "../validator/type";
 import { validateFail } from "../exception";
 import { JSONObject } from "../helper/type";
@@ -49,6 +49,18 @@ export function isNoEmptyOrNull(): PropertyDecorator {
 export function isBoolean(): PropertyDecorator {
     return generateDecorator((newValue) => {
         if (!checkOfType(newValue, "boolean")) validateFail(`"${newValue}" 不是一个有效的布尔值`);
+
+        return newValue;
+    });
+}
+
+/**
+ * 检查颜色值
+ * @returns PropertyDecorator 
+ */
+export function isColor(): PropertyDecorator {
+    return generateDecorator((newValue) => {
+        if (!checkColor(newValue)) validateFail(`"${newValue}" 不是一个有效的CSS颜色值`);
 
         return newValue;
     });

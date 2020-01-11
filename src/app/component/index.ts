@@ -1,5 +1,6 @@
 import Entry from "../entry";
 import EventBus from "../core/event-bus";
+import { JSONObject } from "../core/helper/type";
 
 /**
  * 组件类，所有的组件都必须继承该类
@@ -27,4 +28,20 @@ export default abstract class Component<TOption> {
      * @returns void
      */
     abstract handlerOptions(options: TOption): void;
+
+    /**
+     * 发送事件
+     * @param eventName 事件名称
+     * @param message 消息
+     * @returns void
+     */
+    sendEvent(eventName: string, message: JSONObject = {}): void {
+        this.eventBus.emit(eventName, {
+            dataset: message,
+            eventTarget: {
+                name: eventName,
+                timestamp: new Date().valueOf()
+            }
+        });
+    }
 }

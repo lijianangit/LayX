@@ -1,11 +1,12 @@
 import { EntryOption } from "./type";
-import { VERSION, ZINDEX, PREFIX, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, SupportLanguage } from "./const";
-import { isPstNumber, inValueOptions, isPstInt, min } from "../core/decorator/property-decorator";
+import { VERSION, ZINDEX, PREFIX, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_BACKGROUND_COLOR, SupportLanguage } from "./const";
+import { isPstNumber, inValueOptions, isPstInt, min, isColor } from "../core/decorator/property-decorator";
 import { UIWindowOption } from "../component/ui-window/type";
 import UIWindow from "../component/ui-window";
 import { EventSetter } from "../core/event-bus/type";
 import EventBus from "../core/event-bus";
 import { checkOfType } from "../core/validator";
+import { handlerOptions } from "./partial";
 
 import "../asset/style";
 
@@ -20,6 +21,13 @@ export default class Entry {
     private constructor(options: EntryOption) {
         this.handlerOptions(options);
     }
+
+    /**
+     * 处理初始传入参数
+     * @param options 可选参数
+     * @returns void
+     */
+    handlerOptions: (options: EntryOption) => void = handlerOptions;
 
     /**
      * 版本号
@@ -55,6 +63,12 @@ export default class Entry {
      */
     @isPstNumber()
     public height: number = DEFAULT_WINDOW_HEIGHT;
+
+    /**
+     * 默认背景颜色
+     */
+    @isColor()
+    public backgroundColor: string = DEFAULT_WINDOW_BACKGROUND_COLOR;
 
     /**
      * 监听事件
@@ -101,17 +115,5 @@ export default class Entry {
             this.instance.handlerOptions(options);
         }
         return this.instance;
-    }
-
-    /**
-     * 处理传入参数
-     * @param options 入口参数
-     * @returns void
-     */
-    private handlerOptions(options: EntryOption): void {
-        this.lang = options?.lang ?? SupportLanguage.ZH_CN;
-        this.width = options?.width ?? this.width;
-        this.height = options?.height ?? this.height;
-        this.zIndex = options?.zIndex ?? this.zIndex;
     }
 }

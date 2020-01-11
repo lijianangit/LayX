@@ -1,10 +1,10 @@
 import Component from "../";
 import UIComponent from "../ui-component";
 import { UIWindowOption, BorderOption } from "./type";
-import { isPstNumber, isNoEmptyOrNull, isBoolean, combine, inValueOptions } from "../../core/decorator/property-decorator";
+import { isPstNumber, isNoEmptyOrNull, isBoolean, combine, inValueOptions, isColor } from "../../core/decorator/property-decorator";
 import { addCSSStyles, addCSSClasses, removeCSSClasses, hasCSSClass } from "../../core/helper/element-helper";
 import { Animation, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT, DEFAULT_MAX_WIDTH, DEFAULT_MAX_HEIGHT, DEFAULT_BORDER_WIDTH, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_STYLE, DEFAULT_BORDER_RADIUS, BorderStyle, Offset } from "./const";
-import { checkPstInt, checkNoEmptyOrNull } from "../../core/validator";
+import { checkPstInt, checkNoEmptyOrNull, checkColor } from "../../core/validator";
 import { handlerOptions } from "./partial";
 
 /**
@@ -23,7 +23,7 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
 
     /**
      * 处理初始传入参数
-     * @param options 控件支持传入可选参数
+     * @param options 可选参数
      * @returns void
      */
     handlerOptions: (options: UIWindowOption) => void = handlerOptions;
@@ -88,7 +88,7 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
     @combine({
         width: checkPstInt, /** 正整数 */
         style: [BorderStyle.SOLID, BorderStyle.DOUBLE, BorderStyle.DOTTED, BorderStyle.DASHED], /** 可选值 */
-        color: checkNoEmptyOrNull,  /** 非空字符串 */
+        color: checkColor,  /** 非空字符串 */
         radius: checkPstInt /** 正整数 */
     }, false)
     public border: BorderOption | false = <BorderOption>{
@@ -109,6 +109,12 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
      */
     @inValueOptions(Animation.ZOOM, false)
     public animate: false | Animation = Animation.ZOOM;
+
+    /**
+     * 背景颜色
+     */
+    @isColor()
+    public backgroundColor: string = this.entry.backgroundColor;
 
     /**
      * 窗口元素对象
@@ -132,6 +138,7 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
 
         addCSSStyles(element,
             <CSSStyleDeclaration>{
+                backgroundColor: `${this.backgroundColor}`,
                 zIndex: `${this.entry.zIndex}`,
                 width: `${this.width}px`,
                 height: `${this.height}px`,
@@ -151,7 +158,7 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
 
         this.monitorEvent();
 
-        this.eventBus.emit(`window:create`, { eventName: "window:create", id: this.id });
+        this.sendEvent("window:create", { id: this.id });
         return element;
     }
 
@@ -169,7 +176,7 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
                 const animateShowName = `animate-${this.animate}-show`;
                 if (hasCSSClass(this.windowElement, animateShowName)) {
                     removeCSSClasses(this.windowElement, animateShowName);
-                    this.eventBus.emit(`window:show`, { eventName: "window:show", id: this.id });
+                    this.sendEvent("window:show", { id: this.id });
                 }
 
             });

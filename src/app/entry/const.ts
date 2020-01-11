@@ -24,6 +24,11 @@ export const DEFAULT_WINDOW_WIDTH: number = 800;
 export const DEFAULT_WINDOW_HEIGHT: number = 600;
 
 /**
+ * 默认窗口背景颜色
+ */
+export const DEFAULT_WINDOW_BACKGROUND_COLOR: string = "#ffffff";
+
+/**
  * 内置支持语言
  */
 export const enum SupportLanguage {

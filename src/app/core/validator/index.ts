@@ -186,3 +186,16 @@ export function checkNoEmptyOrNull(data: any): boolean {
 export function checkRegExp(data: any): boolean {
     return data instanceof RegExp;
 }
+
+/**
+ * 检查是否是颜色值
+ * @param data 数值
+ * @returns boolean 
+ */
+export function checkColor(data: any): boolean {
+    var binaryReg = /^#([0-9a-f]{6}|[0-9a-f]{3})$/i;
+    var rgbRex = /^rgb\(([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\,([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\,([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\)$/i;
+    var rgbaRex = /^rgba\(([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\,([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\,([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\,(1|1.0|0.[0-9])\)$/i;
+
+    return binaryReg.test(data) || rgbRex.test(data) || rgbaRex.test(data);
+}

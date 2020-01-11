@@ -46,6 +46,14 @@ function isBoolean() {
     });
 }
 exports.isBoolean = isBoolean;
+function isColor() {
+    return generateDecorator(function (newValue) {
+        if (!validator_1.checkColor(newValue))
+            exception_1.validateFail("\"" + newValue + "\" \u4E0D\u662F\u4E00\u4E2A\u6709\u6548\u7684CSS\u989C\u8272\u503C");
+        return newValue;
+    });
+}
+exports.isColor = isColor;
 function isPstInt() {
     return generateDecorator(function (newValue) {
         if (!validator_1.checkPstInt(newValue))

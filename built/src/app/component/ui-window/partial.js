@@ -1,10 +1,17 @@
 "use strict";
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var validator_1 = require("../../core/validator");
 var exception_1 = require("../../core/exception");
 function handlerOptions(options) {
     var _a;
-    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
+    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x;
     this.width = (_c = (_b = options) === null || _b === void 0 ? void 0 : _b.width, (_c !== null && _c !== void 0 ? _c : this.width));
     this.height = (_e = (_d = options) === null || _d === void 0 ? void 0 : _d.height, (_e !== null && _e !== void 0 ? _e : this.height));
     this.maxWidth = (_g = (_f = options) === null || _f === void 0 ? void 0 : _f.maxWidth, (_g !== null && _g !== void 0 ? _g : this.maxWidth));
@@ -19,20 +26,32 @@ function handlerOptions(options) {
     this.boxShadow = (_s = (_r = options) === null || _r === void 0 ? void 0 : _r.boxShadow, (_s !== null && _s !== void 0 ? _s : this.boxShadow));
     this.animate = (_u = (_t = options) === null || _t === void 0 ? void 0 : _t.animate, (_u !== null && _u !== void 0 ? _u : this.animate));
     _a = calcOffset(this.width, this.height, (_v = options) === null || _v === void 0 ? void 0 : _v.offset), this.left = _a[0], this.top = _a[1];
+    this.backgroundColor = (_x = (_w = options) === null || _w === void 0 ? void 0 : _w.backgroundColor, (_x !== null && _x !== void 0 ? _x : this.backgroundColor));
 }
 exports.handlerOptions = handlerOptions;
 function calcOffset(width, height, offset) {
-    var croods = [(innerWidth - width) / 2, (innerHeight - height) / 2];
     if (offset === undefined)
-        return croods;
-    else if (validator_1.checkArray(offset)) {
+        return [(innerWidth - width) / 2, (innerHeight - height) / 2];
+    if (validator_1.checkArray(offset)) {
         if (offset.length !== 2 ||
             !validator_1.checkOfType(offset[0], "number") ||
             !validator_1.checkOfType(offset[1], "number"))
             exception_1.validateFail("\"" + [offset] + "\" \u4E0D\u662F\u6709\u6548\u7684 \"[number,number]\" \u7C7B\u578B");
-        croods = [offset[0], offset[1]];
+        return [offset[0], offset[1]];
     }
-    else if (validator_1.checkInValueOptions(offset, "center", "top-center", "bottom-center", "left-top", "left-middle", "left-bottom", "right-top", "right-middle", "right-bottom")) {
+    var croods = [0, 0];
+    var offsetOptions = [
+        "center",
+        "top-center",
+        "bottom-center",
+        "left-top",
+        "left-middle",
+        "left-bottom",
+        "right-top",
+        "right-middle",
+        "right-bottom"
+    ];
+    if (validator_1.checkInValueOptions.apply(void 0, __spreadArrays([offset], offsetOptions))) {
         switch (offset) {
             case "center":
                 croods = [(innerWidth - width) / 2, (innerHeight - height) / 2];
@@ -62,17 +81,8 @@ function calcOffset(width, height, offset) {
                 croods = [innerWidth - width, innerHeight - height];
                 break;
         }
+        return croods;
     }
-    else
-        exception_1.validateFail("\"" + offset + "\" \u4E0D\u662F\u6709\u6548\u7684 \"[number,number] \u6216 [" + ["center",
-            "top-center",
-            "bottom-center",
-            "left-top",
-            "left-middle",
-            "left-bottom",
-            "right-top",
-            "right-middle",
-            "right-bottom"] + "]\" \u7C7B\u578B");
-    return croods;
+    exception_1.validateFail("\"" + offset + "\" \u4E0D\u662F\u6709\u6548\u7684 \"[number,number] \u6216 [" + offsetOptions + "]\" \u7C7B\u578B");
 }
 //# sourceMappingURL=partial.js.map
