@@ -1,3 +1,5 @@
-import "./common.css";
-import "./window.css";
-import "./animate.css";
+import './common.css';
+import './animate.css';
+import './window.css';
+import './tool-bar.css';
+

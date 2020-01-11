@@ -8,6 +8,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var const_1 = require("../../entry/const");
+var validator_1 = require("../validator");
 function addCSSStyles(element, cssStyles) {
     var _a;
     if (!element)
@@ -73,4 +74,12 @@ function updateCSSClasses(element, handler, prefix) {
     element.className = currentClasses.join(" ").trim();
     return element;
 }
+function createDivElement(id) {
+    var element = document.createElement("div");
+    if (validator_1.checkOfType(id, "string")) {
+        element.id = id;
+    }
+    return element;
+}
+exports.createDivElement = createDivElement;
 //# sourceMappingURL=element-helper.js.map

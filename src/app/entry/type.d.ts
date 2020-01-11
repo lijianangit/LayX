@@ -1,7 +1,47 @@
-import { SupportLanguage } from "./const";
-import { UIWindowOption } from "../component/ui-window/type";
-import EventBus from "../core/event-bus";
-import { MessageQueues, EventSetter } from "../core/event-bus/type";
+import { UIWindowOption } from '../component/ui-window/type';
+import EventBus from '../core/event-bus';
+import { EventSetter, MessageQueues } from '../core/event-bus/type';
+import { SupportLanguage } from './const';
+
+/**
+ * 工具栏默认配置
+ */
+export interface ToolBarDefault {
+    /**
+     * 默认高度
+     */
+    height?: number;
+
+    /**
+     * 默认背景颜色
+     */
+    backgroundColor?: string;
+}
+
+/**
+ * 窗口默认配置
+ */
+export interface WindowDefault {
+    /**
+     * 默认窗口宽度
+     */
+    width?: number;
+
+    /**
+     * 默认窗口高度
+     */
+    height?: number;
+
+    /**
+     * 默认背景颜色
+     */
+    backgroundColor?: string;
+
+    /**
+     * 工具栏默认配置
+     */
+    toolBar?: ToolBarDefault;
+}
 
 /**
  * 入口配置选项
@@ -18,19 +58,9 @@ export interface EntryOption {
     startZIndex: number;
 
     /**
-     * 默认窗口宽度
+     * window 默认配置
      */
-    width?: number;
-
-    /**
-     * 默认窗口高度
-     */
-    height?: number;
-
-    /**
-     * 默认背景颜色
-     */
-    backgroundColor?: string;
+    window?: WindowDefault;
 }
 
 /**

@@ -1,4 +1,4 @@
-import Component from "..";
+import Component from '../';
 
 /**
  * UI组件类，所有的组件都必须实现该接口

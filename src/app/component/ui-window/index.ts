@@ -1,18 +1,29 @@
-import Component from "../";
-import UIComponent from "../ui-component";
-import { UIWindowOption, BorderOption } from "./type";
-import { isPstNumber, isNoEmptyOrNull, isBoolean, combine, inValueOptions, isColor } from "../../core/decorator/property-decorator";
-import { addCSSStyles, addCSSClasses, removeCSSClasses, hasCSSClass } from "../../core/helper/element-helper";
-import { Animation, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT, DEFAULT_MAX_WIDTH, DEFAULT_MAX_HEIGHT, DEFAULT_BORDER_WIDTH, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_STYLE, DEFAULT_BORDER_RADIUS, BorderStyle, Offset } from "./const";
-import { checkPstInt, checkNoEmptyOrNull, checkColor } from "../../core/validator";
-import { handlerOptions } from "./partial";
+import Component from '../';
+import {
+    combine, inValueOptions, isBoolean, isColor, isNoEmptyOrNull, isPstNumber
+} from '../../core/decorator/property-decorator';
+import {
+    addCSSClasses, addCSSStyles, createDivElement, hasCSSClass, removeCSSClasses
+} from '../../core/helper/element-helper';
+import { checkColor, checkNoEmptyOrNull, checkPstInt, checkPstNumber } from '../../core/validator';
+import UIComponent from '../ui-component';
+import {
+    Animation, BorderStyle, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_RADIUS, DEFAULT_BORDER_STYLE,
+    DEFAULT_BORDER_WIDTH, DEFAULT_MAX_HEIGHT, DEFAULT_MAX_WIDTH, DEFAULT_MIN_HEIGHT,
+    DEFAULT_MIN_WIDTH, Offset
+} from './const';
+import { handlerOptions } from './partial';
+import { BorderOption, UIWindowOption } from './type';
+import { UIToolBarOption } from '../ui-tool-bar/type';
+import UIToolBar from '../ui-tool-bar';
 
 /**
  * 窗口组件类
  */
 export default class UIWindow extends Component<UIWindowOption> implements UIComponent<UIWindowOption> {
     /**
-     * 构造函数初始化
+     * 构造函数
+     * @param options 可选参数
      */
     public constructor(options: UIWindowOption) {
         super();
@@ -38,13 +49,13 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
      * 宽度
      */
     @isPstNumber()
-    public width: number = this.entry.width;
+    public width: number = <number>this.entry.window.width;
 
     /**
      * 高度
      */
     @isPstNumber()
-    public height: number = this.entry.height;
+    public height: number = <number>this.entry.window.height;
 
     /**
      * 最小宽度
@@ -114,7 +125,19 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
      * 背景颜色
      */
     @isColor()
-    public backgroundColor: string = this.entry.backgroundColor;
+    public backgroundColor: string = <string>this.entry.window.backgroundColor;
+
+    /**
+     * 工具栏
+     */
+    @combine({
+        height: checkPstNumber,
+        backgroundColor: checkColor
+    }, false)
+    public toolBar: UIToolBarOption | false = <UIToolBarOption>{
+        height: this.entry.window.toolBar?.height,
+        backgroundColor: this.entry.window.toolBar?.backgroundColor
+    };
 
     /**
      * 窗口元素对象
@@ -122,16 +145,17 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
     public windowElement: HTMLDivElement | null = null;
 
     /**
-     * 创建控件元素对象
+     * 创建组件元素对象
      * @returns HTMLElement
      */
     present(): HTMLElement {
-        const element = document.createElement("div");
+        const element = createDivElement(`${this.entry.prefix + this.id}`);
         this.windowElement = element;
-        element.id = `${this.entry.prefix + this.id}`;
 
         addCSSClasses(element,
             "window",
+            "flex-box",
+            "col-direction",
             this.boxShadow ? "box-shadow" : undefined,
             this.animate !== false ? "animate" : undefined,
             this.animate !== false ? `animate-${this.animate}-show` : undefined);
@@ -155,6 +179,12 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
                 webkitBorderRadius: this.border === false ? null :
                     `${this.border.radius}px`,
             });
+
+        if (this.toolBar !== false) {
+            const uiToolBar = new UIToolBar(this.toolBar);
+            const uiToolBarElement = uiToolBar.present();
+            element.appendChild(uiToolBarElement);
+        }
 
         this.monitorEvent();
 

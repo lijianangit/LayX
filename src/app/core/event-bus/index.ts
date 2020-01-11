@@ -1,5 +1,5 @@
-import { EventHandler, MessageQueues } from "./type";
-import { checkOfType, checkArray } from "../validator";
+import { checkArray, checkOfType } from '../validator';
+import { EventHandler, MessageQueues } from './type';
 
 /**
  * 事件总线类

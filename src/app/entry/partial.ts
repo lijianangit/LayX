@@ -1,6 +1,6 @@
-import Entry from "./"
-import { EntryOption } from "./type";
-import { SupportLanguage } from "./const";
+import Entry from './';
+import { SupportLanguage } from './const';
+import { EntryOption, WindowDefault } from './type';
 
 /**
  * 处理初始传入参数
@@ -9,8 +9,6 @@ import { SupportLanguage } from "./const";
  */
 export function handlerOptions(this: Entry, options: EntryOption): void {
     this.lang = options?.lang ?? SupportLanguage.ZH_CN;
-    this.width = options?.width ?? this.width;
-    this.height = options?.height ?? this.height;
     this.startZIndex = options?.startZIndex ?? this.startZIndex;
-    this.backgroundColor = options?.backgroundColor ?? this.backgroundColor;
+    this.window = <WindowDefault>options?.window ?? this.window;
 }

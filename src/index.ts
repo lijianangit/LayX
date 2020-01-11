@@ -1,5 +1,5 @@
-import { EntryOvert, EntryOption } from "./app/entry/type";
-import Entry from "./app/entry";
+import Entry from './app/entry';
+import { EntryOption, EntryOvert } from './app/entry/type';
 
 /**
  * 对外公开方法

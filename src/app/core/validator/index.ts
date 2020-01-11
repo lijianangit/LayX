@@ -1,4 +1,4 @@
-import { CanTypeof, ValueOption } from "./type";
+import { CanTypeof, ValueOption } from './type';
 
 /**
  * 检查能够被 typeof 的类型
@@ -45,7 +45,7 @@ export function checkPstNumber(data: any): boolean {
 export function checkJSONObject(data: any): boolean {
     return checkOfType(data, "object") &&
         Object.prototype.toString.call(data).toLowerCase() === "[object object]" &&
-        !data.length;
+        !checkArray(data);
 }
 
 /**

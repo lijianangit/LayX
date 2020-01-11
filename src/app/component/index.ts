@@ -1,6 +1,6 @@
-import Entry from "../entry";
-import EventBus from "../core/event-bus";
-import { JSONObject } from "../core/helper/type";
+import EventBus from '../core/event-bus';
+import { JSONObject } from '../core/helper/type';
+import Entry from '../entry';
 
 /**
  * 组件类，所有的组件都必须继承该类

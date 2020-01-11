@@ -1,8 +1,9 @@
-import { checkArray, checkOfType, checkInValueOptions } from "../../core/validator";
-import { validateFail } from "../../core/exception";
-import { Animation, Offset } from "./const";
-import UIWindow from ".";
-import { UIWindowOption, BorderOption } from "./type";
+import { validateFail } from '../../core/exception';
+import { checkArray, checkInValueOptions, checkOfType } from '../../core/validator';
+import UIWindow from './';
+import { Animation, Offset } from './const';
+import { BorderOption, UIWindowOption } from './type';
+import { UIToolBarOption } from '../ui-tool-bar/type';
 
 /**
  * 处理初始传入参数
@@ -25,6 +26,7 @@ export function handlerOptions(this: UIWindow, options: UIWindowOption): void {
     this.animate = <Animation | false>options?.animate ?? this.animate;
     [this.left, this.top] = calcOffset(this.width, this.height, options?.offset);
     this.backgroundColor = options?.backgroundColor ?? this.backgroundColor;
+    this.toolBar = <UIToolBarOption | false>options?.toolBar ?? this.toolBar;
 }
 
 /**

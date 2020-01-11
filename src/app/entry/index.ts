@@ -1,15 +1,24 @@
-import { EntryOption } from "./type";
-import { VERSION, START_ZINDEX, PREFIX, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_BACKGROUND_COLOR, SupportLanguage } from "./const";
-import { isPstNumber, inValueOptions, isPstInt, min, isColor, isNoEmptyOrNull } from "../core/decorator/property-decorator";
-import { UIWindowOption } from "../component/ui-window/type";
-import UIWindow from "../component/ui-window";
-import { EventSetter } from "../core/event-bus/type";
-import EventBus from "../core/event-bus";
-import { checkOfType } from "../core/validator";
-import { handlerOptions } from "./partial";
+import '../asset/style';
 
-import "../asset/style";
-
+import UIWindow from '../component/ui-window';
+import { UIWindowOption } from '../component/ui-window/type';
+import { combine, inValueOptions, isNoEmptyOrNull, isPstInt, min } from '../core/decorator/property-decorator';
+import EventBus from '../core/event-bus';
+import { EventSetter } from '../core/event-bus/type';
+import { checkColor, checkOfType, checkPstNumber } from '../core/validator';
+import {
+    DEFAULT_TOOLBAR_BACKGROUND_COLOR,
+    DEFAULT_TOOLBAR_HEIGHT,
+    DEFAULT_WINDOW_BACKGROUND_COLOR,
+    DEFAULT_WINDOW_HEIGHT,
+    DEFAULT_WINDOW_WIDTH,
+    PREFIX,
+    START_ZINDEX,
+    SupportLanguage,
+    VERSION,
+} from './const';
+import { handlerOptions } from './partial';
+import { EntryOption, ToolBarDefault, WindowDefault } from './type';
 
 /**
  * 入口单例类，承载着全局数据存储
@@ -54,22 +63,28 @@ export default class Entry {
     public lang: SupportLanguage = SupportLanguage.ZH_CN;
 
     /**
-     * 默认窗口初始化宽度
+     * 窗口默认配置
      */
-    @isPstNumber()
-    public width: number = DEFAULT_WINDOW_WIDTH;
-
-    /**
-     * 默认窗口初始化高度
-     */
-    @isPstNumber()
-    public height: number = DEFAULT_WINDOW_HEIGHT;
-
-    /**
-     * 默认背景颜色
-     */
-    @isColor()
-    public backgroundColor: string = DEFAULT_WINDOW_BACKGROUND_COLOR;
+    @combine({
+        width: checkPstNumber,
+        height: checkPstNumber,
+        backgroundColor: checkColor,
+        toolBar: {
+            decorator: {
+                height: checkPstNumber,
+                backgroundColor: checkColor
+            }
+        }
+    })
+    public window: WindowDefault = <WindowDefault>{
+        width: DEFAULT_WINDOW_WIDTH, // 默认宽度
+        height: DEFAULT_WINDOW_HEIGHT,  // 默认高度
+        backgroundColor: DEFAULT_WINDOW_BACKGROUND_COLOR,    //默认背景颜色
+        toolBar: <ToolBarDefault>{
+            height: DEFAULT_TOOLBAR_HEIGHT, // 默认工具栏高度
+            backgroundColor: DEFAULT_TOOLBAR_BACKGROUND_COLOR // 默认工具栏背景颜色
+        }
+    };
 
     /**
      * 当前层级数

@@ -23,7 +23,7 @@ exports.checkPstNumber = checkPstNumber;
 function checkJSONObject(data) {
     return checkOfType(data, "object") &&
         Object.prototype.toString.call(data).toLowerCase() === "[object object]" &&
-        !data.length;
+        !checkArray(data);
 }
 exports.checkJSONObject = checkJSONObject;
 function checkArray(data) {

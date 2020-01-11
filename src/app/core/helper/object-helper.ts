@@ -1,5 +1,5 @@
-import { checkJSONObject } from "../validator";
-import { JSONObject } from "./type";
+import { checkJSONObject } from '../validator';
+import { JSONObject } from './type';
 
 /**
  * 克隆JSON对象

@@ -6,24 +6,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var const_1 = require("./const");
-var property_decorator_1 = require("../core/decorator/property-decorator");
+require("../asset/style");
 var ui_window_1 = require("../component/ui-window");
+var property_decorator_1 = require("../core/decorator/property-decorator");
 var event_bus_1 = require("../core/event-bus");
 var validator_1 = require("../core/validator");
+var const_1 = require("./const");
 var partial_1 = require("./partial");
-require("../asset/style");
 var Entry = (function () {
     function Entry(options) {
         this.handlerOptions = partial_1.handlerOptions;
         this.version = const_1.VERSION;
-        this.startIndex = const_1.START_ZINDEX;
+        this.startZIndex = const_1.START_ZINDEX;
         this.prefix = const_1.PREFIX;
         this.lang = "ZH_CN";
-        this.width = const_1.DEFAULT_WINDOW_WIDTH;
-        this.height = const_1.DEFAULT_WINDOW_HEIGHT;
-        this.backgroundColor = const_1.DEFAULT_WINDOW_BACKGROUND_COLOR;
-        this._zIndex = this.startIndex;
+        this.window = {
+            width: const_1.DEFAULT_WINDOW_WIDTH,
+            height: const_1.DEFAULT_WINDOW_HEIGHT,
+            backgroundColor: const_1.DEFAULT_WINDOW_BACKGROUND_COLOR,
+            toolBar: {
+                height: const_1.DEFAULT_TOOLBAR_HEIGHT,
+                backgroundColor: const_1.DEFAULT_TOOLBAR_BACKGROUND_COLOR
+            }
+        };
+        this._zIndex = this.startZIndex;
         this.handlerOptions(options);
     }
     Object.defineProperty(Entry.prototype, "zIndex", {
@@ -62,7 +68,7 @@ var Entry = (function () {
     __decorate([
         property_decorator_1.isPstInt(),
         property_decorator_1.min(1000)
-    ], Entry.prototype, "startIndex", void 0);
+    ], Entry.prototype, "startZIndex", void 0);
     __decorate([
         property_decorator_1.isNoEmptyOrNull()
     ], Entry.prototype, "prefix", void 0);
@@ -70,14 +76,18 @@ var Entry = (function () {
         property_decorator_1.inValueOptions("ZH_CN", "EN_US")
     ], Entry.prototype, "lang", void 0);
     __decorate([
-        property_decorator_1.isPstNumber()
-    ], Entry.prototype, "width", void 0);
-    __decorate([
-        property_decorator_1.isPstNumber()
-    ], Entry.prototype, "height", void 0);
-    __decorate([
-        property_decorator_1.isColor()
-    ], Entry.prototype, "backgroundColor", void 0);
+        property_decorator_1.combine({
+            width: validator_1.checkPstNumber,
+            height: validator_1.checkPstNumber,
+            backgroundColor: validator_1.checkColor,
+            toolBar: {
+                decorator: {
+                    height: validator_1.checkPstNumber,
+                    backgroundColor: validator_1.checkColor
+                }
+            }
+        })
+    ], Entry.prototype, "window", void 0);
     return Entry;
 }());
 exports.default = Entry;

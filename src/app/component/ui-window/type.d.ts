@@ -1,4 +1,5 @@
-import { BorderStyle, Animation, Offset } from "./const";
+import { UIToolBarOption } from '../ui-tool-bar/type';
+import { Animation, BorderStyle, Offset } from './const';
 
 /**
  * 边框参数
@@ -88,4 +89,9 @@ export interface UIWindowOption {
      * 背景颜色
      */
     backgroundColor?: string;
+
+    /**
+     * 工具栏
+     */
+    toolBar?: false | UIToolBarOption;
 }

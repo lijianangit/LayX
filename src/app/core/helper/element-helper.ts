@@ -1,4 +1,5 @@
-import { PREFIX } from "../../entry/const";
+import { PREFIX } from '../../entry/const';
+import { checkOfType } from '../validator';
 
 /**
  * 批量添加元素样式
@@ -86,5 +87,18 @@ function updateCSSClasses(element: HTMLElement, handler: (currentClasses: string
     });
 
     element.className = currentClasses.join(" ").trim();
+    return element;
+}
+
+/**
+ * 创建div标签
+ * @param [id] id
+ * @returns HTMLDivElement 
+ */
+export function createDivElement(id?: string): HTMLDivElement {
+    const element = document.createElement("div");
+    if (checkOfType(id, "string")) {
+        element.id = <string>id;
+    }
     return element;
 }

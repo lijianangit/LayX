@@ -29,6 +29,16 @@ export const DEFAULT_WINDOW_HEIGHT: number = 600;
 export const DEFAULT_WINDOW_BACKGROUND_COLOR: string = "#ffffff";
 
 /**
+ * 默认工具栏背景颜色
+ */
+export const DEFAULT_TOOLBAR_BACKGROUND_COLOR: string = "#ffffff";
+
+/**
+ * 默认工具栏高度
+ */
+export const DEFAULT_TOOLBAR_HEIGHT: number = 30;
+
+/**
  * 内置支持语言
  */
 export const enum SupportLanguage {

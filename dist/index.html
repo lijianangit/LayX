@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Layx 窗口即入口，入口即天地</title>
-<link href="layx.css?854818bb7c7a180f10a7" rel="stylesheet"><script type="text/javascript" src="layx.js?854818bb7c7a180f10a7"></script></head>
+<link href="layx.css?5ed39fafce627685fc68" rel="stylesheet"><script type="text/javascript" src="layx.js?5ed39fafce627685fc68"></script></head>
 
 <body>
     <button id="create">打开窗口</button>
@@ -14,8 +14,10 @@
     <script type="text/javascript">
         // 支持全局配置
         layx({
-            width: 500, // 默认宽度
-            height: 500 // 默认高度
+            window: {
+                width: 500, // 默认宽度
+                height: 500 // 默认高度
+            }
         });
         // 支持事件绑定
         layx.on({
