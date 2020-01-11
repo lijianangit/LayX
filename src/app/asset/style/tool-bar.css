@@ -1,1 +1,4 @@
-.layx-tool-bar {}
+.layx-title-bar {
+    min-width: 0;
+    padding: 0 5px;
+}

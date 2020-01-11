@@ -2,6 +2,7 @@ import { UIWindowOption } from '../component/ui-window/type';
 import EventBus from '../core/event-bus';
 import { EventSetter, MessageQueues } from '../core/event-bus/type';
 import { SupportLanguage } from './const';
+import { TitleBarOption } from "../component/ui-tool-bar/type";
 
 /**
  * 工具栏默认配置
@@ -16,6 +17,11 @@ export interface ToolBarDefault {
      * 默认背景颜色
      */
     backgroundColor?: string;
+
+    /**
+     * 标题栏
+     */
+    titleBar?: false | TitleBarOption;
 }
 
 /**
@@ -40,7 +46,7 @@ export interface WindowDefault {
     /**
      * 工具栏默认配置
      */
-    toolBar?: ToolBarDefault;
+    toolBar?: false | ToolBarDefault;
 }
 
 /**

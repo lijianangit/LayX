@@ -32,13 +32,20 @@
             layx.open({
                 id: "hello",
                 width: 800, // 复写默认全局配置
-                height: 600// 复写默认全局配置
+                height: 600,// 复写默认全局配置
+                toolBar: {
+                    titleBar: {
+                        label: "Layx 窗口即入口，入口即天地",
+                        align:"left"
+                    }
+                }
             });
         };
         document.getElementById("create2").onclick = function () {
             layx.open({
                 id: "hello2",
-                offset: "right-bottom"
+                offset: "right-bottom",
+                toolBar: false
             });
         };
     </script>

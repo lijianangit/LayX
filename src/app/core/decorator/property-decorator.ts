@@ -3,7 +3,7 @@ import { mergeJSONObject } from '../helper/object-helper';
 import { JSONObject } from '../helper/type';
 import {
     checkArray, checkColor, checkInValueOptions, checkJSONObject, checkMin, checkNoEmptyOrNull,
-    checkOfType, checkPstInt, checkPstNumber, checkRegExp
+    checkOfType, checkPstInt, checkPstNumber, checkRegExp, checkString
 } from '../validator';
 import { ValueOption } from '../validator/type';
 import { PropertyDecorator, PropertySetter } from './type';
@@ -58,6 +58,18 @@ export function isBoolean(): PropertyDecorator {
 }
 
 /**
+ * 检查字符串类型值
+ * @returns PropertyDecorator 
+ */
+export function isString(): PropertyDecorator {
+    return generateDecorator((newValue) => {
+        if (!checkString(newValue)) validateFail(`"${newValue}" 不是一个有效的字符串`);
+
+        return newValue;
+    });
+}
+
+/**
  * 检查颜色值
  * @returns PropertyDecorator 
  */
@@ -101,8 +113,10 @@ export function min(threshold: number): PropertyDecorator {
  */
 export function combine(jsonDecorator: JSONObject = {}, ...items: Array<any>): PropertyDecorator {
     return generateDecorator((newValue, propertyKey, value) => {
-        checkCombine(newValue, jsonDecorator, items);
-        newValue = mergeJSONObject(value ?? {}, newValue);
+        newValue = checkCombine(newValue, jsonDecorator, ...items);
+        if (checkJSONObject(newValue)) {
+            newValue = mergeJSONObject(value ?? {}, newValue);
+        }
         return newValue;
     });
 }
@@ -114,12 +128,12 @@ export function combine(jsonDecorator: JSONObject = {}, ...items: Array<any>): P
  * @param items 其余可选值，只支持基本数据类型
  * @returns void
  */
-function checkCombine(newValue: any, jsonDecorator: JSONObject = {}, ...items: Array<any>): void {
+function checkCombine(newValue: any, jsonDecorator: JSONObject = {}, ...items: Array<any>): any {
     if (!checkJSONObject(newValue) && (items.length > 0 && items.indexOf(newValue) === -1)) validateFail(`"${newValue}" 不是一个有效的参数值`);
     if (items.indexOf(newValue) > -1) return newValue;
 
     for (const key in newValue) {
-        const keyValue = newValue[key];
+        let keyValue = newValue[key];
         const decorator = jsonDecorator[key];
         if (!decorator) continue;
 
@@ -138,9 +152,11 @@ function checkCombine(newValue: any, jsonDecorator: JSONObject = {}, ...items: A
         if (checkJSONObject(decorator)) {
             const childDecorator = decorator?.decorator ?? {};
             const childItems = decorator?.options ?? [];
-            checkCombine(keyValue, childDecorator, childItems);
+            keyValue = checkCombine(keyValue, childDecorator, ...childItems);
         }
     }
+
+    return newValue;
 }
 
 /**

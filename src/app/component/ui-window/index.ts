@@ -5,7 +5,7 @@ import {
 import {
     addCSSClasses, addCSSStyles, createDivElement, hasCSSClass, removeCSSClasses
 } from '../../core/helper/element-helper';
-import { checkColor, checkNoEmptyOrNull, checkPstInt, checkPstNumber } from '../../core/validator';
+import { checkColor, checkNoEmptyOrNull, checkPstInt, checkPstNumber, checkString } from '../../core/validator';
 import UIComponent from '../ui-component';
 import {
     Animation, BorderStyle, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_RADIUS, DEFAULT_BORDER_STYLE,
@@ -16,6 +16,7 @@ import { handlerOptions } from './partial';
 import { BorderOption, UIWindowOption } from './type';
 import { UIToolBarOption } from '../ui-tool-bar/type';
 import UIToolBar from '../ui-tool-bar';
+import { Align } from '../ui-tool-bar/const';
 
 /**
  * 窗口组件类
@@ -132,12 +133,18 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
      */
     @combine({
         height: checkPstNumber,
-        backgroundColor: checkColor
+        backgroundColor: checkColor,
+        titleBar: {
+            decorator: {
+                label: checkString,
+                color: checkColor,
+                align: [Align.LEFT, Align.CENTER, Align.RIGHT],
+                fontSize: checkPstInt
+            },
+            options: [false]
+        }
     }, false)
-    public toolBar: UIToolBarOption | false = <UIToolBarOption>{
-        height: this.entry.window.toolBar?.height,
-        backgroundColor: this.entry.window.toolBar?.backgroundColor
-    };
+    public toolBar: UIToolBarOption | false = <UIToolBarOption | false>this.entry.window.toolBar;
 
     /**
      * 窗口元素对象

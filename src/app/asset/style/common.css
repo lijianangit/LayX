@@ -25,3 +25,7 @@
 .layx-flex-item {
     flex: 1;
 }
+
+.layx-vertical-middle {
+    align-items: center;
+}

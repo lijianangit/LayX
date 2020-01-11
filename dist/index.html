@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Layx 窗口即入口，入口即天地</title>
-<link href="layx.css?5ed39fafce627685fc68" rel="stylesheet"><script type="text/javascript" src="layx.js?5ed39fafce627685fc68"></script></head>
+<link href="layx.css?7492fc34060dc0f3e8a1" rel="stylesheet"><script type="text/javascript" src="layx.js?7492fc34060dc0f3e8a1"></script></head>
 
 <body>
     <button id="create">打开窗口</button>
@@ -32,13 +32,20 @@
             layx.open({
                 id: "hello",
                 width: 800, // 复写默认全局配置
-                height: 600// 复写默认全局配置
+                height: 600,// 复写默认全局配置
+                toolBar: {
+                    titleBar: {
+                        label: "Layx 窗口即入口，入口即天地",
+                        align:"left"
+                    }
+                }
             });
         };
         document.getElementById("create2").onclick = function () {
             layx.open({
                 id: "hello2",
-                offset: "right-bottom"
+                offset: "right-bottom",
+                toolBar: false
             });
         };
     </script>

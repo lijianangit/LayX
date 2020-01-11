@@ -46,6 +46,14 @@ function isBoolean() {
     });
 }
 exports.isBoolean = isBoolean;
+function isString() {
+    return generateDecorator(function (newValue) {
+        if (!validator_1.checkString(newValue))
+            exception_1.validateFail("\"" + newValue + "\" \u4E0D\u662F\u4E00\u4E2A\u6709\u6548\u7684\u5B57\u7B26\u4E32");
+        return newValue;
+    });
+}
+exports.isString = isString;
 function isColor() {
     return generateDecorator(function (newValue) {
         if (!validator_1.checkColor(newValue))
@@ -77,8 +85,10 @@ function combine(jsonDecorator) {
         items[_i - 1] = arguments[_i];
     }
     return generateDecorator(function (newValue, propertyKey, value) {
-        checkCombine(newValue, jsonDecorator, items);
-        newValue = object_helper_1.mergeJSONObject((value !== null && value !== void 0 ? value : {}), newValue);
+        newValue = checkCombine.apply(void 0, __spreadArrays([newValue, jsonDecorator], items));
+        if (validator_1.checkJSONObject(newValue)) {
+            newValue = object_helper_1.mergeJSONObject((value !== null && value !== void 0 ? value : {}), newValue);
+        }
         return newValue;
     });
 }
@@ -114,9 +124,10 @@ function checkCombine(newValue, jsonDecorator) {
         if (validator_1.checkJSONObject(decorator)) {
             var childDecorator = (_b = (_a = decorator) === null || _a === void 0 ? void 0 : _a.decorator, (_b !== null && _b !== void 0 ? _b : {}));
             var childItems = (_d = (_c = decorator) === null || _c === void 0 ? void 0 : _c.options, (_d !== null && _d !== void 0 ? _d : []));
-            checkCombine(keyValue, childDecorator, childItems);
+            keyValue = checkCombine.apply(void 0, __spreadArrays([keyValue, childDecorator], childItems));
         }
     }
+    return newValue;
 }
 function generateDecorator(propertySetter) {
     return function (target, propertyKey) {

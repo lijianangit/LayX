@@ -1,7 +1,39 @@
+import { Align } from "./const";
+
+/**
+ * 标题栏
+ */
+export interface TitleBarOption {
+    /**
+     * 标题
+     */
+    label?: string;
+
+    /**
+     * 颜色
+     */
+    color?: string;
+
+    /**
+     * 对齐方式
+     */
+    align?: Align;
+
+    /**
+     * 字体大小
+     */
+    fontSize: number;
+}
+
 /**
  * 工具栏可选参数
  */
 export interface UIToolBarOption {
+    /**
+     * 标题
+     */
+    titleBar?: false | TitleBarOption;
+
     /**
      * 默认高度
      */

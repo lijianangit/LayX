@@ -29,7 +29,7 @@ var ui_tool_bar_1 = require("../ui-tool-bar");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
     function UIWindow(options) {
-        var _a, _b, _c;
+        var _a;
         var _this = _super.call(this) || this;
         _this.handlerOptions = partial_1.handlerOptions;
         _this.width = _this.entry.window.width;
@@ -49,12 +49,9 @@ var UIWindow = (function (_super) {
         _this.boxShadow = true;
         _this.animate = "zoom";
         _this.backgroundColor = _this.entry.window.backgroundColor;
-        _this.toolBar = {
-            height: (_a = _this.entry.window.toolBar) === null || _a === void 0 ? void 0 : _a.height,
-            backgroundColor: (_b = _this.entry.window.toolBar) === null || _b === void 0 ? void 0 : _b.backgroundColor
-        };
+        _this.toolBar = _this.entry.window.toolBar;
         _this.windowElement = null;
-        _this.id = (_c = options) === null || _c === void 0 ? void 0 : _c.id;
+        _this.id = (_a = options) === null || _a === void 0 ? void 0 : _a.id;
         _this.handlerOptions(options);
         return _this;
     }
@@ -150,7 +147,16 @@ var UIWindow = (function (_super) {
     __decorate([
         property_decorator_1.combine({
             height: validator_1.checkPstNumber,
-            backgroundColor: validator_1.checkColor
+            backgroundColor: validator_1.checkColor,
+            titleBar: {
+                decorator: {
+                    label: validator_1.checkString,
+                    color: validator_1.checkColor,
+                    align: ["left", "center", "right"],
+                    fontSize: validator_1.checkPstInt
+                },
+                options: [false]
+            }
         }, false)
     ], UIWindow.prototype, "toolBar", void 0);
     return UIWindow;

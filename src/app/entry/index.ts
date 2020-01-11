@@ -5,7 +5,7 @@ import { UIWindowOption } from '../component/ui-window/type';
 import { combine, inValueOptions, isNoEmptyOrNull, isPstInt, min } from '../core/decorator/property-decorator';
 import EventBus from '../core/event-bus';
 import { EventSetter } from '../core/event-bus/type';
-import { checkColor, checkOfType, checkPstNumber } from '../core/validator';
+import { checkColor, checkOfType, checkPstNumber, checkString, checkPstInt } from '../core/validator';
 import {
     DEFAULT_TOOLBAR_BACKGROUND_COLOR,
     DEFAULT_TOOLBAR_HEIGHT,
@@ -16,9 +16,15 @@ import {
     START_ZINDEX,
     SupportLanguage,
     VERSION,
+    DEFAULT_TITLEBAR_LABEL,
+    DEFAULT_TITLEBAR_COLOR,
+    DEFAULT_TITLEBAR_ALIGN,
+    DEFAULT_TITLEBAR_FONTSIZE,
 } from './const';
 import { handlerOptions } from './partial';
 import { EntryOption, ToolBarDefault, WindowDefault } from './type';
+import { TitleBarOption } from '../component/ui-tool-bar/type';
+import { Align } from '../component/ui-tool-bar/const';
 
 /**
  * 入口单例类，承载着全局数据存储
@@ -72,17 +78,33 @@ export default class Entry {
         toolBar: {
             decorator: {
                 height: checkPstNumber,
-                backgroundColor: checkColor
-            }
+                backgroundColor: checkColor,
+                titleBar: {
+                    decorator: {
+                        label: checkString,
+                        color: checkColor,
+                        align: [Align.LEFT, Align.CENTER, Align.RIGHT],
+                        fontSize: checkPstInt
+                    },
+                    options: [false]
+                }
+            },
+            options: [false]
         }
     })
     public window: WindowDefault = <WindowDefault>{
         width: DEFAULT_WINDOW_WIDTH, // 默认宽度
         height: DEFAULT_WINDOW_HEIGHT,  // 默认高度
         backgroundColor: DEFAULT_WINDOW_BACKGROUND_COLOR,    //默认背景颜色
-        toolBar: <ToolBarDefault>{
+        toolBar: <ToolBarDefault | false>{
             height: DEFAULT_TOOLBAR_HEIGHT, // 默认工具栏高度
-            backgroundColor: DEFAULT_TOOLBAR_BACKGROUND_COLOR // 默认工具栏背景颜色
+            backgroundColor: DEFAULT_TOOLBAR_BACKGROUND_COLOR, // 默认工具栏背景颜色
+            titleBar: <TitleBarOption | false>{
+                label: DEFAULT_TITLEBAR_LABEL,
+                color: DEFAULT_TITLEBAR_COLOR,
+                align: DEFAULT_TITLEBAR_ALIGN,
+                fontSize: DEFAULT_TITLEBAR_FONTSIZE
+            }
         }
     };
 

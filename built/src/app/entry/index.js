@@ -26,7 +26,13 @@ var Entry = (function () {
             backgroundColor: const_1.DEFAULT_WINDOW_BACKGROUND_COLOR,
             toolBar: {
                 height: const_1.DEFAULT_TOOLBAR_HEIGHT,
-                backgroundColor: const_1.DEFAULT_TOOLBAR_BACKGROUND_COLOR
+                backgroundColor: const_1.DEFAULT_TOOLBAR_BACKGROUND_COLOR,
+                titleBar: {
+                    label: const_1.DEFAULT_TITLEBAR_LABEL,
+                    color: const_1.DEFAULT_TITLEBAR_COLOR,
+                    align: const_1.DEFAULT_TITLEBAR_ALIGN,
+                    fontSize: const_1.DEFAULT_TITLEBAR_FONTSIZE
+                }
             }
         };
         this._zIndex = this.startZIndex;
@@ -83,8 +89,18 @@ var Entry = (function () {
             toolBar: {
                 decorator: {
                     height: validator_1.checkPstNumber,
-                    backgroundColor: validator_1.checkColor
-                }
+                    backgroundColor: validator_1.checkColor,
+                    titleBar: {
+                        decorator: {
+                            label: validator_1.checkString,
+                            color: validator_1.checkColor,
+                            align: ["left", "center", "right"],
+                            fontSize: validator_1.checkPstInt
+                        },
+                        options: [false]
+                    }
+                },
+                options: [false]
             }
         })
     ], Entry.prototype, "window", void 0);

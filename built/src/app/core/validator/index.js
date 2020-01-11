@@ -8,6 +8,10 @@ function checkOfType(data) {
     return typeNames.indexOf(typeof data) > -1;
 }
 exports.checkOfType = checkOfType;
+function checkString(data) {
+    return checkOfType(data, "string");
+}
+exports.checkString = checkString;
 function checkInt(data) {
     return checkOfType(data, "number") && (/^\-?[0-9]+$/.test(data));
 }

@@ -1,5 +1,5 @@
 import UIToolBar from './';
-import { UIToolBarOption } from './type';
+import { UIToolBarOption, TitleBarOption } from './type';
 
 /**
  * 处理初始传入参数
@@ -9,4 +9,5 @@ import { UIToolBarOption } from './type';
 export function handlerOptions(this: UIToolBar, options: UIToolBarOption): void {
     this.height = options?.height ?? this.height;
     this.backgroundColor = options?.backgroundColor ?? this.backgroundColor;
+    this.titleBar = <TitleBarOption | false>options?.titleBar ?? this.titleBar;
 }
