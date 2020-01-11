@@ -17,14 +17,22 @@ var Entry = (function () {
     function Entry(options) {
         this.handlerOptions = partial_1.handlerOptions;
         this.version = const_1.VERSION;
-        this.zIndex = const_1.ZINDEX;
+        this.startIndex = const_1.START_ZINDEX;
         this.prefix = const_1.PREFIX;
         this.lang = "ZH_CN";
         this.width = const_1.DEFAULT_WINDOW_WIDTH;
         this.height = const_1.DEFAULT_WINDOW_HEIGHT;
         this.backgroundColor = const_1.DEFAULT_WINDOW_BACKGROUND_COLOR;
+        this._zIndex = this.startIndex;
         this.handlerOptions(options);
     }
+    Object.defineProperty(Entry.prototype, "zIndex", {
+        get: function () {
+            return this._zIndex = this._zIndex + 2;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Entry.prototype.on = function (queues) {
         if (queues === void 0) { queues = {}; }
         for (var eventKey in queues) {
@@ -54,7 +62,10 @@ var Entry = (function () {
     __decorate([
         property_decorator_1.isPstInt(),
         property_decorator_1.min(1000)
-    ], Entry.prototype, "zIndex", void 0);
+    ], Entry.prototype, "startIndex", void 0);
+    __decorate([
+        property_decorator_1.isNoEmptyOrNull()
+    ], Entry.prototype, "prefix", void 0);
     __decorate([
         property_decorator_1.inValueOptions("ZH_CN", "EN_US")
     ], Entry.prototype, "lang", void 0);

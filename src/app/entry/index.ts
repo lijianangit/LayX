@@ -1,6 +1,6 @@
 import { EntryOption } from "./type";
-import { VERSION, ZINDEX, PREFIX, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_BACKGROUND_COLOR, SupportLanguage } from "./const";
-import { isPstNumber, inValueOptions, isPstInt, min, isColor } from "../core/decorator/property-decorator";
+import { VERSION, START_ZINDEX, PREFIX, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_BACKGROUND_COLOR, SupportLanguage } from "./const";
+import { isPstNumber, inValueOptions, isPstInt, min, isColor, isNoEmptyOrNull } from "../core/decorator/property-decorator";
 import { UIWindowOption } from "../component/ui-window/type";
 import UIWindow from "../component/ui-window";
 import { EventSetter } from "../core/event-bus/type";
@@ -35,15 +35,16 @@ export default class Entry {
     public readonly version: string = VERSION;
 
     /**
-     * 默认层数,不能小于1000
+     * 起始层数,不能小于1000
      */
     @isPstInt()
     @min(1000)
-    public zIndex: number = ZINDEX;
+    public startZIndex: number = START_ZINDEX;
 
     /**
      * 前缀符
      */
+    @isNoEmptyOrNull()
     public readonly prefix: string = PREFIX;
 
     /**
@@ -69,6 +70,14 @@ export default class Entry {
      */
     @isColor()
     public backgroundColor: string = DEFAULT_WINDOW_BACKGROUND_COLOR;
+
+    /**
+     * 当前层级数
+     */
+    private _zIndex: number = this.startZIndex;
+    get zIndex() {
+        return this._zIndex = this._zIndex + 2;
+    }
 
     /**
      * 监听事件

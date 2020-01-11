@@ -11,7 +11,7 @@ export const PREFIX: string = "layx-";
 /**
  * 默认开始层数
  */
-export const ZINDEX: number = 10000000;
+export const START_ZINDEX: number = 10000000;
 
 /**
  * 默认窗口宽度

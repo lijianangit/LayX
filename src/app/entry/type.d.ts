@@ -13,9 +13,9 @@ export interface EntryOption {
     lang?: SupportLanguage;
 
     /**
-     * 默认层数
+     * 起始层数
      */
-    zIndex: number;
+    startZIndex: number;
 
     /**
      * 默认窗口宽度

@@ -10,11 +10,12 @@
 
 <body>
     <button id="create">打开窗口</button>
+    <button id="create2">打开窗口2</button>
     <script type="text/javascript">
         // 支持全局配置
         layx({
-            width: 500,
-            height: 500
+            width: 500, // 默认宽度
+            height: 500 // 默认高度
         });
         // 支持事件绑定
         layx.on({
@@ -27,7 +28,15 @@
         });
         document.getElementById("create").onclick = function () {
             layx.open({
-                id: "hello"
+                id: "hello",
+                width: 800, // 复写默认全局配置
+                height: 600// 复写默认全局配置
+            });
+        };
+        document.getElementById("create2").onclick = function () {
+            layx.open({
+                id: "hello2",
+                offset: "right-bottom"
             });
         };
     </script>

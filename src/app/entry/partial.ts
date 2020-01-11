@@ -11,6 +11,6 @@ export function handlerOptions(this: Entry, options: EntryOption): void {
     this.lang = options?.lang ?? SupportLanguage.ZH_CN;
     this.width = options?.width ?? this.width;
     this.height = options?.height ?? this.height;
-    this.zIndex = options?.zIndex ?? this.zIndex;
+    this.startZIndex = options?.startZIndex ?? this.startZIndex;
     this.backgroundColor = options?.backgroundColor ?? this.backgroundColor;
 }
