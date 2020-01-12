@@ -89,7 +89,7 @@ var Entry = (function () {
         property_decorator_1.inValueOptions("ZH_CN", "EN_US")
     ], Entry.prototype, "lang", void 0);
     __decorate([
-        property_decorator_1.combine({
+        property_decorator_1.admix({
             width: validator_1.checkPstNumber,
             height: validator_1.checkPstNumber,
             backgroundColor: validator_1.checkColor,

@@ -90,4 +90,12 @@ function createSvgElement(name) {
     return svgElement;
 }
 exports.createSvgElement = createSvgElement;
+function removeDivElement(element) {
+    if (!element)
+        return;
+    if (!element.parentElement)
+        return;
+    element.parentElement.removeChild(element);
+}
+exports.removeDivElement = removeDivElement;
 //# sourceMappingURL=element-helper.js.map

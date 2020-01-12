@@ -22,16 +22,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var __1 = require("../");
 var property_decorator_1 = require("../../core/decorator/property-decorator");
 var element_helper_1 = require("../../core/helper/element-helper");
+var validator_1 = require("../../core/validator");
 var const_1 = require("./const");
 var partial_1 = require("./partial");
 var UIICon = (function (_super) {
     __extends(UIICon, _super);
     function UIICon(options) {
+        var _a;
         var _this = _super.call(this) || this;
         _this.handlerOptions = partial_1.handlerOptions;
-        _this.name = const_1.DEFAULT_ICON;
-        _this.color = const_1.DEFAULT_ICON_COLOR;
+        _this.color = null;
         _this.size = const_1.DEFAULT_ICON_SIZE;
+        _this.name = (_a = options) === null || _a === void 0 ? void 0 : _a.name;
         _this.handlerOptions(options);
         return _this;
     }
@@ -41,7 +43,7 @@ var UIICon = (function (_super) {
         var svgElement = element_helper_1.createSvgElement(this.name);
         svgElement.setAttribute("class", this.entry.prefix + "svg");
         svgElement.style.fontSize = this.size + "px";
-        svgElement.style.color = "" + this.color;
+        svgElement.style.color = this.color;
         element.appendChild(svgElement);
         return element;
     };
@@ -49,7 +51,7 @@ var UIICon = (function (_super) {
         property_decorator_1.isNoEmptyOrNull()
     ], UIICon.prototype, "name", void 0);
     __decorate([
-        property_decorator_1.isColor()
+        property_decorator_1.admix(validator_1.checkColor, null)
     ], UIICon.prototype, "color", void 0);
     __decorate([
         property_decorator_1.isPstInt()

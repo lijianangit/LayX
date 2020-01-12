@@ -24,6 +24,7 @@ var property_decorator_1 = require("../../core/decorator/property-decorator");
 var element_helper_1 = require("../../core/helper/element-helper");
 var validator_1 = require("../../core/validator");
 var const_1 = require("../../entry/const");
+var ui_action_button_1 = require("../ui-action-button");
 var ui_tool_bar_1 = require("../ui-tool-bar");
 var const_2 = require("./const");
 var partial_1 = require("./partial");
@@ -51,14 +52,20 @@ var UIWindow = (function (_super) {
         _this.animate = "zoom";
         _this.backgroundColor = _this.fromJSONPath("window/backgroundColor", const_1.DEFAULT_WINDOW_BACKGROUND_COLOR);
         _this.toolBar = _this.fromJSONPath("window/toolBar", false);
-        _this.windowElement = null;
+        _this._windowElement = null;
         _this.id = (_a = options) === null || _a === void 0 ? void 0 : _a.id;
         _this.handlerOptions(options);
         return _this;
     }
+    Object.defineProperty(UIWindow.prototype, "windowElement", {
+        get: function () {
+            return document.getElementById("" + (this.entry.prefix + this.id));
+        },
+        enumerable: true,
+        configurable: true
+    });
     UIWindow.prototype.present = function () {
         var element = element_helper_1.createDivElement("" + (this.entry.prefix + this.id));
-        this.windowElement = element;
         element_helper_1.addCSSClasses(element, "window", "flex-box", "col-direction", this.boxShadow ? "box-shadow" : undefined, this.animate !== false ? "animate" : undefined, this.animate !== false ? "animate-" + this.animate + "-show" : undefined);
         element_helper_1.addCSSStyles(element, {
             backgroundColor: "" + this.backgroundColor,
@@ -79,27 +86,53 @@ var UIWindow = (function (_super) {
                 this.border.radius + "px",
         });
         this.appendChild(element);
-        this.monitorEvent();
+        this.monitorEvent(element);
         this.sendEvent("window:create", { id: this.id });
         return element;
     };
     UIWindow.prototype.appendChild = function (element) {
+        var _this = this;
+        var actionBarElement = element_helper_1.createDivElement();
+        element_helper_1.addCSSClasses(actionBarElement, "action-bar");
+        var uiActionButton = new ui_action_button_1.UIActionButton({
+            name: "destroy",
+            handler: function (ev) { return _this.destroy(); }
+        });
+        var uiActionButtonElement = uiActionButton.present();
+        actionBarElement.appendChild(uiActionButtonElement);
+        element.appendChild(actionBarElement);
         if (this.toolBar !== false) {
             var uiToolBar = new ui_tool_bar_1.UIToolBar(this.toolBar);
             var uiToolBarElement = uiToolBar.present();
             element.appendChild(uiToolBarElement);
         }
     };
-    UIWindow.prototype.monitorEvent = function () {
+    UIWindow.prototype.destroy = function () {
+        if (this.animate !== false) {
+            element_helper_1.addCSSClasses(this.windowElement, "animate-" + this.animate + "-destroy");
+        }
+        else {
+            this.remove();
+        }
+    };
+    UIWindow.prototype.remove = function () {
+        element_helper_1.removeDivElement(this.windowElement);
+        this.sendEvent("window:destroy", { id: this.id });
+    };
+    UIWindow.prototype.monitorEvent = function (element) {
         var _this = this;
-        if (!this.windowElement)
+        if (!element)
             return;
         if (this.animate !== false) {
-            this.windowElement.addEventListener("animationend", function (ev) {
+            element.addEventListener("animationend", function (ev) {
                 var animateShowName = "animate-" + _this.animate + "-show";
-                if (element_helper_1.hasCSSClass(_this.windowElement, animateShowName)) {
-                    element_helper_1.removeCSSClasses(_this.windowElement, animateShowName);
+                if (element_helper_1.hasCSSClass(element, animateShowName)) {
+                    element_helper_1.removeCSSClasses(element, animateShowName);
                     _this.sendEvent("window:show", { id: _this.id });
+                }
+                var animateDestroyName = "animate-" + _this.animate + "-destroy";
+                if (element_helper_1.hasCSSClass(element, animateDestroyName)) {
+                    _this.remove();
                 }
             });
         }
@@ -132,7 +165,7 @@ var UIWindow = (function (_super) {
         property_decorator_1.isPstNumber()
     ], UIWindow.prototype, "top", void 0);
     __decorate([
-        property_decorator_1.combine({
+        property_decorator_1.admix({
             width: validator_1.checkPstInt,
             style: ["solid", "double", "dotted", "dashed"],
             color: validator_1.checkColor,
@@ -149,7 +182,7 @@ var UIWindow = (function (_super) {
         property_decorator_1.isColor()
     ], UIWindow.prototype, "backgroundColor", void 0);
     __decorate([
-        property_decorator_1.combine({
+        property_decorator_1.admix({
             height: validator_1.checkPstNumber,
             backgroundColor: validator_1.checkColor,
             titleBar: {

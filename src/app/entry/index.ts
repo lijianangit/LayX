@@ -7,7 +7,7 @@ import { Align } from '../component/ui-tool-bar/const';
 import { TitleBarOption } from '../component/ui-tool-bar/type';
 import { UIWindow } from '../component/ui-window';
 import { UIWindowOption } from '../component/ui-window/type';
-import { combine, inValueOptions, isNoEmptyOrNull, isPstInt, min } from '../core/decorator/property-decorator';
+import { admix, inValueOptions, isNoEmptyOrNull, isPstInt, min } from '../core/decorator/property-decorator';
 import { EventBus } from '../core/event-bus';
 import { EventSetter } from '../core/event-bus/type';
 import { checkColor, checkNoEmptyOrNull, checkOfType, checkPstInt, checkPstNumber, checkString } from '../core/validator';
@@ -74,7 +74,7 @@ export class Entry {
     /**
      * 窗口默认配置
      */
-    @combine({
+    @admix({
         width: checkPstNumber,
         height: checkPstNumber,
         backgroundColor: checkColor,

@@ -10,7 +10,6 @@ export function checkOfType(data: any, ...typeNames: Array<CanTypeof>): boolean 
     return typeNames.indexOf(typeof data) > -1;
 }
 
-
 /**
  * 检查是否是字符串类型
  * @param data 数据
@@ -18,6 +17,15 @@ export function checkOfType(data: any, ...typeNames: Array<CanTypeof>): boolean 
  */
 export function checkString(data: any): boolean {
     return checkOfType(data, "string");
+}
+
+/**
+ * 检查是否是函数类型
+ * @param data 数据
+ * @returns boolean 
+ */
+export function checkFunction(data: any): boolean {
+    return checkOfType(data, "function");
 }
 
 /**
@@ -55,7 +63,7 @@ export function checkPstNumber(data: any): boolean {
 export function checkJSONObject(data: any): boolean {
     return checkOfType(data, "object") &&
         Object.prototype.toString.call(data).toLowerCase() === "[object object]" &&
-        !checkArray(data);
+        !checkArray(data) && data !== null;
 }
 
 /**

@@ -1,6 +1,9 @@
 import { Component } from '../';
-import { isColor, isNoEmptyOrNull, isPstInt } from '../../core/decorator/property-decorator';
-import { addCSSClasses, createDivElement, createSvgElement } from '../../core/helper/element-helper';
+import { admix, isColor, isNoEmptyOrNull, isPstInt } from '../../core/decorator/property-decorator';
+import {
+    addCSSClasses, createDivElement, createSvgElement
+} from '../../core/helper/element-helper';
+import { checkColor } from '../../core/validator';
 import { UIComponent } from '../ui-component';
 import { ComponentElement } from '../ui-component/type';
 import { DEFAULT_ICON, DEFAULT_ICON_COLOR, DEFAULT_ICON_SIZE } from './const';
@@ -14,6 +17,7 @@ export class UIICon extends Component<UIIconOption> implements UIComponent<UIIco
     */
     public constructor(options: UIIconOption) {
         super();
+        this.name = options?.name;
         this.handlerOptions(options);
     }
 
@@ -28,13 +32,13 @@ export class UIICon extends Component<UIIconOption> implements UIComponent<UIIco
      * 图标名称
      */
     @isNoEmptyOrNull()
-    public name: string = DEFAULT_ICON;
+    public name: string;
 
     /**
      * 图标颜色
      */
-    @isColor()
-    public color: string = DEFAULT_ICON_COLOR;
+    @admix(checkColor, null)
+    public color: string | null = null;
 
     /**
      * 图标大小
@@ -55,7 +59,7 @@ export class UIICon extends Component<UIIconOption> implements UIComponent<UIIco
         const svgElement = createSvgElement(this.name);
         svgElement.setAttribute("class", `${this.entry.prefix}svg`);
         svgElement.style.fontSize = `${this.size}px`;
-        svgElement.style.color = `${this.color}`;
+        svgElement.style.color = this.color;
         element.appendChild(svgElement);
 
         return element;

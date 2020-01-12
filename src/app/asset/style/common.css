@@ -29,3 +29,12 @@
 .layx-vertical-middle {
     align-items: center;
 }
+
+.layx-align-center {
+    justify-content: center;
+}
+
+.layx-center-all {
+    align-items: center;
+    justify-content: center;
+}

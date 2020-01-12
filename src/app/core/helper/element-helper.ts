@@ -115,3 +115,15 @@ export function createSvgElement(name: string): SVGSVGElement {
     svgElement.appendChild(useElement);
     return svgElement;
 }
+
+/**
+ * 移除div元素
+ * @param element 元素对象
+ * @returns void 
+ */
+export function removeDivElement(element: HTMLDivElement | null): void {
+    if (!element) return;
+    if (!element.parentElement) return;
+
+    element.parentElement.removeChild(element);
+}

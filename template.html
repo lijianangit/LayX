@@ -26,6 +26,9 @@
             },
             ["window:show"]: function (message) {
                 console.log(message);
+            },
+            ["window:destroy"]: function (message) {
+                console.log(message);
             }
         });
         document.getElementById("create").onclick = function () {
@@ -36,7 +39,7 @@
                 toolBar: {
                     titleBar: {
                         label: "Layx 窗口即入口，入口即天地",
-                        align:"left"
+                        align: "left"
                     }
                 }
             });

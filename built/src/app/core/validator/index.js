@@ -12,6 +12,10 @@ function checkString(data) {
     return checkOfType(data, "string");
 }
 exports.checkString = checkString;
+function checkFunction(data) {
+    return checkOfType(data, "function");
+}
+exports.checkFunction = checkFunction;
 function checkInt(data) {
     return checkOfType(data, "number") && (/^\-?[0-9]+$/.test(data));
 }
@@ -27,7 +31,7 @@ exports.checkPstNumber = checkPstNumber;
 function checkJSONObject(data) {
     return checkOfType(data, "object") &&
         Object.prototype.toString.call(data).toLowerCase() === "[object object]" &&
-        !checkArray(data);
+        !checkArray(data) && data !== null;
 }
 exports.checkJSONObject = checkJSONObject;
 function checkArray(data) {

@@ -7,7 +7,6 @@ import { UIIconOption } from './type';
  * @returns void
  */
 export function handlerOptions(this: UIICon, options: UIIconOption): void {
-    this.name = options?.name ?? this.name;
     this.color = options?.color ?? this.color;
     this.size = options?.size ?? this.size;
 }

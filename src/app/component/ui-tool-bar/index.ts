@@ -1,5 +1,5 @@
 import { Component } from '../';
-import { combine, isColor, isPstNumber } from '../../core/decorator/property-decorator';
+import { admix, isColor, isPstNumber } from '../../core/decorator/property-decorator';
 import { addCSSClasses, addCSSStyles, createDivElement } from '../../core/helper/element-helper';
 import { checkColor, checkNoEmptyOrNull, checkPstInt, checkString } from '../../core/validator';
 import { DEFAULT_TOOLBAR_BACKGROUND_COLOR, DEFAULT_TOOLBAR_HEIGHT } from '../../entry/const';
@@ -34,7 +34,7 @@ export class UIToolBar extends Component<UIToolBarOption> implements UIComponent
     /**
      * 标题
      */
-    @combine({
+    @admix({
         label: checkString,
         color: checkColor,
         align: [Align.LEFT, Align.CENTER, Align.RIGHT],
@@ -57,7 +57,7 @@ export class UIToolBar extends Component<UIToolBarOption> implements UIComponent
     /**
      * 图标
      */
-    @combine({
+    @admix({
         name: checkNoEmptyOrNull,
         size: checkPstInt,
         color: checkColor

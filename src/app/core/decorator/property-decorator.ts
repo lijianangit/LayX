@@ -1,9 +1,10 @@
-import { validateFail } from '../exception';
+import { appError, validateFail } from '../exception';
 import { mergeJSONObject } from '../helper/object-helper';
 import { JSONObject } from '../helper/type';
 import {
     checkArray,
     checkColor,
+    checkFunction,
     checkInValueOptions,
     checkJSONObject,
     checkMin,
@@ -116,16 +117,53 @@ export function min(threshold: number): PropertyDecorator {
 }
 
 /**
- * 组合检查验证
- * @param jsonDecorator 参数每一项装饰器，支持Array|Function|RegExp|{decorator: {},options: []}
- * @param items 其余可选值，只支持基本数据类型
+ * 混合验证
+ * @param admixes 支持Array|Function|RegExp|{decorator: {},options: []}|任意值，但Object类型只能有一个
+ * @returns PropertyDecorator
  */
-export function combine(jsonDecorator: JSONObject = {}, ...items: Array<any>): PropertyDecorator {
+export function admix(...admixes: Array<any>): PropertyDecorator {
     return generateDecorator((newValue, propertyKey, value) => {
-        newValue = checkCombine(newValue, jsonDecorator, ...items);
-        if (checkJSONObject(newValue)) {
+        const valueOptions = [];
+        const functionOptions = [];
+        const regexOptions = [];
+        const decorators = [];
+
+        for (const item of admixes) {
+            if (checkOfType(item, "string", "bigint", "boolean", "symbol", "undefined") || item === null) {
+                valueOptions.push(item);
+            }
+            else if (checkArray(item)) {
+                valueOptions.push(...<Array<any>>item);
+            }
+            else if (checkFunction(item)) {
+                functionOptions.push(item);
+            }
+            else if (checkRegExp(item)) {
+                regexOptions.push(item);
+            }
+            else {
+                if (decorators.length > 0) appError(`对象验证不能存在多个`);
+                decorators.push(item);
+            }
+        }
+        if (checkInValueOptions(newValue, ...valueOptions)) return newValue;
+
+        if (decorators.length > 0) {
+            newValue = checkCombine(newValue, decorators[0], ...valueOptions);
+        }
+
+        if (!checkJSONObject(newValue)) {
+            functionOptions.map(func => {
+                if (!func(newValue)) validateFail(`"${newValue}" 不是一个有效的参数值`);
+            })
+            regexOptions.map(reg => {
+                if (!reg.test(newValue)) validateFail(`"${newValue}" 不是一个有效的参数值`);
+            })
+        }
+        else {
             newValue = mergeJSONObject(value ?? {}, newValue);
         }
+
         return newValue;
     });
 }

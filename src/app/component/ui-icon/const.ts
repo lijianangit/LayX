@@ -5,7 +5,12 @@ export const enum SupportIcon {
     /**
      * 默认图标
      */
-    ICON = "icon"
+    ICON = "icon",
+
+    /**
+     * 删除图标
+     */
+    DESTROY = "destroy"
 }
 
 

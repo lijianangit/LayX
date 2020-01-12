@@ -1,1 +1,3 @@
-import "./icon.svg";
+import './icon.svg';
+import './destroy.svg';
+

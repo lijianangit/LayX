@@ -67,7 +67,7 @@ var UIToolBar = (function (_super) {
         }
     };
     __decorate([
-        property_decorator_1.combine({
+        property_decorator_1.admix({
             label: validator_1.checkString,
             color: validator_1.checkColor,
             align: ["left", "center", "right"],
@@ -81,7 +81,7 @@ var UIToolBar = (function (_super) {
         property_decorator_1.isColor()
     ], UIToolBar.prototype, "backgroundColor", void 0);
     __decorate([
-        property_decorator_1.combine({
+        property_decorator_1.admix({
             name: validator_1.checkNoEmptyOrNull,
             size: validator_1.checkPstInt,
             color: validator_1.checkColor

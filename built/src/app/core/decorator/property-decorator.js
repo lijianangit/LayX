@@ -78,21 +78,58 @@ function min(threshold) {
     });
 }
 exports.min = min;
-function combine(jsonDecorator) {
-    if (jsonDecorator === void 0) { jsonDecorator = {}; }
-    var items = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        items[_i - 1] = arguments[_i];
+function admix() {
+    var admixes = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        admixes[_i] = arguments[_i];
     }
     return generateDecorator(function (newValue, propertyKey, value) {
-        newValue = checkCombine.apply(void 0, __spreadArrays([newValue, jsonDecorator], items));
-        if (validator_1.checkJSONObject(newValue)) {
+        var valueOptions = [];
+        var functionOptions = [];
+        var regexOptions = [];
+        var decorators = [];
+        for (var _i = 0, admixes_1 = admixes; _i < admixes_1.length; _i++) {
+            var item = admixes_1[_i];
+            if (validator_1.checkOfType(item, "string", "bigint", "boolean", "symbol", "undefined") || item === null) {
+                valueOptions.push(item);
+            }
+            else if (validator_1.checkArray(item)) {
+                valueOptions.push.apply(valueOptions, item);
+            }
+            else if (validator_1.checkFunction(item)) {
+                functionOptions.push(item);
+            }
+            else if (validator_1.checkRegExp(item)) {
+                regexOptions.push(item);
+            }
+            else {
+                if (decorators.length > 0)
+                    exception_1.appError("\u5BF9\u8C61\u9A8C\u8BC1\u4E0D\u80FD\u5B58\u5728\u591A\u4E2A");
+                decorators.push(item);
+            }
+        }
+        if (validator_1.checkInValueOptions.apply(void 0, __spreadArrays([newValue], valueOptions)))
+            return newValue;
+        if (decorators.length > 0) {
+            newValue = checkCombine.apply(void 0, __spreadArrays([newValue, decorators[0]], valueOptions));
+        }
+        if (!validator_1.checkJSONObject(newValue)) {
+            functionOptions.map(function (func) {
+                if (!func(newValue))
+                    exception_1.validateFail("\"" + newValue + "\" \u4E0D\u662F\u4E00\u4E2A\u6709\u6548\u7684\u53C2\u6570\u503C");
+            });
+            regexOptions.map(function (reg) {
+                if (!reg.test(newValue))
+                    exception_1.validateFail("\"" + newValue + "\" \u4E0D\u662F\u4E00\u4E2A\u6709\u6548\u7684\u53C2\u6570\u503C");
+            });
+        }
+        else {
             newValue = object_helper_1.mergeJSONObject((value !== null && value !== void 0 ? value : {}), newValue);
         }
         return newValue;
     });
 }
-exports.combine = combine;
+exports.admix = admix;
 function checkCombine(newValue, jsonDecorator) {
     if (jsonDecorator === void 0) { jsonDecorator = {}; }
     var items = [];

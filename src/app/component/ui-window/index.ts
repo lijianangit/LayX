@@ -1,40 +1,31 @@
 import { Component } from '../';
 import {
-    combine,
-    inValueOptions,
-    isBoolean,
-    isColor,
-    isNoEmptyOrNull,
-    isPstNumber,
+    admix, inValueOptions, isBoolean, isColor, isNoEmptyOrNull, isPstNumber
 } from '../../core/decorator/property-decorator';
 import {
-    addCSSClasses,
-    addCSSStyles,
-    createDivElement,
-    hasCSSClass,
-    removeCSSClasses,
+    addCSSClasses, addCSSStyles, createDivElement, hasCSSClass, removeCSSClasses, removeDivElement
 } from '../../core/helper/element-helper';
-import { checkColor, checkNoEmptyOrNull, checkPstInt, checkPstNumber, checkString } from '../../core/validator';
-import { DEFAULT_WINDOW_BACKGROUND_COLOR, DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_WIDTH } from '../../entry/const';
+import {
+    checkColor, checkNoEmptyOrNull, checkPstInt, checkPstNumber, checkString
+} from '../../core/validator';
+import {
+    DEFAULT_WINDOW_BACKGROUND_COLOR, DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_WIDTH
+} from '../../entry/const';
+import { UIActionButton } from '../ui-action-button';
+import { UIActionButtonOption } from '../ui-action-button/type';
 import { UIComponent } from '../ui-component';
 import { ComponentElement } from '../ui-component/type';
 import { UIToolBar } from '../ui-tool-bar';
 import { Align } from '../ui-tool-bar/const';
 import { UIToolBarOption } from '../ui-tool-bar/type';
 import {
-    Animation,
-    BorderStyle,
-    DEFAULT_BORDER_COLOR,
-    DEFAULT_BORDER_RADIUS,
-    DEFAULT_BORDER_STYLE,
-    DEFAULT_BORDER_WIDTH,
-    DEFAULT_MAX_HEIGHT,
-    DEFAULT_MAX_WIDTH,
-    DEFAULT_MIN_HEIGHT,
-    DEFAULT_MIN_WIDTH,
+    Animation, BorderStyle, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_RADIUS, DEFAULT_BORDER_STYLE,
+    DEFAULT_BORDER_WIDTH, DEFAULT_MAX_HEIGHT, DEFAULT_MAX_WIDTH, DEFAULT_MIN_HEIGHT,
+    DEFAULT_MIN_WIDTH
 } from './const';
 import { handlerOptions } from './partial';
 import { BorderOption, UIWindowOption } from './type';
+import { SupportIcon } from '../ui-icon/const';
 
 /**
  * 窗口组件类
@@ -46,7 +37,6 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
      */
     public constructor(options: UIWindowOption) {
         super();
-
         this.id = options?.id;
         this.handlerOptions(options);
     }
@@ -115,7 +105,7 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
     /**
      * 边框样式
      */
-    @combine({
+    @admix({
         width: checkPstInt, /** 正整数 */
         style: [BorderStyle.SOLID, BorderStyle.DOUBLE, BorderStyle.DOTTED, BorderStyle.DASHED], /** 可选值 */
         color: checkColor,  /** 非空字符串 */
@@ -149,7 +139,7 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
     /**
      * 工具栏
      */
-    @combine({
+    @admix({
         height: checkPstNumber,
         backgroundColor: checkColor,
         titleBar: {
@@ -175,7 +165,10 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
     /**
      * 窗口元素对象
      */
-    public windowElement: HTMLDivElement | null = null;
+    public _windowElement: HTMLDivElement | null = null;
+    get windowElement(): HTMLDivElement | null {
+        return <HTMLDivElement | null>document.getElementById(`${this.entry.prefix + this.id}`);
+    }
 
     /**
      * 创建组件元素对象
@@ -183,7 +176,6 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
      */
     present(): ComponentElement {
         const element = createDivElement(`${this.entry.prefix + this.id}`);
-        this.windowElement = element;
 
         addCSSClasses(element,
             "window",
@@ -215,7 +207,7 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
 
         this.appendChild(element);
 
-        this.monitorEvent();
+        this.monitorEvent(element);
 
         this.sendEvent("window:create", { id: this.id });
         return element;
@@ -227,6 +219,18 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
      * @returns void
      */
     private appendChild(element: HTMLDivElement): void {
+        const actionBarElement = createDivElement();
+        addCSSClasses(actionBarElement,
+            "action-bar");
+        const uiActionButton = new UIActionButton(<UIActionButtonOption>{
+            name: SupportIcon.DESTROY,
+            handler: ev => this.destroy()
+        });
+        const uiActionButtonElement = uiActionButton.present();
+        actionBarElement.appendChild(uiActionButtonElement);
+
+        element.appendChild(actionBarElement);
+
         if (this.toolBar !== false) {
             const uiToolBar = new UIToolBar(this.toolBar);
             const uiToolBarElement = uiToolBar.present();
@@ -235,22 +239,50 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
     }
 
     /**
+     * 删除窗口
+     * @returns void
+     */
+    destroy(): void {
+        if (this.animate !== false) {
+            addCSSClasses(this.windowElement,
+                `animate-${this.animate}-destroy`);
+        }
+        else {
+            this.remove();
+        }
+    }
+
+    /**
+     * 移除窗口
+     * @returns void
+     */
+    private remove(): void {
+        removeDivElement(this.windowElement);
+        this.sendEvent("window:destroy", { id: this.id });
+    }
+
+    /**
      * 监听事件
      * @returns void 
      */
-    private monitorEvent(): void {
-        if (!this.windowElement) return;
+    private monitorEvent(element: HTMLDivElement | null): void {
+        if (!element) return;
 
         if (this.animate !== false) {
-            this.windowElement.addEventListener("animationend", (ev: AnimationEvent) => {
+            element.addEventListener("animationend", (ev: AnimationEvent) => {
 
                 // 新建或显示窗口
                 const animateShowName = `animate-${this.animate}-show`;
-                if (hasCSSClass(this.windowElement, animateShowName)) {
-                    removeCSSClasses(this.windowElement, animateShowName);
+                if (hasCSSClass(element, animateShowName)) {
+                    removeCSSClasses(element, animateShowName);
                     this.sendEvent("window:show", { id: this.id });
                 }
 
+                // 删除窗口
+                const animateDestroyName = `animate-${this.animate}-destroy`;
+                if (hasCSSClass(element, animateDestroyName)) {
+                    this.remove();
+                }
             });
         }
     }

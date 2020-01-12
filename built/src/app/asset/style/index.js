@@ -5,4 +5,5 @@ require("./common.css");
 require("./icon.css");
 require("./tool-bar.css");
 require("./window.css");
+require("./action-bar.css");
 //# sourceMappingURL=index.js.map

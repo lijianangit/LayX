@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Layx 窗口即入口，入口即天地</title>
-<link href="layx.css?7f89a0f0208dd5909749" rel="stylesheet"><script type="text/javascript" src="layx.js?7f89a0f0208dd5909749"></script></head>
+<link href="layx.css?37090065ba6eefb75ada" rel="stylesheet"><script type="text/javascript" src="layx.js?37090065ba6eefb75ada"></script></head>
 
 <body>
     <button id="create">打开窗口</button>
@@ -26,6 +26,9 @@
             },
             ["window:show"]: function (message) {
                 console.log(message);
+            },
+            ["window:destroy"]: function (message) {
+                console.log(message);
             }
         });
         document.getElementById("create").onclick = function () {
@@ -36,7 +39,7 @@
                 toolBar: {
                     titleBar: {
                         label: "Layx 窗口即入口，入口即天地",
-                        align:"left"
+                        align: "left"
                     }
                 }
             });
