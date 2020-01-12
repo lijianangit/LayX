@@ -40,19 +40,19 @@ export default class UIToolBar extends Component<UIToolBarOption> implements UIC
         align: [Align.LEFT, Align.CENTER, Align.RIGHT],
         fontSize: checkPstInt
     }, false)
-    public titleBar: TitleBarOption | false = <TitleBarOption | false>this.evaluateOrReturnDefault("window/toolBar/titleBar", false);
+    public titleBar: TitleBarOption | false = <TitleBarOption | false>this.fromJSONPath("window/toolBar/titleBar", false);
 
     /**
      * 默认高度
      */
     @isPstNumber()
-    public height: number = this.evaluateOrReturnDefault("window/toolBar/height", DEFAULT_TOOLBAR_HEIGHT);
+    public height: number = this.fromJSONPath("window/toolBar/height", DEFAULT_TOOLBAR_HEIGHT);
 
     /**
      * 背景颜色
      */
     @isColor()
-    public backgroundColor: string = this.evaluateOrReturnDefault("window/toolBar/backgroundColor", DEFAULT_TOOLBAR_BACKGROUND_COLOR)
+    public backgroundColor: string = this.fromJSONPath("window/toolBar/backgroundColor", DEFAULT_TOOLBAR_BACKGROUND_COLOR)
 
     /**
      * 图标
@@ -62,7 +62,7 @@ export default class UIToolBar extends Component<UIToolBarOption> implements UIC
         size: checkPstInt,
         color: checkColor
     }, false)
-    public icon: UIIconOption | false = <UIIconOption | false>this.evaluateOrReturnDefault("window/toolBar/icon", false);
+    public icon: UIIconOption | false = <UIIconOption | false>this.fromJSONPath("window/toolBar/icon", false);
 
     /**
      * 创建组件元素对象

@@ -52,14 +52,14 @@ export default abstract class Component<TOption> {
      * @param [starObject] 起始对象
      * @returns any 
      */
-    evaluateOrReturnDefault(key: string, defaultValue: any, starObject: JSONObject = this.entry): any {
+    fromJSONPath(key: string, defaultValue: any, starObject: JSONObject = this.entry): any {
         if (key.indexOf("/") > -1) {
             const keys = key.split("/");
-            let tier = this.evaluateOrReturnDefault(keys[0], defaultValue);
+            let tier = this.fromJSONPath(keys[0], defaultValue);
             if (!tier) return defaultValue;
             for (let i = 0; i < keys.length; i++) {
                 if (i + 1 < keys.length) {
-                    tier = this.evaluateOrReturnDefault(keys[i + 1], defaultValue, tier);
+                    tier = this.fromJSONPath(keys[i + 1], defaultValue, tier);
                 }
                 else return tier;
             }

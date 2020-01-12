@@ -68,13 +68,13 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
      * 宽度
      */
     @isPstNumber()
-    public width: number = <number>this.evaluateOrReturnDefault("window/width", DEFAULT_WINDOW_WIDTH);
+    public width: number = <number>this.fromJSONPath("window/width", DEFAULT_WINDOW_WIDTH);
 
     /**
      * 高度
      */
     @isPstNumber()
-    public height: number = <number>this.evaluateOrReturnDefault("window/height", DEFAULT_WINDOW_HEIGHT);
+    public height: number = <number>this.fromJSONPath("window/height", DEFAULT_WINDOW_HEIGHT);
 
     /**
      * 最小宽度
@@ -144,7 +144,7 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
      * 背景颜色
      */
     @isColor()
-    public backgroundColor: string = <string>this.evaluateOrReturnDefault("window/backgroundColor", DEFAULT_WINDOW_BACKGROUND_COLOR);
+    public backgroundColor: string = <string>this.fromJSONPath("window/backgroundColor", DEFAULT_WINDOW_BACKGROUND_COLOR);
 
     /**
      * 工具栏
@@ -170,7 +170,7 @@ export default class UIWindow extends Component<UIWindowOption> implements UICom
             options: [false]
         }
     }, false)
-    public toolBar: UIToolBarOption | false = <UIToolBarOption | false>this.evaluateOrReturnDefault("window/toolBar", false);
+    public toolBar: UIToolBarOption | false = <UIToolBarOption | false>this.fromJSONPath("window/toolBar", false);
 
     /**
      * 窗口元素对象

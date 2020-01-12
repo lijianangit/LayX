@@ -31,10 +31,10 @@ var UIToolBar = (function (_super) {
     function UIToolBar(options) {
         var _this = _super.call(this) || this;
         _this.handlerOptions = partial_1.handlerOptions;
-        _this.titleBar = _this.evaluateOrReturnDefault("window/toolBar/titleBar", false);
-        _this.height = _this.evaluateOrReturnDefault("window/toolBar/height", const_1.DEFAULT_TOOLBAR_HEIGHT);
-        _this.backgroundColor = _this.evaluateOrReturnDefault("window/toolBar/backgroundColor", const_1.DEFAULT_TOOLBAR_BACKGROUND_COLOR);
-        _this.icon = _this.evaluateOrReturnDefault("window/toolBar/icon", false);
+        _this.titleBar = _this.fromJSONPath("window/toolBar/titleBar", false);
+        _this.height = _this.fromJSONPath("window/toolBar/height", const_1.DEFAULT_TOOLBAR_HEIGHT);
+        _this.backgroundColor = _this.fromJSONPath("window/toolBar/backgroundColor", const_1.DEFAULT_TOOLBAR_BACKGROUND_COLOR);
+        _this.icon = _this.fromJSONPath("window/toolBar/icon", false);
         _this.handlerOptions(options);
         return _this;
     }

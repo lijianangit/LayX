@@ -33,8 +33,8 @@ var UIWindow = (function (_super) {
         var _a;
         var _this = _super.call(this) || this;
         _this.handlerOptions = partial_1.handlerOptions;
-        _this.width = _this.evaluateOrReturnDefault("window/width", const_1.DEFAULT_WINDOW_WIDTH);
-        _this.height = _this.evaluateOrReturnDefault("window/height", const_1.DEFAULT_WINDOW_HEIGHT);
+        _this.width = _this.fromJSONPath("window/width", const_1.DEFAULT_WINDOW_WIDTH);
+        _this.height = _this.fromJSONPath("window/height", const_1.DEFAULT_WINDOW_HEIGHT);
         _this.minWidth = const_2.DEFAULT_MIN_WIDTH;
         _this.minHeight = const_2.DEFAULT_MIN_HEIGHT;
         _this.maxWidth = const_2.DEFAULT_MAX_WIDTH;
@@ -49,8 +49,8 @@ var UIWindow = (function (_super) {
         };
         _this.boxShadow = true;
         _this.animate = "zoom";
-        _this.backgroundColor = _this.evaluateOrReturnDefault("window/backgroundColor", const_1.DEFAULT_WINDOW_BACKGROUND_COLOR);
-        _this.toolBar = _this.evaluateOrReturnDefault("window/toolBar", false);
+        _this.backgroundColor = _this.fromJSONPath("window/backgroundColor", const_1.DEFAULT_WINDOW_BACKGROUND_COLOR);
+        _this.toolBar = _this.fromJSONPath("window/toolBar", false);
         _this.windowElement = null;
         _this.id = (_a = options) === null || _a === void 0 ? void 0 : _a.id;
         _this.handlerOptions(options);
