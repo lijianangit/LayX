@@ -111,15 +111,15 @@ export default class Entry {
             height: DEFAULT_TOOLBAR_HEIGHT, // 默认工具栏高度
             backgroundColor: DEFAULT_TOOLBAR_BACKGROUND_COLOR, // 默认工具栏背景颜色
             titleBar: <TitleBarOption | false>{
-                label: DEFAULT_TITLEBAR_LABEL,
-                color: DEFAULT_TITLEBAR_COLOR,
-                align: DEFAULT_TITLEBAR_ALIGN,
-                fontSize: DEFAULT_TITLEBAR_FONTSIZE
+                label: DEFAULT_TITLEBAR_LABEL,  // 默认标题栏文本
+                color: DEFAULT_TITLEBAR_COLOR, // 默认标题栏颜色
+                align: DEFAULT_TITLEBAR_ALIGN, // 默认标题栏对齐方式
+                fontSize: DEFAULT_TITLEBAR_FONTSIZE // 默认标题栏字体大小
             },
             icon: <UIIconOption | false>{
-                name: DEFAULT_ICON,
-                size: DEFAULT_ICON_SIZE,
-                color: DEFAULT_ICON_COLOR
+                name: DEFAULT_ICON, // 默认图标名称
+                size: DEFAULT_ICON_SIZE, // 默认图标大小
+                color: DEFAULT_ICON_COLOR // 默认图标颜色
             }
         }
     };
