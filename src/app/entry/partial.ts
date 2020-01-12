@@ -1,4 +1,4 @@
-import Entry from './';
+import { Entry } from './';
 import { SupportLanguage } from './const';
 import { EntryOption, WindowDefault } from './type';
 

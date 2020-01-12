@@ -2,8 +2,17 @@ import { validateFail } from '../exception';
 import { mergeJSONObject } from '../helper/object-helper';
 import { JSONObject } from '../helper/type';
 import {
-    checkArray, checkColor, checkInValueOptions, checkJSONObject, checkMin, checkNoEmptyOrNull,
-    checkOfType, checkPstInt, checkPstNumber, checkRegExp, checkString
+    checkArray,
+    checkColor,
+    checkInValueOptions,
+    checkJSONObject,
+    checkMin,
+    checkNoEmptyOrNull,
+    checkOfType,
+    checkPstInt,
+    checkPstNumber,
+    checkRegExp,
+    checkString,
 } from '../validator';
 import { ValueOption } from '../validator/type';
 import { PropertyDecorator, PropertySetter } from './type';

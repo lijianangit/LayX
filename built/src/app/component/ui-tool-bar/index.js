@@ -49,7 +49,7 @@ var UIToolBar = (function (_super) {
     };
     UIToolBar.prototype.appendChild = function (element) {
         if (this.icon !== false) {
-            var uiIcon = new ui_icon_1.default(this.icon);
+            var uiIcon = new ui_icon_1.UIICon(this.icon);
             var uiIconElement = uiIcon.present();
             element_helper_1.addCSSClasses(uiIconElement, "tool-bar-icon");
             element.appendChild(uiIconElement);
@@ -88,6 +88,6 @@ var UIToolBar = (function (_super) {
         }, false)
     ], UIToolBar.prototype, "icon", void 0);
     return UIToolBar;
-}(__1.default));
-exports.default = UIToolBar;
+}(__1.Component));
+exports.UIToolBar = UIToolBar;
 //# sourceMappingURL=index.js.map

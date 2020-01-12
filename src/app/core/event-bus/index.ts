@@ -4,7 +4,7 @@ import { EventHandler, MessageQueues } from './type';
 /**
  * 事件总线类
  */
-export default class EventBus {
+export class EventBus {
     /**
      * 私有化构造函数，实现单例
      */
@@ -51,22 +51,23 @@ export default class EventBus {
      * 发送事件
      * @param eventKey 事件名称
      * @param message 事件处理函数或函数数组
+     * @param isSync 是否同步执行，默认false
      * @returns void 
      */
-    public emit(eventKey: string, message: any): void {
+    public emit(eventKey: string, message: any, isSync: boolean = false): void {
         if (!this.messageQueues.hasOwnProperty(eventKey)) return;
 
         const eventValue = this.messageQueues[eventKey];
         if (checkOfType(eventValue, "function")) {
-            setTimeout(() => {
+            !isSync ? setTimeout(() => {
                 (<EventHandler>eventValue)(message);
-            }, 0);
+            }, 0) : (<EventHandler>eventValue)(message);
         }
         else if (checkArray(eventValue)) {
             (<Array<EventHandler>>eventValue).map(handler => {
-                setTimeout(() => {
+                !isSync ? setTimeout(() => {
                     handler(message);
-                }, 0);
+                }, 0) : handler(message);
             });
         }
     }

@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var entry_1 = require("./app/entry");
 function overt() {
-    var entry = entry_1.default.getInstance();
+    var entry = entry_1.Entry.getInstance();
     var entryOvert = function (options) {
-        entry_1.default.getInstance(options);
+        entry_1.Entry.getInstance(options);
     };
     entryOvert.on = entry.on;
     entryOvert.version = entry.version;

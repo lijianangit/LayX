@@ -55,6 +55,6 @@ var UIICon = (function (_super) {
         property_decorator_1.isPstInt()
     ], UIICon.prototype, "size", void 0);
     return UIICon;
-}(__1.default));
-exports.default = UIICon;
+}(__1.Component));
+exports.UIICon = UIICon;
 //# sourceMappingURL=index.js.map

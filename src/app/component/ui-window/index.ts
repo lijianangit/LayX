@@ -1,4 +1,4 @@
-import Component from '../';
+import { Component } from '../';
 import {
     combine,
     inValueOptions,
@@ -16,9 +16,9 @@ import {
 } from '../../core/helper/element-helper';
 import { checkColor, checkNoEmptyOrNull, checkPstInt, checkPstNumber, checkString } from '../../core/validator';
 import { DEFAULT_WINDOW_BACKGROUND_COLOR, DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_WIDTH } from '../../entry/const';
-import UIComponent from '../ui-component';
+import { UIComponent } from '../ui-component';
 import { ComponentElement } from '../ui-component/type';
-import UIToolBar from '../ui-tool-bar';
+import { UIToolBar } from '../ui-tool-bar';
 import { Align } from '../ui-tool-bar/const';
 import { UIToolBarOption } from '../ui-tool-bar/type';
 import {
@@ -39,7 +39,7 @@ import { BorderOption, UIWindowOption } from './type';
 /**
  * 窗口组件类
  */
-export default class UIWindow extends Component<UIWindowOption> implements UIComponent<UIWindowOption> {
+export class UIWindow extends Component<UIWindowOption> implements UIComponent<UIWindowOption> {
     /**
      * 构造函数
      * @param options 可选参数

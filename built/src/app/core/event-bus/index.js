@@ -29,20 +29,21 @@ var EventBus = (function () {
     EventBus.prototype.one = function (eventKey, eventHandler) {
         this.messageQueues[eventKey] = eventHandler;
     };
-    EventBus.prototype.emit = function (eventKey, message) {
+    EventBus.prototype.emit = function (eventKey, message, isSync) {
+        if (isSync === void 0) { isSync = false; }
         if (!this.messageQueues.hasOwnProperty(eventKey))
             return;
         var eventValue = this.messageQueues[eventKey];
         if (validator_1.checkOfType(eventValue, "function")) {
-            setTimeout(function () {
+            !isSync ? setTimeout(function () {
                 eventValue(message);
-            }, 0);
+            }, 0) : eventValue(message);
         }
         else if (validator_1.checkArray(eventValue)) {
             eventValue.map(function (handler) {
-                setTimeout(function () {
+                !isSync ? setTimeout(function () {
                     handler(message);
-                }, 0);
+                }, 0) : handler(message);
             });
         }
     };
@@ -59,5 +60,5 @@ var EventBus = (function () {
     };
     return EventBus;
 }());
-exports.default = EventBus;
+exports.EventBus = EventBus;
 //# sourceMappingURL=index.js.map

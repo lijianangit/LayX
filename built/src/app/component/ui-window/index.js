@@ -85,7 +85,7 @@ var UIWindow = (function (_super) {
     };
     UIWindow.prototype.appendChild = function (element) {
         if (this.toolBar !== false) {
-            var uiToolBar = new ui_tool_bar_1.default(this.toolBar);
+            var uiToolBar = new ui_tool_bar_1.UIToolBar(this.toolBar);
             var uiToolBarElement = uiToolBar.present();
             element.appendChild(uiToolBarElement);
         }
@@ -172,6 +172,6 @@ var UIWindow = (function (_super) {
         }, false)
     ], UIWindow.prototype, "toolBar", void 0);
     return UIWindow;
-}(__1.default));
-exports.default = UIWindow;
+}(__1.Component));
+exports.UIWindow = UIWindow;
 //# sourceMappingURL=index.js.map

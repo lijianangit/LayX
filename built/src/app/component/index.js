@@ -4,8 +4,8 @@ var event_bus_1 = require("../core/event-bus");
 var entry_1 = require("../entry");
 var Component = (function () {
     function Component() {
-        this.entry = entry_1.default.getInstance();
-        this.eventBus = event_bus_1.default.getInstance();
+        this.entry = entry_1.Entry.getInstance();
+        this.eventBus = event_bus_1.EventBus.getInstance();
         this.symbol = Symbol("monksoul");
     }
     Component.prototype.sendEvent = function (eventName, message) {
@@ -40,5 +40,5 @@ var Component = (function () {
     };
     return Component;
 }());
-exports.default = Component;
+exports.Component = Component;
 //# sourceMappingURL=index.js.map

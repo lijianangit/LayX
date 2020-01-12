@@ -57,12 +57,12 @@ var Entry = (function () {
         for (var eventKey in queues) {
             var handler = queues[eventKey];
             if (validator_1.checkOfType(handler, "function")) {
-                event_bus_1.default.getInstance().on(eventKey, handler);
+                event_bus_1.EventBus.getInstance().on(eventKey, handler);
             }
         }
     };
     Entry.prototype.open = function (options) {
-        var uiWindow = new ui_window_1.default(options);
+        var uiWindow = new ui_window_1.UIWindow(options);
         var uiWindowElement = uiWindow.present();
         var fragment = document.createDocumentFragment();
         fragment.appendChild(uiWindowElement);
@@ -121,5 +121,5 @@ var Entry = (function () {
     ], Entry.prototype, "window", void 0);
     return Entry;
 }());
-exports.default = Entry;
+exports.Entry = Entry;
 //# sourceMappingURL=index.js.map

@@ -1,6 +1,6 @@
-import UIToolBar from './';
-import { UIToolBarOption, TitleBarOption } from './type';
 import { UIIconOption } from '../ui-icon/type';
+import { UIToolBar } from './';
+import { TitleBarOption, UIToolBarOption } from './type';
 
 /**
  * 处理初始传入参数

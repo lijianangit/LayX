@@ -1,13 +1,13 @@
-import Component from '../';
+import { Component } from '../';
 import { isColor, isNoEmptyOrNull, isPstInt } from '../../core/decorator/property-decorator';
 import { addCSSClasses, createDivElement, createSvgElement } from '../../core/helper/element-helper';
-import { DEFAULT_ICON, DEFAULT_ICON_COLOR, DEFAULT_ICON_SIZE } from './const';
-import UIComponent from '../ui-component';
+import { UIComponent } from '../ui-component';
 import { ComponentElement } from '../ui-component/type';
+import { DEFAULT_ICON, DEFAULT_ICON_COLOR, DEFAULT_ICON_SIZE } from './const';
 import { handlerOptions } from './partial';
 import { UIIconOption } from './type';
 
-export default class UIICon extends Component<UIIconOption> implements UIComponent<UIIconOption> {
+export class UIICon extends Component<UIIconOption> implements UIComponent<UIIconOption> {
     /**
     * 构造函数
     * @param options 可选参数

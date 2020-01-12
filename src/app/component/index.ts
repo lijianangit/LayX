@@ -1,12 +1,12 @@
-import EventBus from '../core/event-bus';
+import { EventBus } from '../core/event-bus';
 import { JSONObject } from '../core/helper/type';
-import Entry from '../entry';
+import { Entry } from '../entry';
 
 /**
  * 组件类，所有的组件都必须继承该类
  * @template TOption 组件参数
  */
-export default abstract class Component<TOption> {
+export abstract class Component<TOption> {
     /**
      * 入口对象
      */

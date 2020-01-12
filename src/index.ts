@@ -1,4 +1,4 @@
-import Entry from './app/entry';
+import { Entry } from './app/entry';
 import { EntryOption, EntryOvert } from './app/entry/type';
 
 /**

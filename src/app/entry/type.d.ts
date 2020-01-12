@@ -1,5 +1,5 @@
 import { UIWindowOption } from '../component/ui-window/type';
-import EventBus from '../core/event-bus';
+import { EventBus } from '../core/event-bus';
 import { EventSetter, MessageQueues } from '../core/event-bus/type';
 import { SupportLanguage } from './const';
 import { TitleBarOption } from "../component/ui-tool-bar/type";

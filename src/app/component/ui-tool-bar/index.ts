@@ -1,11 +1,11 @@
-import Component from '../';
+import { Component } from '../';
 import { combine, isColor, isPstNumber } from '../../core/decorator/property-decorator';
 import { addCSSClasses, addCSSStyles, createDivElement } from '../../core/helper/element-helper';
 import { checkColor, checkNoEmptyOrNull, checkPstInt, checkString } from '../../core/validator';
 import { DEFAULT_TOOLBAR_BACKGROUND_COLOR, DEFAULT_TOOLBAR_HEIGHT } from '../../entry/const';
-import UIComponent from '../ui-component';
+import { UIComponent } from '../ui-component';
 import { ComponentElement } from '../ui-component/type';
-import UIICon from '../ui-icon';
+import { UIICon } from '../ui-icon';
 import { UIIconOption } from '../ui-icon/type';
 import { Align } from './const';
 import { handlerOptions } from './partial';
@@ -14,7 +14,7 @@ import { TitleBarOption, UIToolBarOption } from './type';
 /**
  * 工具栏类
  */
-export default class UIToolBar extends Component<UIToolBarOption> implements UIComponent<UIToolBarOption> {
+export class UIToolBar extends Component<UIToolBarOption> implements UIComponent<UIToolBarOption> {
     /**
      * 构造函数
      * @param options 可选参数

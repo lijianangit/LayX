@@ -1,9 +1,9 @@
 import { validateFail } from '../../core/exception';
 import { checkArray, checkInValueOptions, checkOfType } from '../../core/validator';
-import UIWindow from './';
+import { UIToolBarOption } from '../ui-tool-bar/type';
+import { UIWindow } from './';
 import { Animation, Offset } from './const';
 import { BorderOption, UIWindowOption } from './type';
-import { UIToolBarOption } from '../ui-tool-bar/type';
 
 /**
  * 处理初始传入参数

@@ -5,10 +5,10 @@ import { DEFAULT_ICON, DEFAULT_ICON_COLOR, DEFAULT_ICON_SIZE } from '../componen
 import { UIIconOption } from '../component/ui-icon/type';
 import { Align } from '../component/ui-tool-bar/const';
 import { TitleBarOption } from '../component/ui-tool-bar/type';
-import UIWindow from '../component/ui-window';
+import { UIWindow } from '../component/ui-window';
 import { UIWindowOption } from '../component/ui-window/type';
 import { combine, inValueOptions, isNoEmptyOrNull, isPstInt, min } from '../core/decorator/property-decorator';
-import EventBus from '../core/event-bus';
+import { EventBus } from '../core/event-bus';
 import { EventSetter } from '../core/event-bus/type';
 import { checkColor, checkNoEmptyOrNull, checkOfType, checkPstInt, checkPstNumber, checkString } from '../core/validator';
 import {
@@ -32,7 +32,7 @@ import { EntryOption, ToolBarDefault, WindowDefault } from './type';
 /**
  * 入口单例类，承载着全局数据存储
  */
-export default class Entry {
+export class Entry {
     /**
      * 私有化构造函数，实现单例
      */

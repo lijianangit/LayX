@@ -1,4 +1,4 @@
-import UIICon from '.';
+import { UIICon } from '.';
 import { UIIconOption } from './type';
 
 /**
