@@ -1,4 +1,5 @@
 import Component from '../';
+import { ComponentElement } from './type';
 
 /**
  * UI组件类，所有的组件都必须实现该接口
@@ -7,7 +8,7 @@ import Component from '../';
 export default interface UIComponent<TOption> extends Component<TOption> {
     /**
      * 创建组件元素对象
-     * @returns HTMLElement 
+     * @returns ComponentElement 
      */
-    present(): HTMLElement;
+    present(): ComponentElement;
 }

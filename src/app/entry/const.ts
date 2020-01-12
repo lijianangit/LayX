@@ -1,4 +1,5 @@
 import { Align } from "../component/ui-tool-bar/const";
+import { SupportIcon } from "../component/ui-icon/const";
 
 /**
  * 版本号

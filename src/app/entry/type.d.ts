@@ -3,6 +3,7 @@ import EventBus from '../core/event-bus';
 import { EventSetter, MessageQueues } from '../core/event-bus/type';
 import { SupportLanguage } from './const';
 import { TitleBarOption } from "../component/ui-tool-bar/type";
+import { UIIconOption } from '../component/ui-icon/type';
 
 /**
  * 工具栏默认配置
@@ -22,6 +23,11 @@ export interface ToolBarDefault {
      * 标题栏
      */
     titleBar?: false | TitleBarOption;
+
+    /**
+     * 图标
+     */
+    icon?: false | UIIconOption;
 }
 
 /**

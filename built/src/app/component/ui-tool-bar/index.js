@@ -23,16 +23,18 @@ var __1 = require("../");
 var property_decorator_1 = require("../../core/decorator/property-decorator");
 var element_helper_1 = require("../../core/helper/element-helper");
 var validator_1 = require("../../core/validator");
+var const_1 = require("../../entry/const");
+var ui_icon_1 = require("../ui-icon");
 var partial_1 = require("./partial");
 var UIToolBar = (function (_super) {
     __extends(UIToolBar, _super);
     function UIToolBar(options) {
-        var _a, _b, _c;
         var _this = _super.call(this) || this;
         _this.handlerOptions = partial_1.handlerOptions;
-        _this.titleBar = _this.entry.window.toolBar === false ? false : (_a = _this.entry.window.toolBar) === null || _a === void 0 ? void 0 : _a.titleBar;
-        _this.height = _this.entry.window.toolBar === false ? 0 : (_b = _this.entry.window.toolBar) === null || _b === void 0 ? void 0 : _b.height;
-        _this.backgroundColor = _this.entry.window.toolBar === false ? "rgba(0,0,0,0)" : (_c = _this.entry.window.toolBar) === null || _c === void 0 ? void 0 : _c.backgroundColor;
+        _this.titleBar = _this.evaluateOrReturnDefault("window/toolBar/titleBar", false);
+        _this.height = _this.evaluateOrReturnDefault("window/toolBar/height", const_1.DEFAULT_TOOLBAR_HEIGHT);
+        _this.backgroundColor = _this.evaluateOrReturnDefault("window/toolBar/backgroundColor", const_1.DEFAULT_TOOLBAR_BACKGROUND_COLOR);
+        _this.icon = _this.evaluateOrReturnDefault("window/toolBar/icon", false);
         _this.handlerOptions(options);
         return _this;
     }
@@ -42,6 +44,16 @@ var UIToolBar = (function (_super) {
         element_helper_1.addCSSStyles(element, {
             height: this.height + "px",
         });
+        this.appendChild(element);
+        return element;
+    };
+    UIToolBar.prototype.appendChild = function (element) {
+        if (this.icon !== false) {
+            var uiIcon = new ui_icon_1.default(this.icon);
+            var uiIconElement = uiIcon.present();
+            element_helper_1.addCSSClasses(uiIconElement, "tool-bar-icon");
+            element.appendChild(uiIconElement);
+        }
         if (this.titleBar !== false) {
             var titleBarElement = element_helper_1.createDivElement();
             element_helper_1.addCSSClasses(titleBarElement, "title-bar", "flex-item");
@@ -53,7 +65,6 @@ var UIToolBar = (function (_super) {
             titleBarElement.textContent = this.titleBar.label;
             element.appendChild(titleBarElement);
         }
-        return element;
     };
     __decorate([
         property_decorator_1.combine({
@@ -69,6 +80,13 @@ var UIToolBar = (function (_super) {
     __decorate([
         property_decorator_1.isColor()
     ], UIToolBar.prototype, "backgroundColor", void 0);
+    __decorate([
+        property_decorator_1.combine({
+            name: validator_1.checkNoEmptyOrNull,
+            size: validator_1.checkPstInt,
+            color: validator_1.checkColor
+        }, false)
+    ], UIToolBar.prototype, "icon", void 0);
     return UIToolBar;
 }(__1.default));
 exports.default = UIToolBar;

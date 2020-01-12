@@ -6,32 +6,39 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+require("../asset/icon");
 require("../asset/style");
+var const_1 = require("../component/ui-icon/const");
 var ui_window_1 = require("../component/ui-window");
 var property_decorator_1 = require("../core/decorator/property-decorator");
 var event_bus_1 = require("../core/event-bus");
 var validator_1 = require("../core/validator");
-var const_1 = require("./const");
+var const_2 = require("./const");
 var partial_1 = require("./partial");
 var Entry = (function () {
     function Entry(options) {
         this.handlerOptions = partial_1.handlerOptions;
-        this.version = const_1.VERSION;
-        this.startZIndex = const_1.START_ZINDEX;
-        this.prefix = const_1.PREFIX;
+        this.version = const_2.VERSION;
+        this.startZIndex = const_2.START_ZINDEX;
+        this.prefix = const_2.PREFIX;
         this.lang = "ZH_CN";
         this.window = {
-            width: const_1.DEFAULT_WINDOW_WIDTH,
-            height: const_1.DEFAULT_WINDOW_HEIGHT,
-            backgroundColor: const_1.DEFAULT_WINDOW_BACKGROUND_COLOR,
+            width: const_2.DEFAULT_WINDOW_WIDTH,
+            height: const_2.DEFAULT_WINDOW_HEIGHT,
+            backgroundColor: const_2.DEFAULT_WINDOW_BACKGROUND_COLOR,
             toolBar: {
-                height: const_1.DEFAULT_TOOLBAR_HEIGHT,
-                backgroundColor: const_1.DEFAULT_TOOLBAR_BACKGROUND_COLOR,
+                height: const_2.DEFAULT_TOOLBAR_HEIGHT,
+                backgroundColor: const_2.DEFAULT_TOOLBAR_BACKGROUND_COLOR,
                 titleBar: {
-                    label: const_1.DEFAULT_TITLEBAR_LABEL,
-                    color: const_1.DEFAULT_TITLEBAR_COLOR,
-                    align: const_1.DEFAULT_TITLEBAR_ALIGN,
-                    fontSize: const_1.DEFAULT_TITLEBAR_FONTSIZE
+                    label: const_2.DEFAULT_TITLEBAR_LABEL,
+                    color: const_2.DEFAULT_TITLEBAR_COLOR,
+                    align: const_2.DEFAULT_TITLEBAR_ALIGN,
+                    fontSize: const_2.DEFAULT_TITLEBAR_FONTSIZE
+                },
+                icon: {
+                    name: const_1.DEFAULT_ICON,
+                    size: const_1.DEFAULT_ICON_SIZE,
+                    color: const_1.DEFAULT_ICON_COLOR
                 }
             }
         };
@@ -96,6 +103,14 @@ var Entry = (function () {
                             color: validator_1.checkColor,
                             align: ["left", "center", "right"],
                             fontSize: validator_1.checkPstInt
+                        },
+                        options: [false]
+                    },
+                    icon: {
+                        decorator: {
+                            name: validator_1.checkNoEmptyOrNull,
+                            size: validator_1.checkPstInt,
+                            color: validator_1.checkColor
                         },
                         options: [false]
                     }

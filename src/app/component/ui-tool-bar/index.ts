@@ -1,8 +1,12 @@
 import Component from '../';
 import { combine, isColor, isPstNumber } from '../../core/decorator/property-decorator';
 import { addCSSClasses, addCSSStyles, createDivElement } from '../../core/helper/element-helper';
-import { checkColor, checkPstInt, checkString } from '../../core/validator';
+import { checkColor, checkNoEmptyOrNull, checkPstInt, checkString } from '../../core/validator';
+import { DEFAULT_TOOLBAR_BACKGROUND_COLOR, DEFAULT_TOOLBAR_HEIGHT } from '../../entry/const';
 import UIComponent from '../ui-component';
+import { ComponentElement } from '../ui-component/type';
+import UIICon from '../ui-icon';
+import { UIIconOption } from '../ui-icon/type';
 import { Align } from './const';
 import { handlerOptions } from './partial';
 import { TitleBarOption, UIToolBarOption } from './type';
@@ -36,25 +40,35 @@ export default class UIToolBar extends Component<UIToolBarOption> implements UIC
         align: [Align.LEFT, Align.CENTER, Align.RIGHT],
         fontSize: checkPstInt
     }, false)
-    public titleBar: TitleBarOption | false = this.entry.window.toolBar === false ? false : <TitleBarOption>this.entry.window.toolBar?.titleBar;
+    public titleBar: TitleBarOption | false = <TitleBarOption | false>this.evaluateOrReturnDefault("window/toolBar/titleBar", false);
 
     /**
      * 默认高度
      */
     @isPstNumber()
-    public height: number = this.entry.window.toolBar === false ? 0 : <number>this.entry.window.toolBar?.height;
+    public height: number = this.evaluateOrReturnDefault("window/toolBar/height", DEFAULT_TOOLBAR_HEIGHT);
 
     /**
      * 背景颜色
      */
     @isColor()
-    public backgroundColor: string = this.entry.window.toolBar === false ? "rgba(0,0,0,0)" : <string>this.entry.window.toolBar?.backgroundColor;
+    public backgroundColor: string = this.evaluateOrReturnDefault("window/toolBar/backgroundColor", DEFAULT_TOOLBAR_BACKGROUND_COLOR)
+
+    /**
+     * 图标
+     */
+    @combine({
+        name: checkNoEmptyOrNull,
+        size: checkPstInt,
+        color: checkColor
+    }, false)
+    public icon: UIIconOption | false = <UIIconOption | false>this.evaluateOrReturnDefault("window/toolBar/icon", false);
 
     /**
      * 创建组件元素对象
-     * @returns HTMLElement
+     * @returns ComponentElement
      */
-    present(): HTMLElement {
+    present(): ComponentElement {
         const element = createDivElement();
 
         addCSSClasses(element,
@@ -66,6 +80,24 @@ export default class UIToolBar extends Component<UIToolBarOption> implements UIC
             <CSSStyleDeclaration>{
                 height: `${this.height}px`,
             });
+
+        this.appendChild(element);
+
+        return element;
+    }
+
+    /**
+     * 追加子元素
+     * @param element 父元素
+     * @returns void
+     */
+    private appendChild(element: HTMLDivElement): void {
+        if (this.icon !== false) {
+            const uiIcon = new UIICon(this.icon);
+            const uiIconElement = uiIcon.present();
+            addCSSClasses(uiIconElement, "tool-bar-icon");
+            element.appendChild(uiIconElement);
+        }
 
         if (this.titleBar !== false) {
             const titleBarElement = createDivElement();
@@ -86,7 +118,5 @@ export default class UIToolBar extends Component<UIToolBarOption> implements UIC
             element.appendChild(titleBarElement);
 
         }
-
-        return element;
     }
 }

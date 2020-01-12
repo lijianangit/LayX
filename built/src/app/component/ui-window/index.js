@@ -23,33 +23,34 @@ var __1 = require("../");
 var property_decorator_1 = require("../../core/decorator/property-decorator");
 var element_helper_1 = require("../../core/helper/element-helper");
 var validator_1 = require("../../core/validator");
-var const_1 = require("./const");
-var partial_1 = require("./partial");
+var const_1 = require("../../entry/const");
 var ui_tool_bar_1 = require("../ui-tool-bar");
+var const_2 = require("./const");
+var partial_1 = require("./partial");
 var UIWindow = (function (_super) {
     __extends(UIWindow, _super);
     function UIWindow(options) {
         var _a;
         var _this = _super.call(this) || this;
         _this.handlerOptions = partial_1.handlerOptions;
-        _this.width = _this.entry.window.width;
-        _this.height = _this.entry.window.height;
-        _this.minWidth = const_1.DEFAULT_MIN_WIDTH;
-        _this.minHeight = const_1.DEFAULT_MIN_HEIGHT;
-        _this.maxWidth = const_1.DEFAULT_MAX_WIDTH;
-        _this.maxHeight = const_1.DEFAULT_MAX_HEIGHT;
-        _this.left = (const_1.DEFAULT_MAX_WIDTH - _this.width) / 2;
-        _this.top = (const_1.DEFAULT_MAX_HEIGHT - _this.height) / 2;
+        _this.width = _this.evaluateOrReturnDefault("window/width", const_1.DEFAULT_WINDOW_WIDTH);
+        _this.height = _this.evaluateOrReturnDefault("window/height", const_1.DEFAULT_WINDOW_HEIGHT);
+        _this.minWidth = const_2.DEFAULT_MIN_WIDTH;
+        _this.minHeight = const_2.DEFAULT_MIN_HEIGHT;
+        _this.maxWidth = const_2.DEFAULT_MAX_WIDTH;
+        _this.maxHeight = const_2.DEFAULT_MAX_HEIGHT;
+        _this.left = (const_2.DEFAULT_MAX_WIDTH - _this.width) / 2;
+        _this.top = (const_2.DEFAULT_MAX_HEIGHT - _this.height) / 2;
         _this.border = {
-            width: const_1.DEFAULT_BORDER_WIDTH,
-            style: const_1.DEFAULT_BORDER_STYLE,
-            color: const_1.DEFAULT_BORDER_COLOR,
-            radius: const_1.DEFAULT_BORDER_RADIUS
+            width: const_2.DEFAULT_BORDER_WIDTH,
+            style: const_2.DEFAULT_BORDER_STYLE,
+            color: const_2.DEFAULT_BORDER_COLOR,
+            radius: const_2.DEFAULT_BORDER_RADIUS
         };
         _this.boxShadow = true;
         _this.animate = "zoom";
-        _this.backgroundColor = _this.entry.window.backgroundColor;
-        _this.toolBar = _this.entry.window.toolBar;
+        _this.backgroundColor = _this.evaluateOrReturnDefault("window/backgroundColor", const_1.DEFAULT_WINDOW_BACKGROUND_COLOR);
+        _this.toolBar = _this.evaluateOrReturnDefault("window/toolBar", false);
         _this.windowElement = null;
         _this.id = (_a = options) === null || _a === void 0 ? void 0 : _a.id;
         _this.handlerOptions(options);
@@ -77,14 +78,17 @@ var UIWindow = (function (_super) {
             webkitBorderRadius: this.border === false ? null :
                 this.border.radius + "px",
         });
+        this.appendChild(element);
+        this.monitorEvent();
+        this.sendEvent("window:create", { id: this.id });
+        return element;
+    };
+    UIWindow.prototype.appendChild = function (element) {
         if (this.toolBar !== false) {
             var uiToolBar = new ui_tool_bar_1.default(this.toolBar);
             var uiToolBarElement = uiToolBar.present();
             element.appendChild(uiToolBarElement);
         }
-        this.monitorEvent();
-        this.sendEvent("window:create", { id: this.id });
-        return element;
     };
     UIWindow.prototype.monitorEvent = function () {
         var _this = this;
@@ -154,6 +158,14 @@ var UIWindow = (function (_super) {
                     color: validator_1.checkColor,
                     align: ["left", "center", "right"],
                     fontSize: validator_1.checkPstInt
+                },
+                options: [false]
+            },
+            icon: {
+                decorator: {
+                    name: validator_1.checkNoEmptyOrNull,
+                    size: validator_1.checkPstInt,
+                    color: validator_1.checkColor
                 },
                 options: [false]
             }

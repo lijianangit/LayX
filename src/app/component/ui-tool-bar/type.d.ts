@@ -1,4 +1,5 @@
 import { Align } from "./const";
+import { UIIconOption } from "../ui-icon/type";
 
 /**
  * 标题栏
@@ -43,4 +44,9 @@ export interface UIToolBarOption {
      * 背景颜色
      */
     backgroundColor?: string;
+
+    /**
+     * 图标
+     */
+    icon?: false | UIIconOption;
 }

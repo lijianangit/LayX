@@ -82,4 +82,12 @@ function createDivElement(id) {
     return element;
 }
 exports.createDivElement = createDivElement;
+function createSvgElement(name) {
+    var svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    var useElement = document.createElementNS("http://www.w3.org/2000/svg", "use");
+    useElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + name);
+    svgElement.appendChild(useElement);
+    return svgElement;
+}
+exports.createSvgElement = createSvgElement;
 //# sourceMappingURL=element-helper.js.map

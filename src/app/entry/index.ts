@@ -1,12 +1,21 @@
+import '../asset/icon';
 import '../asset/style';
 
+import { DEFAULT_ICON, DEFAULT_ICON_COLOR, DEFAULT_ICON_SIZE } from '../component/ui-icon/const';
+import { UIIconOption } from '../component/ui-icon/type';
+import { Align } from '../component/ui-tool-bar/const';
+import { TitleBarOption } from '../component/ui-tool-bar/type';
 import UIWindow from '../component/ui-window';
 import { UIWindowOption } from '../component/ui-window/type';
 import { combine, inValueOptions, isNoEmptyOrNull, isPstInt, min } from '../core/decorator/property-decorator';
 import EventBus from '../core/event-bus';
 import { EventSetter } from '../core/event-bus/type';
-import { checkColor, checkOfType, checkPstNumber, checkString, checkPstInt } from '../core/validator';
+import { checkColor, checkNoEmptyOrNull, checkOfType, checkPstInt, checkPstNumber, checkString } from '../core/validator';
 import {
+    DEFAULT_TITLEBAR_ALIGN,
+    DEFAULT_TITLEBAR_COLOR,
+    DEFAULT_TITLEBAR_FONTSIZE,
+    DEFAULT_TITLEBAR_LABEL,
     DEFAULT_TOOLBAR_BACKGROUND_COLOR,
     DEFAULT_TOOLBAR_HEIGHT,
     DEFAULT_WINDOW_BACKGROUND_COLOR,
@@ -16,15 +25,9 @@ import {
     START_ZINDEX,
     SupportLanguage,
     VERSION,
-    DEFAULT_TITLEBAR_LABEL,
-    DEFAULT_TITLEBAR_COLOR,
-    DEFAULT_TITLEBAR_ALIGN,
-    DEFAULT_TITLEBAR_FONTSIZE,
 } from './const';
 import { handlerOptions } from './partial';
 import { EntryOption, ToolBarDefault, WindowDefault } from './type';
-import { TitleBarOption } from '../component/ui-tool-bar/type';
-import { Align } from '../component/ui-tool-bar/const';
 
 /**
  * 入口单例类，承载着全局数据存储
@@ -87,6 +90,14 @@ export default class Entry {
                         fontSize: checkPstInt
                     },
                     options: [false]
+                },
+                icon: {
+                    decorator: {
+                        name: checkNoEmptyOrNull,
+                        size: checkPstInt,
+                        color: checkColor
+                    },
+                    options: [false]
                 }
             },
             options: [false]
@@ -104,6 +115,11 @@ export default class Entry {
                 color: DEFAULT_TITLEBAR_COLOR,
                 align: DEFAULT_TITLEBAR_ALIGN,
                 fontSize: DEFAULT_TITLEBAR_FONTSIZE
+            },
+            icon: <UIIconOption | false>{
+                name: DEFAULT_ICON,
+                size: DEFAULT_ICON_SIZE,
+                color: DEFAULT_ICON_COLOR
             }
         }
     };
@@ -139,7 +155,6 @@ export default class Entry {
         const uiWindowElement = uiWindow.present();
         const fragment = document.createDocumentFragment();
         fragment.appendChild(uiWindowElement);
-
         document.body.appendChild(uiWindowElement);
     }
 

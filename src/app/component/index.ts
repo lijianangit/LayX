@@ -44,4 +44,27 @@ export default abstract class Component<TOption> {
             }
         });
     }
+
+    /**
+     * 计算多层嵌套中类型属性值
+     * @param key 路径，格式：window/toolBar/size
+     * @param defaultValue 默认值
+     * @param [starObject] 起始对象
+     * @returns any 
+     */
+    evaluateOrReturnDefault(key: string, defaultValue: any, starObject: JSONObject = this.entry): any {
+        if (key.indexOf("/") > -1) {
+            const keys = key.split("/");
+            let tier = this.evaluateOrReturnDefault(keys[0], defaultValue);
+            if (!tier) return defaultValue;
+            for (let i = 0; i < keys.length; i++) {
+                if (i + 1 < keys.length) {
+                    tier = this.evaluateOrReturnDefault(keys[i + 1], defaultValue, tier);
+                }
+                else return tier;
+            }
+            return tier;
+        }
+        else return starObject[key] ?? defaultValue;
+    }
 }
