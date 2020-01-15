@@ -19,7 +19,7 @@
         "sourceMap": true
     },
     "include": [
-        "./src/**/*"
+        "./app/**/*"
     ],
     "exclude": [
         "./node_modules"

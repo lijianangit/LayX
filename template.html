@@ -9,49 +9,7 @@
 </head>
 
 <body>
-    <button id="create">打开窗口</button>
-    <button id="create2">打开窗口2</button>
-    <script type="text/javascript">
-        // 支持全局配置
-        layx({
-            window: {
-                width: 500, // 默认宽度
-                height: 500 // 默认高度
-            }
-        });
-        // 支持事件绑定
-        layx.on({
-            ["window:create"]: function (message) {
-                console.log(message);
-            },
-            ["window:show"]: function (message) {
-                console.log(message);
-            },
-            ["window:destroy"]: function (message) {
-                console.log(message);
-            }
-        });
-        document.getElementById("create").onclick = function () {
-            layx.open({
-                id: "hello",
-                width: 800, // 复写默认全局配置
-                height: 600,// 复写默认全局配置
-                toolBar: {
-                    titleBar: {
-                        label: "Layx 窗口即入口，入口即天地",
-                        align: "left"
-                    }
-                }
-            });
-        };
-        document.getElementById("create2").onclick = function () {
-            layx.open({
-                id: "hello2",
-                offset: "right-bottom",
-                toolBar: false
-            });
-        };
-    </script>
+    
 </body>
 
 </html>
