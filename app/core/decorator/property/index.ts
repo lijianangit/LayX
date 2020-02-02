@@ -1,11 +1,10 @@
 import { parameterInvalid } from '../../exception';
 import { mergeJSONObject } from '../../helper/object';
+import { FunctionValidator, JSONObject, PropertySetter, ValueType } from '../../type';
 import {
     checkArray, checkBaseType, checkFunction, checkFunctionValidator, checkIn, checkJSONObject,
     checkValidator
 } from '../../validator';
-import { FunctionValidator, JSONObject, ValueType } from '../../validator/type';
-import { PropertySetter } from './type';
 
 function decorator(propertySetter: PropertySetter): PropertyDecorator {
     if (!checkFunction<PropertySetter>(propertySetter)) parameterInvalid();

@@ -2,7 +2,7 @@ import { parameterInvalid } from '../exception';
 import {
     BaseType, CheckValidator, ColorString, FunctionValidator, IntegerNumber, JSONObject,
     NoEmptyOrNullString, ValueType
-} from './type';
+} from '../type';
 
 export function checkBaseType(data: any, ...typeNames: BaseType[]): boolean {
     return typeNames.indexOf(typeof data) > -1;

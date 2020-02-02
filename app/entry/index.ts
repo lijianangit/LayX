@@ -1,13 +1,22 @@
-import { DEFAULT_START_ZINDEX, DEFAULT_WINDOW_OPTION, TextAlign, VERSION } from '../const';
+import '../asset';
+
+import { AnimationOptional, BorderStyleOptional } from '../const';
+import { GlobalUIWindowOptionContract } from '../contract';
 import { validator } from '../core/decorator/property';
-import {
-    checkColor, checkContains, checkIn, checkMin, checkPstInt, checkPstNumber, checkString
-} from '../core/validator';
-import { EntryOption, EntryUIWindowOption } from './type';
+import { checkMin, checkPstInt } from '../core/validator';
+import { EntryOption, GlobalUIWindowOption } from '../type';
 
 export class Entry {
     private constructor(options: EntryOption) {
         this.handlerOptions(options);
+    }
+
+    private static instance: Entry;
+
+    public static Instance(options: EntryOption = {}): Entry {
+        if (!this.instance) this.instance = new Entry(options);
+        else this.instance.handlerOptions(options);
+        return this.instance;
     }
 
     private handlerOptions(options: EntryOption): void {
@@ -15,24 +24,27 @@ export class Entry {
         this.window = options?.window ?? this.window;
     }
 
-    private static instance: Entry;
+    public readonly version: string = "3.0";
 
-    public readonly version: string = VERSION;
     @validator(checkPstInt, [checkMin, 1000])
-    public startZIndex: number = DEFAULT_START_ZINDEX;
-    @validator({
-        width: checkPstNumber, height: checkPstNumber, backgroundColor: checkColor,
-        toolBar: [{
-            height: checkPstNumber, backgroundColor: checkColor,
-            titleBar: [{ label: checkString, color: checkColor, align: [checkIn, TextAlign.LEFT, TextAlign.CENTER, TextAlign.RIGHT], fontSize: checkPstInt }, false],
-            icon: [{ name: [checkString, null], color: [checkColor, null], size: checkPstInt, path: [checkString, null] }, false]
-        }, false]
-    })
-    public window: EntryUIWindowOption = DEFAULT_WINDOW_OPTION;
+    public startZIndex: number = 10000000;
 
-    public static Instance(options: EntryOption = {}): Entry {
-        if (!this.instance) this.instance = new Entry(options);
-        else this.instance.handlerOptions(options);
-        return this.instance;
-    }
+    @validator(GlobalUIWindowOptionContract)
+    public window: GlobalUIWindowOption = {
+        width: 800,
+        height: 600,
+        minWidth: 200,
+        minHeight: 200,
+        maxWidth: innerWidth,
+        maxHeight: innerHeight,
+        backgroundColor: "#ffffff",
+        boxShadow: true,
+        animate: AnimationOptional.ZOOM,
+        border: {
+            width: 1,
+            style: BorderStyleOptional.SOLID,
+            color: "#3baced",
+            radius: 4
+        }
+    };
 }

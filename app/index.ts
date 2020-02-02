@@ -1,5 +1,5 @@
 import { Entry } from './entry';
-import { EntryOption, Overt } from './entry/type';
+import { EntryOption, Overt } from './type';
 
 export default (function overt(): Overt {
     const entry = Entry.Instance();

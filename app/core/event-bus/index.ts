@@ -1,8 +1,8 @@
 import { parameterInvalid } from '../exception';
+import { EventHandler, MessageQueues } from '../type';
 import {
     checkArrayEach, checkFunction, checkNoEmptyOrNull, checkNoNullOrUndefined
 } from '../validator';
-import { EventHandler, MessageQueues } from './type';
 
 export class EventBus {
     private constructor() { }

@@ -1,0 +1,40 @@
+[class^="layx-"] {
+    user-select: none;
+    box-sizing: border-box;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+.layx-box-shadow {
+    box-shadow: rgba(0, 0, 0, 0.3) 1px 1px 24px;
+}
+
+.layx-flex-box {
+    display: flex
+}
+
+.layx-row-direction {
+    flex-direction: row;
+}
+
+.layx-col-direction {
+    flex-direction: column;
+}
+
+.layx-flex-item {
+    flex: 1;
+}
+
+.layx-vertical-middle {
+    align-items: center;
+}
+
+.layx-align-center {
+    justify-content: center;
+}
+
+.layx-center-all {
+    align-items: center;
+    justify-content: center;
+}
