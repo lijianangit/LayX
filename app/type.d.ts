@@ -38,5 +38,6 @@ export interface Overt {
     version: string;
     (options: EntryOption): void;
     on(eventSetter: EventSetter): void;
+    open(options: UIWindowOption): void;
 }
 

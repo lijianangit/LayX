@@ -1,10 +1,13 @@
 import '../asset';
 
+import { UIWindow } from '../component/ui-window';
 import { AnimationOptional, BorderStyleOptional } from '../const';
 import { GlobalUIWindowOptionContract } from '../contract';
 import { validator } from '../core/decorator/property';
-import { checkMin, checkPstInt } from '../core/validator';
-import { EntryOption, GlobalUIWindowOption } from '../type';
+import { EventBus } from '../core/event-bus';
+import { EventSetter } from '../core/type';
+import { checkFunction, checkJSONObject, checkMin, checkPstInt } from '../core/validator';
+import { EntryOption, GlobalUIWindowOption, UIWindowOption } from '../type';
 
 export class Entry {
     private constructor(options: EntryOption) {
@@ -47,4 +50,29 @@ export class Entry {
             radius: 4
         }
     };
+
+    private _zIndex: number = this.startZIndex;
+    get zIndex() {
+        return this._zIndex = this._zIndex + 2;
+    }
+
+    public on(eventSetter: EventSetter): void {
+        if (!checkJSONObject(eventSetter)) return;
+
+        for (const key in eventSetter) {
+            const handler = eventSetter[key];
+            if (checkFunction(handler)) {
+                EventBus.Instance().on(key, handler);
+            }
+        }
+    }
+
+    public open(options: UIWindowOption): void {
+        const fragment = document.createDocumentFragment();
+
+        const uiWindow = new UIWindow(options);
+        const uiWindowElement = uiWindow.createView();
+        fragment.appendChild(uiWindowElement);
+        document.body.appendChild(uiWindowElement);
+    }
 }

@@ -2,12 +2,12 @@ import { Component } from '../';
 import { AnimationOptional, BorderStyleOptional } from '../../const';
 import { BorderOptionContract } from '../../contract';
 import { validator } from '../../core/decorator/property';
+import { addCSSClasses, addCSSStyles, createDivElement } from '../../core/helper/element';
 import {
     checkBoolean, checkColor, checkIn, checkNoEmptyOrNull, checkPstInt, checkPstNumber
 } from '../../core/validator';
 import { BorderOption, ComponentElement, UIWindowOption } from '../../type';
 import { UIComponent } from '../ui-component';
-import { createDivElement, addCSSStyles, addCSSClasses } from '../../core/helper/element';
 
 export class UIWindow extends Component<UIWindowOption> implements UIComponent<UIWindowOption> {
     public constructor(options: UIWindowOption) {
@@ -72,7 +72,34 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
     public createView(): ComponentElement {
         const element = createDivElement(this.id);
 
-        addCSSClasses(element, "window");
+        addCSSClasses(element,
+            "window",
+            "flex-box",
+            "col-direction",
+            this.boxShadow ? "box-shadow" : undefined,
+            this.animate !== false ? "animate" : undefined,
+            this.animate !== false ? `animate-${this.animate}-show` : undefined);
+
+        addCSSStyles(element, <CSSStyleDeclaration>{
+            backgroundColor: `${this.backgroundColor}`,
+            zIndex: `${this.entry.zIndex}`,
+            width: `${this.width}px`,
+            height: `${this.height}px`,
+            maxWidth: this.maxWidth !== innerWidth ? `${this.maxWidth}px` : null,
+            maxHeight: this.maxHeight !== innerHeight ? `${this.maxHeight}px` : null,
+            minWidth: `${this.minWidth}px`,
+            minHeight: `${this.minHeight}px`,
+            left: `${this.left}px`,
+            top: `${this.top}px`,
+            border: this.border === false ? null :
+                `${this.border.width}px ${this.border.style} ${this.border.color}`,
+            borderRadius: this.border === false ? null :
+                `${this.border.radius}px`,
+            webkitBorderRadius: this.border === false ? null :
+                `${this.border.radius}px`,
+        });
+
+        this.sendEvent("window:create", { id: this.id });
 
         return element;
     }

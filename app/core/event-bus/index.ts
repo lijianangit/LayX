@@ -11,7 +11,7 @@ export class EventBus {
     private messageQueues: MessageQueues = {};
 
     public static Instance(): EventBus {
-        return this.instance ?? new EventBus();
+        return this.instance = this.instance ?? new EventBus();
     }
 
     public on(key: string, handler: EventHandler): void {

@@ -7,5 +7,7 @@ export default (function overt(): Overt {
         Entry.Instance(options);
     };
     overt.version = entry.version;
+    overt.on = entry.on;
+    overt.open = entry.open;
     return overt;
 })();
