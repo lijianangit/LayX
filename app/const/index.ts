@@ -20,3 +20,5 @@ export const enum DirectionOptional {
     RIGHT_MIDDLE = "right-middle",
     RIGHT_BOTTOM = "right-bottom"
 }
+
+export const WINDOW_CREATE: string = "window:create";

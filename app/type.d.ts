@@ -1,8 +1,22 @@
 
+import { UIWindow } from './component/ui-window';
 import { AnimationOptional, BorderStyleOptional, DirectionOptional } from './const';
-import { EventSetter } from './core/type';
+import { EventSetter, JSONObject } from './core/type';
 
 export type ComponentElement = HTMLDivElement;
+
+export interface WindowEventMessage {
+    id: string;
+    target: UIWindow;
+}
+
+export interface EventMessage<TEventMessage> {
+    dataset: TEventMessage & JSONObject;
+    eventTarget: {
+        name: string;
+        timestamp: number;
+    }
+}
 
 export interface BorderOption {
     width?: number;

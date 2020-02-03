@@ -2,6 +2,7 @@ import { EventBus } from '../core/event-bus';
 import { readObject } from '../core/helper/object';
 import { JSONObject } from '../core/type';
 import { Entry } from '../entry';
+import { EventMessage } from '../type';
 
 export abstract class Component<TOption extends JSONObject> {
     private __NAME__: any;
@@ -18,8 +19,8 @@ export abstract class Component<TOption extends JSONObject> {
         return readObject<any>(path, defaultValue, this.options);
     }
 
-    protected sendEvent(key: string, message: JSONObject = {}): void {
-        this.eventBus.emit(key, {
+    protected sendEvent<TEventMessage extends JSONObject>(key: string, message: TEventMessage = <TEventMessage>{}): void {
+        this.eventBus.emit(key, <EventMessage<TEventMessage>>{
             dataset: message,
             eventTarget: {
                 name: key,

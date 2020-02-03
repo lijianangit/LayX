@@ -1,12 +1,12 @@
 import { Component } from '../';
-import { AnimationOptional, BorderStyleOptional } from '../../const';
+import { AnimationOptional, WINDOW_CREATE } from '../../const';
 import { BorderOptionContract } from '../../contract';
 import { validator } from '../../core/decorator/property';
 import { addCSSClasses, addCSSStyles, createDivElement } from '../../core/helper/element';
 import {
-    checkBoolean, checkColor, checkIn, checkNoEmptyOrNull, checkPstInt, checkPstNumber
+    checkBoolean, checkColor, checkIn, checkNoEmptyOrNull, checkPstNumber
 } from '../../core/validator';
-import { BorderOption, ComponentElement, UIWindowOption } from '../../type';
+import { BorderOption, ComponentElement, UIWindowOption, WindowEventMessage } from '../../type';
 import { UIComponent } from '../ui-component';
 
 export class UIWindow extends Component<UIWindowOption> implements UIComponent<UIWindowOption> {
@@ -99,7 +99,10 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
                 `${this.border.radius}px`,
         });
 
-        this.sendEvent("window:create", { id: this.id });
+        this.sendEvent(WINDOW_CREATE, <WindowEventMessage>{
+            id: this.id,
+            target: this
+        });
 
         return element;
     }
