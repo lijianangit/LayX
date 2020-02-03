@@ -26,13 +26,15 @@ export abstract class Component<TOption extends JSONObject> {
         }
     }
 
-    protected sendEvent<TEventMessage extends JSONObject>(key: string, message: TEventMessage = <TEventMessage>{}): void {
-        this.eventBus.emit(key, <EventMessage<TEventMessage>>{
-            dataset: message,
-            eventTarget: {
-                name: key,
-                timestamp: new Date().valueOf()
-            }
-        });
+    protected sendEvents<TEventMessage extends JSONObject>(keys: Array<string>, message: TEventMessage = <TEventMessage>{}): void {
+        for (const key of keys) {
+            this.eventBus.emit(key, <EventMessage<TEventMessage>>{
+                dataset: message,
+                eventTarget: {
+                    name: key,
+                    timestamp: new Date().valueOf()
+                }
+            });
+        }
     }
 }

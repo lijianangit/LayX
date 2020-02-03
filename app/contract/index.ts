@@ -8,6 +8,14 @@ export const BorderOptionContract = [{
     radius: checkPstInt
 }, false];
 
+export const BoxShadowOptionContract = [{
+    offsetX: checkPstNumber,
+    offsetY: checkPstNumber,
+    blurRadius: checkPstInt,
+    spreadRadius: checkPstInt,
+    color: checkColor
+}, false];
+
 export const GlobalUIWindowOptionContract = {
     width: checkPstNumber,
     height: checkPstNumber,
@@ -16,7 +24,7 @@ export const GlobalUIWindowOptionContract = {
     maxWidth: checkPstNumber,
     maxHeight: checkPstNumber,
     backgroundColor: checkColor,
-    boxShadow: checkBoolean,
+    boxShadow: BoxShadowOptionContract,
     animate: [[checkIn, AnimationOptional.ZOOM], false],
     border: BorderOptionContract
 };

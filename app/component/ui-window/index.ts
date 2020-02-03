@@ -1,13 +1,13 @@
 import { Component } from '../';
-import { AnimationOptional, WINDOW_CREATE } from '../../const';
-import { BorderOptionContract } from '../../contract';
+import { AnimationOptional, WINDOW_CREATE, WINDOW_FOCUS } from '../../const';
+import { BorderOptionContract, BoxShadowOptionContract } from '../../contract';
 import { validator } from '../../core/decorator/property';
 import { addCSSClasses, addCSSStyles, createDivElement } from '../../core/helper/element';
-import {
-    checkBoolean, checkColor, checkIn, checkNoEmptyOrNull, checkPstNumber
-} from '../../core/validator';
+import { checkColor, checkIn, checkNoEmptyOrNull, checkPstNumber, checkPstInt } from '../../core/validator';
 import { convertDirection } from '../../helper';
-import { BorderOption, ComponentElement, UIWindowOption, WindowEventMessage } from '../../type';
+import {
+    BorderOption, BoxShadowOption, ComponentElement, UIWindowOption, WindowEventMessage
+} from '../../type';
 import { UIComponent } from '../ui-component';
 
 export class UIWindow extends Component<UIWindowOption> implements UIComponent<UIWindowOption> {
@@ -25,7 +25,9 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
             border: this.border,
             boxShadow: this.boxShadow,
             backgroundColor: this.backgroundColor,
+            animate: this.animate
         });
+
         this.width = Math.max(this.minWidth, this.width);
         this.width = Math.min(this.maxWidth, this.width);
         this.height = Math.max(this.minHeight, this.height);
@@ -37,22 +39,22 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
     public readonly id: string;
 
     @validator(checkPstNumber)
-    public width: number = this.readGlobalValue("window/width");
+    public width: number = this.readGlobalValue("windowOption/width");
 
     @validator(checkPstNumber)
-    public height: number = this.readGlobalValue("window/height");
+    public height: number = this.readGlobalValue("windowOption/height");
 
     @validator(checkPstNumber)
-    public minWidth: number = this.readGlobalValue("window/minWidth");
+    public minWidth: number = this.readGlobalValue("windowOption/minWidth");
 
     @validator(checkPstNumber)
-    public minHeight: number = this.readGlobalValue("window/minHeight");
+    public minHeight: number = this.readGlobalValue("windowOption/minHeight");
 
     @validator(checkPstNumber)
-    public maxWidth: number = this.readGlobalValue("window/maxWidth");
+    public maxWidth: number = this.readGlobalValue("windowOption/maxWidth");
 
     @validator(checkPstNumber)
-    public maxHeight: number = this.readGlobalValue("window/maxHeight");
+    public maxHeight: number = this.readGlobalValue("windowOption/maxHeight");
 
     @validator(checkPstNumber)
     public left: number = 0;
@@ -61,31 +63,38 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
     public top: number = 0;
 
     @validator(...BorderOptionContract)
-    public border: false | BorderOption = this.readGlobalValue("window/border");
+    public border: false | BorderOption = this.readGlobalValue("windowOption/border");
 
-    @validator(checkBoolean)
-    public boxShadow: boolean = this.readGlobalValue("window/boxShadow");
+    @validator(...BoxShadowOptionContract)
+    public boxShadow: false | BoxShadowOption = this.readGlobalValue("windowOption/boxShadow");
 
     @validator([checkIn, AnimationOptional.ZOOM], false)
-    public animate: false | AnimationOptional = this.readGlobalValue("window/animate");
+    public animate: false | AnimationOptional = this.readGlobalValue("windowOption/animate");
 
     @validator(checkColor)
-    public backgroundColor: string = this.readGlobalValue("window/backgroundColor");
+    public backgroundColor: string = this.readGlobalValue("windowOption/backgroundColor");
+
+    @validator(checkPstInt)
+    public zIndex: number = this.entry.zIndex;
+
+    private _element: HTMLDivElement | null = null;
+    public get element(): HTMLDivElement | null {
+        return this._element;
+    }
 
     public createView(): ComponentElement {
-        const element = createDivElement(this.id);
+        const element = this._element = createDivElement(this.id);
 
         addCSSClasses(element,
             "window",
             "flex-box",
             "col-direction",
-            this.boxShadow ? "box-shadow" : undefined,
             this.animate !== false ? "animate" : undefined,
             this.animate !== false ? `animate-${this.animate}-show` : undefined);
 
         addCSSStyles(element, <CSSStyleDeclaration>{
             backgroundColor: `${this.backgroundColor}`,
-            zIndex: `${this.entry.zIndex}`,
+            zIndex: `${this.zIndex}`,
             width: `${this.width}px`,
             height: `${this.height}px`,
             maxWidth: this.maxWidth !== innerWidth ? `${this.maxWidth}px` : null,
@@ -94,19 +103,44 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
             minHeight: `${this.minHeight}px`,
             left: `${this.left}px`,
             top: `${this.top}px`,
+            boxShadow: this.boxShadow === false ? null :
+                `${this.boxShadow.offsetX}px ${this.boxShadow.offsetY}px ${this.boxShadow.blurRadius}px ${this.boxShadow.spreadRadius}px ${this.boxShadow.color}`,
             border: this.border === false ? null :
                 `${this.border.width}px ${this.border.style} ${this.border.color}`,
             borderRadius: this.border === false ? null :
-                `${this.border.radius}px`,
-            webkitBorderRadius: this.border === false ? null :
-                `${this.border.radius}px`,
+                `${this.border.radius}px`
         });
 
-        this.sendEvent(WINDOW_CREATE, <WindowEventMessage>{
+        this.monitorEvent();
+
+        this.sendEvents([WINDOW_CREATE, WINDOW_FOCUS], <WindowEventMessage>{
             id: this.id,
             target: this
         });
 
         return element;
+    }
+
+    private monitorEvent(): void {
+        if (!this.element) return;
+
+        this.element.addEventListener("mousedown", (ev) => {
+            this.updateZIndex();
+        }, true);
+    }
+
+    public updateZIndex(): void {
+        if (this.entry.window === this) return;
+        if (!this.element) return;
+
+        this.zIndex = this.entry.zIndex;
+        addCSSStyles(this.element, <CSSStyleDeclaration>{
+            zIndex: `${this.zIndex}`
+        });
+
+        this.sendEvents([WINDOW_FOCUS], <WindowEventMessage>{
+            id: this.id,
+            target: this
+        });
     }
 }

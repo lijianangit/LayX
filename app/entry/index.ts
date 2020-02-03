@@ -1,7 +1,7 @@
 import '../asset';
 
 import { UIWindow } from '../component/ui-window';
-import { AnimationOptional, BorderStyleOptional, WINDOW_CREATE } from '../const';
+import { AnimationOptional, BorderStyleOptional, WINDOW_CREATE, WINDOW_FOCUS } from '../const';
 import { GlobalUIWindowOptionContract } from '../contract';
 import { validator } from '../core/decorator/property';
 import { EventBus } from '../core/event-bus';
@@ -30,7 +30,7 @@ export class Entry {
     public startZIndex: number = 10000000;
 
     @validator(GlobalUIWindowOptionContract)
-    public window: GlobalUIWindowOption = {
+    public windowOption: GlobalUIWindowOption = {
         width: 800,
         height: 600,
         minWidth: 200,
@@ -38,12 +38,18 @@ export class Entry {
         maxWidth: innerWidth,
         maxHeight: innerHeight,
         backgroundColor: "#ffffff",
-        boxShadow: true,
+        boxShadow: {
+            offsetX: 1,
+            offsetY: 1,
+            blurRadius: 12,
+            spreadRadius: 1,
+            color: "rgba(0, 0, 0, 0.2)"
+        },
         animate: AnimationOptional.ZOOM,
         border: {
             width: 1,
             style: BorderStyleOptional.SOLID,
-            color: "#3baced",
+            color: "#d5d5d5",
             radius: 4
         }
     };
@@ -58,6 +64,16 @@ export class Entry {
         return this._windows;
     }
 
+    private _window: UIWindow | null = null;
+    get window(): UIWindow | null {
+        return this._window;
+    }
+
+    private _lastWindow: UIWindow | null = null;
+    get lastWindow(): UIWindow | null {
+        return this._lastWindow;
+    }
+
     public static Instance(options: EntryOption = {}): Entry {
         if (!this.instance) this.instance = new Entry(options);
         else this.instance.handlerOptions(options);
@@ -65,13 +81,19 @@ export class Entry {
     }
 
     private handlerOptions(options: EntryOption): void {
-        this.startZIndex = options?.startZIndex ?? this.startZIndex;
-        this.window = options?.window ?? this.window;
+        this._zIndex = this.startZIndex = options?.startZIndex ?? this.startZIndex;
+        this.windowOption = options?.windowOption ?? this.windowOption;
     }
 
     private monitorEvent(): void {
         this.eventBus.on(WINDOW_CREATE, (message: EventMessage<WindowEventMessage>) => {
             this._windows.push(message.dataset.target);
+        });
+
+        this.eventBus.on(WINDOW_FOCUS, (message: EventMessage<WindowEventMessage>) => {
+            const window = message.dataset.target;
+            this._lastWindow = this._window;
+            this._window = window;
         });
     }
 

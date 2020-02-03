@@ -7,7 +7,15 @@ export default (function overt(): Overt {
         Entry.Instance(options);
     };
     overt.version = entry.version;
+    Object.defineProperties(overt, {
+        window: { get: () => entry.window },
+        lastWindow: { get: () => entry.lastWindow },
+        windows: { get: () => entry.windows }
+    });
+
     overt.on = entry.on.bind(entry);
     overt.open = entry.open.bind(entry);
+    overt.getWindow = entry.getWindow.bind(entry);
+
     return overt;
 })();

@@ -2,6 +2,8 @@ import { parameterInvalid } from '../../exception';
 import { CSSClassOrUndefined, CSSClassSetter, HTMLElementOrNull } from '../../type';
 import { checkNoEmptyOrNull, checkString } from '../../validator';
 
+export const PREFIX: string = "layx-";
+
 export function addCSSStyles(element: HTMLElementOrNull, cssStyles: CSSStyleDeclaration): void {
     if (!element) return;
 
@@ -16,7 +18,7 @@ function updateCSSClasses(element: HTMLElementOrNull, handler: CSSClassSetter, .
     const elementCSSClasses = element.className.split(/\s+/g);
     cssClasses.forEach((cssClass) => {
         if (cssClass) {
-            const cssClassName = cssClass.indexOf("!") === 0 ? cssClass.substr(1) : "layx-" + cssClass;
+            const cssClassName = cssClass.indexOf("!") === 0 ? cssClass.substr(1) : PREFIX + cssClass;
             const cssClassIndex = elementCSSClasses.indexOf(cssClassName);
             handler(elementCSSClasses, cssClassIndex, cssClassName);
         }
@@ -45,7 +47,7 @@ export function hasCSSClass(element: HTMLElementOrNull, cssClass: string): boole
     if (!element) return false;
 
     const elementCSSClasses = element.className.split(/\s+/g);
-    const cssClassName = cssClass.indexOf("!") === 0 ? cssClass.substr(1) : "layx-" + cssClass;
+    const cssClassName = cssClass.indexOf("!") === 0 ? cssClass.substr(1) : PREFIX + cssClass;
     const index = elementCSSClasses.indexOf(cssClassName);
     return !!~index;
 }
@@ -53,7 +55,7 @@ export function hasCSSClass(element: HTMLElementOrNull, cssClass: string): boole
 export function createDivElement(id?: string): HTMLDivElement {
     const element = document.createElement("div");
     if (checkString(id)) {
-        element.id = id;
+        element.id = PREFIX + id;
     }
     return element;
 }

@@ -27,6 +27,14 @@ export interface BorderOption {
     radius?: number;
 }
 
+export interface BoxShadowOption {
+    offsetX?: number;
+    offsetY?: number;
+    blurRadius?: number;
+    spreadRadius?: number;
+    color?: string;
+}
+
 export interface GlobalUIWindowOption {
     width?: number;
     height?: number;
@@ -35,7 +43,7 @@ export interface GlobalUIWindowOption {
     maxWidth?: number;
     maxHeight?: number;
     backgroundColor?: string;
-    boxShadow?: boolean;
+    boxShadow?: false | BoxShadowOption;
     animate?: false | AnimationOptional;
     border?: false | BorderOption;
 }
@@ -47,13 +55,16 @@ export interface UIWindowOption extends GlobalUIWindowOption {
 
 export interface EntryOption {
     startZIndex?: number;
-    window?: GlobalUIWindowOption
+    windowOption?: GlobalUIWindowOption
 }
 
 export interface Overt {
     version: string;
     (options: EntryOption): void;
+    window: UIWindow | null;
+    lastWindow: UIWindow | null;
+    windows: Array<UIWindow>;
     on(eventSetter: EventSetter): void;
     open(options: UIWindowOption): void;
+    getWindow(id: string): UIWindow | null;
 }
-

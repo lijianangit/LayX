@@ -22,3 +22,4 @@ export const enum DirectionOptional {
 }
 
 export const WINDOW_CREATE: string = "window:create";
+export const WINDOW_FOCUS: string = "window:focus";

@@ -1,7 +1,7 @@
 import { parameterInvalid } from '../exception';
 import { EventHandler, MessageQueues } from '../type';
 import {
-    checkArrayEach, checkFunction, checkNoEmptyOrNull, checkNoNullOrUndefined
+    checkArrayEach, checkFunction, checkJSONObject, checkNoEmptyOrNull, checkNoNullOrUndefined
 } from '../validator';
 
 export class EventBus {
@@ -53,7 +53,6 @@ export class EventBus {
                     setTimeout(() => handler(message), 0);
             });
         }
-        else { }
     }
 
     public off(key: string): void {

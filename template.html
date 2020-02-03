@@ -10,6 +10,7 @@
 
 <body>
     <button id="create">打开窗口</button>
+    <button id="create2">打开窗口2</button>
     <script>
         layx.on({
             ["window:create"]: function (message) {
@@ -18,9 +19,14 @@
         });
         document.getElementById("create").onclick = function () {
             layx.open({
-                id: "hello",
+                id: "hello"
+            });
+        };
+        document.getElementById("create2").onclick = function () {
+            layx.open({
+                id: "hello2",
                 width: 400,
-                height: 400
+                height: 800
             });
         };
     </script>

@@ -1,4 +1,5 @@
 import { parameterInvalid } from '../exception';
+import { removeIllegalCharacter } from '../helper/string';
 import {
     BaseType, CheckValidator, ColorString, FunctionValidator, IntegerNumber, JSONObject,
     NoEmptyOrNullString, ValueType
@@ -86,6 +87,7 @@ export function checkRegExp(data: any): data is RegExp {
 }
 
 export function checkColor(data: any): data is ColorString {
+    data = removeIllegalCharacter(data);
     const binaryRegExp = /^#([0-9a-f]{6}|[0-9a-f]{3})$/i;
     const rgbRegExp = /^rgb\(([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\,([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\,([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\)$/i;
     const rgbaRegExp = /^rgba\(([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\,([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\,([0-9]|[0-9][0-9]|25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9])\,(1|1.0|0.[0-9])\)$/i;

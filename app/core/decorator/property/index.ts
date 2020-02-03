@@ -9,17 +9,13 @@ import {
 function decorator(propertySetter: PropertySetter): PropertyDecorator {
     if (!checkFunction<PropertySetter>(propertySetter)) parameterInvalid();
 
-    return (target: any, propertyKey) => {
-        let value = target[propertyKey];
-        var propertyDescriptor = Object.getOwnPropertyDescriptor(target, propertyKey);
+    return function (target: any, propertyKey) {
+        const storeKey = `_${propertyKey.toString()}_`;
 
         Object.defineProperty(target, propertyKey, {
-            configurable: true,
-            enumerable: true,
-            get: () => value,
-            set: (newValue) => {
-                if (propertyDescriptor && propertyDescriptor.set) propertyDescriptor.set(newValue);
-                value = propertySetter(newValue, propertyKey, value);
+            get() { return this[storeKey]; },
+            set(newValue) {
+                this[storeKey] = propertySetter(newValue, propertyKey, this[storeKey]);
             }
         })
     };
