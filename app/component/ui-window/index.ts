@@ -6,6 +6,7 @@ import { addCSSClasses, addCSSStyles, createDivElement } from '../../core/helper
 import {
     checkBoolean, checkColor, checkIn, checkNoEmptyOrNull, checkPstNumber
 } from '../../core/validator';
+import { convertDirection } from '../../helper';
 import { BorderOption, ComponentElement, UIWindowOption, WindowEventMessage } from '../../type';
 import { UIComponent } from '../ui-component';
 
@@ -14,20 +15,22 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
         super(options);
 
         this.id = options?.id;
-        this.width = this.readOption("width", this.width);
-        this.height = this.readOption("height", this.height);
-        this.maxWidth = this.readOption("maxWidth", this.maxWidth);
-        this.maxHeight = this.readOption("maxHeight", this.maxHeight);
-        this.minWidth = this.readOption("minWidth", this.minWidth);
-        this.minHeight = this.readOption("minHeight", this.minHeight);
+        this.readOptions({
+            width: this.width,
+            height: this.height,
+            maxWidth: this.maxWidth,
+            maxHeight: this.maxHeight,
+            minWidth: this.minWidth,
+            minHeight: this.minHeight,
+            border: this.border,
+            boxShadow: this.boxShadow,
+            backgroundColor: this.backgroundColor,
+        });
         this.width = Math.max(this.minWidth, this.width);
         this.width = Math.min(this.maxWidth, this.width);
         this.height = Math.max(this.minHeight, this.height);
         this.height = Math.min(this.maxHeight, this.height);
-        // [this.left, this.top] = calcOffset(this.width, this.height, options?.offset);
-        this.border = this.readOption("border", this.border);
-        this.boxShadow = this.readOption("boxShadow", this.boxShadow);
-        this.backgroundColor = this.readOption("backgroundColor", this.backgroundColor);
+        [this.left, this.top] = convertDirection(this.width, this.height, options?.direction);
     }
 
     @validator(checkNoEmptyOrNull)

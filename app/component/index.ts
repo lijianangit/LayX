@@ -15,8 +15,15 @@ export abstract class Component<TOption extends JSONObject> {
         return readObject<any>(path, defaultValue, startObject);
     }
 
-    protected readOption(path: string, defaultValue: any = null): any {
-        return readObject<any>(path, defaultValue, this.options);
+    protected readOptions(keyValue: JSONObject): void {
+        for (const key in keyValue) {
+            if (key.indexOf(":") === -1) {
+                (<any>this)[key] = readObject(key, keyValue[key], this.options);
+                continue;
+            }
+            const keyPath = key.split(":");
+            (<any>this)[keyPath[0]] = readObject(keyPath[1], keyValue[key], this.options);
+        }
     }
 
     protected sendEvent<TEventMessage extends JSONObject>(key: string, message: TEventMessage = <TEventMessage>{}): void {

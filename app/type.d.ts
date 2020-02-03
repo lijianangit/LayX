@@ -5,6 +5,8 @@ import { EventSetter, JSONObject } from './core/type';
 
 export type ComponentElement = HTMLDivElement;
 
+export type DirectionOrCoord = DirectionOptional | [number, number];
+
 export interface WindowEventMessage {
     id: string;
     target: UIWindow;
@@ -40,7 +42,7 @@ export interface GlobalUIWindowOption {
 
 export interface UIWindowOption extends GlobalUIWindowOption {
     readonly id: string;
-    direction?: DirectionOptional | [number, number];
+    direction?: DirectionOrCoord;
 }
 
 export interface EntryOption {
