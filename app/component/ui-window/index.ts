@@ -163,7 +163,7 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
                     addCSSStyles(this.element, <CSSStyleDeclaration>{
                         boxShadow: `none`,
                         border: `none`,
-                        borderRadius: `none`
+                        borderRadius: `0`
                     });
                 }
             });
@@ -247,7 +247,7 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
             height: `${innerHeight}px`,
             boxShadow: this.animate !== false ? null : `none`,
             border: this.animate !== false ? null : `none`,
-            borderRadius: this.animate !== false ? null : `none`
+            borderRadius: this.animate !== false ? null : `0`
         });
 
         this._status = WindowStateOptional.MAXIMIZE;
