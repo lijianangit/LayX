@@ -1,8 +1,6 @@
 import { UIWindow } from '../component/ui-window';
 import { WINDOW_CREATE, WINDOW_DESTROY, WINDOW_EXIST, WINDOW_FOCUS } from '../const';
 import { EventBus } from '../core/event-bus';
-import { removeHTMLElement } from '../core/helper/element';
-import { arrayRemove, arraySetToFirst } from '../core/helper/object';
 import { EventMessage } from '../core/type';
 import { WindowEventMessage } from '../type';
 
@@ -26,19 +24,11 @@ export class MonitorCenter {
 
     private constructor() {
         this.eventBus.on(WINDOW_CREATE, (message: EventMessage<WindowEventMessage>) => {
-            this._windows.unshift(message.dataset.target);
         });
 
         this.eventBus.on(WINDOW_FOCUS, (message: EventMessage<WindowEventMessage>) => {
             const window = message.dataset.target;
-            const isCreated = message.dataset?.created ?? false;
-            if (isCreated) {
-                this._window = window;
-                return;
-            };
-            window.updateZIndex();
-            this._window = window;
-            arraySetToFirst(this._windows, window);
+            window.updateZIndex(message.dataset?.created ?? false);
         });
 
         this.eventBus.on(WINDOW_EXIST, (message: EventMessage<WindowEventMessage>) => {
@@ -48,9 +38,11 @@ export class MonitorCenter {
 
         this.eventBus.on(WINDOW_DESTROY, (message: EventMessage<WindowEventMessage>) => {
             const window = message.dataset.target;
-            removeHTMLElement(window.element);
-            arrayRemove(this._windows, window);
-            this._windows.length > 0 && this._windows[0].updateZIndex();
+            window.destroy();
         });
+    }
+
+    public setWindow(window: UIWindow | null): void {
+        this._window = window;
     }
 }

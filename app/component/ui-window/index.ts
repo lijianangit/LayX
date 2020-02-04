@@ -8,6 +8,7 @@ import { validator } from '../../core/decorator/property';
 import {
     addCSSClasses, addCSSStyles, createDivElement, hasCSSClass, removeCSSClasses, removeHTMLElement
 } from '../../core/helper/element';
+import { arrayRemove, arraySetToFirst } from '../../core/helper/object';
 import { stringFormat } from '../../core/helper/string';
 import {
     checkColor, checkIn, checkNoEmptyOrNull, checkPstInt, checkPstNumber
@@ -91,7 +92,6 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
     }
 
     private readonly eventMessage: WindowEventMessage = {
-        id: this.id,
         target: this
     };
 
@@ -126,12 +126,7 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
 
         this.monitorEvent();
 
-        this.eventBus.broadcast([WINDOW_CREATE, WINDOW_FOCUS], <WindowEventMessage>{
-            id: this.id,
-            target: this,
-            created: true
-        });
-
+        this.monitorCenter.windows.unshift(this);
         return element;
     }
 
@@ -152,13 +147,17 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
 
                 const animateDestroyName = stringFormat(ANIMATE_DESTROY, this.animate);
                 if (hasCSSClass(this.element, animateDestroyName)) {
-                    this.eventBus.broadcast([WINDOW_DESTROY], this.eventMessage);
+                    this.remove();
                 }
             });
         }
     }
 
-    public updateZIndex(): void {
+    public updateZIndex(isCreate: boolean = false): void {
+        if (isCreate) {
+            this.monitorCenter.setWindow(this);
+            return;
+        }
         if (this.monitorCenter.window === this) return;
         if (!this.element) return;
 
@@ -166,6 +165,8 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
         addCSSStyles(this.element, <CSSStyleDeclaration>{
             zIndex: `${this.zIndex}`
         });
+        this.monitorCenter.setWindow(this);
+        arraySetToFirst(this.monitorCenter.windows, this);
     }
 
     public attracting(): void {
@@ -197,6 +198,19 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
             addCSSClasses(this.element,
                 stringFormat(ANIMATE_DESTROY, this.animate));
         }
-        else this.eventBus.broadcast([WINDOW_DESTROY], this.eventMessage);
+        else this.remove();
+    }
+
+    private remove(): void {
+        if (!this.element) return;
+        removeHTMLElement(this.element);
+        arrayRemove(this.monitorCenter.windows, this);
+
+        if (this.monitorCenter.windows.length > 0) {
+            const focusWindow = this.monitorCenter.windows[0];
+            this.eventBus.broadcast([WINDOW_FOCUS], <WindowEventMessage>{
+                target: focusWindow
+            });
+        }
     }
 }

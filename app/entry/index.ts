@@ -1,7 +1,10 @@
 import '../asset';
 
 import { UIWindow } from '../component/ui-window';
-import { AnimationOptional, BorderStyleOptional, WINDOW_EXIST, WINDOW_FOCUS } from '../const';
+import {
+    AnimationOptional, BorderStyleOptional, WINDOW_CREATE, WINDOW_DESTROY, WINDOW_EXIST,
+    WINDOW_FOCUS
+} from '../const';
 import { GlobalUIWindowOptionContract } from '../contract';
 import { validator } from '../core/decorator/property';
 import { EventBus } from '../core/event-bus';
@@ -90,7 +93,6 @@ export class Entry {
         const window = this.getWindow(options.id);
         if (window) {
             this.eventBus.broadcast([WINDOW_FOCUS, WINDOW_EXIST], <WindowEventMessage>{
-                id: window.id,
                 target: window
             });
             return;
@@ -101,6 +103,11 @@ export class Entry {
         const uiWindowElement = uiWindow.createView();
         fragment.appendChild(uiWindowElement);
         document.body.appendChild(uiWindowElement);
+
+        this.eventBus.broadcast([WINDOW_CREATE, WINDOW_FOCUS], <WindowEventMessage>{
+            target: uiWindow,
+            created: true
+        });
     }
 
     public getWindow(id: string): UIWindow | null {
@@ -110,5 +117,15 @@ export class Entry {
             return win.id === id;
         });
         return searchs.length > 0 ? searchs[0] : null;
+    }
+
+    public destroy(id: string): void {
+        if (!checkNoEmptyOrNull(id)) parameterInvalid();
+        const window = this.getWindow(id);
+        if (!window) return;
+
+        this.eventBus.broadcast([WINDOW_DESTROY], <WindowEventMessage>{
+            target: window
+        });
     }
 }

@@ -8,8 +8,8 @@ export type ComponentElement = HTMLDivElement;
 export type DirectionOrCoord = DirectionOptional | [number, number];
 
 export interface WindowEventMessage extends JSONObject {
-    id: string;
     target: UIWindow;
+    created?: boolean;
 }
 
 export interface BorderOption {
@@ -58,4 +58,5 @@ export interface Overt {
     on(eventSetter: EventSetter): void;
     open(options: UIWindowOption): void;
     getWindow(id: string): UIWindow | null;
+    destroy(id: string): void;
 }

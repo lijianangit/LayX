@@ -18,6 +18,7 @@ export default (function overt(): Overt {
     overt.on = entry.on.bind(entry);
     overt.open = entry.open.bind(entry);
     overt.getWindow = entry.getWindow.bind(entry);
+    overt.destroy = entry.destroy.bind(entry);
 
     return overt;
 })();
