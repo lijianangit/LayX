@@ -1,7 +1,7 @@
 import { Component } from '../';
 import {
-    ANIMATE_DESTROY, ANIMATE_MAXIMIZE, ANIMATE_SHOW, AnimationOptional, WINDOW_CREATE,
-    WINDOW_DESTROY, WINDOW_FOCUS, WINDOW_MAXIMIZE, WINDOW_SHOW, WindowStateOptional
+    ANIMATE_DESTROY, ANIMATE_MAXIMIZE, ANIMATE_SHOW, AnimationOptional, WINDOW_FOCUS, WINDOW_SHOW,
+    WindowStateOptional
 } from '../../const';
 import { BorderOptionContract, BoxShadowOptionContract } from '../../contract';
 import { validator } from '../../core/decorator/property';
