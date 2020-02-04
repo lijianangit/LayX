@@ -227,6 +227,11 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
             this.eventBus.broadcast([WINDOW_FOCUS], <WindowEventMessage>{
                 target: focusWindow
             });
+
+            const searchs = this.monitorCenter.windows.filter(win => {
+                return win.status === WindowStateOptional.MAXIMIZE;
+            });
+            if (searchs.length === 0) removeCSSClasses(document.body, "disable-scroll");
         }
     }
 
