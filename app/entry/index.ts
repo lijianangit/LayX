@@ -74,12 +74,17 @@ export class Entry {
 
     public static Instance(options: EntryOption = {}): Entry {
         if (!this.instance) this.instance = new Entry(options);
-        else this.instance.handlerOptions(options);
+        else {
+            if (Object.keys(options).length > 0) {
+                this.instance.handlerOptions(options);
+            }
+        };
         return this.instance;
     }
 
     private handlerOptions(options: EntryOption): void {
-        this._zIndex = this.startZIndex = options?.startZIndex ?? this.startZIndex;
+        this.startZIndex = options?.startZIndex ?? this.startZIndex;
+        if (options?.startZIndex) this._zIndex = this.startZIndex;
         this.windowOption = options?.windowOption ?? this.windowOption;
     }
 
@@ -97,7 +102,7 @@ export class Entry {
         this.eventBus.on(WINDOW_DESTROY, (message: EventMessage<WindowEventMessage>) => {
             const window = message.dataset.target;
             arrayRemove(this._windows, window);
-            this._window = this._windows.length > 0 ? this._windows[0] : null;
+            this._windows.length > 0 && this._windows[0].updateZIndex();
         });
     }
 

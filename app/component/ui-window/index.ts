@@ -1,6 +1,7 @@
 import { Component } from '../';
 import {
-    ANIMATE_SHOW, AnimationOptional, WINDOW_CREATE, WINDOW_FOCUS, WINDOW_SHOW, ANIMATE_DESTROY, WINDOW_DESTROY
+    ANIMATE_DESTROY, ANIMATE_SHOW, AnimationOptional, WINDOW_CREATE, WINDOW_DESTROY, WINDOW_FOCUS,
+    WINDOW_SHOW
 } from '../../const';
 import { BorderOptionContract, BoxShadowOptionContract } from '../../contract';
 import { validator } from '../../core/decorator/property';
