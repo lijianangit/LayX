@@ -1,9 +1,16 @@
 import { Component } from '../';
-import { AnimationOptional, WINDOW_CREATE, WINDOW_FOCUS } from '../../const';
+import {
+    ANIMATE_SHOW, AnimationOptional, WINDOW_CREATE, WINDOW_FOCUS, WINDOW_SHOW, ANIMATE_DESTROY, WINDOW_DESTROY
+} from '../../const';
 import { BorderOptionContract, BoxShadowOptionContract } from '../../contract';
 import { validator } from '../../core/decorator/property';
-import { addCSSClasses, addCSSStyles, createDivElement } from '../../core/helper/element';
-import { checkColor, checkIn, checkNoEmptyOrNull, checkPstNumber, checkPstInt } from '../../core/validator';
+import {
+    addCSSClasses, addCSSStyles, createDivElement, hasCSSClass, removeCSSClasses, removeHTMLElement
+} from '../../core/helper/element';
+import { stringFormat } from '../../core/helper/string';
+import {
+    checkColor, checkIn, checkNoEmptyOrNull, checkPstInt, checkPstNumber
+} from '../../core/validator';
 import { convertDirection } from '../../helper';
 import {
     BorderOption, BoxShadowOption, ComponentElement, UIWindowOption, WindowEventMessage
@@ -82,6 +89,11 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
         return this._element;
     }
 
+    private readonly eventMessage: WindowEventMessage = {
+        id: this.id,
+        target: this
+    };
+
     public createView(): ComponentElement {
         const element = this._element = createDivElement(this.id);
 
@@ -90,7 +102,7 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
             "flex-box",
             "col-direction",
             this.animate !== false ? "animate" : undefined,
-            this.animate !== false ? `animate-${this.animate}-show` : undefined);
+            this.animate !== false ? stringFormat(ANIMATE_SHOW, this.animate) : undefined);
 
         addCSSStyles(element, <CSSStyleDeclaration>{
             backgroundColor: `${this.backgroundColor}`,
@@ -113,10 +125,7 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
 
         this.monitorEvent();
 
-        this.sendEvents([WINDOW_CREATE, WINDOW_FOCUS], <WindowEventMessage>{
-            id: this.id,
-            target: this
-        });
+        this.sendEvents([WINDOW_CREATE, WINDOW_FOCUS], this.eventMessage);
 
         return element;
     }
@@ -127,6 +136,21 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
         this.element.addEventListener("mousedown", (ev) => {
             this.updateZIndex();
         }, true);
+
+        if (this.animate !== false) {
+            this.element.addEventListener("animationend", (ev) => {
+                const animateShowName = stringFormat(ANIMATE_SHOW, this.animate);
+                if (hasCSSClass(this.element, animateShowName)) {
+                    removeCSSClasses(this.element, animateShowName);
+                    this.sendEvents([WINDOW_SHOW], this.eventMessage);
+                }
+
+                const animateDestroyName = stringFormat(ANIMATE_DESTROY, this.animate);
+                if (hasCSSClass(this.element, animateDestroyName)) {
+                    this.remove();
+                }
+            });
+        }
     }
 
     public updateZIndex(): void {
@@ -138,9 +162,23 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
             zIndex: `${this.zIndex}`
         });
 
-        this.sendEvents([WINDOW_FOCUS], <WindowEventMessage>{
-            id: this.id,
-            target: this
-        });
+        this.sendEvents([WINDOW_FOCUS], this.eventMessage);
+    }
+
+    public destroy(): void {
+        if (!this.element) return;
+
+        if (this.animate !== false) {
+            addCSSClasses(this.element,
+                stringFormat(ANIMATE_DESTROY, this.animate));
+        }
+        else this.remove();
+    }
+
+    private remove(): void {
+        if (!this.element) return;
+
+        removeHTMLElement(this.element);
+        this.sendEvents([WINDOW_DESTROY], this.eventMessage);
     }
 }

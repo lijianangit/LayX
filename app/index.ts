@@ -9,7 +9,6 @@ export default (function overt(): Overt {
     overt.version = entry.version;
     Object.defineProperties(overt, {
         window: { get: () => entry.window },
-        lastWindow: { get: () => entry.lastWindow },
         windows: { get: () => entry.windows }
     });
 

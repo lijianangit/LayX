@@ -23,3 +23,8 @@ export const enum DirectionOptional {
 
 export const WINDOW_CREATE: string = "window:create";
 export const WINDOW_FOCUS: string = "window:focus";
+export const WINDOW_SHOW: string = "window:show";
+export const WINDOW_DESTROY: string = "window:destroy";
+
+export const ANIMATE_SHOW: string = "animate-{0}-show";
+export const ANIMATE_DESTROY: string = "animate-{0}-destroy";

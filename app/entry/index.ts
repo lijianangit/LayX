@@ -1,11 +1,14 @@
 import '../asset';
 
 import { UIWindow } from '../component/ui-window';
-import { AnimationOptional, BorderStyleOptional, WINDOW_CREATE, WINDOW_FOCUS } from '../const';
+import {
+    AnimationOptional, BorderStyleOptional, WINDOW_CREATE, WINDOW_DESTROY, WINDOW_FOCUS
+} from '../const';
 import { GlobalUIWindowOptionContract } from '../contract';
 import { validator } from '../core/decorator/property';
 import { EventBus } from '../core/event-bus';
 import { parameterInvalid } from '../core/exception';
+import { arrayRemove, arraySetToFirst } from '../core/helper/object';
 import { EventSetter } from '../core/type';
 import {
     checkFunction, checkJSONObject, checkMin, checkNoEmptyOrNull, checkPstInt
@@ -69,11 +72,6 @@ export class Entry {
         return this._window;
     }
 
-    private _lastWindow: UIWindow | null = null;
-    get lastWindow(): UIWindow | null {
-        return this._lastWindow;
-    }
-
     public static Instance(options: EntryOption = {}): Entry {
         if (!this.instance) this.instance = new Entry(options);
         else this.instance.handlerOptions(options);
@@ -87,13 +85,19 @@ export class Entry {
 
     private monitorEvent(): void {
         this.eventBus.on(WINDOW_CREATE, (message: EventMessage<WindowEventMessage>) => {
-            this._windows.push(message.dataset.target);
+            this._windows.unshift(message.dataset.target);
         });
 
         this.eventBus.on(WINDOW_FOCUS, (message: EventMessage<WindowEventMessage>) => {
             const window = message.dataset.target;
-            this._lastWindow = this._window;
             this._window = window;
+            arraySetToFirst(this._windows, window);
+        });
+
+        this.eventBus.on(WINDOW_DESTROY, (message: EventMessage<WindowEventMessage>) => {
+            const window = message.dataset.target;
+            arrayRemove(this._windows, window);
+            this._window = this._windows.length > 0 ? this._windows[0] : null;
         });
     }
 

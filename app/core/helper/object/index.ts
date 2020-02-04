@@ -41,3 +41,17 @@ export function readObject<T>(path: string, defaultValue: T, startObject: JSONOb
     }
     return keyValue;
 }
+
+export function arraySetToFirst(arr: Array<any>, ele: any): void {
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === ele) {
+            arr.splice(i, 1);
+            break;
+        }
+    }
+    arr.unshift(ele);
+}
+
+export function arrayRemove(arr: Array<any>, ele: any): void {
+    arr.splice(arr.indexOf(ele), 1);
+}

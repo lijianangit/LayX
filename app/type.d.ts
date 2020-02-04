@@ -62,7 +62,6 @@ export interface Overt {
     version: string;
     (options: EntryOption): void;
     window: UIWindow | null;
-    lastWindow: UIWindow | null;
     windows: Array<UIWindow>;
     on(eventSetter: EventSetter): void;
     open(options: UIWindowOption): void;
