@@ -126,7 +126,11 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
 
         this.monitorEvent();
 
-        this.sendEvents([WINDOW_CREATE, WINDOW_FOCUS], this.eventMessage);
+        this.eventBus.broadcast([WINDOW_CREATE, WINDOW_FOCUS], <WindowEventMessage>{
+            id: this.id,
+            target: this,
+            created: true
+        });
 
         return element;
     }
@@ -135,7 +139,7 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
         if (!this.element) return;
 
         this.element.addEventListener("mousedown", (ev) => {
-            this.updateZIndex();
+            this.eventBus.broadcast([WINDOW_FOCUS], this.eventMessage);
         }, true);
 
         if (this.animate !== false) {
@@ -143,27 +147,47 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
                 const animateShowName = stringFormat(ANIMATE_SHOW, this.animate);
                 if (hasCSSClass(this.element, animateShowName)) {
                     removeCSSClasses(this.element, animateShowName);
-                    this.sendEvents([WINDOW_SHOW], this.eventMessage);
+                    this.eventBus.broadcast([WINDOW_SHOW], this.eventMessage);
                 }
 
                 const animateDestroyName = stringFormat(ANIMATE_DESTROY, this.animate);
                 if (hasCSSClass(this.element, animateDestroyName)) {
-                    this.remove();
+                    this.eventBus.broadcast([WINDOW_DESTROY], this.eventMessage);
                 }
             });
         }
     }
 
     public updateZIndex(): void {
-        if (this.entry.window === this) return;
+        if (this.monitorCenter.window === this) return;
         if (!this.element) return;
 
         this.zIndex = this.entry.zIndex;
         addCSSStyles(this.element, <CSSStyleDeclaration>{
             zIndex: `${this.zIndex}`
         });
+    }
 
-        this.sendEvents([WINDOW_FOCUS], this.eventMessage);
+    public attracting(): void {
+        if (!this.element) return;
+
+        let timer = null;
+        const frequency: number = 10;
+        const duration: number = 60;
+
+        if (this.boxShadow !== false) {
+            const boxShadowStr = `${this.boxShadow.offsetX}px ${this.boxShadow.offsetY}px {0}px ${this.boxShadow.spreadRadius}px ${this.boxShadow.color}`;
+
+            [...Array(frequency).keys()].forEach(item => {
+                timer = setTimeout(() => {
+                    addCSSStyles(this.element, <CSSStyleDeclaration>{
+                        boxShadow: item % 2 === 0
+                            ? stringFormat(boxShadowStr, (<BoxShadowOption>this.boxShadow).blurRadius)
+                            : stringFormat(boxShadowStr, <number>(<BoxShadowOption>this.boxShadow).blurRadius / 2)
+                    });
+                }, item * duration);
+            });
+        }
     }
 
     public destroy(): void {
@@ -173,13 +197,6 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
             addCSSClasses(this.element,
                 stringFormat(ANIMATE_DESTROY, this.animate));
         }
-        else this.remove();
-    }
-
-    private remove(): void {
-        if (!this.element) return;
-
-        removeHTMLElement(this.element);
-        this.sendEvents([WINDOW_DESTROY], this.eventMessage);
+        else this.eventBus.broadcast([WINDOW_DESTROY], this.eventMessage);
     }
 }

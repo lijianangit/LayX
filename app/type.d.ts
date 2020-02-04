@@ -7,17 +7,9 @@ export type ComponentElement = HTMLDivElement;
 
 export type DirectionOrCoord = DirectionOptional | [number, number];
 
-export interface WindowEventMessage {
+export interface WindowEventMessage extends JSONObject {
     id: string;
     target: UIWindow;
-}
-
-export interface EventMessage<TEventMessage> {
-    dataset: TEventMessage & JSONObject;
-    eventTarget: {
-        name: string;
-        timestamp: number;
-    }
 }
 
 export interface BorderOption {

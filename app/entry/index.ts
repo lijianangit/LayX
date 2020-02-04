@@ -1,31 +1,26 @@
 import '../asset';
 
 import { UIWindow } from '../component/ui-window';
-import {
-    AnimationOptional, BorderStyleOptional, WINDOW_CREATE, WINDOW_DESTROY, WINDOW_FOCUS
-} from '../const';
+import { AnimationOptional, BorderStyleOptional, WINDOW_EXIST, WINDOW_FOCUS } from '../const';
 import { GlobalUIWindowOptionContract } from '../contract';
 import { validator } from '../core/decorator/property';
 import { EventBus } from '../core/event-bus';
 import { parameterInvalid } from '../core/exception';
-import { arrayRemove, arraySetToFirst } from '../core/helper/object';
 import { EventSetter } from '../core/type';
 import {
     checkFunction, checkJSONObject, checkMin, checkNoEmptyOrNull, checkPstInt
 } from '../core/validator';
-import {
-    EntryOption, EventMessage, GlobalUIWindowOption, UIWindowOption, WindowEventMessage
-} from '../type';
+import { MonitorCenter } from '../monitor';
+import { EntryOption, GlobalUIWindowOption, UIWindowOption, WindowEventMessage } from '../type';
 
 export class Entry {
+    private static instance: Entry;
+    private monitorCenter: MonitorCenter = MonitorCenter.Instance();
+    private eventBus: EventBus = EventBus.Instance();
+
     private constructor(options: EntryOption) {
         this.handlerOptions(options);
-        this.monitorEvent();
     }
-
-    private static instance: Entry;
-
-    private eventBus: EventBus = EventBus.Instance();
 
     public readonly version: string = "3.0";
 
@@ -62,16 +57,6 @@ export class Entry {
         return this._zIndex = this._zIndex + 2;
     }
 
-    private _windows: Array<UIWindow> = [];
-    get windows(): Array<UIWindow> {
-        return this._windows;
-    }
-
-    private _window: UIWindow | null = null;
-    get window(): UIWindow | null {
-        return this._window;
-    }
-
     public static Instance(options: EntryOption = {}): Entry {
         if (!this.instance) this.instance = new Entry(options);
         else {
@@ -88,24 +73,6 @@ export class Entry {
         this.windowOption = options?.windowOption ?? this.windowOption;
     }
 
-    private monitorEvent(): void {
-        this.eventBus.on(WINDOW_CREATE, (message: EventMessage<WindowEventMessage>) => {
-            this._windows.unshift(message.dataset.target);
-        });
-
-        this.eventBus.on(WINDOW_FOCUS, (message: EventMessage<WindowEventMessage>) => {
-            const window = message.dataset.target;
-            this._window = window;
-            arraySetToFirst(this._windows, window);
-        });
-
-        this.eventBus.on(WINDOW_DESTROY, (message: EventMessage<WindowEventMessage>) => {
-            const window = message.dataset.target;
-            arrayRemove(this._windows, window);
-            this._windows.length > 0 && this._windows[0].updateZIndex();
-        });
-    }
-
     public on(eventSetter: EventSetter): void {
         if (!checkJSONObject(eventSetter)) return;
 
@@ -119,7 +86,15 @@ export class Entry {
 
     public open(options: UIWindowOption): void {
         if (!checkNoEmptyOrNull(options?.id)) parameterInvalid();
-        if (this.getWindow(options.id)) parameterInvalid(`: Window ID '${options.id}' already exists`);
+
+        const window = this.getWindow(options.id);
+        if (window) {
+            this.eventBus.broadcast([WINDOW_FOCUS, WINDOW_EXIST], <WindowEventMessage>{
+                id: window.id,
+                target: window
+            });
+            return;
+        }
 
         const fragment = document.createDocumentFragment();
         const uiWindow = new UIWindow(options);
@@ -131,7 +106,7 @@ export class Entry {
     public getWindow(id: string): UIWindow | null {
         if (!checkNoEmptyOrNull(id)) parameterInvalid();
 
-        const searchs = this._windows.filter(win => {
+        const searchs = this.monitorCenter.windows.filter(win => {
             return win.id === id;
         });
         return searchs.length > 0 ? searchs[0] : null;

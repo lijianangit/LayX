@@ -16,7 +16,8 @@
         "preserveConstEnums": true,
         "experimentalDecorators": true,
         "pretty": true,
-        "sourceMap": true
+        "sourceMap": true,
+        "downlevelIteration": true
     },
     "include": [
         "./app/**/*"

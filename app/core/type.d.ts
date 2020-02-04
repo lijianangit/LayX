@@ -16,6 +16,14 @@ export interface EventSetter {
     [eventKey: string]: EventHandler;
 }
 
+export interface EventMessage<TEventMessage> {
+    dataset: TEventMessage & JSONObject;
+    eventTarget: {
+        name: string;
+        timestamp: number;
+    }
+}
+
 export type HTMLElementOrNull = HTMLElement | null;
 
 export type CSSClassOrUndefined = string | undefined;

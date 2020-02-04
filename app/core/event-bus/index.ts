@@ -1,5 +1,5 @@
 import { parameterInvalid } from '../exception';
-import { EventHandler, MessageQueues } from '../type';
+import { EventHandler, EventMessage, JSONObject, MessageQueues } from '../type';
 import {
     checkArrayEach, checkFunction, checkJSONObject, checkNoEmptyOrNull, checkNoNullOrUndefined
 } from '../validator';
@@ -59,5 +59,17 @@ export class EventBus {
         if (!checkNoEmptyOrNull(key)) parameterInvalid();
         if (!this.messageQueues.hasOwnProperty(key)) return;
         delete this.messageQueues[key];
+    }
+
+    public broadcast<TEventMessage extends JSONObject>(keys: Array<string>, message: TEventMessage = <TEventMessage>{}): void {
+        for (const key of keys) {
+            this.emit(key, <EventMessage<TEventMessage>>{
+                dataset: message,
+                eventTarget: {
+                    name: key,
+                    timestamp: new Date().valueOf()
+                }
+            });
+        }
     }
 }
