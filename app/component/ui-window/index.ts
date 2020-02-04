@@ -1,7 +1,7 @@
 import { Component } from '../';
 import {
-    ANIMATE_DESTROY, ANIMATE_SHOW, AnimationOptional, WINDOW_CREATE, WINDOW_DESTROY, WINDOW_FOCUS,
-    WINDOW_SHOW
+    ANIMATE_DESTROY, ANIMATE_MAXIMIZE, ANIMATE_SHOW, AnimationOptional, WINDOW_CREATE,
+    WINDOW_DESTROY, WINDOW_FOCUS, WINDOW_MAXIMIZE, WINDOW_SHOW, WindowStateOptional
 } from '../../const';
 import { BorderOptionContract, BoxShadowOptionContract } from '../../contract';
 import { validator } from '../../core/decorator/property';
@@ -91,6 +91,11 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
         return this._element;
     }
 
+    private _status: WindowStateOptional = WindowStateOptional.ORIGINAL;
+    public get status(): WindowStateOptional {
+        return this._status;
+    }
+
     private readonly eventMessage: WindowEventMessage = {
         target: this
     };
@@ -150,6 +155,18 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
                     this.remove();
                 }
             });
+
+            this.element.addEventListener("transitionend", (ev) => {
+                const animateMaximizeName = stringFormat(ANIMATE_MAXIMIZE, this.animate);
+                if (hasCSSClass(this.element, animateMaximizeName)) {
+                    removeCSSClasses(this.element, animateMaximizeName);
+                    addCSSStyles(this.element, <CSSStyleDeclaration>{
+                        boxShadow: `none`,
+                        border: `none`,
+                        borderRadius: `none`
+                    });
+                }
+            });
         }
     }
 
@@ -195,8 +212,7 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
         if (!this.element) return;
 
         if (this.animate !== false) {
-            addCSSClasses(this.element,
-                stringFormat(ANIMATE_DESTROY, this.animate));
+            addCSSClasses(this.element, stringFormat(ANIMATE_DESTROY, this.animate));
         }
         else this.remove();
     }
@@ -212,5 +228,28 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
                 target: focusWindow
             });
         }
+    }
+
+    public maximize(): void {
+        if (!this.element) return;
+        if (this._status === WindowStateOptional.MAXIMIZE) return;
+
+        addCSSClasses(document.body, "disable-scroll");
+
+        if (this.animate !== false) {
+            addCSSClasses(this.element, stringFormat(ANIMATE_MAXIMIZE, this.animate))
+        }
+
+        addCSSStyles(this.element, <CSSStyleDeclaration>{
+            top: `0`,
+            left: `0`,
+            width: `${innerWidth}px`,
+            height: `${innerHeight}px`,
+            boxShadow: this.animate !== false ? null : `none`,
+            border: this.animate !== false ? null : `none`,
+            borderRadius: this.animate !== false ? null : `none`
+        });
+
+        this._status = WindowStateOptional.MAXIMIZE;
     }
 }

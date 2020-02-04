@@ -11,6 +11,12 @@
     animation-name: layx-animate-zoom-destroy;
 }
 
+.layx-animate-zoom-maximize, .layx-animate-zoom-original {
+    transition-property: left, top, width, height;
+    transition-duration: 0.1s;
+    transition-timing-function: ease-in-out;
+}
+
 @keyframes layx-animate-zoom-show {
     from {
         transform: scale3d(0.9, 0.9, 0.9);

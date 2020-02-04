@@ -6,13 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Layx 窗口即入口，入口即天地</title>
-<link href="layx.css?514475dce9a15c6e680c" rel="stylesheet"><script type="text/javascript" src="layx.js?514475dce9a15c6e680c"></script></head>
+<link href="layx.css?8268b1dd967a1d0acb6e" rel="stylesheet"><script type="text/javascript" src="layx.js?8268b1dd967a1d0acb6e"></script></head>
 
 <body>
     <button id="create">打开窗口</button>
     <button id="create2">打开窗口2</button>
     <button id="create3">打开窗口3</button>
     <script>
+        layx({
+            windowOption:{
+                backgroundColor:"#f5f5f5"
+            }
+        });
         layx.on({
             ["window:create"]: function (message) {
                 console.log(message);
@@ -30,7 +35,8 @@
             layx.open({
                 id: "hello2",
                 width: 400,
-                height: 800
+                height: 800,
+                backgroundColor:"#ccc"
             });
         };
         document.getElementById("create3").onclick = function () {
@@ -38,7 +44,8 @@
                 id: "hello3",
                 width: 400,
                 height: 800,
-                direction: [300, 400]
+                direction: [300, 400],
+                backgroundColor:"#ddd"
             });
         };
     </script>

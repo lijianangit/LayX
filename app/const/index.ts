@@ -21,11 +21,20 @@ export const enum DirectionOptional {
     RIGHT_BOTTOM = "right-bottom"
 }
 
+export const enum WindowStateOptional {
+    ORIGINAL = "original",
+    MAXIMIZE = "maximize",
+    MINIMIZE = "minimize"
+}
+
 export const WINDOW_CREATE: string = "window:create";
 export const WINDOW_FOCUS: string = "window:focus";
 export const WINDOW_SHOW: string = "window:show";
 export const WINDOW_EXIST: string = "window:exist";
+export const WINDOW_MAXIMIZE: string = "window:maximize";
+export const WINDOW_MINIMIZE: string = "window:minimize";
 export const WINDOW_DESTROY: string = "window:destroy";
 
 export const ANIMATE_SHOW: string = "animate-{0}-show";
 export const ANIMATE_DESTROY: string = "animate-{0}-destroy";
+export const ANIMATE_MAXIMIZE: string = "animate-{0}-maximize";

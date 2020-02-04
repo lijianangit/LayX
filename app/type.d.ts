@@ -59,4 +59,6 @@ export interface Overt {
     open(options: UIWindowOption): void;
     getWindow(id: string): UIWindow | null;
     destroy(id: string): void;
+    maximize(id: string): void;
+    focus(id: string): void;
 }

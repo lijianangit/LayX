@@ -1,8 +1,9 @@
 import { UIWindow } from '../component/ui-window';
-import { WINDOW_CREATE, WINDOW_DESTROY, WINDOW_EXIST, WINDOW_FOCUS } from '../const';
+import { WINDOW_CREATE, WINDOW_DESTROY, WINDOW_EXIST, WINDOW_FOCUS, WINDOW_MAXIMIZE } from '../const';
 import { EventBus } from '../core/event-bus';
 import { EventMessage } from '../core/type';
 import { WindowEventMessage } from '../type';
+import { PREFIX } from '../core/helper/element';
 
 export class MonitorCenter {
     private static instance: MonitorCenter;
@@ -23,6 +24,12 @@ export class MonitorCenter {
     }
 
     private constructor() {
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!document.body.id) {
+                document.body.id = `${PREFIX}container`;
+            }
+        });
+
         this.eventBus.on(WINDOW_CREATE, (message: EventMessage<WindowEventMessage>) => {
         });
 
@@ -34,6 +41,11 @@ export class MonitorCenter {
         this.eventBus.on(WINDOW_EXIST, (message: EventMessage<WindowEventMessage>) => {
             const window = message.dataset.target;
             window.attracting();
+        });
+
+        this.eventBus.on(WINDOW_MAXIMIZE, (message: EventMessage<WindowEventMessage>) => {
+            const window = message.dataset.target;
+            window.maximize();
         });
 
         this.eventBus.on(WINDOW_DESTROY, (message: EventMessage<WindowEventMessage>) => {

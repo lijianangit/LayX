@@ -3,7 +3,7 @@ import '../asset';
 import { UIWindow } from '../component/ui-window';
 import {
     AnimationOptional, BorderStyleOptional, WINDOW_CREATE, WINDOW_DESTROY, WINDOW_EXIST,
-    WINDOW_FOCUS
+    WINDOW_FOCUS, WINDOW_MAXIMIZE
 } from '../const';
 import { GlobalUIWindowOptionContract } from '../contract';
 import { validator } from '../core/decorator/property';
@@ -119,13 +119,25 @@ export class Entry {
         return searchs.length > 0 ? searchs[0] : null;
     }
 
-    public destroy(id: string): void {
+    private triggerWindowOperator(id: string, eventKey: string): void {
         if (!checkNoEmptyOrNull(id)) parameterInvalid();
         const window = this.getWindow(id);
         if (!window) return;
 
-        this.eventBus.broadcast([WINDOW_DESTROY], <WindowEventMessage>{
+        this.eventBus.broadcast([eventKey], <WindowEventMessage>{
             target: window
         });
+    }
+
+    public destroy(id: string): void {
+        this.triggerWindowOperator(id, WINDOW_DESTROY);
+    }
+
+    public maximize(id: string): void {
+        this.triggerWindowOperator(id, WINDOW_MAXIMIZE);
+    }
+
+    public focus(id: string): void {
+        this.triggerWindowOperator(id, WINDOW_FOCUS);
     }
 }

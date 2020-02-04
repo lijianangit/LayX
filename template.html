@@ -13,6 +13,11 @@
     <button id="create2">打开窗口2</button>
     <button id="create3">打开窗口3</button>
     <script>
+        layx({
+            windowOption:{
+                backgroundColor:"#f5f5f5"
+            }
+        });
         layx.on({
             ["window:create"]: function (message) {
                 console.log(message);
@@ -30,7 +35,8 @@
             layx.open({
                 id: "hello2",
                 width: 400,
-                height: 800
+                height: 800,
+                backgroundColor:"#ccc"
             });
         };
         document.getElementById("create3").onclick = function () {
@@ -38,7 +44,8 @@
                 id: "hello3",
                 width: 400,
                 height: 800,
-                direction: [300, 400]
+                direction: [300, 400],
+                backgroundColor:"#ddd"
             });
         };
     </script>
