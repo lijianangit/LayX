@@ -1,7 +1,7 @@
 
 import { UIWindow } from './component/ui-window';
 import { AnimationOptional, BorderStyleOptional, DirectionOptional } from './const';
-import { EventSetter, JSONObject } from './core/type';
+import { EventSetter, JSONObject, MouseAndTouchEvent } from './core/type';
 
 export type ComponentElement = HTMLDivElement;
 
@@ -61,4 +61,37 @@ export interface Overt {
     destroy(id: string): void;
     maximize(id: string): void;
     focus(id: string): void;
+}
+
+export interface UIIconOption {
+    icon: string;
+    color?: string;
+    backgroundColor?: string;
+    disabled?: boolean;
+    visible?: boolean;
+    size?: number;
+    handler?: (ev: MouseAndTouchEvent) => void;
+    switchIcon?: string;
+    switchColor?: string;
+    switchBackgroundColor?: string;
+    switchHandler?: (ev: MouseAndTouchEvent) => void;
+}
+
+export interface UIActionButtonOption {
+    extra?: false | UIIconOption;
+    about?: false | UIIconOption;
+    develop?: false | UIIconOption;
+    refresh?: false | UIIconOption;
+    istop?: false | UIIconOption;
+    minimize?: false | UIIconOption;
+    maximize?: false | UIIconOption;
+    destroy?: false | UIIconOption;
+    customize?: Array<UIIconOption>;
+}
+
+export interface UIActionBarOption {
+    actions?: false | UIActionButtonOption;
+    height?: number;
+    backgroundColor?: string;
+    align: "left" | "right";
 }

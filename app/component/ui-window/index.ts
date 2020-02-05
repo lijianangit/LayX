@@ -1,7 +1,7 @@
 import { Component } from '../';
 import {
-    ANIMATE_DESTROY, ANIMATE_MAXIMIZE, ANIMATE_SHOW, AnimationOptional, WINDOW_FOCUS, WINDOW_SHOW,
-    WindowStateOptional
+    ANIMATE_DESTROY, ANIMATE_MAXIMIZE, ANIMATE_SHOW, AnimationOptional, WINDOW_DESTROY,
+    WINDOW_FOCUS, WINDOW_MAXIMIZE, WINDOW_SHOW, WindowStateOptional
 } from '../../const';
 import { BorderOptionContract, BoxShadowOptionContract } from '../../contract';
 import { validator } from '../../core/decorator/property';
@@ -15,9 +15,11 @@ import {
 } from '../../core/validator';
 import { convertDirection } from '../../helper';
 import {
-    BorderOption, BoxShadowOption, ComponentElement, UIWindowOption, WindowEventMessage
+    BorderOption, BoxShadowOption, ComponentElement, UIIconOption, UIWindowOption,
+    WindowEventMessage
 } from '../../type';
 import { UIComponent } from '../ui-component';
+import { UIIcon } from '../ui-icon';
 
 export class UIWindow extends Component<UIWindowOption> implements UIComponent<UIWindowOption> {
     public constructor(options: UIWindowOption) {
@@ -86,11 +88,6 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
     @validator(checkPstInt)
     public zIndex: number = this.entry.zIndex;
 
-    private _element: HTMLDivElement | null = null;
-    public get element(): HTMLDivElement | null {
-        return this._element;
-    }
-
     private _status: WindowStateOptional = WindowStateOptional.ORIGINAL;
     public get status(): WindowStateOptional {
         return this._status;
@@ -128,6 +125,21 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
             borderRadius: this.border === false ? null :
                 `${this.border.radius}px`
         });
+
+        element.appendChild(new UIIcon(<UIIconOption>{
+            icon: "maximize",
+            handler: (ev) => {
+                this.eventBus.broadcast([WINDOW_MAXIMIZE], this.eventMessage);
+            },
+            switchIcon: "restore"
+        }).createView());
+
+        element.appendChild(new UIIcon(<UIIconOption>{
+            icon: "destroy",
+            handler: (ev) => {
+                this.eventBus.broadcast([WINDOW_DESTROY], this.eventMessage);
+            }
+        }).createView());
 
         this.monitorEvent();
 
@@ -233,6 +245,7 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
             });
             if (searchs.length === 0) removeCSSClasses(document.body, "disable-scroll");
         }
+        else removeCSSClasses(document.body, "disable-scroll");
     }
 
     public maximize(): void {

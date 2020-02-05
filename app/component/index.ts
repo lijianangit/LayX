@@ -10,6 +10,12 @@ export abstract class Component<TOption extends JSONObject> {
     protected eventBus: EventBus = EventBus.Instance();
     protected monitorCenter: MonitorCenter = MonitorCenter.Instance();
 
+
+    protected _element: HTMLDivElement | null = null;
+    public get element(): HTMLDivElement | null {
+        return this._element;
+    }
+
     public constructor(protected options: TOption) { }
 
     protected readGlobalValue(path: string, defaultValue: any = null, startObject = this.entry): any {

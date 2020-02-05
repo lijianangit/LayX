@@ -39,6 +39,8 @@ export type JSONObject = {
     [key: string]: any;
 };
 
+export type MouseAndTouchEvent = MouseEvent | TouchEvent;
+
 export type ColorString = string;
 
 export type NoEmptyOrNullString = string;
