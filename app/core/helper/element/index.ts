@@ -36,6 +36,8 @@ export function addCSSClasses(element: HTMLElementOrNull, ...cssClasses: Array<C
 }
 
 export function removeCSSClasses(element: HTMLElementOrNull, ...cssClasses: string[]): HTMLElementOrNull {
+    if (cssClasses.length === 1 && !hasCSSClass(element, cssClasses[0])) return element;
+
     return updateCSSClasses(element, (elementCSSClasses, cssClassIndex) => {
         if (~cssClassIndex) {
             elementCSSClasses.splice(cssClassIndex, 1);
