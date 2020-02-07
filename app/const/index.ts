@@ -27,6 +27,12 @@ export const enum WindowStateOptional {
     MINIMIZE = "minimize"
 }
 
+export const enum AlignOptional {
+    LEFT = "left",
+    CENTER = "center",
+    RIGHT = "right"
+}
+
 export const WINDOW_CREATE: string = "window:create";
 export const WINDOW_FOCUS: string = "window:focus";
 export const WINDOW_SHOW: string = "window:show";

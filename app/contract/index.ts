@@ -1,5 +1,8 @@
-import { AnimationOptional, BorderStyleOptional } from '../const';
-import { checkBoolean, checkColor, checkIn, checkPstInt, checkPstNumber } from '../core/validator';
+import { AlignOptional, AnimationOptional, BorderStyleOptional } from '../const';
+import {
+    checkArrayEach, checkBoolean, checkColor, checkContract, checkFunction, checkIn,
+    checkNoEmptyOrNull, checkPstInt, checkPstNumber
+} from '../core/validator';
 
 export const BorderOptionContract = [{
     width: checkPstNumber,
@@ -27,4 +30,34 @@ export const GlobalUIWindowOptionContract = {
     boxShadow: BoxShadowOptionContract,
     animate: [[checkIn, AnimationOptional.ZOOM], false],
     border: BorderOptionContract
+};
+
+export const UIIconOptionContract = {
+    icon: checkNoEmptyOrNull,
+    color: checkColor,
+    backgroundColor: checkColor,
+    disabled: checkBoolean,
+    visible: checkBoolean,
+    size: checkPstNumber,
+    width: checkPstNumber,
+    handler: checkFunction,
+    switchIcon: checkNoEmptyOrNull,
+    switchColor: checkColor,
+    switchBackgroundColor: checkColor,
+    switchHandler: checkFunction
+}
+
+export const UIActionBarOptionContract = {
+    height: checkPstNumber,
+    backgroundColor: checkColor,
+    align: [checkIn, AlignOptional.LEFT, AlignOptional.RIGHT],
+    extra: [UIIconOptionContract, false],
+    about: [UIIconOptionContract, false],
+    develop: [UIIconOptionContract, false],
+    refresh: [UIIconOptionContract, false],
+    istop: [UIIconOptionContract, false],
+    minimize: [UIIconOptionContract, false],
+    maximize: [UIIconOptionContract, false],
+    destroy: [UIIconOptionContract, false],
+    customize: [[checkArrayEach, [checkContract, UIIconOptionContract]]]
 };

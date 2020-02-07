@@ -1,7 +1,7 @@
 import { parameterInvalid } from '../exception';
 import { removeIllegalCharacter } from '../helper/string';
 import {
-    BaseType, CheckValidator, ColorString, FunctionValidator, IntegerNumber, JSONObject,
+    BaseType, Validation, ColorString, FunctionValidator, IntegerNumber, JSONObject,
     NoEmptyOrNullString, ValueType
 } from '../type';
 
@@ -26,21 +26,21 @@ export function checkFunction<T>(data: any): data is T {
 }
 
 export function checkFunctionValidator(data: any): data is FunctionValidator {
-    return checkFunction<CheckValidator>(data) ||
-        checkArray(data) && checkFunction<CheckValidator>(data[0]) ||
-        checkArray(data) && checkArray(data[0]) && checkFunction<CheckValidator>(data[0][0]);
+    return checkFunction<Validation>(data) ||
+        checkArray(data) && checkFunction<Validation>(data[0]) ||
+        checkArray(data) && checkArray(data[0]) && checkFunction<Validation>(data[0][0]);
 }
 
 export function checkValidator(data: any, functionValidator: FunctionValidator): boolean {
     let isTrue = true;
-    if (checkFunction<CheckValidator>(functionValidator)) {
+    if (checkFunction<Validation>(functionValidator)) {
         if (!functionValidator(data)) isTrue = false;
     }
-    else if (checkArray(functionValidator) && checkFunction<CheckValidator>(functionValidator[0])) {
+    else if (checkArray(functionValidator) && checkFunction<Validation>(functionValidator[0])) {
         const [validator, ...args] = functionValidator;
         if (!validator(data, ...args)) isTrue = false;
     }
-    else if (checkArray(functionValidator) && checkArray(functionValidator[0]) && checkFunction<CheckValidator>(functionValidator[0][0])) {
+    else if (checkArray(functionValidator) && checkArray(functionValidator[0]) && checkFunction<Validation>(functionValidator[0][0])) {
         const [childValidator, ...values] = functionValidator;
         if (!checkValidator(data, childValidator) && !checkIn(data, ...values)) isTrue = false;
     }
@@ -166,4 +166,40 @@ export function checkRange(data: any, minThreshold: number, maxThreshold: number
 
 export function checkMatch(data: any, regex: RegExp): boolean {
     return regex.test(data);
+}
+
+export function checkContract(data: any, ...contracts: Array<any>): boolean {
+    const valueOptions: Array<ValueType> = [];
+    const functionValidators: Array<FunctionValidator> = [];
+    const objectValidators: Array<JSONObject> = [];
+
+    contracts.map(item => {
+        if (item === null || checkBaseType(item, "string", "bigint", "boolean", "symbol", "undefined")) valueOptions.push(item);
+        if (checkFunctionValidator(item)) functionValidators.push(item);
+        if (checkJSONObject(item)) objectValidators.push(item);
+    });
+
+    if (checkIn(data, ...valueOptions)) return true;
+
+    if (functionValidators.length > 0) {
+        let isPassAllFunctionValidator = true;
+        for (const functionValidator of functionValidators) {
+            isPassAllFunctionValidator = checkValidator(data, functionValidator);
+            if (!isPassAllFunctionValidator) break;
+        }
+        if (isPassAllFunctionValidator) return true;
+    }
+
+    if (checkJSONObject(data) && objectValidators.length > 0) {
+        const [firstValidator,] = objectValidators;
+        let isPassAllPropValidator = true;
+        for (const key in data) {
+            const childValues = firstValidator[key];
+            if (!childValues) continue;
+            isPassAllPropValidator = checkContract(data[key], ...(checkArray(childValues) ? childValues : [childValues]));
+            if (!isPassAllPropValidator) break;
+        }
+        return isPassAllPropValidator;
+    }
+    return false;
 }

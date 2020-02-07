@@ -5,7 +5,7 @@ import {
 } from '../../core/helper/element';
 import { MouseAndTouchEvent } from '../../core/type';
 import {
-    checkBoolean, checkColor, checkFunction, checkMin, checkNoEmptyOrNull, checkPstInt, checkString
+    checkBoolean, checkColor, checkFunction, checkMin, checkNoEmptyOrNull, checkPstNumber
 } from '../../core/validator';
 import { ComponentElement, UIIconOption } from '../../type';
 import { UIComponent } from '../ui-component';
@@ -40,8 +40,8 @@ export class UIIcon extends Component<UIIconOption> implements UIComponent<UIIco
     @validator(checkColor)
     public color: string = "#000000";
 
-    @validator(checkColor)
-    public backgroundColor: string = "transparent";
+    @validator(checkColor, undefined)
+    public backgroundColor?: string;
 
     @validator(checkBoolean)
     public disabled: boolean = false;
@@ -49,13 +49,16 @@ export class UIIcon extends Component<UIIconOption> implements UIComponent<UIIco
     @validator(checkBoolean)
     public visible: boolean = true;
 
-    @validator(checkPstInt, [checkMin, 12])
+    @validator(checkPstNumber, [checkMin, 12])
     public size: number = 14;
+
+    @validator(checkPstNumber)
+    public width: number = 45;
 
     @validator(checkFunction, undefined)
     public handler?: (ev: MouseAndTouchEvent) => void;
 
-    @validator(checkString, undefined)
+    @validator(checkNoEmptyOrNull, undefined)
     public switchIcon?: string;
 
     @validator(checkColor, undefined)
@@ -72,13 +75,16 @@ export class UIIcon extends Component<UIIconOption> implements UIComponent<UIIco
 
         addCSSClasses(element,
             "icon",
+            "flex-box",
+            this.visible ? undefined : "box-hidden",
+            "center-all",
             this.disabled ? "disable-icon" : undefined);
 
         addCSSStyles(element, <CSSStyleDeclaration>{
             color: this.color,
-            backgroundColor: this.backgroundColor,
-            visibility: this.visible ? `visible` : `hidden`,
-            fontSize: `${this.size}px`
+            backgroundColor: this.backgroundColor ?? null,
+            fontSize: `${this.size}px`,
+            width: `${this.width}px`
         });
 
         element.appendChild(this.svgIcons[0]);

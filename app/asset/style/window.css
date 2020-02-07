@@ -1,3 +1,4 @@
 .layx-window {
     position: fixed;
+    overflow: hidden;
 }

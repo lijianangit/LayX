@@ -3,7 +3,9 @@ import {
     ANIMATE_DESTROY, ANIMATE_MAXIMIZE, ANIMATE_SHOW, AnimationOptional, WINDOW_DESTROY,
     WINDOW_FOCUS, WINDOW_MAXIMIZE, WINDOW_SHOW, WindowStateOptional
 } from '../../const';
-import { BorderOptionContract, BoxShadowOptionContract } from '../../contract';
+import {
+    BorderOptionContract, BoxShadowOptionContract, UIActionBarOptionContract
+} from '../../contract';
 import { validator } from '../../core/decorator/property';
 import {
     addCSSClasses, addCSSStyles, createDivElement, hasCSSClass, removeCSSClasses, removeHTMLElement
@@ -15,11 +17,11 @@ import {
 } from '../../core/validator';
 import { convertDirection } from '../../helper';
 import {
-    BorderOption, BoxShadowOption, ComponentElement, UIIconOption, UIWindowOption,
-    WindowEventMessage
+    BorderOption, BoxShadowOption, ComponentElement, UIActionBarOption, UIIconOption,
+    UIWindowOption, WindowEventMessage
 } from '../../type';
+import { UIActionBar } from '../ui-action-bar';
 import { UIComponent } from '../ui-component';
-import { UIIcon } from '../ui-icon';
 
 export class UIWindow extends Component<UIWindowOption> implements UIComponent<UIWindowOption> {
     public constructor(options: UIWindowOption) {
@@ -88,6 +90,26 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
     @validator(checkPstInt)
     public zIndex: number = this.entry.zIndex;
 
+    @validator(UIActionBarOptionContract, false)
+    public actionBar: false | UIActionBarOption = <UIActionBarOption>{
+        minimize: <UIIconOption>{
+
+        },
+        maximize: <UIIconOption>{
+            handler: (ev) => {
+                this.eventBus.broadcast([WINDOW_MAXIMIZE], this.eventMessage);
+            },
+            switchHandler: (ev) => {
+                alert("恢复");
+            }
+        },
+        destroy: <UIIconOption>{
+            handler: (ev) => {
+                this.eventBus.broadcast([WINDOW_DESTROY], this.eventMessage);
+            }
+        }
+    };
+
     private _status: WindowStateOptional = WindowStateOptional.ORIGINAL;
     public get status(): WindowStateOptional {
         return this._status;
@@ -126,20 +148,9 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
                 `${this.border.radius}px`
         });
 
-        element.appendChild(new UIIcon(<UIIconOption>{
-            icon: "maximize",
-            handler: (ev) => {
-                this.eventBus.broadcast([WINDOW_MAXIMIZE], this.eventMessage);
-            },
-            switchIcon: "restore"
-        }).createView());
-
-        element.appendChild(new UIIcon(<UIIconOption>{
-            icon: "destroy",
-            handler: (ev) => {
-                this.eventBus.broadcast([WINDOW_DESTROY], this.eventMessage);
-            }
-        }).createView());
+        if (this.actionBar !== false) {
+            element.appendChild(new UIActionBar(this.actionBar).createView());
+        }
 
         this.monitorEvent();
 

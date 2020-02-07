@@ -49,10 +49,10 @@ export type IntegerNumber = number;
 
 export type ValueType = number | string | boolean | undefined | null;
 
-export type CheckValidator = {
+export type Validation = {
     (item: any, ...args: Array<any>): boolean;
 };
 
-export type FunctionValidator = CheckValidator
-    | [CheckValidator, ...Array<any>]
-    | [[CheckValidator, ...Array<any>], ...Array<any>];
+export type FunctionValidator = Validation
+    | [Validation, ...Array<any>]
+    | [[Validation, ...Array<any>], ...Array<any>];

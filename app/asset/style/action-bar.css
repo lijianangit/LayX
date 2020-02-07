@@ -1,0 +1,13 @@
+.layx-action-bar {
+    position: absolute;
+    top: 0;
+}
+
+.layx-action-button:hover {
+    background-color: #e5e5e5;
+}
+
+.layx-action-button.layx-action-destroy:hover {
+    background-color: #e81123!important;
+    color: #fff!important;
+}

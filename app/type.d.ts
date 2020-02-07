@@ -1,6 +1,6 @@
 
 import { UIWindow } from './component/ui-window';
-import { AnimationOptional, BorderStyleOptional, DirectionOptional } from './const';
+import { AnimationOptional, BorderStyleOptional, DirectionOptional, AlignOptional } from './const';
 import { EventSetter, JSONObject, MouseAndTouchEvent } from './core/type';
 
 export type ComponentElement = HTMLDivElement;
@@ -43,6 +43,7 @@ export interface GlobalUIWindowOption {
 export interface UIWindowOption extends GlobalUIWindowOption {
     readonly id: string;
     direction?: DirectionOrCoord;
+    actionBar: false | UIActionBarOption;
 }
 
 export interface EntryOption {
@@ -70,6 +71,7 @@ export interface UIIconOption {
     disabled?: boolean;
     visible?: boolean;
     size?: number;
+    width?: number;
     handler?: (ev: MouseAndTouchEvent) => void;
     switchIcon?: string;
     switchColor?: string;
@@ -77,7 +79,10 @@ export interface UIIconOption {
     switchHandler?: (ev: MouseAndTouchEvent) => void;
 }
 
-export interface UIActionButtonOption {
+export interface UIActionBarOption {
+    height?: number;
+    backgroundColor?: string;
+    align?: AlignOptional;
     extra?: false | UIIconOption;
     about?: false | UIIconOption;
     develop?: false | UIIconOption;
@@ -87,11 +92,4 @@ export interface UIActionButtonOption {
     maximize?: false | UIIconOption;
     destroy?: false | UIIconOption;
     customize?: Array<UIIconOption>;
-}
-
-export interface UIActionBarOption {
-    actions?: false | UIActionButtonOption;
-    height?: number;
-    backgroundColor?: string;
-    align: "left" | "right";
 }
