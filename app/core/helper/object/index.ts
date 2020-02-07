@@ -25,19 +25,25 @@ export function mergeJSONObject<T extends JSONObject>(source: T, dest: T): T {
     return <T>newJSONObject;
 }
 
-export function readObject<T>(path: string, defaultValue: T, startObject: JSONObject): T {
+export function readObject<T>(path: string, defaultValue: T, startObject: JSONObject, fixKey?: string): T {
     if (!checkNoEmptyOrNull(path) || !checkJSONObject(startObject)) parameterInvalid();
 
     path = removeIllegalCharacter(path);
-    if (path.indexOf("/") === -1) return startObject[path] ?? defaultValue;
+    if (path.indexOf("/") === -1) {
+        if (fixKey) {
+            if (checkJSONObject(startObject[fixKey])) return startObject[fixKey][path] ?? defaultValue;
+            else return defaultValue;
+        }
+        return startObject[path] ?? defaultValue
+    };
 
     const keys = path.split("/");
-    let keyValue = readObject(keys[0], defaultValue, startObject);
+    let keyValue = readObject(keys[0], defaultValue, startObject, fixKey);
     if (!checkNoNullOrUndefined(keyValue)) return defaultValue;
 
     for (let i = 0; i < keys.length; i++) {
         if (i + 1 >= keys.length) break;
-        keyValue = readObject(keys[i + 1], defaultValue, keyValue);
+        keyValue = readObject(keys[i + 1], defaultValue, keyValue, fixKey);
     }
     return keyValue;
 }

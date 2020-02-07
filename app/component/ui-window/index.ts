@@ -149,7 +149,9 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
         });
 
         if (this.actionBar !== false) {
-            element.appendChild(new UIActionBar(this.actionBar).createView());
+            const actionBar = new UIActionBar(this.actionBar);
+            element.appendChild(actionBar.createView());
+            this.components["actionBar"] = actionBar;
         }
 
         this.monitorEvent();

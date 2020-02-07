@@ -11,7 +11,10 @@ import { ComponentElement, UIIconOption } from '../../type';
 import { UIComponent } from '../ui-component';
 
 export class UIIcon extends Component<UIIconOption> implements UIComponent<UIIconOption> {
-    private isSwitch: boolean = false;
+    private _isSwitch: boolean = false;
+    public get isSwitch(): boolean {
+        return this._isSwitch;
+    }
     private svgIcons: [SVGSVGElement, SVGSVGElement?];
     public constructor(options: UIIconOption) {
         super(options);
@@ -105,7 +108,7 @@ export class UIIcon extends Component<UIIconOption> implements UIComponent<UIIco
         return svgElement;
     }
 
-    private changeStyle(): void {
+    public changeStyle(): void {
         if (!this.element) return;
 
         addCSSStyles(this.element, <CSSStyleDeclaration>{
@@ -122,6 +125,6 @@ export class UIIcon extends Component<UIIconOption> implements UIComponent<UIIco
             }
         }
 
-        this.isSwitch = !this.isSwitch;
+        this._isSwitch = !this._isSwitch;
     }
 }

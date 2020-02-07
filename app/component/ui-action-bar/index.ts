@@ -1,10 +1,11 @@
 import { Component } from '../';
-import { AlignOptional } from '../../const';
+import { AlignOptional, WINDOW_MAXIMIZE, WindowStateOptional } from '../../const';
 import { UIIconOptionContract } from '../../contract';
 import { validator } from '../../core/decorator/property';
 import { addCSSClasses, addCSSStyles, createDivElement } from '../../core/helper/element';
+import { EventMessage } from '../../core/type';
 import { checkColor, checkIn, checkPstNumber } from '../../core/validator';
-import { ComponentElement, UIActionBarOption, UIIconOption } from '../../type';
+import { ComponentElement, UIActionBarOption, UIIconOption, WindowEventMessage } from '../../type';
 import { UIComponent } from '../ui-component';
 import { UIIcon } from '../ui-icon';
 
@@ -20,6 +21,8 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
             maximize: this.maximize,
             destroy: this.destroy
         });
+
+        this.monitorEvent();
     }
 
     @validator(checkPstNumber)
@@ -86,7 +89,20 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
                     "action-button",
                     `action-${option.icon}`);
                 this.element.appendChild(uiIconElement);
+                this.components[option.icon] = uiIcon;
             }
         }
+    }
+
+    private monitorEvent(): void {
+        this.eventBus.on(WINDOW_MAXIMIZE, (message: EventMessage<WindowEventMessage>) => {
+            const window = message.dataset.target;
+            if (window.status === WindowStateOptional.MAXIMIZE) {
+                const maximizeAction = window.readComponent<UIIcon>("actionBar/maximize");
+                if (maximizeAction?.isSwitch === false) {
+                    maximizeAction?.changeStyle();
+                }
+            }
+        });
     }
 }

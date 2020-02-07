@@ -1,5 +1,6 @@
 
 import { UIWindow } from './component/ui-window';
+import { Component } from './component';
 import { AnimationOptional, BorderStyleOptional, DirectionOptional, AlignOptional } from './const';
 import { EventSetter, JSONObject, MouseAndTouchEvent } from './core/type';
 
@@ -10,6 +11,10 @@ export type DirectionOrCoord = DirectionOptional | [number, number];
 export interface WindowEventMessage extends JSONObject {
     target: UIWindow;
     created?: boolean;
+}
+
+export interface BuiltInComponent {
+    [key: string]: Component<JSONObject>;
 }
 
 export interface BorderOption {
