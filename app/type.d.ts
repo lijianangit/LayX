@@ -67,6 +67,7 @@ export interface Overt {
     destroy(id: string): void;
     maximize(id: string): void;
     focus(id: string): void;
+    restore(id: string): void;
 }
 
 export interface UIIconOption {

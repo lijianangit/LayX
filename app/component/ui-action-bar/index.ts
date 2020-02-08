@@ -1,5 +1,5 @@
 import { Component } from '../';
-import { AlignOptional, WINDOW_MAXIMIZE, WindowStateOptional } from '../../const';
+import { AlignOptional, WINDOW_MAXIMIZE, WindowStateOptional, WINDOW_RESTORE } from '../../const';
 import { UIIconOptionContract } from '../../contract';
 import { validator } from '../../core/decorator/property';
 import { addCSSClasses, addCSSStyles, createDivElement } from '../../core/helper/element';
@@ -100,6 +100,16 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
             if (window.status === WindowStateOptional.MAXIMIZE) {
                 const maximizeAction = window.readComponent<UIIcon>("actionBar/maximize");
                 if (maximizeAction?.isSwitch === false) {
+                    maximizeAction?.changeStyle();
+                }
+            }
+        });
+
+        this.eventBus.on(WINDOW_RESTORE, (message: EventMessage<WindowEventMessage>) => {
+            const window = message.dataset.target;
+            if (window.lastStatus === WindowStateOptional.MAXIMIZE) {
+                const maximizeAction = window.readComponent<UIIcon>("actionBar/maximize");
+                if (maximizeAction?.isSwitch) {
                     maximizeAction?.changeStyle();
                 }
             }

@@ -21,6 +21,7 @@ export default (function overt(): Overt {
     overt.destroy = entry.destroy.bind(entry);
     overt.maximize = entry.maximize.bind(entry);
     overt.focus = entry.focus.bind(entry);
+    overt.restore = entry.restore.bind(entry);
 
     return overt;
 })();

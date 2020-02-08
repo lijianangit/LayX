@@ -3,7 +3,7 @@ import '../asset';
 import { UIWindow } from '../component/ui-window';
 import {
     AnimationOptional, BorderStyleOptional, WINDOW_CREATE, WINDOW_DESTROY, WINDOW_EXIST,
-    WINDOW_FOCUS, WINDOW_MAXIMIZE
+    WINDOW_FOCUS, WINDOW_MAXIMIZE, WINDOW_RESTORE
 } from '../const';
 import { GlobalUIWindowOptionContract } from '../contract';
 import { validator } from '../core/decorator/property';
@@ -139,5 +139,9 @@ export class Entry {
 
     public focus(id: string): void {
         this.triggerWindowOperator(id, WINDOW_FOCUS);
+    }
+
+    public restore(id: string): void {
+        this.triggerWindowOperator(id, WINDOW_RESTORE);
     }
 }

@@ -1,7 +1,7 @@
 import { Component } from '../';
 import {
     ANIMATE_DESTROY, ANIMATE_MAXIMIZE, ANIMATE_SHOW, AnimationOptional, WINDOW_DESTROY,
-    WINDOW_FOCUS, WINDOW_MAXIMIZE, WINDOW_SHOW, WindowStateOptional
+    WINDOW_FOCUS, WINDOW_MAXIMIZE, WINDOW_RESTORE, WINDOW_SHOW, WindowStateOptional, ANIMATE_ORIGINAL
 } from '../../const';
 import {
     BorderOptionContract, BoxShadowOptionContract, UIActionBarOptionContract
@@ -100,7 +100,7 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
                 this.eventBus.broadcast([WINDOW_MAXIMIZE], this.eventMessage);
             },
             switchHandler: (ev) => {
-                alert("恢复");
+                this.eventBus.broadcast([WINDOW_RESTORE], this.eventMessage);
             }
         },
         destroy: <UIIconOption>{
@@ -113,6 +113,11 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
     private _status: WindowStateOptional = WindowStateOptional.ORIGINAL;
     public get status(): WindowStateOptional {
         return this._status;
+    }
+
+    private _lastStatus?: WindowStateOptional;
+    public get lastStatus(): WindowStateOptional | undefined {
+        return this._lastStatus;
     }
 
     private readonly eventMessage: WindowEventMessage = {
@@ -164,6 +169,7 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
         if (!this.element) return;
 
         this.element.addEventListener("mousedown", (ev) => {
+            if (this.monitorCenter.window === this) return;
             this.eventBus.broadcast([WINDOW_FOCUS], this.eventMessage);
         }, true);
 
@@ -190,6 +196,10 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
                         border: `none`,
                         borderRadius: `0`
                     });
+                }
+                const animateOriginalName = stringFormat(ANIMATE_ORIGINAL, this.animate);
+                if (hasCSSClass(this.element, animateOriginalName)) {
+                    removeCSSClasses(this.element, animateOriginalName);
                 }
             });
         }
@@ -261,6 +271,36 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
         else removeCSSClasses(document.body, "disable-scroll");
     }
 
+    public restore(): void {
+        if (!this.element) return;
+        if (this.lastStatus === undefined) return;
+
+        if (this.lastStatus === WindowStateOptional.MAXIMIZE) {
+            this.eventBus.broadcast([WINDOW_MAXIMIZE], this.eventMessage);
+        }
+        else if (this.lastStatus === WindowStateOptional.ORIGINAL) {
+            if (this.animate !== false) {
+                addCSSClasses(this.element, stringFormat(ANIMATE_ORIGINAL, this.animate))
+            }
+
+            addCSSStyles(this.element, <CSSStyleDeclaration>{
+                width: `${this.width}px`,
+                height: `${this.height}px`,
+                left: `${this.left}px`,
+                top: `${this.top}px`,
+                boxShadow: this.boxShadow === false ? null :
+                    `${this.boxShadow.offsetX}px ${this.boxShadow.offsetY}px ${this.boxShadow.blurRadius}px ${this.boxShadow.spreadRadius}px ${this.boxShadow.color}`,
+                border: this.border === false ? null :
+                    `${this.border.width}px ${this.border.style} ${this.border.color}`,
+                borderRadius: this.border === false ? null :
+                    `${this.border.radius}px`
+            });
+
+            this._lastStatus = this._status;
+            this._status = WindowStateOptional.ORIGINAL;
+        }
+    }
+
     public maximize(): void {
         if (!this.element) return;
         if (this._status === WindowStateOptional.MAXIMIZE) return;
@@ -281,6 +321,7 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
             borderRadius: this.animate !== false ? null : `0`
         });
 
+        this._lastStatus = this._status;
         this._status = WindowStateOptional.MAXIMIZE;
     }
 }
