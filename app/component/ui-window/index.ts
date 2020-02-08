@@ -38,7 +38,8 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
             border: this.border,
             boxShadow: this.boxShadow,
             backgroundColor: this.backgroundColor,
-            animate: this.animate
+            animate: this.animate,
+            actionBar: this.actionBar
         });
 
         this.width = Math.max(this.minWidth, this.width);
@@ -90,25 +91,8 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
     @validator(checkPstInt)
     public zIndex: number = this.entry.zIndex;
 
-    @validator(UIActionBarOptionContract, false)
-    public actionBar: false | UIActionBarOption = <UIActionBarOption>{
-        minimize: <UIIconOption>{
-
-        },
-        maximize: <UIIconOption>{
-            handler: (ev) => {
-                this.eventBus.broadcast([WINDOW_MAXIMIZE], this.eventMessage);
-            },
-            switchHandler: (ev) => {
-                this.eventBus.broadcast([WINDOW_RESTORE], this.eventMessage);
-            }
-        },
-        destroy: <UIIconOption>{
-            handler: (ev) => {
-                this.eventBus.broadcast([WINDOW_DESTROY], this.eventMessage);
-            }
-        }
-    };
+    @validator(...UIActionBarOptionContract)
+    public actionBar: false | UIActionBarOption = this.readGlobalValue("windowOption/actionBar");
 
     private _status: WindowStateOptional = WindowStateOptional.ORIGINAL;
     public get status(): WindowStateOptional {

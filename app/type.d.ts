@@ -43,12 +43,12 @@ export interface GlobalUIWindowOption {
     boxShadow?: false | BoxShadowOption;
     animate?: false | AnimationOptional;
     border?: false | BorderOption;
+    actionBar?: false | UIActionBarOption;
 }
 
 export interface UIWindowOption extends GlobalUIWindowOption {
     readonly id: string;
     direction?: DirectionOrCoord;
-    actionBar: false | UIActionBarOption;
 }
 
 export interface EntryOption {
@@ -89,6 +89,7 @@ export interface UIActionBarOption {
     height?: number;
     backgroundColor?: string;
     align?: AlignOptional;
+    color?: string;
     extra?: false | UIIconOption;
     about?: false | UIIconOption;
     develop?: false | UIIconOption;

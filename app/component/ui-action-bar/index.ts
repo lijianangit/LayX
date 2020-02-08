@@ -1,5 +1,5 @@
 import { Component } from '../';
-import { AlignOptional, WINDOW_MAXIMIZE, WindowStateOptional, WINDOW_RESTORE } from '../../const';
+import { AlignOptional, WINDOW_MAXIMIZE, WindowStateOptional, WINDOW_RESTORE, WINDOW_MINIMIZE, WINDOW_DESTROY } from '../../const';
 import { UIIconOptionContract } from '../../contract';
 import { validator } from '../../core/decorator/property';
 import { addCSSClasses, addCSSStyles, createDivElement } from '../../core/helper/element';
@@ -8,6 +8,7 @@ import { checkColor, checkIn, checkPstNumber } from '../../core/validator';
 import { ComponentElement, UIActionBarOption, UIIconOption, WindowEventMessage } from '../../type';
 import { UIComponent } from '../ui-component';
 import { UIIcon } from '../ui-icon';
+import { UIWindow } from '../ui-window';
 
 export class UIActionBar extends Component<UIActionBarOption> implements UIComponent<UIActionBarOption> {
     public constructor(options: UIActionBarOption) {
@@ -17,6 +18,7 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
             height: this.height,
             backgroundColor: this.backgroundColor,
             align: this.align,
+            color: this.color,
             minimize: this.minimize,
             maximize: this.maximize,
             destroy: this.destroy
@@ -34,12 +36,20 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
     @validator([checkIn, AlignOptional.LEFT, AlignOptional.RIGHT])
     public align: AlignOptional = AlignOptional.RIGHT;
 
+    @validator(checkColor)
+    public color: string = "#000000";
+
     @validator(UIIconOptionContract, false)
     public minimize: false | UIIconOption = <UIIconOption>{
         icon: "minimize",
         disabled: false,
         visible: true,
-        width: 45
+        width: 45,
+        handler: (ev) => {
+            this.eventBus.broadcast([WINDOW_MINIMIZE], {
+                target: <UIWindow>this.monitorCenter.window
+            });
+        },
     };
 
     @validator(UIIconOptionContract, false)
@@ -48,7 +58,17 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
         disabled: false,
         visible: true,
         width: 45,
-        switchIcon: "restore"
+        switchIcon: "restore",
+        handler: (ev) => {
+            this.eventBus.broadcast([WINDOW_MAXIMIZE], {
+                target: <UIWindow>this.monitorCenter.window
+            });
+        },
+        switchHandler: (ev) => {
+            this.eventBus.broadcast([WINDOW_RESTORE], {
+                target: <UIWindow>this.monitorCenter.window
+            });
+        }
     };
 
     @validator(UIIconOptionContract, false)
@@ -56,7 +76,12 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
         icon: "destroy",
         disabled: false,
         visible: true,
-        width: 45
+        width: 45,
+        handler: (ev) => {
+            this.eventBus.broadcast([WINDOW_DESTROY], {
+                target: <UIWindow>this.monitorCenter.window
+            });
+        }
     };
 
     public createView(): ComponentElement {
@@ -83,6 +108,7 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
 
         for (const option of iconOptions) {
             if (option !== false) {
+                option.color = option.color ?? this.color;
                 const uiIcon = new UIIcon(option);
                 const uiIconElement = uiIcon.createView();
                 addCSSClasses(uiIconElement,

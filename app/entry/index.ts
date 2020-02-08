@@ -2,8 +2,8 @@ import '../asset';
 
 import { UIWindow } from '../component/ui-window';
 import {
-    AnimationOptional, BorderStyleOptional, WINDOW_CREATE, WINDOW_DESTROY, WINDOW_EXIST,
-    WINDOW_FOCUS, WINDOW_MAXIMIZE, WINDOW_RESTORE
+    AlignOptional, AnimationOptional, BorderStyleOptional, WINDOW_CREATE, WINDOW_DESTROY,
+    WINDOW_EXIST, WINDOW_FOCUS, WINDOW_MAXIMIZE, WINDOW_MINIMIZE, WINDOW_RESTORE
 } from '../const';
 import { GlobalUIWindowOptionContract } from '../contract';
 import { validator } from '../core/decorator/property';
@@ -14,7 +14,10 @@ import {
     checkFunction, checkJSONObject, checkMin, checkNoEmptyOrNull, checkPstInt
 } from '../core/validator';
 import { MonitorCenter } from '../monitor';
-import { EntryOption, GlobalUIWindowOption, UIWindowOption, WindowEventMessage } from '../type';
+import {
+    BorderOption, BoxShadowOption, EntryOption, GlobalUIWindowOption, UIActionBarOption,
+    UIIconOption, UIWindowOption, WindowEventMessage
+} from '../type';
 
 export class Entry {
     private static instance: Entry;
@@ -52,6 +55,12 @@ export class Entry {
             style: BorderStyleOptional.SOLID,
             color: "#d5d5d5",
             radius: 4
+        },
+        actionBar: <UIActionBarOption>{
+            height: 30,
+            backgroundColor: undefined,
+            align: AlignOptional.RIGHT,
+            color: "#000000"
         }
     };
 

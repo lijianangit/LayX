@@ -19,19 +19,6 @@ export const BoxShadowOptionContract = [{
     color: checkColor
 }, false];
 
-export const GlobalUIWindowOptionContract = {
-    width: checkPstNumber,
-    height: checkPstNumber,
-    minWidth: checkPstNumber,
-    minHeight: checkPstNumber,
-    maxWidth: checkPstNumber,
-    maxHeight: checkPstNumber,
-    backgroundColor: checkColor,
-    boxShadow: BoxShadowOptionContract,
-    animate: [[checkIn, AnimationOptional.ZOOM], false],
-    border: BorderOptionContract
-};
-
 export const UIIconOptionContract = {
     icon: checkNoEmptyOrNull,
     color: checkColor,
@@ -47,10 +34,11 @@ export const UIIconOptionContract = {
     switchHandler: checkFunction
 }
 
-export const UIActionBarOptionContract = {
+export const UIActionBarOptionContract = [{
     height: checkPstNumber,
-    backgroundColor: checkColor,
+    backgroundColor: [checkColor, undefined],
     align: [checkIn, AlignOptional.LEFT, AlignOptional.RIGHT],
+    color: checkColor,
     extra: [UIIconOptionContract, false],
     about: [UIIconOptionContract, false],
     develop: [UIIconOptionContract, false],
@@ -60,4 +48,19 @@ export const UIActionBarOptionContract = {
     maximize: [UIIconOptionContract, false],
     destroy: [UIIconOptionContract, false],
     customize: [[checkArrayEach, [checkContract, UIIconOptionContract]]]
+}, false];
+
+
+export const GlobalUIWindowOptionContract = {
+    width: checkPstNumber,
+    height: checkPstNumber,
+    minWidth: checkPstNumber,
+    minHeight: checkPstNumber,
+    maxWidth: checkPstNumber,
+    maxHeight: checkPstNumber,
+    backgroundColor: checkColor,
+    boxShadow: BoxShadowOptionContract,
+    animate: [[checkIn, AnimationOptional.ZOOM], false],
+    border: BorderOptionContract,
+    actionBar: UIActionBarOptionContract
 };
