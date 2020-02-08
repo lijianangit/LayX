@@ -27,6 +27,7 @@ export const UIIconOptionContract = {
     visible: checkBoolean,
     size: checkPstNumber,
     width: checkPstNumber,
+    hoverClass: checkNoEmptyOrNull,
     handler: checkFunction,
     switchIcon: checkNoEmptyOrNull,
     switchColor: checkColor,
@@ -36,7 +37,7 @@ export const UIIconOptionContract = {
 
 export const UIActionBarOptionContract = [{
     height: checkPstNumber,
-    backgroundColor: [checkColor, undefined],
+    backgroundColor: checkColor,
     align: [checkIn, AlignOptional.LEFT, AlignOptional.RIGHT],
     color: checkColor,
     extra: [UIIconOptionContract, false],

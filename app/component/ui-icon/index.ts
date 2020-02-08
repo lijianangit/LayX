@@ -1,7 +1,7 @@
 import { Component } from '../';
 import { validator } from '../../core/decorator/property';
 import {
-    addCSSClasses, addCSSStyles, createDivElement, createSvgElement, PREFIX
+    addCSSClasses, addCSSStyles, createDivElement, createSvgElement, PREFIX, setHoverClass
 } from '../../core/helper/element';
 import { MouseAndTouchEvent } from '../../core/type';
 import {
@@ -23,8 +23,10 @@ export class UIIcon extends Component<UIIconOption> implements UIComponent<UIIco
         this.readOptions({
             color: this.color,
             backgroundColor: this.backgroundColor,
+            width: this.width,
             disabled: this.disabled,
             visible: this.visible,
+            hoverClass: this.hoverClass,
             handler: this.handler,
             switchIcon: this.switchIcon,
             switchColor: this.switchColor,
@@ -40,8 +42,8 @@ export class UIIcon extends Component<UIIconOption> implements UIComponent<UIIco
     @validator(checkNoEmptyOrNull)
     public icon: string;
 
-    @validator(checkColor)
-    public color: string = "#000000";
+    @validator(checkColor, undefined)
+    public color?: string;
 
     @validator(checkColor, undefined)
     public backgroundColor?: string;
@@ -55,8 +57,11 @@ export class UIIcon extends Component<UIIconOption> implements UIComponent<UIIco
     @validator(checkPstNumber, [checkMin, 12])
     public size: number = 14;
 
-    @validator(checkPstNumber)
-    public width: number = 45;
+    @validator(checkPstNumber, undefined)
+    public width?: number;
+
+    @validator(checkNoEmptyOrNull, undefined)
+    public hoverClass?: string;
 
     @validator(checkFunction, undefined)
     public handler?: (ev: MouseAndTouchEvent) => void;
@@ -84,11 +89,15 @@ export class UIIcon extends Component<UIIconOption> implements UIComponent<UIIco
             this.disabled ? "disable-icon" : undefined);
 
         addCSSStyles(element, <CSSStyleDeclaration>{
-            color: this.color,
+            color: this.color ?? null,
             backgroundColor: this.backgroundColor ?? null,
             fontSize: `${this.size}px`,
-            width: `${this.width}px`
+            width: this.width ? `${this.width}px` : null
         });
+
+        if (this.hoverClass) {
+            setHoverClass(element, this.hoverClass);
+        }
 
         element.appendChild(this.svgIcons[0]);
 
@@ -112,8 +121,8 @@ export class UIIcon extends Component<UIIconOption> implements UIComponent<UIIco
         if (!this.element) return;
 
         addCSSStyles(this.element, <CSSStyleDeclaration>{
-            color: !this.isSwitch ? this.color : (this.switchColor ?? this.color),
-            backgroundColor: !this.isSwitch ? this.backgroundColor : (this.switchBackgroundColor ?? this.backgroundColor)
+            color: !this.isSwitch ? (this.color ?? null) : (this.switchColor ?? this.color ?? null),
+            backgroundColor: !this.isSwitch ? (this.backgroundColor ?? null) : (this.switchBackgroundColor ?? this.backgroundColor ?? null)
         });
 
         if (this.svgIcons[1]) {

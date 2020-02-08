@@ -85,8 +85,8 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
     @validator([checkIn, AnimationOptional.ZOOM], false)
     public animate: false | AnimationOptional = this.readGlobalValue("windowOption/animate");
 
-    @validator(checkColor)
-    public backgroundColor: string = this.readGlobalValue("windowOption/backgroundColor");
+    @validator(checkColor, undefined)
+    public backgroundColor?: string = this.readGlobalValue("windowOption/backgroundColor");
 
     @validator(checkPstInt)
     public zIndex: number = this.entry.zIndex;
@@ -119,7 +119,7 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
             this.animate !== false ? stringFormat(ANIMATE_SHOW, this.animate) : undefined);
 
         addCSSStyles(element, <CSSStyleDeclaration>{
-            backgroundColor: `${this.backgroundColor}`,
+            backgroundColor: this.backgroundColor ?? null,
             zIndex: `${this.zIndex}`,
             width: `${this.width}px`,
             height: `${this.height}px`,

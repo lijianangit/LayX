@@ -58,7 +58,6 @@ export class Entry {
         },
         actionBar: <UIActionBarOption>{
             height: 30,
-            backgroundColor: undefined,
             align: AlignOptional.RIGHT,
             color: "#000000"
         }

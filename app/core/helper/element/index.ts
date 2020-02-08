@@ -81,3 +81,16 @@ export function removeHTMLElement(element: HTMLElementOrNull): void {
 
     element.parentElement.removeChild(element);
 }
+
+export function setHoverClass(element: HTMLElementOrNull, hoverCSSClass: string): void {
+    if (!element) return;
+    if (!checkNoEmptyOrNull(hoverCSSClass)) return;
+
+    element.addEventListener("mouseenter", (ev) => {
+        addCSSClasses(element, hoverCSSClass);
+    }, true);
+
+    element.addEventListener("mouseleave", (ev) => {
+        removeCSSClasses(element, hoverCSSClass);
+    }, true);
+}

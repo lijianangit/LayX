@@ -1,5 +1,8 @@
 import { Component } from '../';
-import { AlignOptional, WINDOW_MAXIMIZE, WindowStateOptional, WINDOW_RESTORE, WINDOW_MINIMIZE, WINDOW_DESTROY } from '../../const';
+import {
+    AlignOptional, WINDOW_DESTROY, WINDOW_MAXIMIZE, WINDOW_MINIMIZE, WINDOW_RESTORE,
+    WindowStateOptional
+} from '../../const';
 import { UIIconOptionContract } from '../../contract';
 import { validator } from '../../core/decorator/property';
 import { addCSSClasses, addCSSStyles, createDivElement } from '../../core/helper/element';
@@ -11,6 +14,9 @@ import { UIIcon } from '../ui-icon';
 import { UIWindow } from '../ui-window';
 
 export class UIActionBar extends Component<UIActionBarOption> implements UIComponent<UIActionBarOption> {
+    private actionButtonWidth: number = 45;
+    private actionButtonHoverClass: string = "action-button-hover";
+
     public constructor(options: UIActionBarOption) {
         super(options);
 
@@ -28,23 +34,24 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
     }
 
     @validator(checkPstNumber)
-    public height: number = 30;
+    public height: number = this.readGlobalValue("windowOption/actionBar/height");
 
     @validator(checkColor, undefined)
-    public backgroundColor?: string;
+    public backgroundColor?: string = this.readGlobalValue("windowOption/actionBar/backgroundColor");
 
     @validator([checkIn, AlignOptional.LEFT, AlignOptional.RIGHT])
-    public align: AlignOptional = AlignOptional.RIGHT;
+    public align: AlignOptional = this.readGlobalValue("windowOption/actionBar/align");
 
-    @validator(checkColor)
-    public color: string = "#000000";
+    @validator(checkColor, undefined)
+    public color?: string = this.readGlobalValue("windowOption/actionBar/color");
 
     @validator(UIIconOptionContract, false)
     public minimize: false | UIIconOption = <UIIconOption>{
         icon: "minimize",
         disabled: false,
         visible: true,
-        width: 45,
+        width: this.actionButtonWidth,
+        hoverClass: this.actionButtonHoverClass,
         handler: (ev) => {
             this.eventBus.broadcast([WINDOW_MINIMIZE], {
                 target: <UIWindow>this.monitorCenter.window
@@ -57,8 +64,9 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
         icon: "maximize",
         disabled: false,
         visible: true,
-        width: 45,
+        width: this.actionButtonWidth,
         switchIcon: "restore",
+        hoverClass: this.actionButtonHoverClass,
         handler: (ev) => {
             this.eventBus.broadcast([WINDOW_MAXIMIZE], {
                 target: <UIWindow>this.monitorCenter.window
@@ -76,11 +84,23 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
         icon: "destroy",
         disabled: false,
         visible: true,
-        width: 45,
+        width: this.actionButtonWidth,
+        hoverClass: "action-destroy-hover",
         handler: (ev) => {
             this.eventBus.broadcast([WINDOW_DESTROY], {
                 target: <UIWindow>this.monitorCenter.window
             });
+        }
+    };
+
+    @validator(UIIconOptionContract, false)
+    public extra: false | UIIconOption = <UIIconOption>{
+        icon: "extra",
+        disabled: false,
+        visible: false,
+        width: this.actionButtonWidth,
+        hoverClass: this.actionButtonHoverClass,
+        handler: (ev) => {
         }
     };
 
@@ -92,23 +112,24 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
             "row-direction");
 
         addCSSStyles(element, <CSSStyleDeclaration>{
+            color: this.color ?? null,
             height: `${this.height}px`,
             backgroundColor: this.backgroundColor ?? null,
             left: this.align === AlignOptional.LEFT ? '0' : null,
             right: this.align === AlignOptional.RIGHT ? '0' : null,
         });
 
-        this.createInlineIcons(this.minimize, this.maximize, this.destroy);
+        this.createInlineIcons(this.extra, this.minimize, this.maximize, this.destroy);
 
         return element;
     }
 
     private createInlineIcons(...iconOptions: Array<UIIconOption | false>): void {
         if (!this.element) return;
+        if (this.align === AlignOptional.LEFT) iconOptions = iconOptions.reverse();
 
         for (const option of iconOptions) {
             if (option !== false) {
-                option.color = option.color ?? this.color;
                 const uiIcon = new UIIcon(option);
                 const uiIconElement = uiIcon.createView();
                 addCSSClasses(uiIconElement,

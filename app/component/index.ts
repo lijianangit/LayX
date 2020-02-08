@@ -23,7 +23,7 @@ export abstract class Component<TOption extends JSONObject> {
 
     public constructor(protected options: TOption) { }
 
-    protected readGlobalValue(path: string, defaultValue: any = null, startObject = this.entry): any {
+    protected readGlobalValue(path: string, defaultValue: any = undefined, startObject = this.entry): any {
         return readObject<any>(path, defaultValue, startObject);
     }
 

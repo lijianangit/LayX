@@ -78,6 +78,7 @@ export interface UIIconOption {
     visible?: boolean;
     size?: number;
     width?: number;
+    hoverClass?: string;
     handler?: (ev: MouseAndTouchEvent) => void;
     switchIcon?: string;
     switchColor?: string;
