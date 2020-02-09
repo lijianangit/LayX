@@ -1,7 +1,7 @@
 import { Component } from '../';
 import {
-    ANIMATE_DESTROY, ANIMATE_MAXIMIZE, ANIMATE_SHOW, AnimationOptional, WINDOW_DESTROY,
-    WINDOW_FOCUS, WINDOW_MAXIMIZE, WINDOW_RESTORE, WINDOW_SHOW, WindowStateOptional, ANIMATE_ORIGINAL
+    ANIMATE_DESTROY, ANIMATE_MAXIMIZE, ANIMATE_ORIGINAL, ANIMATE_SHOW, AnimationOptional,
+    WINDOW_DESTROY, WINDOW_FOCUS, WINDOW_MAXIMIZE, WINDOW_RESTORE, WINDOW_SHOW, WindowStateOptional
 } from '../../const';
 import {
     BorderOptionContract, BoxShadowOptionContract, UIActionBarOptionContract
@@ -22,6 +22,7 @@ import {
 } from '../../type';
 import { UIActionBar } from '../ui-action-bar';
 import { UIComponent } from '../ui-component';
+import { CSSStyleDeclarationExpand } from 'app/core/type';
 
 export class UIWindow extends Component<UIWindowOption> implements UIComponent<UIWindowOption> {
     public constructor(options: UIWindowOption) {
@@ -118,23 +119,22 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
             this.animate !== false ? "animate" : undefined,
             this.animate !== false ? stringFormat(ANIMATE_SHOW, this.animate) : undefined);
 
-        addCSSStyles(element, <CSSStyleDeclaration>{
-            backgroundColor: this.backgroundColor ?? null,
-            zIndex: `${this.zIndex}`,
-            width: `${this.width}px`,
-            height: `${this.height}px`,
-            maxWidth: this.maxWidth !== innerWidth ? `${this.maxWidth}px` : null,
-            maxHeight: this.maxHeight !== innerHeight ? `${this.maxHeight}px` : null,
-            minWidth: `${this.minWidth}px`,
-            minHeight: `${this.minHeight}px`,
-            left: `${this.left}px`,
-            top: `${this.top}px`,
-            boxShadow: this.boxShadow === false ? null :
+        addCSSStyles(element, <CSSStyleDeclarationExpand>{
+            backgroundColor: this.backgroundColor,
+            zIndex: this.zIndex,
+            "width:px": this.width,
+            "height:px": this.height,
+            "maxWidth:px": this.maxWidth !== innerWidth ? this.maxWidth : undefined,
+            "maxHeight:px": this.maxHeight !== innerHeight ? this.maxHeight : undefined,
+            "minWidth:px": this.minWidth,
+            "minHeight:px": this.minHeight,
+            "left:px": this.left,
+            "top:px": this.top,
+            boxShadow: this.boxShadow === false ? undefined :
                 `${this.boxShadow.offsetX}px ${this.boxShadow.offsetY}px ${this.boxShadow.blurRadius}px ${this.boxShadow.spreadRadius}px ${this.boxShadow.color}`,
-            border: this.border === false ? null :
+            border: this.border === false ? undefined :
                 `${this.border.width}px ${this.border.style} ${this.border.color}`,
-            borderRadius: this.border === false ? null :
-                `${this.border.radius}px`
+            "borderRadius:px": this.border === false ? undefined : this.border.radius
         });
 
         if (this.actionBar !== false) {
@@ -175,10 +175,10 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
                 const animateMaximizeName = stringFormat(ANIMATE_MAXIMIZE, this.animate);
                 if (hasCSSClass(this.element, animateMaximizeName)) {
                     removeCSSClasses(this.element, animateMaximizeName);
-                    addCSSStyles(this.element, <CSSStyleDeclaration>{
-                        boxShadow: `none`,
-                        border: `none`,
-                        borderRadius: `0`
+                    addCSSStyles(this.element, <CSSStyleDeclarationExpand>{
+                        boxShadow: null,
+                        border: null,
+                        borderRadius: null
                     });
                 }
                 const animateOriginalName = stringFormat(ANIMATE_ORIGINAL, this.animate);
@@ -198,8 +198,8 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
         if (!this.element) return;
 
         this.zIndex = this.entry.zIndex;
-        addCSSStyles(this.element, <CSSStyleDeclaration>{
-            zIndex: `${this.zIndex}`
+        addCSSStyles(this.element, <CSSStyleDeclarationExpand>{
+            zIndex: this.zIndex
         });
         this.monitorCenter.setWindow(this);
         arraySetToFirst(this.monitorCenter.windows, this);
@@ -217,7 +217,7 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
 
             [...Array(frequency).keys()].forEach(item => {
                 timer = setTimeout(() => {
-                    addCSSStyles(this.element, <CSSStyleDeclaration>{
+                    addCSSStyles(this.element, <CSSStyleDeclarationExpand>{
                         boxShadow: item % 2 === 0
                             ? stringFormat(boxShadowStr, (<BoxShadowOption>this.boxShadow).blurRadius)
                             : stringFormat(boxShadowStr, <number>(<BoxShadowOption>this.boxShadow).blurRadius / 2)
@@ -267,17 +267,16 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
                 addCSSClasses(this.element, stringFormat(ANIMATE_ORIGINAL, this.animate))
             }
 
-            addCSSStyles(this.element, <CSSStyleDeclaration>{
-                width: `${this.width}px`,
-                height: `${this.height}px`,
-                left: `${this.left}px`,
-                top: `${this.top}px`,
-                boxShadow: this.boxShadow === false ? null :
+            addCSSStyles(this.element, <CSSStyleDeclarationExpand>{
+                "width:px": this.width,
+                "height:px": this.height,
+                "left:px": this.left,
+                "top:px": this.top,
+                boxShadow: this.boxShadow === false ? undefined :
                     `${this.boxShadow.offsetX}px ${this.boxShadow.offsetY}px ${this.boxShadow.blurRadius}px ${this.boxShadow.spreadRadius}px ${this.boxShadow.color}`,
-                border: this.border === false ? null :
+                border: this.border === false ? undefined :
                     `${this.border.width}px ${this.border.style} ${this.border.color}`,
-                borderRadius: this.border === false ? null :
-                    `${this.border.radius}px`
+                "borderRadius:px": this.border === false ? undefined : this.border.radius
             });
 
             this._lastStatus = this._status;
@@ -295,14 +294,14 @@ export class UIWindow extends Component<UIWindowOption> implements UIComponent<U
             addCSSClasses(this.element, stringFormat(ANIMATE_MAXIMIZE, this.animate))
         }
 
-        addCSSStyles(this.element, <CSSStyleDeclaration>{
-            top: `0`,
-            left: `0`,
-            width: `${innerWidth}px`,
-            height: `${innerHeight}px`,
-            boxShadow: this.animate !== false ? null : `none`,
-            border: this.animate !== false ? null : `none`,
-            borderRadius: this.animate !== false ? null : `0`
+        addCSSStyles(this.element, <CSSStyleDeclarationExpand>{
+            top: 0,
+            left: 0,
+            "width:px": innerWidth,
+            "height:px": innerHeight,
+            boxShadow: this.animate !== false ? undefined : null,
+            border: this.animate !== false ? undefined : null,
+            borderRadius: this.animate !== false ? undefined : null
         });
 
         this._lastStatus = this._status;

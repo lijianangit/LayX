@@ -1,14 +1,25 @@
 import { parameterInvalid } from '../../exception';
-import { CSSClassOrUndefined, CSSClassSetter, HTMLElementOrNull } from '../../type';
-import { checkNoEmptyOrNull, checkString } from '../../validator';
+import {
+    CSSClassOrUndefined, CSSClassSetter, CSSStyleDeclarationExpand, HTMLElementOrNull
+} from '../../type';
+import { checkNoEmptyOrNull, checkNoNullOrUndefined, checkString } from '../../validator';
 
 export const PREFIX: string = "layx-";
 
-export function addCSSStyles(element: HTMLElementOrNull, cssStyles: CSSStyleDeclaration): void {
+export function addCSSStyles(element: HTMLElementOrNull, cssStyles: CSSStyleDeclarationExpand): void {
     if (!element) return;
 
     for (const cssProp in cssStyles) {
-        element.style[cssProp] = cssStyles[cssProp] ?? null;
+        const propValue = cssStyles[cssProp];
+        if (propValue === undefined) continue;
+
+        if (cssProp.indexOf(":") === -1) {
+            element.style[cssProp] = propValue === null ? "" : `${propValue}`;
+        }
+        else {
+            const propWidthUnit = cssProp.split(":");
+            (<any>element.style)[propWidthUnit[0]] = propValue === null ? "" : `${propValue}${propWidthUnit[1]}`;
+        }
     }
 }
 
@@ -82,15 +93,15 @@ export function removeHTMLElement(element: HTMLElementOrNull): void {
     element.parentElement.removeChild(element);
 }
 
-export function setHoverClass(element: HTMLElementOrNull, hoverCSSClass: string): void {
+export function addHoverClasses(element: HTMLElementOrNull, ...hoverCSSClasses: Array<string>): void {
     if (!element) return;
-    if (!checkNoEmptyOrNull(hoverCSSClass)) return;
+    if (hoverCSSClasses.length === 0) return;
 
     element.addEventListener("mouseenter", (ev) => {
-        addCSSClasses(element, hoverCSSClass);
+        addCSSClasses(element, ...hoverCSSClasses);
     }, true);
 
     element.addEventListener("mouseleave", (ev) => {
-        removeCSSClasses(element, hoverCSSClass);
+        removeCSSClasses(element, ...hoverCSSClasses);
     }, true);
 }

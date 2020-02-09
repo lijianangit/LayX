@@ -4,6 +4,10 @@ export type PropertySetter = {
     (newValue: any, propertyKey: PropertyKey, oldValue: any): any;
 }
 
+export type CSSStyleDeclarationExpand = {
+    [key in keyof CSSStyleDeclaration]?: number | string | null;
+}
+
 export interface EventHandler {
     (message: any): void;
 }

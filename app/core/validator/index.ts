@@ -48,7 +48,11 @@ export function checkValidator(data: any, functionValidator: FunctionValidator):
     return isTrue;
 }
 
-export function checkArray(data: any): data is Array<any> {
+export function checkArray(data: any, supportSingleString: boolean = false): data is Array<any> {
+    if (supportSingleString && checkNoEmptyOrNull(data)) {
+        data = [data];
+        return true;
+    }
     return Array.isArray(data);
 }
 

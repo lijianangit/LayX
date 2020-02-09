@@ -59,7 +59,8 @@ export class Entry {
         actionBar: <UIActionBarOption>{
             height: 30,
             align: AlignOptional.RIGHT,
-            color: "#000000"
+            color: "#000000",
+            actionHoverClasses: "action-button-hover"
         }
     };
 

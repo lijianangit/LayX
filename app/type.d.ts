@@ -78,7 +78,7 @@ export interface UIIconOption {
     visible?: boolean;
     size?: number;
     width?: number;
-    hoverClass?: string;
+    hoverClasses?: string | Array<string>;
     handler?: (ev: MouseAndTouchEvent) => void;
     switchIcon?: string;
     switchColor?: string;
@@ -91,6 +91,7 @@ export interface UIActionBarOption {
     backgroundColor?: string;
     align?: AlignOptional;
     color?: string;
+    actionHoverClasses?: string | Array<string>;
     extra?: false | UIIconOption;
     about?: false | UIIconOption;
     develop?: false | UIIconOption;

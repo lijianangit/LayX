@@ -1,6 +1,6 @@
 import { AlignOptional, AnimationOptional, BorderStyleOptional } from '../const';
 import {
-    checkArrayEach, checkBoolean, checkColor, checkContract, checkFunction, checkIn,
+    checkArray, checkArrayEach, checkBoolean, checkColor, checkContract, checkFunction, checkIn,
     checkNoEmptyOrNull, checkPstInt, checkPstNumber
 } from '../core/validator';
 
@@ -27,7 +27,7 @@ export const UIIconOptionContract = {
     visible: checkBoolean,
     size: checkPstNumber,
     width: checkPstNumber,
-    hoverClass: checkNoEmptyOrNull,
+    hoverClasses: [[checkArray, true], undefined],
     handler: checkFunction,
     switchIcon: checkNoEmptyOrNull,
     switchColor: checkColor,

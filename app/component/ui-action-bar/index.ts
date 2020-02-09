@@ -6,8 +6,8 @@ import {
 import { UIIconOptionContract } from '../../contract';
 import { validator } from '../../core/decorator/property';
 import { addCSSClasses, addCSSStyles, createDivElement } from '../../core/helper/element';
-import { EventMessage } from '../../core/type';
-import { checkColor, checkIn, checkPstNumber } from '../../core/validator';
+import { CSSStyleDeclarationExpand, EventMessage } from '../../core/type';
+import { checkArray, checkColor, checkIn, checkPstNumber } from '../../core/validator';
 import { ComponentElement, UIActionBarOption, UIIconOption, WindowEventMessage } from '../../type';
 import { UIComponent } from '../ui-component';
 import { UIIcon } from '../ui-icon';
@@ -15,7 +15,6 @@ import { UIWindow } from '../ui-window';
 
 export class UIActionBar extends Component<UIActionBarOption> implements UIComponent<UIActionBarOption> {
     private actionButtonWidth: number = 45;
-    private actionButtonHoverClass: string = "action-button-hover";
 
     public constructor(options: UIActionBarOption) {
         super(options);
@@ -25,6 +24,7 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
             backgroundColor: this.backgroundColor,
             align: this.align,
             color: this.color,
+            actionHoverClasses: this.actionHoverClasses,
             minimize: this.minimize,
             maximize: this.maximize,
             destroy: this.destroy
@@ -45,13 +45,15 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
     @validator(checkColor, undefined)
     public color?: string = this.readGlobalValue("windowOption/actionBar/color");
 
+    @validator([checkArray, true], undefined)
+    public actionHoverClasses?: string | Array<string>;
+
     @validator(UIIconOptionContract, false)
     public minimize: false | UIIconOption = <UIIconOption>{
         icon: "minimize",
         disabled: false,
         visible: true,
         width: this.actionButtonWidth,
-        hoverClass: this.actionButtonHoverClass,
         handler: (ev) => {
             this.eventBus.broadcast([WINDOW_MINIMIZE], {
                 target: <UIWindow>this.monitorCenter.window
@@ -66,7 +68,6 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
         visible: true,
         width: this.actionButtonWidth,
         switchIcon: "restore",
-        hoverClass: this.actionButtonHoverClass,
         handler: (ev) => {
             this.eventBus.broadcast([WINDOW_MAXIMIZE], {
                 target: <UIWindow>this.monitorCenter.window
@@ -85,7 +86,7 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
         disabled: false,
         visible: true,
         width: this.actionButtonWidth,
-        hoverClass: "action-destroy-hover",
+        hoverClasses: "action-destroy-hover",
         handler: (ev) => {
             this.eventBus.broadcast([WINDOW_DESTROY], {
                 target: <UIWindow>this.monitorCenter.window
@@ -99,7 +100,6 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
         disabled: false,
         visible: false,
         width: this.actionButtonWidth,
-        hoverClass: this.actionButtonHoverClass,
         handler: (ev) => {
         }
     };
@@ -111,12 +111,12 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
             "flex-box",
             "row-direction");
 
-        addCSSStyles(element, <CSSStyleDeclaration>{
-            color: this.color ?? null,
-            height: `${this.height}px`,
-            backgroundColor: this.backgroundColor ?? null,
-            left: this.align === AlignOptional.LEFT ? '0' : null,
-            right: this.align === AlignOptional.RIGHT ? '0' : null,
+        addCSSStyles(element, <CSSStyleDeclarationExpand>{
+            color: this.color,
+            "height:px": this.height,
+            backgroundColor: this.backgroundColor,
+            left: this.align === AlignOptional.LEFT ? 0 : undefined,
+            right: this.align === AlignOptional.RIGHT ? 0 : undefined,
         });
 
         this.createInlineIcons(this.extra, this.minimize, this.maximize, this.destroy);
@@ -130,6 +130,7 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
 
         for (const option of iconOptions) {
             if (option !== false) {
+                option.hoverClasses = option.hoverClasses ?? this.actionHoverClasses;
                 const uiIcon = new UIIcon(option);
                 const uiIconElement = uiIcon.createView();
                 addCSSClasses(uiIconElement,
@@ -146,7 +147,7 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
             const window = message.dataset.target;
             if (window.status === WindowStateOptional.MAXIMIZE) {
                 const maximizeAction = window.readComponent<UIIcon>("actionBar/maximize");
-                if (maximizeAction?.isSwitch === false) {
+                if (maximizeAction?.switched === false) {
                     maximizeAction?.changeStyle();
                 }
             }
@@ -156,7 +157,7 @@ export class UIActionBar extends Component<UIActionBarOption> implements UICompo
             const window = message.dataset.target;
             if (window.lastStatus === WindowStateOptional.MAXIMIZE) {
                 const maximizeAction = window.readComponent<UIIcon>("actionBar/maximize");
-                if (maximizeAction?.isSwitch) {
+                if (maximizeAction?.switched) {
                     maximizeAction?.changeStyle();
                 }
             }
