@@ -7,7 +7,7 @@ const MiniCssExtractWebpackPlugin = require("mini-css-extract-plugin");
 module.exports = {
     mode: "development",    // 编译环境：development | production
     devtool: "inline-source-map",
-    entry: path.join(__dirname, "app", "index.ts"),
+    entry: path.join(__dirname, "src", "index.ts"),
     output: {
         filename: "layx.js",
         path: path.join(__dirname, "dist"),
