@@ -1,0 +1,24 @@
+.layx-top-menu-bar {
+    min-height: 25px;
+    background: #fff;
+}
+
+.layx-top-menu-button {
+    float: left;
+    padding: 0 8px;
+    line-height: 25px;
+}
+
+.layx-top-menu-button-label {
+    display: inline-block;
+    font-size: 13px;
+    color: #444444;
+}
+
+.layx-top-menu-button:hover {
+    background-color: #e9e9e9;
+}
+
+.layx-top-menu-button.layx-top-menu-button-active {
+    background-color: #e9e9e9;
+}

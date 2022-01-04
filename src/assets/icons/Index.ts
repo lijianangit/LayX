@@ -1,0 +1,14 @@
+import "./destroy.svg";
+import "./min.svg";
+import "./max.svg";
+import "./info.svg";
+import "./restore.svg";
+import "./above.svg";
+import "./more.svg";
+import "./icon.svg";
+import "./right.svg";
+import "./about.svg";
+import "./success.svg";
+import "./warning.svg";
+import "./error.svg";
+import "./refresh.svg";

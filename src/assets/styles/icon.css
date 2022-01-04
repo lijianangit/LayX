@@ -1,0 +1,11 @@
+.layx-icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -.15em;
+    fill: currentColor;
+    overflow: hidden;
+    font-size: 14px;
+    display: inline-block;
+    line-height: normal;
+    pointer-events: none;
+}

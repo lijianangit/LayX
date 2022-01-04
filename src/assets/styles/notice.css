@@ -1,0 +1,101 @@
+.layx-notice {
+    position: fixed;
+    margin-bottom: 10px;
+    padding: 16px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
+    background: #fff;
+    width: 320px;
+    right: 24px;
+    overflow: hidden;
+}
+
+.layx-notice.layx-animate-fade-in-right {
+    animation-name: layx-animate-fade-in-right;
+}
+
+.layx-notice.layx-animate-fade-in-right-reverse {
+    animation-name: layx-animate-fade-in-right-reverse;
+}
+
+.layx-notice.layx-animate-slide-to-top {
+    animation-name: layx-animate-slide-to-top;
+}
+
+.layx-notice-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.layx-notice-close-button .layx-icon {
+    font-size: 10px;
+}
+
+.layx-notice-close-button:hover {
+    background-color: #e81123;
+}
+
+.layx-notice-close-button:hover .layx-icon {
+    color: #fff;
+}
+
+.layx-notice-icon {
+    margin-right: 16px;
+}
+
+.layx-notice-icon .layx-icon {
+    font-size: 26px;
+}
+
+.layx-notice-title {
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-size: 14px;
+    line-height: 17px;
+    color: #17233d;
+    white-space: nowrap;
+}
+
+.layx-notice-content {
+    font-size: 13px;
+    color: #515a6e;
+    line-height: 1.5;
+}
+
+.layx-notice-time {
+    font-size: 10px;
+    color: #999;
+    text-align: right;
+    margin-top: 8px;
+}
+
+.layx-notice-process {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    z-index: 1;
+    background: #dedede;
+    width: 0%;
+}
+
+.layx-notice-info {
+    color: #009688;
+}
+
+.layx-notice-success {
+    color: #01aaed;
+}
+
+.layx-notice-warning {
+    color: #ffb800;
+}
+
+.layx-notice-error {
+    color: #ff0000;
+}

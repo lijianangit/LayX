@@ -1,0 +1,40 @@
+[class^="layx-"] {
+    user-select: none;
+    box-sizing: border-box;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+#layx-body.zlayx-body-noscroll {
+    overflow: hidden!important;
+}
+
+.layx-flexbox {
+    display: flex;
+}
+
+.layx-flex-row {
+    flex-flow: row;
+}
+
+.layx-flex-row-reverse {
+    flex-flow: row-reverse;
+}
+
+.layx-flex-column {
+    flex-flow: column;
+}
+
+.layx-flex-vertical-center {
+    align-items: center;
+}
+
+.layx-flex-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.layx-flex-item {
+    flex: 1;
+}

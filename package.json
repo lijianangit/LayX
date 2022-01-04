@@ -1,0 +1,55 @@
+{
+  "name": "layx",
+  "version": "3.0.0",
+  "description": "A magical window.",
+  "main": "./built/index.js",
+  "types": "./types/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "webpack": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitee.com:monksoul/LayX.git"
+  },
+  "keywords": [
+    "layx",
+    "window",
+    "dialog",
+    "layer",
+    "layui",
+    "iframe",
+    "弹窗",
+    "弹层",
+    "窗口",
+    "百小僧",
+    "Monk",
+    "MonkSoul",
+    "baiqian",
+    "百签",
+    "百签科技",
+    "百签.com",
+    "baiqian.ltd"
+  ],
+  "author": "百小僧/MonkSoul",
+  "license": "MIT",
+  "devDependencies": {
+    "autoprefixer": "^9.6.1",
+    "css-loader": "^3.0.0",
+    "cssnano": "^4.1.10",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.7.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "postcss": "^7.0.17",
+    "postcss-import": "^12.0.1",
+    "postcss-loader": "^3.0.0",
+    "style-loader": "^0.23.1",
+    "svg-sprite-loader": "^4.1.6",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.2",
+    "uglifyjs-webpack-plugin": "^2.1.3",
+    "webpack": "^4.35.2",
+    "webpack-cli": "^3.3.5",
+    "webpack-dev-server": "^3.7.2"
+  }
+}
